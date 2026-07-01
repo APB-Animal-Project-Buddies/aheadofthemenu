@@ -406,6 +406,11 @@ body:has(main.aotm) a[aria-label="Home"][href="/"] { display: none; }
   .aotm-auth-login { padding: 0 0.55rem; }
   .aotm-auth-signup { padding: 0 0.85rem; }
 }
+/* Auth modal open: drop the landing's heavy background so it isn't composited
+   under the overlay (autoplaying video + film-grain blend were lagging the page). */
+body.auth-modal-open .aotm-stage { display: none; }
+body.auth-modal-open .aotm::before { display: none; }
+
 @media (prefers-reduced-motion: reduce) {
   .aotm *, .aotm::before { animation: none !important; }
 }

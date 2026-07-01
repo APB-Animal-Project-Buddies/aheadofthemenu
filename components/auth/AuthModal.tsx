@@ -20,10 +20,14 @@ export function AuthModal({ children }: { children: React.ReactNode }) {
     document.addEventListener("keydown", onKey);
     const prevOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
+    // Pause the landing's expensive background (autoplaying video + film-grain
+    // blend) while the modal covers it — avoids compositing it every frame.
+    document.body.classList.add("auth-modal-open");
     sheetRef.current?.focus();
     return () => {
       document.removeEventListener("keydown", onKey);
       document.body.style.overflow = prevOverflow;
+      document.body.classList.remove("auth-modal-open");
     };
   }, [close]);
 
