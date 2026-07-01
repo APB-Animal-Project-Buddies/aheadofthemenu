@@ -48,9 +48,9 @@ const overlay: CSSProperties = {
   justifyContent: "center",
   padding: "6vh 1rem 2rem",
   overflowY: "auto",
-  background: "rgba(14, 31, 20, 0.55)",
-  backdropFilter: "blur(4px)",
-  WebkitBackdropFilter: "blur(4px)",
+  // Solid dim instead of backdrop-filter: blur() — blurring the landing's live
+  // hero video every frame was pegging the CPU/GPU and lagging the whole page.
+  background: "rgba(12, 26, 17, 0.82)",
 };
 
 const sheet: CSSProperties = {

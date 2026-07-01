@@ -49,6 +49,14 @@ allowedUrls = [
   'http://localhost:3111',
   'http://localhost:3111/verify',
   'http://localhost:3111/reset-password',
+  # Production — custom domain (www + apex) and Vercel preview deploys.
+  'https://www.aheadofthemenu.com',
+  'https://www.aheadofthemenu.com/verify',
+  'https://www.aheadofthemenu.com/reset-password',
+  'https://aheadofthemenu.com',
+  'https://aheadofthemenu.com/verify',
+  'https://aheadofthemenu.com/reset-password',
+  'https://*.vercel.app',
 ]
 
 [auth.signUp]
