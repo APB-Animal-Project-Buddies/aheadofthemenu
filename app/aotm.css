@@ -1,0 +1,411 @@
+/* Fonts (Fraunces + DM Sans) are loaded app-wide by app/globals.css. */
+.aotm {
+  --green-900: #112619;
+  --green-800: #163320;
+  --green-700: #1e4d2b;
+  --green-500: #2d7a3e;
+  --cream: #faf8f5;
+  --cream-dim: rgba(250, 248, 245, 0.66);
+  --cream-faint: rgba(250, 248, 245, 0.14);
+  --accent: #ff6b35;
+  --accent-2: #ff8c61;
+  --leaf: #5bb673;
+  --ink: #0e1f14;
+
+  position: relative;
+  min-height: 100svh;
+  width: 100%;
+  overflow: hidden;
+  color: var(--cream);
+  font-family: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
+  background:
+    radial-gradient(120% 90% at 85% 8%, rgba(45, 122, 62, 0.38) 0%, transparent 55%),
+    radial-gradient(90% 80% at 8% 95%, rgba(255, 107, 53, 0.12) 0%, transparent 50%),
+    linear-gradient(155deg, var(--green-800) 0%, var(--green-900) 60%, #0d2014 100%);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* film-grain texture overlay */
+.aotm::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.5;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
+  mix-blend-mode: overlay;
+}
+
+/* ---- top bar ---- */
+.aotm-top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: clamp(1.4rem, 3vw, 2.4rem) clamp(1.5rem, 5vw, 4.5rem);
+  animation: aotm-fade 0.9s ease both;
+}
+.aotm-brand {
+  font-family: 'Fraunces', serif;
+  font-weight: 600;
+  font-size: clamp(1rem, 1.4vw, 1.15rem);
+  letter-spacing: -0.01em;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+.aotm-brand .leaf {
+  width: 22px; height: 22px;
+  color: var(--accent);
+  flex: none;
+}
+
+/* ---- auth buttons (top-right) ---- */
+.aotm-auth {
+  display: inline-flex;
+  align-items: center;
+  gap: clamp(0.25rem, 1.2vw, 0.7rem);
+  animation: aotm-fade 0.9s ease both;
+}
+.aotm-auth-login,
+.aotm-auth-signup {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  font-size: clamp(0.85rem, 1.2vw, 0.95rem);
+  font-weight: 600;
+  line-height: 1;
+  text-decoration: none;
+  white-space: nowrap;
+  border-radius: 999px;
+  transition: transform 0.25s ease, background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+}
+.aotm-auth-login {
+  color: var(--cream);
+  padding: 0 clamp(0.7rem, 1.6vw, 1rem);
+  border: 1px solid transparent;
+}
+.aotm-auth-login:hover { background: rgba(250, 248, 245, 0.1); }
+.aotm-auth-signup {
+  color: var(--green-900);
+  background: var(--accent);
+  padding: 0 clamp(0.95rem, 2vw, 1.25rem);
+  border: 1px solid var(--accent);
+  box-shadow: 0 6px 18px -9px rgba(255, 107, 53, 0.65);
+}
+.aotm-auth-signup:hover {
+  background: var(--accent-2);
+  border-color: var(--accent-2);
+  transform: translateY(-1px);
+}
+
+/* The global fixed "Home" button (app/layout.tsx) is redundant on the landing
+   itself and would sit on top of the auth buttons — hide it here. */
+body:has(main.aotm) a[aria-label="Home"][href="/"] { display: none; }
+.aotm-powered {
+  position: absolute;
+  left: clamp(1.5rem, 5vw, 4.5rem);
+  bottom: clamp(1.2rem, 3.5vh, 2.2rem);
+  z-index: 4;
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  color: var(--cream-dim);
+  text-decoration: none;
+  transition: color 0.25s ease;
+  animation: aotm-fade 1.2s ease both;
+  animation-delay: 0.7s;
+}
+.aotm-powered:hover { color: var(--cream); }
+.aotm-powered b { color: var(--cream); font-weight: 600; }
+
+/* ---- hero: video panel pinned left, copy in the right half ---- */
+.aotm-hero {
+  position: relative;          /* containing block for the absolute video panel */
+  z-index: 2;
+  min-height: 100svh;          /* fill the first screen; grows if copy is taller */
+}
+.aotm-copy {
+  position: relative;
+  z-index: 2;
+  box-sizing: border-box;
+  margin-left: 50%;            /* sit in the right half, clear of the video */
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;     /* vertically centered, adaptive to height */
+  padding: clamp(5.5rem, 12vh, 8rem) clamp(1.75rem, 4vw, 4.5rem) clamp(3rem, 8vh, 5rem);
+}
+.aotm-copy > * { max-width: 600px; }
+
+.aotm-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--accent-2);
+  margin-bottom: clamp(1.1rem, 2vw, 1.6rem);
+  animation: aotm-rise 0.8s ease both;
+  animation-delay: 0.1s;
+}
+.aotm-eyebrow::before {
+  content: '';
+  width: 34px; height: 1px;
+  background: var(--accent);
+}
+
+.aotm-title {
+  font-family: 'Fraunces', serif;
+  font-weight: 600;
+  font-size: clamp(2.9rem, 6.4vw, 5.4rem);
+  line-height: 0.96;
+  letter-spacing: -0.025em;
+  margin: 0 0 clamp(1.3rem, 2.5vw, 1.9rem);
+}
+.aotm-title span { display: block; animation: aotm-rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+.aotm-title span:nth-child(1) { animation-delay: 0.16s; }
+.aotm-title span:nth-child(2) { animation-delay: 0.26s; }
+.aotm-title .accent {
+  font-style: italic;
+  font-weight: 500;
+  color: var(--accent);
+}
+
+.aotm-lede {
+  font-size: clamp(1.1rem, 1.7vw, 1.4rem);
+  line-height: 1.45;
+  max-width: 30ch;
+  margin: 0 0 0.5rem;
+  color: var(--cream);
+  font-weight: 500;
+  animation: aotm-rise 0.9s ease both;
+  animation-delay: 0.34s;
+}
+.aotm-fire {
+  font-weight: 600;
+  background: linear-gradient(90deg, #e01f12 0%, #ff5a1f 50%, #ff8c3f 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+.aotm-sub {
+  font-size: clamp(0.95rem, 1.2vw, 1.08rem);
+  line-height: 1.55;
+  max-width: 42ch;
+  color: var(--cream-dim);
+  margin: 0 0 clamp(2rem, 3.5vw, 2.8rem);
+  animation: aotm-rise 0.9s ease both;
+  animation-delay: 0.42s;
+}
+
+/* ---- audience cards (menu rows) ---- */
+.aotm-paths { display: flex; flex-direction: column; gap: 0.85rem; }
+
+.aotm-card {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 1.1rem;
+  padding: clamp(1.05rem, 1.8vw, 1.4rem) clamp(1.2rem, 2vw, 1.6rem);
+  border: 1px solid var(--cream-faint);
+  border-radius: 16px;
+  background: rgba(250, 248, 245, 0.04);
+  color: var(--cream);
+  text-decoration: none;
+  overflow: hidden;
+  transition: transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1), border-color 0.35s ease, background 0.35s ease;
+  animation: aotm-rise 0.9s ease both;
+}
+.aotm-card:nth-of-type(1) { animation-delay: 0.5s; }
+.aotm-card:nth-of-type(2) { animation-delay: 0.58s; }
+.aotm-card:nth-of-type(3) { animation-delay: 0.66s; }
+
+.aotm-card::after {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: var(--accent);
+  transform: scaleY(0);
+  transform-origin: bottom;
+  transition: transform 0.35s ease;
+}
+.aotm-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(255, 140, 97, 0.55);
+  background: rgba(250, 248, 245, 0.08);
+}
+.aotm-card:hover::after { transform: scaleY(1); }
+
+.aotm-card-num {
+  font-family: 'Fraunces', serif;
+  font-size: 0.9rem;
+  color: var(--accent-2);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+.aotm-card-body .who {
+  display: block;
+  font-size: 0.74rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--cream-dim);
+  margin-bottom: 0.28rem;
+}
+.aotm-card-body .what {
+  display: block;
+  font-family: 'Fraunces', serif;
+  font-size: clamp(1.25rem, 2vw, 1.55rem);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+.aotm-card-body .desc {
+  display: block;
+  font-size: 0.86rem;
+  color: var(--cream-dim);
+  margin-top: 0.42rem;
+  line-height: 1.45;
+  max-width: 38ch;
+}
+.aotm-card-arrow {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--cream-faint);
+  display: grid;
+  place-items: center;
+  flex: none;
+  transition: transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1), background 0.35s ease, color 0.35s ease, border-color 0.35s ease;
+}
+.aotm-card:hover .aotm-card-arrow {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--green-900);
+  transform: translateX(4px) rotate(-45deg);
+}
+
+/* the Favorite Products card uses a heart in place of the index number */
+.aotm-card-num svg { display: block; }
+
+/* ---- video panel: left half, always full hero height ---- */
+.aotm-stage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 50%;
+  z-index: 1;
+  animation: aotm-rise-r 1s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  animation-delay: 0.3s;
+}
+.aotm-frame {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+  box-shadow: 28px 0 80px -36px rgba(0, 0, 0, 0.7);
+}
+.aotm-frame video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.aotm-frame::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  /* darken top (for the overlaid brand) and bottom (for the credit/tag) */
+  background: linear-gradient(180deg, rgba(13, 32, 20, 0.6) 0%, rgba(13, 32, 20, 0.12) 15%, transparent 32%, transparent 66%, rgba(17, 38, 25, 0.6) 100%);
+}
+.aotm-tag {
+  position: absolute;
+  z-index: 2;
+  right: 1rem;
+  bottom: 1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 0.85rem;
+  border-radius: 999px;
+  background: rgba(17, 38, 25, 0.55);
+  backdrop-filter: blur(8px);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--cream);
+  border: 1px solid var(--cream-faint);
+}
+.aotm-tag .dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 0 rgba(255, 107, 53, 0.6);
+  animation: aotm-pulse 2s infinite;
+}
+.aotm-stage::before { display: none; }
+
+/* ---- animations ---- */
+@keyframes aotm-rise { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: none; } }
+@keyframes aotm-rise-r { from { opacity: 0; transform: translateX(34px) scale(0.97); } to { opacity: 1; transform: none; } }
+@keyframes aotm-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes aotm-pulse {
+  0% { box-shadow: 0 0 0 0 rgba(255, 107, 53, 0.55); }
+  70% { box-shadow: 0 0 0 9px rgba(255, 107, 53, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 107, 53, 0); }
+}
+
+/* ---- responsive ---- */
+@media (max-width: 880px) {
+  .aotm-copy {
+    margin-left: 0;
+    padding: clamp(5.5rem, 16vh, 9rem) clamp(1.4rem, 6vw, 2.5rem) clamp(3rem, 10vh, 6rem);
+  }
+  .aotm-copy > * { max-width: none; }
+  /* video becomes a dimmed full-bleed background */
+  .aotm-stage {
+    position: fixed;
+    inset: 0;
+    width: auto;
+    z-index: 0;
+    animation: none;
+  }
+  .aotm-frame { box-shadow: none; }
+  .aotm-frame video { opacity: 0.3; }
+  .aotm-frame::after {
+    background: linear-gradient(180deg, rgba(13, 32, 20, 0.55) 0%, rgba(13, 32, 20, 0.6) 45%, rgba(13, 32, 20, 0.82) 100%);
+  }
+  .aotm-tag { display: none; }
+  .aotm-eyebrow::before { display: none; }
+}
+@media (max-width: 520px) {
+  .aotm-card { grid-template-columns: auto 1fr; gap: 0.8rem; }
+  .aotm-card-arrow { display: none; }
+  .aotm-card-body .desc { display: none; }
+}
+/* keep the top bar on one row on phones: brand shrinks/ellipsizes, auth stays put */
+@media (max-width: 600px) {
+  .aotm-top { gap: 0.6rem; }
+  .aotm-brand { min-width: 0; }
+  .aotm-brand-text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+}
+@media (max-width: 400px) {
+  .aotm-brand-text { display: none; }      /* leaf icon alone stands in for the wordmark */
+  .aotm-auth { gap: 0.35rem; }
+  .aotm-auth-login { padding: 0 0.55rem; }
+  .aotm-auth-signup { padding: 0 0.85rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .aotm *, .aotm::before { animation: none !important; }
+}

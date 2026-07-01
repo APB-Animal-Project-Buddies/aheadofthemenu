@@ -1,0 +1,642 @@
+[
+  {
+    "id": "vietnamese-vegan-ph-chay-the-viet-vegan",
+    "title": "Phở Chay (Không tàn nhẫn)",
+    "source": "The Viet Vegan",
+    "rawTitle": "### Vegan Phở Chay — The Viet Vegan",
+    "rawBody": "- **URL:** https://thevietvegan.com/homemade-vegan-vietnamese-pho/ ✓ VERIFIED\n- $2.65/serving · **Menu price:** $13–17 · 600 g · 480 cal · 18 g · 90 min broth · 4 · **Easy** (broth bulk; ladle assemble) · 🥘 ⚡",
+    "valueRatio": 5.660377358490567,
+    "valueTier": "Strong Earner",
+    "cuisine": "vietnamese",
+    "cuisineName": "Vietnamese",
+    "courses": [
+      "main"
+    ],
+    "url": "https://thevietvegan.com/homemade-vegan-vietnamese-pho/",
+    "urlStatus": "verified",
+    "urlNote": null,
+    "description": "Easy — broth bulk; ladle assemble · bulk-prep, fast-service.",
+    "cost": 2.65,
+    "menuPrice": "$13–17",
+    "weight": "600 g",
+    "calories": 480,
+    "protein": "18 g",
+    "time": "90m",
+    "prep": "90m",
+    "servings": 4,
+    "serves": 4,
+    "difficulty": 1,
+    "difficultyLabel": "Easy",
+    "difficultyNote": "broth bulk; ladle assemble",
+    "tags": [
+      "bulk-prep",
+      "fast-service"
+    ],
+    "sourcingTier": "in-house",
+    "subs": [],
+    "alternatives": [],
+    "photo": "plate",
+    "photoLabel": "chay",
+    "badge": "Strong Earner",
+    "ingredients": [
+      "8 oz (225 g) dried flat rice noodles (bánh phở)",
+      "7 oz (200 g) extra-firm tofu, sliced and pan-fried",
+      "1 large onion, halved (charred in dry pan)",
+      "3-inch (8 cm) piece fresh ginger, charred",
+      "4 whole star anise",
+      "1 cinnamon stick (3 inch)",
+      "4 whole cloves",
+      "1 teaspoon fennel seeds",
+      "6 cups (1.4 L) vegetable broth",
+      "2 tablespoons soy sauce",
+      "1 teaspoon sugar",
+      "fresh bean sprouts, Thai basil, lime wedges, sliced chili (for the table)",
+      "1 cup (50 g) fresh Vietnamese herb plate (sawtooth herb, mint, perilla)",
+      "hoisin sauce and Sriracha (for serving)"
+    ],
+    "steps": [
+      "Cut off the tops and bottoms of onions and peel the onions. Peel and cut daikon.",
+      "In a large pan over medium heat, dry sear the onions, peeled ginger, quartered cabbage, and daikon to get a caramelized browned edge. If you have a grill or BBQ, it would taste better to do this on there instead of the dry sear on a pan. They'll burn/char and that's okay, that's how you get a good depth of flavour. This will take 10-15 minutes. Alternatively you can broil everything in the oven, flipping until both sides gets some char. This will also take about 15 minutes.",
+      "Meanwhile in another non-stick pan, cook the slivered king oyster mushrooms with 1 tsp of mushroom broth powder until browned and caramelized.",
+      "To a large stock pot with at least 4 L of water, add the caramelized king oyster mushrooms (and dried shiitake mushrooms), charred daikon, onion, cabbage, carrot, apple and ginger and water and bring to a boil. Lower to a simmer and cover. Let simmer for at least an hour. Ideally up to 5-6 hours for more depth. After about 45 min-1 hour, remove the onion and apple since they will completely dissolve if you cook it longer.",
+      "Meanwhile, in a dry skillet, toast the spices (star anise, coriander seed, fennel, cardamom, cassia bark and cloves) for about 2-3 minutes until fragrant. Remove from heat.",
+      "About 15 minutes before serving, combine the toasted spices into a mesh bag, tea strainer/bag, or a sieve. Lower into the pot and simmer for 10 minutes, careful not to lose the spices into the broth. Don't leave the spices too long or it will become bitter.",
+      "Remove the spices.",
+      "Add the slices of tofu/fried tofu and Vietnamese sausage if using to heat them through. Add a tsp of vegetable oil to the broth if you're not adding fried tofu. The small about of oil adds a richness to the broth.",
+      "Meanwhile, cook the pho noodles until al dente (so when you add the steamy broth, they're perfectly chewy and delicious!), drain and segment into servings. It's easier to do this when they're freshly cooked, otherwise they'll drain into one big clump and be hard to divide.",
+      "Remove everything but the mushrooms from the pot. Start seasoning the broth with mushroom broth powder (or salt), vegan fish sauce, yellow rock sugar, MSG, and vegan beef bouillon cubes. Start out a little of each ingredient at a time until you have the full-bodied broth you like.",
+      "Pour broth over pho noodles, garnishing the tofu, sliced mushrooms (from the broth), vegan Vietnamese sausage, culantro leaves, Thai basil, bean sprouts, cilantro, green onion and a squeeze of lime. Add hoisin sauce and sriracha to taste!"
+    ],
+    "ingredientSource": "authored",
+    "allergens": [
+      "soy"
+    ],
+    "allergenSubs": [
+      {
+        "from": "tofu",
+        "to": "chickpea tofu (Burmese tofu)",
+        "removes": "soy"
+      }
+    ]
+  },
+  {
+    "id": "vietnamese-vegan-b-nh-m-nora-cooks",
+    "title": "Bánh Mì (Không tàn nhẫn)",
+    "source": "Nora Cooks",
+    "rawTitle": "### Vegan Bánh Mì — Nora Cooks",
+    "rawBody": "- **URL:** https://www.noracooks.com/vegan-banh-mi/ ✓ VERIFIED\n- $2.40/serving · **Menu price:** $11–14 · 280 g · 540 cal · 18 g · 30 min · 4 · **Easy** (cold assembly) · ⚡\n- **Premium row:** Chunk Pulled lemongrass-marinated +$1.90",
+    "valueRatio": 5.208333333333334,
+    "valueTier": "Strong Earner",
+    "cuisine": "vietnamese",
+    "cuisineName": "Vietnamese",
+    "courses": [
+      "main"
+    ],
+    "url": "https://www.noracooks.com/vegan-banh-mi/",
+    "urlStatus": "verified",
+    "urlNote": null,
+    "description": "Easy — cold assembly · fast-service.",
+    "cost": 2.4,
+    "menuPrice": "$11–14",
+    "weight": "280 g",
+    "calories": 540,
+    "protein": "18 g",
+    "time": "30m",
+    "prep": "30m",
+    "servings": 4,
+    "serves": 4,
+    "difficulty": 1,
+    "difficultyLabel": "Easy",
+    "difficultyNote": "cold assembly",
+    "tags": [
+      "fast-service"
+    ],
+    "sourcingTier": "in-house",
+    "subs": [],
+    "alternatives": [],
+    "photo": "plate",
+    "photoLabel": "bánh mì (không tàn nhẫn)",
+    "badge": "Strong Earner",
+    "ingredients": [
+      "2 small carrots (peeled and cut into matchsticks (about 1 cup))",
+      "1 small daikon radish (peeled and cut into matchsticks (about 1 cup))",
+      "1/2 cup rice vinegar",
+      "1/2 cup water",
+      "1/4 cup granulated sugar",
+      "1/2 teaspoon salt",
+      "14.5 ounce block extra-firm tofu",
+      "4 tablespoons low-sodium soy sauce",
+      "3 tablespoons sriracha hot sauce",
+      "2 tablespoons vegetable oil",
+      "1/2 cup vegan mayo",
+      "1 tablespoon hoisin sauce",
+      "2 teaspoons low-sodium soy sauce",
+      "2 teaspoons granulated sugar",
+      "2 teaspoons sriracha hot sauce",
+      "17-20 inch baguette (or 3 smaller baguettes)",
+      "few sprigs fresh cilantro",
+      "1/2 medium jalapeño pepper (sliced, optional)"
+    ],
+    "steps": [
+      "In a small saucepan, bring the vinegar and water to a boil. Remove from heat and stir in the sugar and salt until dissolved.",
+      "Add the carrots and daikon to a mason jar or other container. Pour the brine over the vegetables and let cool to room temperature. Cover with a lid and keep in the refrigerator until ready to use, or up to 2 weeks. If you can make the veggies a few hours ahead of time, they will be more flavorful.",
+      "Preheat the oven to 425 degrees F and line a rimmed baking sheet with parchment paper.",
+      "Remove the tofu from the packaging and press dry with a clean tea towel. If you have extra-firm tofu, there is no need to press it.",
+      "Rip the tofu into 1-inch chunks and place in a large bowl. Add the soy sauce, sriracha and oil and stir to coat the tofu in the sauce.",
+      "Place the tofu in a single layer on the prepared baking sheet. Bake for 10 minutes, then flip the tofu pieces and bake for 10-15 more minutes, until they are a bit crispy on the outside. Remove from the oven and set aside.",
+      "Make the Creamy Bánh Mì Sauce - In a small bowl, whisk all sauce ingredients together and set aside.",
+      "To Assemble the Sandwiches - Slice open the baguette and scoop out some of the soft bread inside, if desired, to make more room for the fillings. Spread the sauce on both sides of the bread, then stuff with some tofu, drained pickled vegetables, cilantro (chopped, stems removed or the whole sprig) and optional sliced jalapeño peppers. Slice to make 3 sandwiches. Enjoy!"
+    ],
+    "ingredientSource": "json-ld",
+    "allergens": [
+      "gluten",
+      "soy"
+    ],
+    "allergenSubs": [
+      {
+        "from": "baguette",
+        "to": "gluten-free baguette (Canyon Bakehouse)",
+        "removes": "gluten"
+      },
+      {
+        "from": "tofu",
+        "to": "chickpea tofu (Burmese tofu)",
+        "removes": "soy"
+      }
+    ]
+  },
+  {
+    "id": "vietnamese-vegan-spring-rolls-g-i-cu-n-the-viet-vegan",
+    "title": "Spring Rolls (Gỏi Cuốn)",
+    "source": "The Viet Vegan",
+    "rawTitle": "### Vegan Spring Rolls (Gỏi Cuốn) — The Viet Vegan",
+    "rawBody": "- **URL:** https://thevietvegan.com/spring-rolls/ ✓ VERIFIED\n- $1.85/serving · **Menu price:** $9–12 (3-pc app) · 240 g · 280 cal · 8 g · 30 min · 4 · **Medium** (rolling labor) · ⚡",
+    "valueRatio": 5.675675675675675,
+    "valueTier": "Strong Earner",
+    "cuisine": "vietnamese",
+    "cuisineName": "Vietnamese",
+    "courses": [
+      "starter"
+    ],
+    "url": "https://thevietvegan.com/vegan-vietnamese-spring-rolls/",
+    "urlStatus": "verified",
+    "urlNote": null,
+    "description": "Medium — rolling labor · fast-service.",
+    "cost": 1.85,
+    "menuPrice": "$9–12 (3-pc app)",
+    "weight": "240 g",
+    "calories": 280,
+    "protein": "8 g",
+    "time": "30m",
+    "prep": "30m",
+    "servings": 4,
+    "serves": 4,
+    "difficulty": 2,
+    "difficultyLabel": "Medium",
+    "difficultyNote": "rolling labor",
+    "tags": [
+      "fast-service"
+    ],
+    "sourcingTier": "in-house",
+    "subs": [],
+    "alternatives": [],
+    "photo": "plate",
+    "photoLabel": "spring · rolls",
+    "badge": "Strong Earner",
+    "ingredients": [
+      "12 sheets (8-inch) rice paper",
+      "4 oz (115 g) rice vermicelli noodles, cooked and drained",
+      "7 oz (200 g) firm tofu, pan-fried in strips",
+      "2 cups (140 g) butter lettuce leaves, torn",
+      "1 cup (50 g) fresh bean sprouts",
+      "½ English cucumber, julienned",
+      "1 medium carrot, julienned",
+      "½ cup (20 g) fresh mint leaves",
+      "½ cup (20 g) fresh cilantro leaves",
+      "¼ cup (20 g) fresh Thai basil leaves",
+      "3 tablespoons hoisin sauce (for dipping)",
+      "2 tablespoons peanut butter",
+      "1 tablespoon lime juice",
+      "1 clove garlic, minced",
+      "1-2 tablespoons water (to thin dipping sauce)"
+    ],
+    "ingredientSource": "authored",
+    "allergens": [
+      "nuts",
+      "soy"
+    ],
+    "allergenSubs": [
+      {
+        "from": "peanut butter",
+        "to": "sunflower seed butter",
+        "removes": "nuts"
+      },
+      {
+        "from": "tofu",
+        "to": "chickpea tofu (Burmese tofu)",
+        "removes": "soy"
+      }
+    ],
+    "urlFixedAt": "2026-05-01T02:12:45.908Z",
+    "urlFixReason": "old slug 404s; site uses longer slug now"
+  },
+  {
+    "id": "vietnamese-vegan-bun-bowls-pick-up-limes",
+    "title": "Bun Bowls (Không tàn nhẫn)",
+    "source": "Pick Up Limes",
+    "rawTitle": "### Vegan Bun Bowls — Pick Up Limes",
+    "rawBody": "- **URL:** https://www.pickuplimes.com/recipe/vegan-vermicelli-noodle-bowl-104 ✓ VERIFIED\n- $2.40/serving · **Menu price:** $13–16 · 380 g · 460 cal · 16 g · 30 min · 4 · **Easy** (assembly) · 🥘 ⚡",
+    "valueRatio": 6.041666666666667,
+    "valueTier": "Strong Earner",
+    "cuisine": "vietnamese",
+    "cuisineName": "Vietnamese",
+    "courses": [
+      "main"
+    ],
+    "url": "https://thevietvegan.com/lemongrass-tofu-vermicelli-bowl/",
+    "urlStatus": "verified",
+    "urlNote": "URL replaced via url_overrides.json",
+    "description": "Easy — assembly · bulk-prep, fast-service.",
+    "cost": 2.4,
+    "menuPrice": "$13–16",
+    "weight": "380 g",
+    "calories": 460,
+    "protein": "16 g",
+    "time": "30m",
+    "prep": "30m",
+    "servings": 4,
+    "serves": 4,
+    "difficulty": 1,
+    "difficultyLabel": "Easy",
+    "difficultyNote": "assembly",
+    "tags": [
+      "bulk-prep",
+      "fast-service"
+    ],
+    "sourcingTier": "in-house",
+    "subs": [],
+    "alternatives": [],
+    "photo": "plate",
+    "photoLabel": "bun · bowls",
+    "badge": "Strong Earner",
+    "ingredients": [
+      "Rice noodles (bun tuoi, 1 package (375 g))",
+      "2-3 cups mung bean sprouts",
+      "1 batch lemongrass tofu (replace soy sauce with tamari to make this GF)",
+      "4 cups chopped green or red leaf lettuce",
+      "Pickled carrots and daikon (1/4 cup per person, or as much as you like)",
+      "1/2 English cucumber (julienned or cut into half moons)",
+      "1/2 cup cilantro (diced)",
+      "1 cup nước chấm chay (use a tamari-based soy sauce to make this GF)"
+    ],
+    "steps": [
+      "Add the noodles to a large pot of boiling water and stir to cook. The noodles cook fairly quickly and only take about 5-6 minutes, depending on how high you've got the heat. I usually take a noodle and taste to check, you want them to be tender and chewy, and they'll absorb the sauce better! Overcooked noodles will break and will make for a watery vermicelli bowl.",
+      "Once the noodles are cooked, drain immediately in a colander, and rinse with cold water.",
+      "Add back to the pot and submerge in cold water to further halt the cooking process. Then grab small portions to drain in the colander. I generally lay them out in a criss-cross pattern so that once the noodles are drained, they are easier to separate. Otherwise you'll have one MASSIVE noodle clump that you have to break apart to eat. Cover with a plate and let drain for about 30 minutes while you prepare the rest of the noodle bowl.",
+      "Prepare the mung bean sprouts by either steaming or blanching. I prefer the texture of them blanched, so I add them to a pot of boiling water for about 3 minutes until they're softened, then drain. You can steam for about 5 minutes, or just eat these fresh.",
+      "To assemble, for each noodle bowl, layer 1 cup of lettuce, 1 + 1/2 cups rice noodles, 1/3 cup mung bean sprouts, lemongrass tofu, cucumber, pickled carrots and daikon, cilantro, and top with about 1/4 cup of nước chấm chay. Enjoy immediately!"
+    ],
+    "ingredientSource": "json-ld",
+    "allergens": [
+      "soy"
+    ],
+    "allergenSubs": [
+      {
+        "from": "tofu",
+        "to": "chickpea tofu (Burmese tofu)",
+        "removes": "soy"
+      }
+    ]
+  },
+  {
+    "id": "vietnamese-vegan-lemongrass-tofu-the-viet-vegan",
+    "title": "Lemongrass Tofu (Không tàn nhẫn)",
+    "source": "The Viet Vegan",
+    "rawTitle": "### Vegan Lemongrass Tofu — The Viet Vegan",
+    "rawBody": "- **URL:** https://thevietvegan.com/vegan-lemongrass-tofu/ ✓ VERIFIED\n- $2.10/serving · **Menu price:** $13–16 · 280 g · 380 cal · 22 g · 30 min · 4 · **Medium** (per-plate sear) · ⚡\n- **Premium row:** Chunk Pulled lemongrass +$2.00",
+    "valueRatio": 6.904761904761904,
+    "valueTier": "Strong Earner",
+    "cuisine": "vietnamese",
+    "cuisineName": "Vietnamese",
+    "courses": [
+      "main"
+    ],
+    "url": "https://thevietvegan.com/lemongrass-tofu/",
+    "urlStatus": "verified",
+    "urlNote": null,
+    "description": "Medium — per-plate sear · fast-service.",
+    "cost": 2.1,
+    "menuPrice": "$13–16",
+    "weight": "280 g",
+    "calories": 380,
+    "protein": "22 g",
+    "time": "30m",
+    "prep": "30m",
+    "servings": 4,
+    "serves": 4,
+    "difficulty": 2,
+    "difficultyLabel": "Medium",
+    "difficultyNote": "per-plate sear",
+    "tags": [
+      "fast-service"
+    ],
+    "sourcingTier": "in-house",
+    "subs": [],
+    "alternatives": [],
+    "photo": "plate",
+    "photoLabel": "lemongrass · tofu",
+    "badge": "Strong Earner",
+    "ingredients": [
+      "14 oz (400 g) extra-firm tofu, pressed and cubed",
+      "3 stalks lemongrass (inner white part only), minced",
+      "3 cloves garlic, minced",
+      "1 shallot, minced",
+      "1 tablespoon neutral oil",
+      "1 tablespoon soy sauce",
+      "1 tablespoon maple syrup or sugar",
+      "1 teaspoon ground turmeric",
+      "½ teaspoon chili flakes",
+      "1 tablespoon lime juice",
+      "¼ cup fresh cilantro, chopped (for garnish)",
+      "steamed jasmine rice (for serving)"
+    ],
+    "ingredientSource": "authored",
+    "allergens": [
+      "soy"
+    ],
+    "allergenSubs": [
+      {
+        "from": "tofu",
+        "to": "chickpea tofu (Burmese tofu)",
+        "removes": "soy"
+      }
+    ],
+    "urlFixedAt": "2026-05-01T02:12:45.908Z",
+    "urlFixReason": "site dropped \"vegan-\" prefix on this slug"
+  },
+  {
+    "id": "vietnamese-vegan-b-n-ri-u-chay-cinnamon-snail-viet-vegan",
+    "title": "Bún Riêu Chay (Không tàn nhẫn)",
+    "source": "Cinnamon Snail / Viet Vegan",
+    "rawTitle": "### Vegan Bún Riêu Chay — Cinnamon Snail / Viet Vegan",
+    "rawBody": "- **URL:** https://thevietvegan.com/vegan-bun-rieu-chay/ ✓ VERIFIED\n- $3.10/serving · **Menu price:** $14–17 · 580 g · 480 cal · 18 g · 90 min · 4 · **Medium** · 🥘 ⚡",
+    "valueRatio": 5,
+    "valueTier": "Strong Earner",
+    "cuisine": "vietnamese",
+    "cuisineName": "Vietnamese",
+    "courses": [
+      "main"
+    ],
+    "url": "https://thevietvegan.com/vegan-bun-rieu/",
+    "urlStatus": "verified",
+    "urlNote": null,
+    "description": "Tomato-fermented-soybean broth with rice noodles, crispy tofu, and herbs. Saigon-market lunch — vegan rebuild of bún riêu, naturally bright and balanced.",
+    "cost": 3.1,
+    "menuPrice": "$14–17",
+    "weight": "580 g",
+    "calories": 480,
+    "protein": "18 g",
+    "time": "90m",
+    "prep": "90m",
+    "servings": 4,
+    "serves": 4,
+    "difficulty": 2,
+    "difficultyLabel": "Medium",
+    "difficultyNote": null,
+    "tags": [
+      "bulk-prep",
+      "fast-service"
+    ],
+    "sourcingTier": "in-house",
+    "subs": [],
+    "alternatives": [],
+    "photo": "plate",
+    "photoLabel": "chay",
+    "badge": "Strong Earner",
+    "ingredients": [
+      "8 oz (225 g) dried rice vermicelli noodles",
+      "4 oz (115 g) firm tofu, crumbled",
+      "4 oz (115 g) dried lily buds, soaked and knotted",
+      "1 can (14 oz) diced tomatoes",
+      "1 medium tomato, sliced into wedges",
+      "1 medium onion, halved",
+      "4 cloves garlic, minced",
+      "2 tablespoons neutral oil",
+      "6 cups (1.4 L) vegetable broth",
+      "2 tablespoons soy sauce",
+      "1 tablespoon vegan fish sauce or rice vinegar",
+      "1 teaspoon sugar",
+      "2 cups (140 g) bean sprouts",
+      "fresh Thai basil, lime wedges, chili (for serving)",
+      "salt and white pepper to taste"
+    ],
+    "ingredientSource": "authored",
+    "allergens": [
+      "soy"
+    ],
+    "allergenSubs": [
+      {
+        "from": "tofu",
+        "to": "chickpea tofu (Burmese tofu)",
+        "removes": "soy"
+      }
+    ],
+    "urlFixedAt": "2026-05-01T02:12:45.908Z",
+    "urlFixReason": "old slug 404s; current site uses /vegan-bun-rieu/"
+  },
+  {
+    "id": "vietnamese-vegan-b-kho",
+    "title": "Bò Kho (Không tàn nhẫn)",
+    "source": "The Viet Vegan",
+    "rawTitle": "### Vegan Bò Kho (**SHOWSTOPPER**)",
+    "rawBody": "- **URL:** https://thevietvegan.com/vegan-beef-stew/ ✓ VERIFIED *(Lisa's Viet Vegan recipe — she titles it \"Vegan Beef Stew\" but explicitly notes in the post that readers requested a Bò Kho version, and her recipe uses lemongrass, star anise, and the classic Bò Kho aromatics. Built around Gardein Beefless Tips. **Recommended swap: Chunk Steakhouse Cut** for the upscale rebuild.)*\n- **Description:** **Lead protein:** Chunk Foods Steakhouse Cut, cubed and slow-braised with lemongrass, star anise, annatto seed oil, ginger, fish-sauce-substitute (mushroom-soy), tomato, and fork-tender carrots. The Vietnamese answer to a French daube — actually a French-Vietnamese hybrid, which is why it shines with the structure of a real whole-muscle plant-meat. Plates with a crusty banh mi for dipping or over fresh rice noodles.\n- **Wholesale food cost:** $6.40 / serving · **Menu price:** **$20–24** (upscale Vietnamese ÷ 0.30)\n- **Weight:** 480 g (stew + bread/noodles) · **Calories:** 580 · **Protein:** 30 g · **Time:** 90 min (mostly unattended) · **Servings:** 4\n- **Restaurant difficulty:** **Easy** — quintessential braise: bulk-prep, hold 4+ days, plate over noodles or with banh mi to order.\n- **Tags:** 🥘 Bulk-Prep · ⚡ Fast-Service\n\n| Sub | Effect | Cost delta |\n|---|---|---|\n| **Lead protein:** Chunk Steakhouse Cut (default) | Best whole-muscle braise | baseline |\n| Chunk Pulled | Looser, \"shredded-beef\" effect | −$0.70 |\n| Beyond Steak Tips | Pre-seasoned shortcut | −$1.40 |\n| Seitan or jackfruit | Budget tier | −$3.20 → menu $14–17 |",
+    "valueRatio": null,
+    "valueTier": "Showpiece",
+    "cuisine": "vietnamese",
+    "cuisineName": "Vietnamese",
+    "courses": [
+      "showstopper"
+    ],
+    "url": "https://thevietvegan.com/vegan-beef-stew/",
+    "urlStatus": "verified",
+    "urlNote": "Lisa's Viet Vegan recipe — she titles it \"Vegan Beef Stew\" but explicitly notes in the post that readers requested a Bò Kho version, and her recipe uses lemongrass, star anise, and the classic Bò Kho aromatics. Built around Gardein Beefless Tips. **Recommended swap: Chunk Steakhouse Cut** for the upscale rebuild.",
+    "description": "**Lead protein:** Chunk Foods Steakhouse Cut, cubed and slow-braised with lemongrass, star anise, annatto seed oil, ginger, fish-sauce-substitute (mushroom-soy), tomato, and fork-tender carrots. The Vietnamese answer to a French daube — actually a French-Vietnamese hybrid, which is why it shines with the structure of a real whole-muscle plant-meat. Plates with a crusty banh mi for dipping or over fresh rice noodles.",
+    "cost": 6.4,
+    "menuPrice": null,
+    "weight": "480 g (stew + bread/noodles)",
+    "calories": 580,
+    "protein": "30 g",
+    "time": "90m",
+    "prep": "90m",
+    "servings": 4,
+    "serves": 4,
+    "difficulty": 1,
+    "difficultyLabel": "Easy",
+    "difficultyNote": "quintessential braise: bulk-prep, hold 4+ days, plate over noodles or with banh mi to order.",
+    "tags": [
+      "bulk-prep",
+      "fast-service"
+    ],
+    "sourcingTier": "branded",
+    "subs": [
+      {
+        "from": "**Lead protein:** Chunk Steakhouse Cut (default)",
+        "effect": "Best whole-muscle braise",
+        "delta": "baseline"
+      },
+      {
+        "from": "Chunk Pulled",
+        "effect": "Looser, \"shredded-beef\" effect",
+        "delta": "−$0.70"
+      },
+      {
+        "from": "Beyond Steak Tips",
+        "effect": "Pre-seasoned shortcut",
+        "delta": "−$1.40"
+      },
+      {
+        "from": "Seitan or jackfruit",
+        "effect": "Budget tier",
+        "delta": "−$3.20 → menu $14–17"
+      }
+    ],
+    "alternatives": [],
+    "photo": "plate",
+    "photoLabel": "kho",
+    "badge": "Showpiece",
+    "ingredients": [
+      "1 large onion (diced (~2 cups [500 mL]))",
+      "1 tbsp 15 mL oil",
+      "5 cloves garlic",
+      "2 tbsp 15 mL tomato paste",
+      "1 tsp 5 mL dried rosemary",
+      "1 tsp 5 mL dried ground sage",
+      "1 tsp 5 mL dried rubbed thyme",
+      "3 tbsp 45 mL dark mushroom soy sauce (you can sub dark soy sauce, liquid aminos, regular soy sauce, but the dark mushroom soy sauce will give deep umami flavour to mimic beef flavour)",
+      "2 tbsp 30 mL balsamic vinegar",
+      "1 tbsp 15 mL white vinegar",
+      "1/3 cup all purpose flour",
+      "4 cups 1 L water + 1 tbsp mushroom broth powder OR vegetable broth",
+      "1 1/2 cup chopped carrots (~3 medium carrots)",
+      "2 cups diced potatoes (~2 large potatoes)",
+      "1 cup chopped celery (~3-4 ribs of celery)",
+      "1 cup frozen peas",
+      "1/2 tsp black pepper",
+      "Vegan beefless tips (I used Gardein brand, but you can also use reconstituted soy/tvp chunks, but I haven't ever tested that.)",
+      "Salt to taste (season after completely cooked)"
+    ],
+    "steps": [
+      "In a large pot over medium heat, sauté an onion in oil until translucent, about 3-4 minutes. Add garlic and cook, stirring until fragrant (about 1-2 minutes).",
+      "Add tomato paste, dried rosemary, sage, and thyme. Stir briefly.",
+      "Add dark mushroom soy sauce, balsamic vinegar, and white vinegar, and mix to thin out the tomato paste.",
+      "Stir in the flour to make a roux. The flour should absorb the moisture and clump up slightly. Mix until all flour is incorporated and you are able to make a thick slurry. If it's taking too long, just add a little bit of the water/vegetable broth and stir until all the lumps are worked out (about a minute or so), then add the remainder of the water + mushroom broth powder OR vegetable broth.",
+      "Gently add in the chopped carrots, diced potatoes, and chopped celery. Stir to coat, then cover and bring to a boil. Once boiling, lower to a medium low heat. Give it one more stir, and then allow to simmer, covered for 30 minutes (stirring occasionally).",
+      "Cook uncovered for 20 minutes to let some of the water evaporate if you want it thicker. In the last 10 minutes of cooking, add the frozen peas and stir into the stew.",
+      "Meanwhile, sauté the vegan beefless tips. Once cooked according to the package, add to the stew. If you're using reconstituted soy/tvp chunks, I imagine you can incorporate the chunks after the 30 minutes of the covered simmering. I haven't tried it, but it seems like it'd be a good alternative from the Gardein product.",
+      "Turn off the heat, and serve!"
+    ],
+    "ingredientSource": "json-ld",
+    "allergens": [
+      "soy"
+    ],
+    "allergenSubs": [
+      {
+        "from": "soy sauce",
+        "to": "coconut aminos",
+        "removes": "soy"
+      }
+    ]
+  },
+  {
+    "id": "vietnamese-vegan-ch-chu-i",
+    "title": "Chè Chuối (Không tàn nhẫn)",
+    "source": "Veggie Anh",
+    "rawTitle": "### Vegan Chè Chuối (Banana-Coconut-Tapioca Pudding) (**DESSERT**)",
+    "rawBody": "- **URL:** https://veggieanh.com/banana-tapioca-pudding/ ✓ VERIFIED *(Veggie Anh — a Vietnamese food blogger, so this is an authoritative source. Recipe she learned from her university roommate; classic preparation, naturally vegan, 30 min total.)*\n\n  **Recipe** (4 servings, per Anh): 4 tbsp tapioca pearls (soak in 1 cup warm water for 10 min), 4 medium ripe bananas/plantains (sliced into 2 cm chunks), 200 ml full-fat coconut milk, 4–5 tbsp sugar, 300 ml cold water for the cooking liquid. Optional toppings: 50 g roasted coconut flakes, 25 g chopped peanuts, fresh banana slices. Bring 300 ml water to a boil; add banana chunks + drained tapioca; simmer on low 3 min until tapioca pearls turn transparent. Add sugar + coconut milk; stir 5 min more. Chill 15 min before serving. Holds 3–4 days refrigerated; serve warm or cold.\n- **Description:** Sweet ripe bananas simmered in coconut milk with small tapioca pearls, served warm or chilled, topped with toasted coconut flakes and chopped peanuts. The Vietnamese sweet that translates effortlessly — naturally vegan in its traditional form.\n- **Wholesale food cost:** $1.50 / serving · **Menu price:** $6–9\n- **Weight:** 220 g · **Calories:** 320 · **Protein:** 4 g · **Time:** 30 min · **Servings:** 6\n- **Restaurant difficulty:** **Easy** — bulk-cook, hold warm in bain or chilled in cold-line; portion to order.\n- **Tags:** 🥘 Bulk-Prep · ⚡ Fast-Service\n\n| Sub | Effect | Cost delta |\n|---|---|---|\n| Banana + tapioca (default) | Classic | baseline |\n| Add black sesame swirl | Visual + flavor accent | +$0.20 |\n| Combo plate with mini banh chuoi nuong (banana cake) | Vietnamese sweets duo | +$1.20 → menu $9–12 |",
+    "valueRatio": 5,
+    "valueTier": "Strong Earner",
+    "cuisine": "vietnamese",
+    "cuisineName": "Vietnamese",
+    "courses": [
+      "dessert"
+    ],
+    "url": "https://veggieanh.com/banana-tapioca-pudding/",
+    "urlStatus": "verified",
+    "urlNote": "Veggie Anh — a Vietnamese food blogger, so this is an authoritative source. Recipe she learned from her university roommate; classic preparation, naturally vegan, 30 min total.",
+    "description": "Sweet ripe bananas simmered in coconut milk with small tapioca pearls, served warm or chilled, topped with toasted coconut flakes and chopped peanuts. The Vietnamese sweet that translates effortlessly — naturally vegan in its traditional form.",
+    "cost": 1.5,
+    "menuPrice": "$6–9",
+    "weight": "220 g",
+    "calories": 320,
+    "protein": "4 g",
+    "time": "30m",
+    "prep": "30m",
+    "servings": 6,
+    "serves": 6,
+    "difficulty": 1,
+    "difficultyLabel": "Easy",
+    "difficultyNote": "bulk-cook, hold warm in bain or chilled in cold-line; portion to order.",
+    "tags": [
+      "bulk-prep",
+      "fast-service"
+    ],
+    "sourcingTier": "in-house",
+    "subs": [
+      {
+        "from": "Banana + tapioca (default)",
+        "effect": "Classic",
+        "delta": "baseline"
+      },
+      {
+        "from": "Add black sesame swirl",
+        "effect": "Visual + flavor accent",
+        "delta": "+$0.20"
+      },
+      {
+        "from": "Combo plate with mini banh chuoi nuong (banana cake)",
+        "effect": "Vietnamese sweets duo",
+        "delta": "+$1.20 → menu $9–12"
+      }
+    ],
+    "alternatives": [],
+    "photo": "plate",
+    "photoLabel": "chu",
+    "badge": "Strong Earner",
+    "ingredients": [
+      "1 cup warm water",
+      "300 ml cold water",
+      "4 tbsp tapioca pearls",
+      "4 medium ripe bananas / plaintains",
+      "200 ml coconut milk (preferably full fat)",
+      "4-5 tbsp sugar",
+      "50 g roasted coconut flakes",
+      "25 g chopped peanuts",
+      "fresh banana slides"
+    ],
+    "steps": [
+      "Put 1 cup of warm water and soak the tapioca pearl for 10 minutes.",
+      "Meanwhile, peel the bananas and slice them into 2 cm chunks, set aside.",
+      "Boil 300ml of water in a pot on medium heat.",
+      "Add in the banana slides and tapioca pearls into the boiling water. Simmer on low heat for 3 minutes or until the tapioca turn transparent.",
+      "Add in the sugar and coconut milk and stir frequently for 5 more minutes.",
+      "Let chill for at least 15 minutes. Serve in a bowl and add the toppings."
+    ],
+    "ingredientSource": "json-ld",
+    "allergens": [
+      "nuts",
+      "coconut"
+    ],
+    "allergenSubs": [
+      {
+        "from": "peanuts",
+        "to": "roasted sunflower seeds",
+        "removes": "nuts"
+      },
+      {
+        "from": "coconut milk",
+        "to": "oat cream + 1 tsp olive oil (per 1 cup)",
+        "removes": "coconut"
+      }
+    ]
+  }
+]

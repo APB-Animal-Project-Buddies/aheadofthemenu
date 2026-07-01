@@ -1,0 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500;1,9..144,600&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --apb-primary: #1e4d2b;
+  --apb-accent: #ff6b35;
+  --apb-cream: #faf8f5;
+  --apb-serif: 'Fraunces', Georgia, 'Times New Roman', serif;
+}
+body { font-family: 'DM Sans', ui-sans-serif, system-ui, sans-serif; background: var(--apb-cream); }
+h1, h2, h3 { font-family: var(--apb-serif); }

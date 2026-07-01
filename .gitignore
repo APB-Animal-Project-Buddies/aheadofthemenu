@@ -1,0 +1,70 @@
+# Dependencies
+node_modules/
+
+# Environment files — ignore ALL .env* (never commit any env file).
+# Onboarding: run the env pull script (scripts/pull-vercel-env.mjs) to generate
+# .env.local from Vercel instead of committing a template.
+.env*
+
+# Vercel — local token file (secret). Non-secret .vercel-config.json IS committed.
+.vercel-config.local.json
+.vercel/
+
+# --- Secrets / credentials safety net (public repo) ---
+*.pem
+*.key
+*.crt
+*.cert
+*.p12
+*.pfx
+id_rsa*
+id_ed25519*
+.netrc
+.npmrc
+.dev.vars
+*.local.json
+secrets.*
+*.secret
+*service-account*.json
+*credentials*.json
+
+# Nhost
+.nhost/
+.secrets
+
+# Build output
+dist/
+build/
+*.tsbuildinfo
+.next/
+out/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+bun-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor directories
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Test coverage
+coverage/
+
+# Superpowers docs
+docs/superpowers/
+
+# Claude Code / OMC local config
+.claude/
+.omc/
+
+# Git worktrees
+.worktrees/

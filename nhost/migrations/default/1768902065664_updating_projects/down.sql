@@ -1,0 +1,20 @@
+-- Could not auto-generate a down migration.
+-- Please write an appropriate down migration for the SQL below:
+-- UPDATE projects SET project_name = CASE project_handle
+--       WHEN 'chicken-nor-egg' THEN 'Chicken Nor Egg'
+--       WHEN 'ahimsa-in-action' THEN 'Ahimsa in Action'
+--       WHEN 'kind-state' THEN 'Kind State'
+--       WHEN 'clean-meat-alliance' THEN 'Clean Meat Alliance'
+--       WHEN 'feeding-progress' THEN 'Feeding Progress'
+--       WHEN 'vishnus-thoughts' THEN 'Vishnu''s Thoughts'
+--       WHEN 'viniths-thoughts' THEN 'Vinith''s Thoughts'
+--   END
+--   WHERE project_handle IN ('chicken-nor-egg', 'ahimsa-in-action', 'kind-state', 'clean-meat-alliance',
+--   'feeding-progress', 'vishnus-thoughts', 'viniths-thoughts');
+--
+--    INSERT INTO projects (project_handle, project_name, project_website, project_description) VALUES
+--       ('coffee-buddy', 'Coffee Buddy', 'https://coffeebuddy.org/', 'A fun platform for tracking coffee
+--   shops and which ones are vegan friendly.'),
+--       ('just-another-day-at-work', 'Just Another Day At Work', NULL, 'An innocent fellow begins his
+--   mysterious new job, only to discover it was not at all what they had planned for...')
+--   ON CONFLICT (project_handle) DO NOTHING;

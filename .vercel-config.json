@@ -1,0 +1,10 @@
+{
+  "_comment": "Non-secret Vercel wiring for scripts/sync-vercel-env.mjs. Fill in projectId/teamId after creating the Vercel project (`vercel link`, or the dashboard URL). The Vercel token is NOT here — put it in .vercel-config.local.json (gitignored) or VERCEL_TOKEN.",
+  "projectId": "prj_REPLACE_ME",
+  "teamId": "team_REPLACE_ME",
+  "scopes": {
+    "prod": { "target": ["production"] },
+    "preview": { "target": ["preview"] },
+    "dev": { "target": ["development"] }
+  }
+}

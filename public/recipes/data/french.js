@@ -1,0 +1,782 @@
+// Auto-generated from vegan-restaurant-catalog-v5.md — do not edit by hand.
+(window.APB_RECIPES = window.APB_RECIPES || []).push(...[
+  {
+    "id": "french-vegan-faux-gras-terrine-gauthier-soho",
+    "title": "Faux Gras Terrine (Sans cruauté)",
+    "source": "Chef Gauthier Soho (Michelin Star)",
+    "rawTitle": "### Vegan Faux Gras Terrine — Gauthier Soho (**STARTER / SHOWSTOPPER**)",
+    "rawBody": "- **URL:** https://chefalexisgauthier.substack.com/p/faux-gras-20 ✓ VERIFIED *(Chef Alexis Gauthier — Michelin-starred French chef, owner of Gauthier Soho in London (the restaurant went fully plant-based in 2021). This is the **actual production recipe served at the restaurant** — Gauthier published \"Faux Gras 2.0\" on his Substack in Dec 2025 explicitly because \"it deserves to be shared with as many people as possible.\" The recipe is the most credible vegan foie-gras alternative in French gastronomy: cashew-cacao-butter base seasoned with miso, soy, nutritional yeast, tahini, sugar, and beetroot for color, shaped into 3 \"lobes,\" drizzled with cognac and port, weighted into a 25cm terrine, and aged 24-48 hours. Yields 10-12 portions per terrine.)*\n\n  **Recipe** (1 × 25cm terrine, 10-12 portions): **Terrine base:** 900 g cashews (soaked), 180 g cacao butter, 180 g neutral coconut oil, 80 g white miso, 2 tbsp soy sauce, 50 g nutritional yeast, 2 tbsp tahini, 20 g caster sugar, beetroot powder OR 2 tbsp very dry beetroot purée OR 3 drops natural red colouring (add gradually — aim for pale pink, not Barbie pink), salt + pepper. **Lobe seasoning:** cognac, port, more beetroot powder, 20 g caster sugar, 10 g salt, generous fresh black pepper. **Method:** Blend everything for the base smooth in a food processor, adjusting colour gradually at the end. Divide into 3 portions, hand-shape into lobes, wrap in cling film, chill 4 hours. Unwrap, place lobes on parchment, drizzle with cognac and port, sprinkle with salt/sugar/pepper, turn to coat, cover with parchment, chill 12+ hours. Line a 25cm terrine with cling film, stack the 3 seasoned lobes inside, weight firmly, refrigerate **24–48 hours** to firm up and develop flavour. Slice cold to order.\n- **Description:** Slow-aged cashew-cacao butter terrine seasoned with miso, soy, tahini, beetroot, cognac and port — Chef Alexis Gauthier's restaurant-grade vegan answer to foie gras, served sliced cold with toasted sourdough or brioche, fig jam or onion confit, and flaky salt. The single most credible plant-based French starter on the market.\n- **Wholesale food cost:** $2.65 / portion · **Menu price:** $14–18 (casual) / $18–24 (upscale)\n- **Weight:** 75 g slice · **Calories:** 320 · **Protein:** 7 g · **Time:** 30 min active + 4 hr lobe chill + 12 hr seasoning + 24-48 hr terrine set · **Servings:** 10-12 / 25cm terrine\n- **Restaurant difficulty:** **Easy-Medium** — fully bulk-prep, long lead time but virtually no service work. One terrine yields 10-12 starters; multiple terrines run in parallel for high-volume nights.\n- **Tags:** 🥘 Bulk-Prep · ⚡ Fast-Service\n\n| Sub | Effect | Cost delta |\n|---|---|---|\n| Cashew-cacao butter base (Gauthier default) | Restaurant recipe as written | baseline ($2.65) |\n| Plate with toasted brioche + fig jam | Classic accompaniment | +$0.50 → menu $16–22 |\n| Plate with truffle shavings | Showstopper presentation | +$3.00 → menu $22–28 |\n| Sub almond butter for tahini | Slightly milder, more \"buttery\" | flat |",
+    "valueRatio": 6.037735849056604,
+    "valueTier": "Showpiece",
+    "cuisine": "french",
+    "cuisineName": "French",
+    "courses": [
+      "starter",
+      "showstopper"
+    ],
+    "url": "https://chefalexisgauthier.substack.com/p/faux-gras-20",
+    "urlStatus": "verified",
+    "urlNote": null,
+    "description": "Slow-aged cashew-cacao butter terrine seasoned with miso, soy, tahini, beetroot, cognac and port — Chef Alexis Gauthier's restaurant-grade vegan answer to foie gras, served sliced cold with toasted sourdough or brioche, fig jam or onion confit, and flaky salt. The single most credible plant-based French starter on the market.",
+    "cost": 2.65,
+    "menuPrice": "$14–18 (casual) / $18–24 (upscale)",
+    "weight": "75 g slice",
+    "calories": 320,
+    "protein": "7 g",
+    "time": "30m",
+    "prep": "30m",
+    "servings": 10,
+    "serves": 10,
+    "difficulty": null,
+    "difficultyLabel": null,
+    "difficultyNote": null,
+    "tags": [
+      "bulk-prep",
+      "fast-service"
+    ],
+    "sourcingTier": "in-house",
+    "subs": [
+      {
+        "from": "Cashew-cacao butter base (Gauthier default)",
+        "effect": "Restaurant recipe as written",
+        "delta": "baseline ($2.65)"
+      },
+      {
+        "from": "Plate with toasted brioche + fig jam",
+        "effect": "Classic accompaniment",
+        "delta": "+$0.50 → menu $16–22"
+      },
+      {
+        "from": "Plate with truffle shavings",
+        "effect": "Showstopper presentation",
+        "delta": "+$3.00 → menu $22–28"
+      },
+      {
+        "from": "Sub almond butter for tahini",
+        "effect": "Slightly milder, more \"buttery\"",
+        "delta": "flat"
+      }
+    ],
+    "alternatives": [],
+    "photo": "layered",
+    "photoLabel": "faux · gras · terrine",
+    "badge": "Showpiece"
+  },
+  {
+    "id": "french-vegan-soupe-vge-bocuse-tribute-gauthier",
+    "title": "Soupe VGE (Sans cruauté)",
+    "source": "Chef Gauthier Soho (Michelin Star)",
+    "rawTitle": "### Vegan Soupe VGE (Bocuse Tribute) — Gauthier (**SHOWSTOPPER**)",
+    "rawBody": "- **URL:** https://chefalexisgauthier.substack.com/p/soupe-vge ✓ VERIFIED *(Chef Alexis Gauthier — vegan reimagining of Paul Bocuse's iconic **Soupe VGE** (officially \"Soupe aux truffes Élysée\"), created in 1975 for the dinner where President Valéry Giscard d'Estaing awarded Bocuse the Légion d'Honneur. The original — black truffle, foie gras, beef consommé, sealed with puff pastry — is one of the most famous dishes in French haute cuisine. Gauthier's vegan version replaces the consommé with a slow-roasted, deeply concentrated vegetable broth (8-10 hr dehydration + 2-3 hr simmer + reduction), the foie gras with quenelles of his own faux gras, and adds morels, vermouth, and shaved black truffle. Sealed with vegan puff pastry and baked, broken at the table. April 2026 release.)*\n\n  **Recipe** (4 portions): **Concentrated broth:** Onion 300 g, carrot 250 g, celeriac 250 g, beetroot 150 g, water 2,500 g. Dry the vegetables in oven at 90-100°C for 8-10 hours (concentrates sugars dramatically). Simmer with water 2-3 hours, strain, reduce to ~1,000 g concentrated stock. **Garnish base:** 120 g carrot small dice, 400 g celeriac small dice, 80 g morels (fresh or rehydrated dried), 30 g olive oil, 200 g concentrated broth, 5 g salt. Sweat carrot + celeriac in oil 8 min (no browning), add morels, add broth, cook until tender and glazed. **Per bowl:** ~120 g garnish + 180-200 g hot broth + 60-70 g faux gras (2 large quenelles) + 3-5 g sliced black truffle + 15-20 g vegan vermouth (added directly to bowl — critical for aroma). **Pastry seal glaze:** mix 10 g white miso + 10 g soy sauce + 15 g olive oil. Cover bowl with ~75 g vegan puff pastry, seal edges tightly, brush generously with glaze. Bake at 200°C for 15-20 min until puffed, golden, glossy. **Service:** crack the pastry tableside to release the vermouth-truffle aroma — one of the great theatrical moments in restaurant service.\n- **Description:** Slow-concentrated vegetable broth, morels, faux gras quenelles, black truffle, and vegan vermouth, sealed in a bowl under glazed puff pastry and baked. Cracked tableside to release a wave of truffle and vermouth aroma. Gauthier's vegan tribute to one of the most legendary French dishes of the 20th century. **Reserve a Wednesday-only or weekend-only feature with limited covers** — both for cost discipline and to preserve the showstopper status.\n- **Wholesale food cost:** $11.50 / portion (with morels + truffle) · $7.80 / portion (morels only, no truffle) · **Menu price:** $42–55 (with truffle, upscale) / $32–42 (morels only)\n- **Weight:** 480 g (bowl + pastry) · **Calories:** 540 · **Protein:** 14 g · **Time:** ~12 hr broth (mostly hands-off) + 30 min active per service · **Servings:** 4\n- **Restaurant difficulty:** **Hard** — concentrated broth is multi-day prep; faux gras must be made ahead; pastry seal needs technique. Only attempt with a trained pastry/sauté line. Pre-portion garnish + broth 4 hours ahead, assemble + bake to order (15-20 min hold per ticket).\n- **Tags:** 🥘 (broth + garnish + faux gras bulk-prep)\n\n| Sub | Effect | Cost delta |\n|---|---|---|\n| Full version with fresh black truffle (Gauthier) | Authentic Bocuse-tribute experience | baseline ($11.50) |\n| Morels-only, omit truffle | Still extraordinary, accessible price point | −$3.70 → menu $32–42 |\n| Sub porcini for morels | Lower cost, deeper umami | −$2.00 → menu $35–46 |\n| Add gold-leaf garnish on the pastry crack | Anniversary / VIP service | +$2.00 → menu $52–65 |",
+    "valueRatio": 4.217391304347826,
+    "valueTier": "Showpiece",
+    "cuisine": "french",
+    "cuisineName": "French",
+    "courses": [
+      "showstopper"
+    ],
+    "url": "https://chefalexisgauthier.substack.com/p/soupe-vge",
+    "urlStatus": "verified",
+    "urlNote": null,
+    "description": "Slow-concentrated vegetable broth, morels, faux gras quenelles, black truffle, and vegan vermouth, sealed in a bowl under glazed puff pastry and baked. Cracked tableside to release a wave of truffle and vermouth aroma. Gauthier's vegan tribute to one of the most legendary French dishes of the 20th century. **Reserve a Wednesday-only or weekend-only feature with limited covers** — both for cost discipline and to preserve the showstopper status.",
+    "cost": 11.5,
+    "menuPrice": "$42–55 (with truffle, upscale) / $32–42 (morels only)",
+    "weight": "480 g (bowl + pastry)",
+    "calories": 540,
+    "protein": "14 g",
+    "time": "12h",
+    "prep": "12h",
+    "servings": 4,
+    "serves": 4,
+    "difficulty": 3,
+    "difficultyLabel": "Hard",
+    "difficultyNote": "concentrated broth is multi-day prep; faux gras must be made ahead; pastry seal needs technique. Only attempt with a trained pastry/sauté line. Pre-portion garnish + broth 4 hours ahead, assemble + bake to order (15-20 min hold per ticket).",
+    "tags": [
+      "bulk-prep"
+    ],
+    "sourcingTier": "in-house",
+    "subs": [
+      {
+        "from": "Full version with fresh black truffle (Gauthier)",
+        "effect": "Authentic Bocuse-tribute experience",
+        "delta": "baseline ($11.50)"
+      },
+      {
+        "from": "Morels-only, omit truffle",
+        "effect": "Still extraordinary, accessible price point",
+        "delta": "−$3.70 → menu $32–42"
+      },
+      {
+        "from": "Sub porcini for morels",
+        "effect": "Lower cost, deeper umami",
+        "delta": "−$2.00 → menu $35–46"
+      },
+      {
+        "from": "Add gold-leaf garnish on the pastry crack",
+        "effect": "Anniversary / VIP service",
+        "delta": "+$2.00 → menu $52–65"
+      }
+    ],
+    "alternatives": [],
+    "photo": "bowl",
+    "photoLabel": "soupe · vge",
+    "badge": "Showpiece"
+  },
+  {
+    "id": "french-vegan-soupe-de-poisson-with-rouille-gauthier",
+    "title": "Soupe de Poisson with Rouille (Sans cruauté)",
+    "source": "Chef Gauthier Soho (Michelin Star)",
+    "rawTitle": "### Vegan Soupe de Poisson with Rouille — Gauthier (**STARTER**)",
+    "rawBody": "- **URL:** https://chefalexisgauthier.substack.com/p/this-is-the-queen-of-the-sea ✓ VERIFIED *(Chef Alexis Gauthier — August 2025. **A vegan soupe de poissons that tastes of the sea, not of fish.** Gauthier's note in the post: \"a good soupe de poissons is not a soup that tastes of filet of fish — it tastes like low tide.\" Achieves that signature Mediterranean / Côte-d'Azur depth using a quartet of dried sea vegetables (kombu, wakame, dulse, samphire) for the briny base, with fennel + leek + celery + shallots + garlic for the soffritto, smoked paprika and saffron for color and warmth, white miso + tamari for umami depth, and a finish of dry white wine + Pastis + nori for the orange/aniseed note that defines a real Provençal soupe de poissons. Topped with quick vegan rouille (roasted pepper + aquafaba + saffron + cayenne + dijon) on grilled sourdough. Serves 4-6.)*\n\n  **Recipe** (4-6 portions): **Broth base** (no salt yet — sea vegetables provide saltiness): 15 g olive oil, 300 g fennel bulb finely sliced, 150 g leek (white only) finely sliced, 80 g celery chopped, 60 g shallots chopped, 15 g garlic crushed (~3 cloves), 6 g tomato paste, 3 g smoked paprika, 2 bay leaves, 4 g fresh thyme (1 sprig), 4 g orange peel strip, 30 g white miso, 30 g tamari/light soy sauce, 10 g dried kombu (soaked), 10 g dried wakame (soaked), 10 g sea dulse (soaked), 10 g samphire, pinch dry thyme, 1 L filtered water, 100 ml dry white wine, 5 cl Pastis, 2 g nori sheet (torn, added at end). **Method:** Sweat fennel/leek/celery/shallots/garlic in oil 6 min on low-medium (no browning). Add tomato paste, smoked paprika, saffron, miso, tamari; stir 1-2 min. Add white wine + Pastis, reduce slightly. Add soaked sea vegetables (with clean soaking water), bay/thyme/orange peel, water. Cook 20 min. Strain through fine chinois for fine-dining texture (or leave rustic). Adjust salt/pepper/tamari. Add nori at the end for sea aroma. **Quick Vegan Rouille:** 80 g roasted red pepper, 5 g garlic (1 clove), 30 ml aquafaba (or plant milk), 5 g Dijon, 60 ml grapeseed oil, pinch cayenne, 1 g saffron, salt. Blend everything until creamy and spoonable. Serve atop grilled sourdough croutons swirled into the soup.\n- **Description:** Provençal sea-vegetable broth — fennel-and-saffron-deep, finished with white wine and Pastis, served piping hot over a slick of saffron-cayenne-aquafaba rouille on grilled sourdough. Tastes like the sea without a single fish. The Gauthier-grade vegan answer to the Marseille classic.\n- **Wholesale food cost:** $3.40 / serving · **Menu price:** $14–18 (casual brasserie) / $16–22 (upscale, with extra rouille + croutons plate)\n- **Weight:** 320 g + 80 g rouille toast · **Calories:** 280 · **Protein:** 7 g · **Time:** 15 min prep + 30 min cook + sea-veg soak (overnight or 2 hr in warm water) · **Servings:** 4-6\n- **Restaurant difficulty:** **Medium-Hard / ⚠ COMPLEX & SPECIALTY-INGREDIENT** — the recipe is technically straightforward, but **requires four specialty sea vegetables** (kombu, wakame, dulse, samphire — Gauthier specifies Clearspring brand) plus saffron and Pastis. Plan a two-week sourcing window before launch. Soak the sea vegetables in advance; rest of the broth holds 4 days under refrigeration; rouille holds 5 days. Very fast service (reheat broth, build crouton, plate).\n- **Tags:** 🥘 Bulk-Prep · ⚡ Fast-Service\n\n| Sub | Effect | Cost delta |\n|---|---|---|\n| Full sea-vegetable quartet (Gauthier default) | Authentic \"low tide\" flavour | baseline ($3.40) |\n| Kombu + nori only (skip wakame, dulse, samphire) | Easier sourcing, ~70% of the depth | −$1.20 → menu $11–15 |\n| Add a dab of vegan crème fraîche on top | Marseille brasserie-style finish | +$0.30 → menu $15–20 |\n| Plate as a tasting-menu bowl with quenelle of faux gras | Pairs into the Soupe VGE inventory | +$1.20 → menu $19–24 |\n| Extra rouille toasts (3 instead of 1) | Higher-perceived-value plate-up | +$0.60 → menu $17–22 |",
+    "valueRatio": 4.705882352941177,
+    "valueTier": "Strong Earner",
+    "cuisine": "french",
+    "cuisineName": "French",
+    "courses": [
+      "starter"
+    ],
+    "url": "https://chefalexisgauthier.substack.com/p/this-is-the-queen-of-the-sea",
+    "urlStatus": "verified",
+    "urlNote": null,
+    "description": "Provençal sea-vegetable broth — fennel-and-saffron-deep, finished with white wine and Pastis, served piping hot over a slick of saffron-cayenne-aquafaba rouille on grilled sourdough. Tastes like the sea without a single fish. The Gauthier-grade vegan answer to the Marseille classic.",
+    "cost": 3.4,
+    "menuPrice": "$14–18 (casual brasserie) / $16–22 (upscale, with extra rouille + croutons plate)",
+    "weight": "320 g + 80 g rouille toast",
+    "calories": 280,
+    "protein": "7 g",
+    "time": "15m",
+    "prep": "15m",
+    "servings": 4,
+    "serves": 4,
+    "difficulty": null,
+    "difficultyLabel": null,
+    "difficultyNote": null,
+    "tags": [
+      "bulk-prep",
+      "fast-service"
+    ],
+    "sourcingTier": "in-house",
+    "subs": [
+      {
+        "from": "Full sea-vegetable quartet (Gauthier default)",
+        "effect": "Authentic \"low tide\" flavour",
+        "delta": "baseline ($3.40)"
+      },
+      {
+        "from": "Kombu + nori only (skip wakame, dulse, samphire)",
+        "effect": "Easier sourcing, ~70% of the depth",
+        "delta": "−$1.20 → menu $11–15"
+      },
+      {
+        "from": "Add a dab of vegan crème fraîche on top",
+        "effect": "Marseille brasserie-style finish",
+        "delta": "+$0.30 → menu $15–20"
+      },
+      {
+        "from": "Plate as a tasting-menu bowl with quenelle of faux gras",
+        "effect": "Pairs into the Soupe VGE inventory",
+        "delta": "+$1.20 → menu $19–24"
+      },
+      {
+        "from": "Extra rouille toasts (3 instead of 1)",
+        "effect": "Higher-perceived-value plate-up",
+        "delta": "+$0.60 → menu $17–22"
+      }
+    ],
+    "alternatives": [],
+    "photo": "plate",
+    "photoLabel": "soupe · poisson · rouille",
+    "badge": "Strong Earner"
+  },
+  {
+    "id": "french-vegan-b-uf-bourguignon-maitake-gauthier",
+    "title": "Bœuf Bourguignon (Sans cruauté)",
+    "source": "Chef Gauthier Soho (Michelin Star)",
+    "rawTitle": "### Vegan Bœuf Bourguignon (Maitake) — Gauthier (**MAIN**)",
+    "rawBody": "- **URL:** https://chefalexisgauthier.substack.com/p/bourguignon ✓ VERIFIED *(Chef Alexis Gauthier — March 2026 release. Restaurant-grade method: maitake clusters are first marinated in soy/water/sugar/bay/oil, **steamed** (softens fibers and opens them up to flavour), grilled to char the edges, then marinated in red wine + garlic + thyme + bay + pepper for 1-2 hours, roasted 8 min at 220°C to concentrate flavour, then **braised in a Dutch oven sealed with pâte morte** (a dead-dough flour/water/salt rope around the lid rim — a classic French technique that traps every drop of aroma) at 180°C for 45 min. Served with mashed potatoes. Yields 4 portions from 600-800g maitake.)*\n\n  **Recipe** (4 servings): **Mushrooms:** 600-800 g maitake, kept in large clusters. **First marinade:** 3 tbsp soy sauce + 3 tbsp water + 1 tbsp brown sugar + 1 bay leaf + 2 tbsp olive oil; coat maitake, marinate 20-30 min. **Steam:** 8 min. **Grill:** brush with oil and char on barbecue or under broiler. **Bourguignon marinade:** 500 ml dry vegan red wine + 2 crushed garlic + 1 bay leaf + 3 thyme sprigs + 1 tsp black pepper; marinate 1-2 hr (or overnight). **Roast:** 8 min at 220°C. **Vegetables:** 2 carrots in chunks, 200 g baby onions, 200 g green cabbage in wedges. **Pâte morte (lid seal):** 200 g flour + 100 ml water + pinch salt, mix into a stiff rope. **Assembly:** olive oil in Dutch oven, layer carrots + baby onions + cabbage + roasted maitake, pour in the wine marinade. Roll the pâte morte into a rope around the rim and close the lid tightly to seal. Bake at 180°C for 45 min. Break the dough seal at the table and serve over mashed potatoes.\n- **Description:** Maitake clusters marinated in soy and red wine, grilled, and slow-braised with carrots, baby onions, and cabbage in a sealed cast-iron pot — pâte-morte-sealed in the classic French manner so the lid dough is broken tableside, releasing the wine-and-thyme aroma. Plated with mashed potatoes and the rich braising sauce.\n- **Wholesale food cost:** $5.85 / serving (maitake default) · **Menu price:** $22–26 (casual) / $26–32 (upscale)\n- **Weight:** 380 g · **Calories:** 510 · **Protein:** 18 g · **Time:** 30 min active + ~3 hr marinades + 45 min braise + 20 min mash · **Servings:** 4\n- **Restaurant difficulty:** **Medium** — marinades and braise are bulk-prep; pâte-morte seal is the showstopper element (do this à la minute for the table-break effect, or use parchment + foil for back-of-house if breaking the seal isn't part of service).\n- **Tags:** 🥘 Bulk-Prep · ⚡ Fast-Service (reheat per ticket)\n\n| Sub | Effect | Cost delta |\n|---|---|---|\n| 100% maitake (Gauthier default) | Restaurant recipe as written, mushroom-forward | baseline ($5.85) |\n| **+ Juicy Marbles 4oz Loin Filet** (per portion, braised in same wine) | Steakhouse-grade hybrid; meaty + mushroom umami | +$3.75 → cost $9.60 → menu $32–42 |\n| **+ Chunk Steakhouse Cut** (per portion, braised in same wine) | Premium hybrid, slightly leaner than JM | +$3.20 → cost $9.05 → menu $30–38 |\n| **+ Beyond Beef chunks** (per portion) | Accessible price hybrid | +$1.50 → cost $7.35 → menu $24–30 |\n| 50/50 maitake + portobello | Cheaper rustic version | −$1.20 → menu $19–23 |\n| Add red-wine glaze drizzle + horseradish gremolata | Plate-up flourish | +$0.30 → menu $25–30 |",
+    "valueRatio": 4.102564102564103,
+    "valueTier": "Strong Earner",
+    "cuisine": "french",
+    "cuisineName": "French",
+    "courses": [
+      "main"
+    ],
+    "url": "https://chefalexisgauthier.substack.com/p/bourguignon",
+    "urlStatus": "verified",
+    "urlNote": null,
+    "description": "Maitake clusters marinated in soy and red wine, grilled, and slow-braised with carrots, baby onions, and cabbage in a sealed cast-iron pot — pâte-morte-sealed in the classic French manner so the lid dough is broken tableside, releasing the wine-and-thyme aroma. Plated with mashed potatoes and the rich braising sauce.",
+    "cost": 5.85,
+    "menuPrice": "$22–26 (casual) / $26–32 (upscale)",
+    "weight": "380 g",
+    "calories": 510,
+    "protein": "18 g",
+    "time": "30m",
+    "prep": "30m",
+    "servings": 4,
+    "serves": 4,
+    "difficulty": 2,
+    "difficultyLabel": "Medium",
+    "difficultyNote": "marinades and braise are bulk-prep; pâte-morte seal is the showstopper element (do this à la minute for the table-break effect, or use parchment + foil for back-of-house if breaking the seal isn't part of service).",
+    "tags": [
+      "bulk-prep",
+      "fast-service"
+    ],
+    "sourcingTier": "in-house",
+    "subs": [
+      {
+        "from": "100% maitake (Gauthier default)",
+        "effect": "Restaurant recipe as written, mushroom-forward",
+        "delta": "baseline ($5.85)"
+      },
+      {
+        "from": "**+ Juicy Marbles 4oz Loin Filet** (per portion, braised in same wine)",
+        "effect": "Steakhouse-grade hybrid; meaty + mushroom umami",
+        "delta": "+$3.75 → cost $9.60 → menu $32–42"
+      },
+      {
+        "from": "**+ Chunk Steakhouse Cut** (per portion, braised in same wine)",
+        "effect": "Premium hybrid, slightly leaner than JM",
+        "delta": "+$3.20 → cost $9.05 → menu $30–38"
+      },
+      {
+        "from": "**+ Beyond Beef chunks** (per portion)",
+        "effect": "Accessible price hybrid",
+        "delta": "+$1.50 → cost $7.35 → menu $24–30"
+      },
+      {
+        "from": "50/50 maitake + portobello",
+        "effect": "Cheaper rustic version",
+        "delta": "−$1.20 → menu $19–23"
+      },
+      {
+        "from": "Add red-wine glaze drizzle + horseradish gremolata",
+        "effect": "Plate-up flourish",
+        "delta": "+$0.30 → menu $25–30"
+      }
+    ],
+    "alternatives": [],
+    "photo": "plate",
+    "photoLabel": "bourguignon",
+    "badge": "Strong Earner"
+  },
+  {
+    "id": "french-ratatouille",
+    "title": "Ratatouille (Provençal)",
+    "source": "RecipeTin Eats",
+    "rawTitle": "### Ratatouille (Provençal)",
+    "rawBody": "- **URL:** https://cooking.nytimes.com/recipes/1018164-ratatouille ✓ VERIFIED  (vegan as written)\n- **Description:** Slow-cooked summer vegetables; bulk-stews and tastes better day 2.\n- **Wholesale food cost:** $1.95 / serving · **Menu price:** $13–16\n- **Weight:** 300 g · **Calories:** 250 · **Protein:** 6 g · **Time:** 75 min · **Servings:** 6\n- **Restaurant difficulty:** **Easy**. **Tags:** 🥘 · ⚡",
+    "valueRatio": 7.435897435897436,
+    "valueTier": "Strong Earner",
+    "cuisine": "french",
+    "cuisineName": "French",
+    "courses": [
+      "main"
+    ],
+    "url": "https://www.recipetineats.com/ratatouille/",
+    "urlStatus": "verified",
+    "urlNote": "URL replaced via url_overrides.json",
+    "description": "Slow-cooked summer vegetables; bulk-stews and tastes better day 2.",
+    "cost": 1.95,
+    "menuPrice": "$13–16",
+    "weight": "300 g",
+    "calories": 250,
+    "protein": "6 g",
+    "time": "75m",
+    "prep": "75m",
+    "servings": 6,
+    "serves": 6,
+    "difficulty": 1,
+    "difficultyLabel": "Easy",
+    "difficultyNote": ". **Tags:** 🥘 · ⚡",
+    "tags": [],
+    "sourcingTier": "in-house",
+    "subs": [],
+    "alternatives": [],
+    "photo": "plate",
+    "photoLabel": "ratatouille",
+    "badge": "Strong Earner"
+  },
+  {
+    "id": "french-vegan-barbajuans-ni-oise-swiss-chard-turnovers-gauthier",
+    "title": "Barbajuans (Niçoise Swiss Chard Turnovers)",
+    "source": "Chef Gauthier Soho (Michelin Star)",
+    "rawTitle": "### Vegan Barbajuans (Niçoise Swiss Chard Turnovers) — Gauthier (**STARTER / SNACK**)",
+    "rawBody": "- **URL:** https://chefalexisgauthier.substack.com/p/swiss-chard ✓ VERIFIED *(Chef Alexis Gauthier — Feb 2025. **A Niçoise classic, fully vegan.** Barbajuans are the iconic fried turnover of Nice and the Côte d'Azur — Gauthier's winter version uses Swiss chard (the Mediterranean stalwart, used both leaves and finely-chopped stems) plus spinach, leek, onion, garlic, and Superstraccia (Julienne Bruno's premium UK vegan ricotta), wrapped in **pâte à huile** — the Ligurian-inspired olive-oil dough that fries up airy, delicate, and shatters slightly with each bite. Yields 20-25 pieces. Note from Gauthier: \"the black pepper is key — don't be shy to add a lot.\")*\n\n  **Recipe** (~20-25 pieces / serves 5-8 as a starter): **Pâte à huile dough:** 250 g all-purpose flour (preferably Italian 00), 90 g water (~6-8 tbsp), 30 g olive oil (~2-4 tbsp), pinch salt, few drops white wine vinegar (only if making more than a day ahead — prevents oxidation). Mix flour + salt, well in center, add oil/water/vinegar, gradually combine, knead 3 min until smooth, wrap in cloth, rest 30 min. **Filling:** 150 g spinach + 100 g Swiss chard (both pan-fried, cooled, squeezed dry — use both green and finely-chopped stem from the chard), 1 small leek (white only, fine dice), 1 small onion (fine dice), 2 garlic cloves (minced), 120 g Superstraccia (Julienne Bruno) OR substitute any quality vegan ricotta or homemade cashew ricotta, 1 tbsp fresh parsley, 1 tsp fresh thyme, generous black pepper, salt, extra olive oil to enrich. Sauté leek + onion + garlic in oil until soft, add cooked-and-drained chard/spinach briefly, cool. Combine with cheese, herbs, lots of pepper. Adjust olive oil for shine and softness. **Assembly:** Roll dough thin (3 mm / ⅛\"). Cut 8 cm (3\") circles. 1 tsp filling per circle. Fold to half-moons, seal with water on the rim, crimp with a fork. **Fry** at 175–190°C / 350–375°F for 2-3 min until golden. Drain on paper towels. **Serve** warm with fleur de sel and more black pepper.\n- **Description:** Crispy, airy olive-oil-dough half-moons stuffed with chard, spinach, leek, vegan ricotta, parsley, and a fierce hit of black pepper. The signature Niçoise café snack — the kind you'd find at a beachfront café in Vieux Nice with a glass of rosé. Bar-snack-friendly, brunch-friendly, starter-friendly. **One of the catalog's strongest passed-canapé / shareable apéro plates.**\n- **Wholesale food cost:** $0.32 / piece · $0.95 / 3-piece serving · $1.30 / 4-piece serving · **Menu price:** $7–10 (3 pieces, casual) / $9–13 (4 pieces, casual) / $11–16 (5-piece tasting plate, upscale)\n- **Weight:** 35 g per piece (~140 g / 4-piece serving) · **Calories:** 95 / piece · **Protein:** 3 g / piece · **Time:** 15 min dough rest + 30 min filling + 5-10 min frying per batch · **Servings:** 20-25 pieces / batch (~5-8 starter portions)\n- **Restaurant difficulty:** **Medium** — three components (dough, filling, frying) but each is a 30-minute job, fully bulk-preppable. Roll out dough and shape barbajuans the day before; refrigerate or freeze unfried. Fry to order in 2-3 minutes. Holds well as a passed canapé at events.\n- **Tags:** 🥘 Bulk-Prep · ⚡ Fast-Service\n\n| Sub | Effect | Cost delta |\n|---|---|---|\n| Superstraccia / Julienne Bruno (Gauthier default) | Authentic recipe, premium UK vegan ricotta | baseline ($0.32/piece) |\n| Substitute any vegan ricotta (Kite Hill, Tofutti, generic) | Still excellent; widely sourceable | −$0.06 → $0.26/piece |\n| Homemade cashew ricotta | Richest, most authentic | flat |\n| **Summer barbajuan** (skip chard/spinach, fold raw fresh herbs into ricotta) | Bright, aromatic seasonal variant | flat |\n| Top with shaved black truffle (3-piece tasting) | Showstopper apéritif plate | +$3.00/serving → menu $14–22 |\n| Pair with chilled Provence rosé | F&B upsell | beverage margin |",
+    "valueRatio": 26.5625,
+    "valueTier": "Margin King",
+    "cuisine": "french",
+    "cuisineName": "French",
+    "courses": [
+      "starter"
+    ],
+    "url": "https://chefalexisgauthier.substack.com/p/swiss-chard",
+    "urlStatus": "verified",
+    "urlNote": null,
+    "description": "Crispy, airy olive-oil-dough half-moons stuffed with chard, spinach, leek, vegan ricotta, parsley, and a fierce hit of black pepper. The signature Niçoise café snack — the kind you'd find at a beachfront café in Vieux Nice with a glass of rosé. Bar-snack-friendly, brunch-friendly, starter-friendly. **One of the catalog's strongest passed-canapé / shareable apéro plates.**",
+    "cost": 0.32,
+    "menuPrice": "$7–10 (3 pieces, casual) / $9–13 (4 pieces, casual) / $11–16 (5-piece tasting plate, upscale)",
+    "weight": "35 g per piece (~140 g / 4-piece serving)",
+    "calories": 95,
+    "protein": "3 g / piece",
+    "time": "15m",
+    "prep": "15m",
+    "servings": 20,
+    "serves": 20,
+    "difficulty": 2,
+    "difficultyLabel": "Medium",
+    "difficultyNote": "three components (dough, filling, frying) but each is a 30-minute job, fully bulk-preppable. Roll out dough and shape barbajuans the day before; refrigerate or freeze unfried. Fry to order in 2-3 minutes. Holds well as a passed canapé at events.",
+    "tags": [
+      "bulk-prep",
+      "fast-service"
+    ],
+    "sourcingTier": "in-house",
+    "subs": [
+      {
+        "from": "Superstraccia / Julienne Bruno (Gauthier default)",
+        "effect": "Authentic recipe, premium UK vegan ricotta",
+        "delta": "baseline ($0.32/piece)"
+      },
+      {
+        "from": "Substitute any vegan ricotta (Kite Hill, Tofutti, generic)",
+        "effect": "Still excellent; widely sourceable",
+        "delta": "−$0.06 → $0.26/piece"
+      },
+      {
+        "from": "Homemade cashew ricotta",
+        "effect": "Richest, most authentic",
+        "delta": "flat"
+      },
+      {
+        "from": "**Summer barbajuan** (skip chard/spinach, fold raw fresh herbs into ricotta)",
+        "effect": "Bright, aromatic seasonal variant",
+        "delta": "flat"
+      },
+      {
+        "from": "Top with shaved black truffle (3-piece tasting)",
+        "effect": "Showstopper apéritif plate",
+        "delta": "+$3.00/serving → menu $14–22"
+      },
+      {
+        "from": "Pair with chilled Provence rosé",
+        "effect": "F&B upsell",
+        "delta": "beverage margin"
+      }
+    ],
+    "alternatives": [],
+    "photo": "plate",
+    "photoLabel": "barbajuans",
+    "badge": "Margin King"
+  },
+  {
+    "id": "french-vegan-french-toast",
+    "title": "French Toast (Sans cruauté)",
+    "source": "Loving It Vegan",
+    "rawTitle": "### Vegan French Toast",
+    "rawBody": "- **URL:** https://lovingitvegan.com/vegan-french-toast/ ✓ VERIFIED\n- **Description:** Brioche dipped in chickpea-flour-based custard. Brunch fast-service item.\n- **Wholesale food cost:** $1.85 / serving · **Menu price:** $11–14\n- **Weight:** 240 g · **Calories:** 480 · **Protein:** 12 g · **Time:** 25 min · **Servings:** 4\n- **Restaurant difficulty:** **Easy**. **Tags:** ⚡",
+    "valueRatio": 6.756756756756756,
+    "valueTier": "Strong Earner",
+    "cuisine": "french",
+    "cuisineName": "French",
+    "courses": [
+      "main"
+    ],
+    "url": "https://lovingitvegan.com/vegan-french-toast/",
+    "urlStatus": "verified",
+    "urlNote": null,
+    "description": "Brioche dipped in chickpea-flour-based custard. Brunch fast-service item.",
+    "cost": 1.85,
+    "menuPrice": "$11–14",
+    "weight": "240 g",
+    "calories": 480,
+    "protein": "12 g",
+    "time": "25m",
+    "prep": "25m",
+    "servings": 4,
+    "serves": 4,
+    "difficulty": 1,
+    "difficultyLabel": "Easy",
+    "difficultyNote": ". **Tags:** ⚡",
+    "tags": [],
+    "sourcingTier": "in-house",
+    "subs": [],
+    "alternatives": [],
+    "photo": "plate",
+    "photoLabel": "french · toast",
+    "badge": "Strong Earner"
+  },
+  {
+    "id": "french-french-onion-soup",
+    "title": "French Onion Soup",
+    "source": "Nora Cooks",
+    "rawTitle": "### French Onion Soup",
+    "rawBody": "- **URL:** https://www.noracooks.com/vegan-french-onion-soup/ ✓ VERIFIED\n- **Description:** Slowly caramelized onions in mushroom-soy broth, gratinéed with vegan gruyère.\n- **Wholesale food cost:** $2.20 / serving · **Menu price:** $9–12 (cup) / $13–16 (gratinéed bowl)\n- **Weight:** 300 g · **Calories:** 380 · **Protein:** 10 g · **Time:** 90 min · **Servings:** 6\n- **Restaurant difficulty:** **Medium** — broth bulk-preps; salamander gratinée per ticket.\n- **Tags:** 🥘 · ⚡",
+    "valueRatio": 4.7727272727272725,
+    "valueTier": "Strong Earner",
+    "cuisine": "french",
+    "cuisineName": "French",
+    "courses": [
+      "main"
+    ],
+    "url": "https://www.noracooks.com/vegan-french-onion-soup/",
+    "urlStatus": "verified",
+    "urlNote": null,
+    "description": "Slowly caramelized onions in mushroom-soy broth, gratinéed with vegan gruyère.",
+    "cost": 2.2,
+    "menuPrice": "$9–12 (cup) / $13–16 (gratinéed bowl)",
+    "weight": "300 g",
+    "calories": 380,
+    "protein": "10 g",
+    "time": "90m",
+    "prep": "90m",
+    "servings": 6,
+    "serves": 6,
+    "difficulty": 2,
+    "difficultyLabel": "Medium",
+    "difficultyNote": "broth bulk-preps; salamander gratinée per ticket.",
+    "tags": [
+      "bulk-prep",
+      "fast-service"
+    ],
+    "sourcingTier": "in-house",
+    "subs": [],
+    "alternatives": [],
+    "photo": "bowl",
+    "photoLabel": "french · onion · soup",
+    "badge": "Strong Earner"
+  },
+  {
+    "id": "french-lentil-salad",
+    "title": "Lentil Salad (Lentilles à la Française)",
+    "source": "NYT Cooking",
+    "rawTitle": "### Lentil Salad (Lentilles à la Française)",
+    "rawBody": "- **URL:** https://cooking.nytimes.com/recipes/1019042-french-lentil-salad ✓ VERIFIED\n- **Description:** Du Puy lentils, mustard vin, shallots, herbs. Cold-hold workhorse.\n- **Wholesale food cost:** $1.40 / serving · **Menu price:** $10–13\n- **Weight:** 220 g · **Calories:** 280 · **Protein:** 14 g · **Time:** 40 min · **Servings:** 4\n- **Restaurant difficulty:** **Easy**. **Tags:** 🥘 · ⚡",
+    "valueRatio": 8.214285714285715,
+    "valueTier": "Margin King",
+    "cuisine": "french",
+    "cuisineName": "French",
+    "courses": [
+      "main"
+    ],
+    "url": "https://cooking.nytimes.com/recipes/1019042-french-lentil-salad",
+    "urlStatus": "verified",
+    "urlNote": null,
+    "description": "Du Puy lentils, mustard vin, shallots, herbs. Cold-hold workhorse.",
+    "cost": 1.4,
+    "menuPrice": "$10–13",
+    "weight": "220 g",
+    "calories": 280,
+    "protein": "14 g",
+    "time": "40m",
+    "prep": "40m",
+    "servings": 4,
+    "serves": 4,
+    "difficulty": 1,
+    "difficultyLabel": "Easy",
+    "difficultyNote": ". **Tags:** 🥘 · ⚡",
+    "tags": [],
+    "sourcingTier": "in-house",
+    "subs": [],
+    "alternatives": [],
+    "photo": "flat",
+    "photoLabel": "lentil · salad",
+    "badge": "Margin King"
+  },
+  {
+    "id": "french-vegan-coq-au-vin",
+    "title": "Coq au Vin (Sans cruauté)",
+    "source": "Connoisseurus Veg",
+    "rawTitle": "### Vegan Coq au Vin",
+    "rawBody": "- **URL:** https://www.connoisseurusveg.com/vegan-coq-au-vin/ ✓ VERIFIED\n- **Description:** Burgundy-red-wine braise with mushrooms, pearl onions, and seitan or oyster mushroom \"chicken.\" A natural Chunk Foods showcase.\n- **Wholesale food cost:** $3.95 / serving (with seitan) · $5.40 (Chunk) · **Menu price:** $19–24 (seitan) / $24–29 (Chunk)\n- **Weight:** 360 g · **Calories:** 520 · **Protein:** 26 g · **Time:** 90 min · **Servings:** 4\n- **Restaurant difficulty:** **Medium** — braise holds; build per ticket.\n- **Tags:** 🥘 · ⚡\n\n| Sub | Effect | Cost delta |\n|---|---|---|\n| Seitan or oyster mushroom (default) | Lower cost, classic feel | baseline |\n| **Premium faux-meat:** Chunk Pulled or Chunk 4 oz Steak in braise | Steakhouse-grade upgrade | +$1.45 |\n| Beyond Chicken Pieces | Lighter \"coq\" | +$1.10 |",
+    "valueRatio": 5.443037974683544,
+    "valueTier": "Strong Earner",
+    "cuisine": "french",
+    "cuisineName": "French",
+    "courses": [
+      "main"
+    ],
+    "url": "https://www.connoisseurusveg.com/vegan-coq-au-vin/",
+    "urlStatus": "verified",
+    "urlNote": null,
+    "description": "Burgundy-red-wine braise with mushrooms, pearl onions, and seitan or oyster mushroom \"chicken.\" A natural Chunk Foods showcase.",
+    "cost": 3.95,
+    "menuPrice": "$19–24 (seitan) / $24–29 (Chunk)",
+    "weight": "360 g",
+    "calories": 520,
+    "protein": "26 g",
+    "time": "90m",
+    "prep": "90m",
+    "servings": 4,
+    "serves": 4,
+    "difficulty": 2,
+    "difficultyLabel": "Medium",
+    "difficultyNote": "braise holds; build per ticket.",
+    "tags": [
+      "bulk-prep",
+      "fast-service"
+    ],
+    "sourcingTier": "in-house",
+    "subs": [
+      {
+        "from": "Seitan or oyster mushroom (default)",
+        "effect": "Lower cost, classic feel",
+        "delta": "baseline"
+      },
+      {
+        "from": "**Premium faux-meat:** Chunk Pulled or Chunk 4 oz Steak in braise",
+        "effect": "Steakhouse-grade upgrade",
+        "delta": "+$1.45"
+      },
+      {
+        "from": "Beyond Chicken Pieces",
+        "effect": "Lighter \"coq\"",
+        "delta": "+$1.10"
+      }
+    ],
+    "alternatives": [],
+    "photo": "plate",
+    "photoLabel": "coq · vin",
+    "badge": "Strong Earner"
+  },
+  {
+    "id": "french-tomato-tarte-tatin",
+    "title": "Tomato Tarte Tatin (Savory)",
+    "source": "The Greedy Vegan",
+    "rawTitle": "### Tomato Tarte Tatin (Savory)",
+    "rawBody": "- **URL:** https://thegreedyvegan.com/tomato-tarte-tatin/ ✓ VERIFIED *(The Greedy Vegan / Gloria — savory inversion of the classic tarte tatin: heirloom + cherry tomatoes, deseeded and roasted; caramelized in vegan butter + balsamic + muscovado; topped with puff pastry; baked, then flipped. Naturally vegan as written; uses store-bought vegan puff pastry. 6 servings, 361 cal/serving, 40 min total.)*\n- **Description:** Inverted savory tart of caramelized cherry tomatoes. Bistro-elegant brunch / starter.\n- **Wholesale food cost:** $2.10 / serving · **Menu price:** $13–16\n- **Weight:** 220 g · **Calories:** 340 · **Protein:** 6 g · **Time:** 50 min · **Servings:** 4\n- **Restaurant difficulty:** **Medium** — par-bake bases, finish per ticket.\n- **Tags:** 🥘",
+    "valueRatio": 6.904761904761904,
+    "valueTier": "Strong Earner",
+    "cuisine": "french",
+    "cuisineName": "French",
+    "courses": [
+      "main"
+    ],
+    "url": "https://thegreedyvegan.com/tomato-tarte-tatin/",
+    "urlStatus": "verified",
+    "urlNote": "The Greedy Vegan / Gloria — savory inversion of the classic tarte tatin: heirloom + cherry tomatoes, deseeded and roasted; caramelized in vegan butter + balsamic + muscovado; topped with puff pastry; baked, then flipped. Naturally vegan as written; uses store-bought vegan puff pastry. 6 servings, 361 cal/serving, 40 min total.",
+    "description": "Inverted savory tart of caramelized cherry tomatoes. Bistro-elegant brunch / starter.",
+    "cost": 2.1,
+    "menuPrice": "$13–16",
+    "weight": "220 g",
+    "calories": 340,
+    "protein": "6 g",
+    "time": "50m",
+    "prep": "50m",
+    "servings": 4,
+    "serves": 4,
+    "difficulty": 2,
+    "difficultyLabel": "Medium",
+    "difficultyNote": "par-bake bases, finish per ticket.",
+    "tags": [
+      "bulk-prep"
+    ],
+    "sourcingTier": "in-house",
+    "subs": [],
+    "alternatives": [],
+    "photo": "flat",
+    "photoLabel": "tomato · tarte · tatin",
+    "badge": "Strong Earner"
+  },
+  {
+    "id": "french-vegan-cr-me-br-l-e-gauthier",
+    "title": "Crème Brûlée (Sans cruauté)",
+    "source": "Chef Gauthier Soho (Michelin Star)",
+    "rawTitle": "### Vegan Crème Brûlée — Gauthier (**DESSERT**)",
+    "rawBody": "- **URL:** https://chefalexisgauthier.substack.com/p/creme-brulee ✓ VERIFIED *(Chef Alexis Gauthier — March 2026. **This replaces the previous Nora Cooks crème brûlée** in v5 because Gauthier's is a Michelin-trained French chef's restaurant-grade recipe (\"years of testing, adjusting, refining… chasing that exact texture, that balance, that moment\"). Stovetop-cooked custard (no water bath, no ramekin baking) using soya milk + plant cream (Flora) + cornflour + custard powder + vanilla pod, finished with vegan butter for richness. Set in ramekins overnight, brûléed à la minute with demerara/caster sugar mix. Served at Studio Gauthier in London — confirmed by guest reviews in the post comments. Yields 6 ramekins.)*\n\n  **Recipe** (6 ramekins): **Custard:** 500 g soya milk, 500 g plant cream (Flora or equivalent), 140 g caster sugar, 40 g cornflour, 40 g custard powder, 1 vanilla pod (split, scraped, infused), pinch salt, 2 tbsp vegan butter (added at the end for richness). **Brûlée topping:** 60 g demerara + 20 g caster sugar (mixed). **Method:** Whisk sugar, cornflour, custard powder, salt in a bowl. Whisk in a small amount of cold soya milk to make a smooth slurry. In a saucepan, gently heat the rest of the soya milk + plant cream + scraped vanilla over medium (do NOT boil). Pour slurry in, whisking continuously; cook over medium, stirring, until thickened to a smooth glossy custard (pastry-cream consistency). Cook 1-2 min more to remove starch flavour. Whisk in vegan butter until incorporated. Divide between 6 ramekins, tap to release air bubbles, chill **at least 4 hours / preferably overnight**. To finish à la minute: sprinkle a thin even layer of the demerara/caster mix on each, blowtorch until golden and glassy, rest 1-2 min before serving.\n- **Description:** Vanilla-infused soya-and-plant-cream custard, set silky-smooth in ramekins overnight, finished with a torched demerara-caster sugar shatter-crust to order. The bistro classic — recreated to Michelin-restaurant standard by Chef Alexis Gauthier after years of iteration. The shatter is everything.\n- **Wholesale food cost:** $1.85 / serving · **Menu price:** $10–13 (casual) / $13–16 (upscale)\n- **Weight:** 150 g (ramekin) · **Calories:** 360 · **Protein:** 6 g · **Time:** 25 min active + 4-12 hr chill · **Servings:** 6 ramekins / batch\n- **Restaurant difficulty:** **Easy-Medium** — custard is fully bulk-prep, holds 4-5 days in the fridge under cling film. Torch the sugar lid à la minute (15-20 sec per ramekin with a kitchen torch). Zero per-ticket complexity once a tray is built.\n- **Tags:** 🥘 Bulk-Prep · ⚡ Fast-Service\n\n| Sub | Effect | Cost delta |\n|---|---|---|\n| Soya + Flora plant cream (Gauthier default) | Restaurant recipe as written | baseline ($1.85) |\n| Sub oat cream for Flora (Oatly Single) | Slightly lighter, oat-forward note | flat |\n| Lavender-honey or Earl Grey infusion | Premium menu listing | +$0.20 → menu $12–15 |\n| Coffee or matcha infusion | Café crossover | +$0.15 → menu $12–15 |\n| Espresso \"affogato\"-style with torched top | Showstopper presentation | +$0.40 → menu $13–17 |",
+    "valueRatio": 6.216216216216216,
+    "valueTier": "Strong Earner",
+    "cuisine": "french",
+    "cuisineName": "French",
+    "courses": [
+      "dessert"
+    ],
+    "url": "https://chefalexisgauthier.substack.com/p/creme-brulee",
+    "urlStatus": "verified",
+    "urlNote": null,
+    "description": "Vanilla-infused soya-and-plant-cream custard, set silky-smooth in ramekins overnight, finished with a torched demerara-caster sugar shatter-crust to order. The bistro classic — recreated to Michelin-restaurant standard by Chef Alexis Gauthier after years of iteration. The shatter is everything.",
+    "cost": 1.85,
+    "menuPrice": "$10–13 (casual) / $13–16 (upscale)",
+    "weight": "150 g (ramekin)",
+    "calories": 360,
+    "protein": "6 g",
+    "time": "25m",
+    "prep": "25m",
+    "servings": 6,
+    "serves": 6,
+    "difficulty": null,
+    "difficultyLabel": null,
+    "difficultyNote": null,
+    "tags": [
+      "bulk-prep",
+      "fast-service"
+    ],
+    "sourcingTier": "in-house",
+    "subs": [
+      {
+        "from": "Soya + Flora plant cream (Gauthier default)",
+        "effect": "Restaurant recipe as written",
+        "delta": "baseline ($1.85)"
+      },
+      {
+        "from": "Sub oat cream for Flora (Oatly Single)",
+        "effect": "Slightly lighter, oat-forward note",
+        "delta": "flat"
+      },
+      {
+        "from": "Lavender-honey or Earl Grey infusion",
+        "effect": "Premium menu listing",
+        "delta": "+$0.20 → menu $12–15"
+      },
+      {
+        "from": "Coffee or matcha infusion",
+        "effect": "Café crossover",
+        "delta": "+$0.15 → menu $12–15"
+      },
+      {
+        "from": "Espresso \"affogato\"-style with torched top",
+        "effect": "Showstopper presentation",
+        "delta": "+$0.40 → menu $13–17"
+      }
+    ],
+    "alternatives": [],
+    "photo": "flat",
+    "photoLabel": "crème brûlée (sans cruauté)",
+    "badge": "Strong Earner"
+  },
+  {
+    "id": "french-vegan-iles-flottantes-floating-islands-gauthier",
+    "title": "Iles Flottantes (Sans cruauté)",
+    "source": "Chef Gauthier Soho (Michelin Star)",
+    "rawTitle": "### Vegan Iles Flottantes (Floating Islands) — Gauthier (**DESSERT**)",
+    "rawBody": "- **URL:** https://chefalexisgauthier.substack.com/p/a-vegan-floating-island ✓ VERIFIED *(Chef Alexis Gauthier — April 2026 release. Aquafaba meringue islands (reduced chickpea liquid + sugar + cornflour, baked low-and-slow at 90°C for 9 min so they set but stay marshmallow-soft inside), floated on vegan crème anglaise (soya + oat milk + plant cream + custard powder + vanilla pod), with a delicate caster-sugar caramel dome cracked tableside. Gauthier's note in the post: \"Iles Flottantes is one of those few puddings that needs to stay alive before everyone forgets about it!\" — this is a proper revival of a French classic that has nearly disappeared from menus.)*\n\n  **Recipe** (6 servings): **Aquafaba \"meringue\" islands:** 300 g aquafaba (chickpea liquid) reduced to 100 g by gentle simmering, then cooled completely; 15 g cornflour, 100 g icing sugar, 70 g caster sugar, 1 spoon vinegar, pinch salt. Whip aquafaba + salt + vinegar to soft peaks, gradually add caster sugar to stiff peaks, fold in icing sugar + cornflour. Pipe in round rings on lined tray (sprinkle roasted nuts on top if desired). Bake at **90°C fan, 9 min** — set but soft inside. **Vegan crème anglaise:** 200 g Flora cream, 200 g oat milk, 100 g soya milk, 70 g sugar, 20 g cornflour, 30 g vegan custard powder, 1 vanilla pod. Whisk all cold in a saucepan, heat gently while stirring constantly until thickened (custard consistency). Cool, stirring occasionally. **Caramel domes:** 100 g caster sugar + a little water; lightly oil dome moulds, cook sugar to amber caramel, pour to coat moulds, cool, unmould. **Assembly:** crème anglaise in serving bowl, baked aquafaba island floated on top, caramel dome over the whole thing — broken at the table for theatre.\n- **Description:** Soft aquafaba meringue island floating on silky vanilla crème anglaise, hidden under a thin caramel dome that's cracked tableside. A nearly-extinct French bistro dessert restored to plant-based form by Chef Alexis Gauthier — a pure-pleasure, Old-World pudding.\n- **Wholesale food cost:** $1.45 / serving · **Menu price:** $9–12 (casual) / $11–14 (upscale)\n- **Weight:** 220 g · **Calories:** 290 · **Protein:** 4 g · **Time:** 30 min active (most simultaneous) · **Servings:** 6\n- **Restaurant difficulty:** **Medium** — three components but each is simple. Crème anglaise holds 3 days in the fridge; meringue islands hold 24 hr in airtight container at room temp; caramel domes hold 3-4 hr in dry storage (the enemy is humidity). Assemble and dome at pickup. The tableside dome-crack is the magic — train servers to do this at the pass.\n- **Tags:** 🥘 Bulk-Prep · ⚡ Fast-Service\n\n| Sub | Effect | Cost delta |\n|---|---|---|\n| Classic vanilla (Gauthier default) | Restaurant recipe as written | baseline ($1.45) |\n| Roasted hazelnut/almond topping on island | Adds crunch + visual | +$0.20 → menu $10–13 |\n| Pistachio crème anglaise | Vibrant green colour, more luxe | +$0.50 → menu $11–14 |\n| Praline shards instead of caramel dome | Easier hold, slightly more rustic | flat |\n| Coffee-spiced caramel dome | Adult dessert pairing | flat → menu $10–13 |",
+    "valueRatio": 7.241379310344827,
+    "valueTier": "Strong Earner",
+    "cuisine": "french",
+    "cuisineName": "French",
+    "courses": [
+      "dessert"
+    ],
+    "url": "https://chefalexisgauthier.substack.com/p/a-vegan-floating-island",
+    "urlStatus": "verified",
+    "urlNote": null,
+    "description": "Soft aquafaba meringue island floating on silky vanilla crème anglaise, hidden under a thin caramel dome that's cracked tableside. A nearly-extinct French bistro dessert restored to plant-based form by Chef Alexis Gauthier — a pure-pleasure, Old-World pudding.",
+    "cost": 1.45,
+    "menuPrice": "$9–12 (casual) / $11–14 (upscale)",
+    "weight": "220 g",
+    "calories": 290,
+    "protein": "4 g",
+    "time": "30m",
+    "prep": "30m",
+    "servings": 6,
+    "serves": 6,
+    "difficulty": 2,
+    "difficultyLabel": "Medium",
+    "difficultyNote": "three components but each is simple. Crème anglaise holds 3 days in the fridge; meringue islands hold 24 hr in airtight container at room temp; caramel domes hold 3-4 hr in dry storage (the enemy is humidity). Assemble and dome at pickup. The tableside dome-crack is the magic — train servers to do this at the pass.",
+    "tags": [
+      "bulk-prep",
+      "fast-service"
+    ],
+    "sourcingTier": "in-house",
+    "subs": [
+      {
+        "from": "Classic vanilla (Gauthier default)",
+        "effect": "Restaurant recipe as written",
+        "delta": "baseline ($1.45)"
+      },
+      {
+        "from": "Roasted hazelnut/almond topping on island",
+        "effect": "Adds crunch + visual",
+        "delta": "+$0.20 → menu $10–13"
+      },
+      {
+        "from": "Pistachio crème anglaise",
+        "effect": "Vibrant green colour, more luxe",
+        "delta": "+$0.50 → menu $11–14"
+      },
+      {
+        "from": "Praline shards instead of caramel dome",
+        "effect": "Easier hold, slightly more rustic",
+        "delta": "flat"
+      },
+      {
+        "from": "Coffee-spiced caramel dome",
+        "effect": "Adult dessert pairing",
+        "delta": "flat → menu $10–13"
+      }
+    ],
+    "alternatives": [],
+    "photo": "plate",
+    "photoLabel": "iles · flottantes",
+    "badge": "Strong Earner"
+  },
+  {
+    "id": "french-vegan-cr-me-caramel-gauthier",
+    "title": "Crème Caramel (Sans cruauté)",
+    "source": "Chef Gauthier Soho (Michelin Star)",
+    "rawTitle": "### Vegan Crème Caramel — Gauthier (**DESSERT**)",
+    "rawBody": "- **URL:** https://chefalexisgauthier.substack.com/p/vegan-creme-caramel ✓ VERIFIED *(Chef Alexis Gauthier — Oct 2025. The classic French baked-version crème caramel (also called \"flan parisien\" / crème renversée), reimagined with soya milk + oat milk + cornflour + custard powder + coconut oil, set on top of an amber sugar caramel and bain-marie-baked, then unmoulded onto a plate so the caramel cascades over the inverted custard. **A second, distinct French dessert from Crème Brûlée** — not the same recipe, not the same texture: brûlée is set-in-ramekin with a shatter-crust top; caramel is unmoulded with a flowing caramel sauce. Both should be on the menu as alternates. Yields 6-8 ramekins.)*\n\n  **Recipe** (6-8 ramekins): **Caramel:** 120 g sugar + 3 tbsp water; cook in heavy saucepan over medium heat WITHOUT stirring until amber, immediately pour into the base of 6-8 ramekins, tilt to coat the bottom evenly, set aside to harden. **Custard:** 415 ml soya milk, 400 ml oat milk, 110 g sugar, 57 g cornflour, 23 g custard powder (or +23 g extra cornflour if unavailable), 70 g refined coconut oil (neutral flavour), 1 tbsp vanilla extract or seeds from 1 vanilla pod. Warm soya/oat milk + sugar + coconut oil gently to melt the oil and dissolve sugar (don't boil). Whisk cornflour + custard powder with a ladle of warm milk to make a smooth slurry. Whisk slurry into warm milk. Cook on medium 3-4 min, whisking, until just starting to thicken (still pourable, not pudding-like). Whisk in vanilla. **Strain through a fine sieve** to remove any lumps or skin. **Bake:** preheat 160°C (fan 140°C). Pour custard over caramel in ramekins. Place ramekins in deep roasting tray, pour hot water in tray to halfway up the sides (bain-marie). Bake 35-45 min until just set with slight wobble in centre. **Chill** to room temp, refrigerate **at least 4 hours, preferably overnight**. **Unmould:** run thin knife around edge, dip base briefly in hot water, invert onto plate. Caramel flows out and coats the custard.\n- **Description:** Silky vanilla custard with an amber caramel cap that flows down the sides when unmoulded — the classic French bistro flan parisien. Lighter and looser than a crème brûlée, with the showstopper element of the caramel cascading on plate-up. Old-world Parisian comfort.\n- **Wholesale food cost:** $0.55 / serving · **Menu price:** $7–10 (casual) / $9–13 (upscale)\n- **Weight:** 165 g · **Calories:** 285 · **Protein:** 3 g · **Time:** 25 min active + 35-45 min bake + 4-12 hr chill · **Servings:** 6-8 ramekins / batch\n- **Restaurant difficulty:** **Easy-Medium** — single-step bain-marie bake, fully bulk-prep, holds 4-5 days in the fridge in the ramekin. Per-ticket service is just unmould + plate (15 sec). Lower per-portion food cost than crème brûlée → better margin.\n- **Tags:** 🥘 Bulk-Prep · ⚡ Fast-Service\n\n| Sub | Effect | Cost delta |\n|---|---|---|\n| Soya + oat milk (Gauthier default) | Restaurant recipe as written | baseline ($0.55) |\n| All soya milk | More custard-y, eggier mouthfeel | flat |\n| Coconut milk substitution (full) | Tropical note, slightly heavier | +$0.15 |\n| Add orange-peel infusion to caramel | Citrus-aromatic cascade | flat → menu $9–12 |\n| Espresso-spiked caramel | Adult bistro variation | +$0.10 → menu $10–13 |\n| Pair as a 2-flan tasting (caramel + brûlée) | Premium plate-up | combined cost $2.40 → menu $16–20 |",
+    "valueRatio": 15.454545454545453,
+    "valueTier": "Margin King",
+    "cuisine": "french",
+    "cuisineName": "French",
+    "courses": [
+      "dessert"
+    ],
+    "url": "https://chefalexisgauthier.substack.com/p/vegan-creme-caramel",
+    "urlStatus": "verified",
+    "urlNote": null,
+    "description": "Silky vanilla custard with an amber caramel cap that flows down the sides when unmoulded — the classic French bistro flan parisien. Lighter and looser than a crème brûlée, with the showstopper element of the caramel cascading on plate-up. Old-world Parisian comfort.",
+    "cost": 0.55,
+    "menuPrice": "$7–10 (casual) / $9–13 (upscale)",
+    "weight": "165 g",
+    "calories": 285,
+    "protein": "3 g",
+    "time": "25m",
+    "prep": "25m",
+    "servings": 6,
+    "serves": 6,
+    "difficulty": null,
+    "difficultyLabel": null,
+    "difficultyNote": null,
+    "tags": [
+      "bulk-prep",
+      "fast-service"
+    ],
+    "sourcingTier": "in-house",
+    "subs": [
+      {
+        "from": "Soya + oat milk (Gauthier default)",
+        "effect": "Restaurant recipe as written",
+        "delta": "baseline ($0.55)"
+      },
+      {
+        "from": "All soya milk",
+        "effect": "More custard-y, eggier mouthfeel",
+        "delta": "flat"
+      },
+      {
+        "from": "Coconut milk substitution (full)",
+        "effect": "Tropical note, slightly heavier",
+        "delta": "+$0.15"
+      },
+      {
+        "from": "Add orange-peel infusion to caramel",
+        "effect": "Citrus-aromatic cascade",
+        "delta": "flat → menu $9–12"
+      },
+      {
+        "from": "Espresso-spiked caramel",
+        "effect": "Adult bistro variation",
+        "delta": "+$0.10 → menu $10–13"
+      },
+      {
+        "from": "Pair as a 2-flan tasting (caramel + brûlée)",
+        "effect": "Premium plate-up",
+        "delta": "combined cost $2.40 → menu $16–20"
+      }
+    ],
+    "alternatives": [],
+    "photo": "flat",
+    "photoLabel": "caramel",
+    "badge": "Margin King"
+  }
+]);

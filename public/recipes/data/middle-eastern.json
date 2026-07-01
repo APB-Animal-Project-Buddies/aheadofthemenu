@@ -1,0 +1,496 @@
+[
+  {
+    "id": "middle-eastern-classic-vegan-falafel-loving-it-vegan",
+    "title": "Classic Vegan Falafel",
+    "source": "Loving It Vegan",
+    "rawTitle": "### Classic Vegan Falafel — Loving It Vegan",
+    "rawBody": "- **URL:** https://lovingitvegan.com/falafel/ ✓ VERIFIED\n- $1.10/serving · **Menu price:** $10–13 (platter) / $7–9 (sandwich) · 240 g · 380 cal · 14 g · 24 hr soak + 30 min · 6 · **Medium** (fry per ticket; mix bulk-preps) · ⚡ 🥘 (mix only)",
+    "valueRatio": 10.454545454545453,
+    "valueTier": "Margin King",
+    "cuisine": "middle-eastern",
+    "cuisineName": "Middle Eastern",
+    "courses": [
+      "main"
+    ],
+    "url": "https://cookieandkate.com/crispy-falafel-recipe/",
+    "urlStatus": "verified",
+    "urlNote": "URL replaced via url_overrides.json",
+    "description": "Medium — fry per ticket; mix bulk-preps · bulk-prep, fast-service.",
+    "cost": 1.1,
+    "menuPrice": "$10–13 (platter) / $7–9 (sandwich)",
+    "weight": "240 g",
+    "calories": 380,
+    "protein": "14 g",
+    "time": "30m",
+    "prep": "30m",
+    "servings": 6,
+    "serves": 6,
+    "difficulty": 2,
+    "difficultyLabel": "Medium",
+    "difficultyNote": "fry per ticket; mix bulk-preps",
+    "tags": [
+      "bulk-prep",
+      "fast-service"
+    ],
+    "sourcingTier": "in-house",
+    "subs": [],
+    "alternatives": [],
+    "photo": "plate",
+    "photoLabel": "classic · falafel",
+    "badge": "Margin King",
+    "ingredients": [
+      "&frac14; cup + 1 tablespoon extra-virgin olive oil",
+      "1 cup dried (uncooked/raw) chickpeas, rinsed, picked over and soaked for at least 4 hours and up to 24 hours in the refrigerator",
+      "&frac12; cup roughly chopped red onion (about &frac12; small red onion)",
+      "&frac12; cup packed fresh parsley (mostly leaves but small stems are ok)",
+      "&frac12; cup packed fresh cilantro (mostly leaves but small stems are ok)",
+      "4 cloves garlic, quartered",
+      "1 teaspoon fine sea salt",
+      "&frac12; teaspoon (about 25 twists) freshly ground black pepper",
+      "&frac12; teaspoon ground cumin",
+      "&frac14; teaspoon ground cinnamon"
+    ],
+    "steps": [
+      "With an oven rack in the middle position, preheat oven to 375 degrees Fahrenheit. Pour &frac14; cup of the olive oil into a large, rimmed baking sheet and turn until the pan is evenly coated.",
+      "In a food processor, combine the soaked and drained chickpeas, onion, parsley, cilantro, garlic, salt, pepper, cumin, cinnamon, and the remaining 1 tablespoon of olive oil. Process until smooth, about 1 minute.",
+      "Using your hands, scoop out about 2 tablespoons of the mixture at a time. Shape the falafel into small patties, about 2 inches wide and &frac12; inch thick. Place each falafel on your oiled pan.",
+      "Bake for 25 to 30 minutes, carefully flipping the falafels halfway through baking, until the falafels are deeply golden on both sides. These falafels keep well in the refrigerator for up to 4 days, or in the freezer for several months."
+    ],
+    "ingredientSource": "json-ld",
+    "allergens": [],
+    "allergenSubs": []
+  },
+  {
+    "id": "middle-eastern-classic-hummus-the-mediterranean-dish",
+    "title": "Classic Hummus",
+    "source": "The Mediterranean Dish",
+    "rawTitle": "### Classic Hummus — The Mediterranean Dish",
+    "rawBody": "- **URL:** https://www.themediterraneandish.com/how-to-make-hummus/ ✓ VERIFIED\n- $0.85/serving · **Menu price:** $8–11 (app) · 120 g · 240 cal · 8 g · 30 min · 8 · **Easy** · 🥘 ⚡",
+    "valueRatio": 11.176470588235295,
+    "valueTier": "Margin King",
+    "cuisine": "middle-eastern",
+    "cuisineName": "Middle Eastern",
+    "courses": [
+      "starter",
+      "main"
+    ],
+    "url": "https://www.themediterraneandish.com/how-to-make-hummus/",
+    "urlStatus": "verified",
+    "urlNote": null,
+    "description": "Cooked chickpeas blended with tahini, lemon, and garlic until silky. Naturally vegan; the meze plate's anchor — peel the chickpeas for the smoothest finish.",
+    "cost": 0.85,
+    "menuPrice": "$8–11 (app)",
+    "weight": "120 g",
+    "calories": 240,
+    "protein": "8 g",
+    "time": "30m",
+    "prep": "30m",
+    "servings": 8,
+    "serves": 8,
+    "difficulty": 1,
+    "difficultyLabel": "Easy",
+    "difficultyNote": null,
+    "tags": [
+      "bulk-prep",
+      "fast-service"
+    ],
+    "sourcingTier": "in-house",
+    "subs": [],
+    "alternatives": [],
+    "photo": "plate",
+    "photoLabel": "classic · hummus",
+    "badge": "Margin King",
+    "ingredients": [
+      "3 cups cooked chickpeas,",
+      "1 1/2 teaspoons baking soda, ((optional) use if peeling chickpeas)",
+      "1 to 2 garlic cloves (minced)",
+      "2 ice cubes",
+      "1/3 cup tahini",
+      "1/2 tsp kosher salt",
+      "Juice of 1 lemon",
+      "Arbequina extra virgin olive oil,",
+      "Sumac, (to serve)"
+    ],
+    "steps": [
+      "Drain and simmer: Drain two cans of chickpeas, and place them in a medium-sized pot over medium heat. Cover with water and simmer for 20-minutes.",
+      "Remove the skins: Remove the beans from the heat, and stir in the baking soda. Let it sit for a few minutes. This makes it easier to remove the skins. Drain the chickpeas into a colander. While rinsing the chickpeas under running water, take a handful of chickpeas and rub them to remove the skins. They come off easily. Place peeled chickpeas in the bowl of your food processor.",
+      "Puree the chickpeas: Add the minced garlic to the bowl of a food processor fitted with the S-blade. Puree until a smooth, powder-like mixture forms.",
+      "Finish the hummus: While the food processor is running, feed 2 ice cubes, tahini, salt, and lemon juice through the tube, and process for about 4 to 5 minutes. Check, and if the consistency is too thick, run the processor and slowly add a little water, 1 tablespoon at a time, until you reach the desired silky smooth consistency.",
+      "Serve: Spoon your hummus on a serving platter, drizzle a generous amount of olive oil over the top, a few reserved chickpeas, and a sprinkle of sumac if using.",
+      "Soak the chickpeas: Place dried chickpeas in a large bowl, cover with water, and soak overnight.",
+      "Cook the chickpeas: The next day, drain the chickpeas cover with 2 inches of water. Bring to boil over high heat, then reduce the heat so the chickpeas are at a simmer. Simmer for 1 1/2 to 2 hours.",
+      "Remove the skins: Add 1 1/2 teaspoons baking soda to the water with the chickpeas. Leave for a few minutes. Turn off the heat. Drain the chickpeas into a colander. While rinsing the chickpeas under running water, take a handful of chickpeas and rub them to remove the skins. Place peeled chickpeas in a bowl.",
+      "Puree the chickpeas: Add cooked chickpeas and minced garlic to the bowl of a food processor fitted with the S-blade. Puree until a smooth, powder-like mixture forms.",
+      "Finish the hummus: While the food processor is running, feed 2 ice cubes, tahini, salt, and lemon juice through the tube, and process for about 4 to 5 minutes. Check, and if the consistency is too thick, run the processor and slowly add a little water, 1 tablespoon at a time, until you reach the desired silky smooth consistency.",
+      "Garnish and serve: Spread in a serving bowl and add a generous drizzle of extra virgin olive oil. Top with a few chickpeas, if you like. Sprinkle with sumac. Enjoy with warm pita wedges and your favorite veggies."
+    ],
+    "ingredientSource": "json-ld",
+    "allergens": [],
+    "allergenSubs": []
+  },
+  {
+    "id": "middle-eastern-vegan-shawarma",
+    "title": "Shawarma (بدون قسوة · Bidoun qaswa)",
+    "source": "Make It Dairy Free",
+    "rawTitle": "### Vegan Shawarma",
+    "rawBody": "- **URL:** https://makeitdairyfree.com/vegan-chicken-shawarma/ ✓ VERIFIED *(Andrew Bernard / Make It Dairy Free — fully vegan, **shredded extra-firm tofu** spice-roasted with the classic shawarma blend (cumin, coriander, cardamom, smoked paprika, cinnamon, turmeric, chili flakes), 4.93/28 votes, 4 servings, 40 min total. Includes sub-recipes for sumac onions and tahini sauce. Lemon juice both flavors and helps the tofu crisp in the oven. **Recommended swap for upscale tier: Chunk Steakhouse Cut** (cut into shawarma-thin slices on a deli slicer, partial-freeze first), or **Beyond Chicken Pieces** for fast-casual; both benefit from the same marinade/spice rub but need a hotter, faster cook than tofu.)*\n\n  **Recipe** (4 servings, per Andrew Bernard): 2 × 14 oz blocks extra-firm tofu (drained, pressed, shredded by hand or grated), 6 tbsp olive oil, 4 tbsp lemon juice, 4 cloves garlic minced, 4 tsp ground cumin, 4 tsp ground coriander, 4 tsp ground cardamom, 2 tsp smoked paprika, 1½ tsp salt, 1 tsp cinnamon, 1 tsp black pepper, 1 tsp turmeric, ½ tsp chili flakes. Toss everything in a bowl until evenly coated. Spread in a single layer on parchment-lined sheet pan; bake 450°F for 25–30 min until edges crisp. **Sumac onions:** 1 large red onion thin-sliced, ½ cup chopped parsley, juice of 1 lemon, ½ tbsp olive oil, 1 tsp sumac, ½ tsp salt — toss and rest 20 min. **Tahini sauce:** ¼ cup tahini, 1 clove garlic minced, juice of ½ lemon, ½ tsp salt, water to drizzle consistency.\n- **Description:** Spice-marinated protein roasted on vertical or sheet, sliced over flatbread/rice with toum and pickles. **Strong Chunk lead candidate.**\n- $3.40/serving (seitan) · $5.20 (Chunk) · **Menu price:** $14–17 / $19–22\n- 380 g · 560 cal · 24 g · 45 min · 4 · **Medium** (carve to order; marinade bulk-preps) · 🥘 ⚡\n\n| Sub | Cost delta |\n|---|---|\n| Seitan or marinated mushrooms (default) | baseline |\n| **Premium lead:** Chunk Steak slices in shawarma marinade | +$1.80; converts to upscale shawarma | |",
+    "valueRatio": 4.5588235294117645,
+    "valueTier": "Strong Earner",
+    "cuisine": "middle-eastern",
+    "cuisineName": "Middle Eastern",
+    "courses": [
+      "main"
+    ],
+    "url": "https://makeitdairyfree.com/vegan-chicken-shawarma/",
+    "urlStatus": "verified",
+    "urlNote": null,
+    "description": "Spice-marinated protein roasted on vertical or sheet, sliced over flatbread/rice with toum and pickles. **Strong Chunk lead candidate.**",
+    "cost": 3.4,
+    "menuPrice": "$14–17 / $19–22",
+    "weight": "380 g",
+    "calories": 560,
+    "protein": "24 g",
+    "time": "45m",
+    "prep": "45m",
+    "servings": 4,
+    "serves": 4,
+    "difficulty": 2,
+    "difficultyLabel": "Medium",
+    "difficultyNote": "carve to order; marinade bulk-preps",
+    "tags": [
+      "bulk-prep",
+      "fast-service"
+    ],
+    "sourcingTier": "in-house",
+    "subs": [
+      {
+        "from": "**Premium lead:** Chunk Steak slices in shawarma marinade",
+        "effect": "+$1.80; converts to upscale shawarma",
+        "delta": ""
+      }
+    ],
+    "alternatives": [],
+    "photo": "flat",
+    "photoLabel": "shawarma",
+    "badge": "Strong Earner",
+    "ingredients": [
+      "2 14 oz blocks extra firm tofu, (drained and pressed)",
+      "6 tablespoon olive oil",
+      "4 tablespoons lemon juice",
+      "4 cloves garlic, (minced)",
+      "4 teaspoons ground cumin",
+      "4 teaspoons ground coriander",
+      "4 teaspoons ground cardamom",
+      "2 teaspoons smoked paprika",
+      "1 1/2 teaspoons salt",
+      "1 teaspoon cinnamon",
+      "1 teaspoon black pepper",
+      "1 teaspoon turmeric",
+      "1/2 teaspoon chilli flakes (more or less to taste)",
+      "pita bread",
+      "cherry tomatoes, (halved)",
+      "mini cucumbers, (thinly sliced)",
+      "sumac onions, (recipe below)",
+      "tahini sauce, (recipe below)"
+    ],
+    "steps": [
+      "Preheat oven to 450˚F. Prep baking sheet with parchment paper.",
+      "Shred your block of tofu into pieces. Place in a large bowl. Add in the oil, lemon juice, minced garlic, and all the spices. Toss together until well combined.",
+      "Spread out into a single layer. Bake for 25-30 minutes.",
+      "Add to pita with toppings or use as desired."
+    ],
+    "ingredientSource": "json-ld",
+    "allergens": [
+      "gluten",
+      "soy"
+    ],
+    "allergenSubs": [
+      {
+        "from": "pita",
+        "to": "gluten-free flatbread",
+        "removes": "gluten"
+      },
+      {
+        "from": "tofu",
+        "to": "chickpea tofu (Burmese tofu)",
+        "removes": "soy"
+      }
+    ]
+  },
+  {
+    "id": "middle-eastern-mujadara-cookie-and-kate",
+    "title": "Mujadara",
+    "source": "Cookie and Kate",
+    "rawTitle": "### Mujadara — Cookie and Kate",
+    "rawBody": "- **URL:** https://cookieandkate.com/mujadara-recipe/ ✓ VERIFIED\n- $0.95/serving · **Menu price:** $11–13 · 280 g · 380 cal · 14 g · 60 min · 6 · **Easy** · 🥘 ⚡",
+    "valueRatio": 12.631578947368421,
+    "valueTier": "Margin King",
+    "cuisine": "middle-eastern",
+    "cuisineName": "Middle Eastern",
+    "courses": [
+      "main"
+    ],
+    "url": "https://cookieandkate.com/mujaddara-recipe/",
+    "urlStatus": "verified",
+    "urlNote": null,
+    "description": "Lentils and rice cooked together, crowned with deeply caramelized onions and cumin. Levantine pantry classic — dirt-cheap, naturally vegan, freezer-friendly.",
+    "cost": 0.95,
+    "menuPrice": "$11–13",
+    "weight": "280 g",
+    "calories": 380,
+    "protein": "14 g",
+    "time": "60m",
+    "prep": "60m",
+    "servings": 6,
+    "serves": 6,
+    "difficulty": 1,
+    "difficultyLabel": "Easy",
+    "difficultyNote": null,
+    "tags": [
+      "bulk-prep",
+      "fast-service"
+    ],
+    "sourcingTier": "in-house",
+    "subs": [],
+    "alternatives": [],
+    "photo": "plate",
+    "photoLabel": "mujadara",
+    "badge": "Margin King",
+    "ingredients": [
+      "1 cup (200 g) green or brown lentils, rinsed",
+      "¾ cup (150 g) long-grain white or basmati rice, rinsed",
+      "3 large yellow onions, thinly sliced",
+      "4 tablespoons olive oil",
+      "½ teaspoon ground cumin",
+      "½ teaspoon ground allspice",
+      "¼ teaspoon ground cinnamon",
+      "¼ teaspoon ground black pepper",
+      "3 cups (720 ml) vegetable broth or water",
+      "1 teaspoon salt",
+      "plain vegan yogurt and lemon wedges (for serving)"
+    ],
+    "ingredientSource": "authored",
+    "allergens": [],
+    "allergenSubs": [],
+    "urlFixedAt": "2026-05-01T02:12:45.907Z",
+    "urlFixReason": "spelling correction (double-d) — old slug redirects to videos page"
+  },
+  {
+    "id": "middle-eastern-vegan-tabbouleh-cookie-and-kate",
+    "title": "Tabbouleh (بدون قسوة · Bidoun qaswa)",
+    "source": "Cookie and Kate",
+    "rawTitle": "### Vegan Tabbouleh — Cookie and Kate",
+    "rawBody": "- **URL:** https://cookieandkate.com/tabbouleh-recipe/ ✓ VERIFIED\n- $1.20/serving · **Menu price:** $7–9 (side) / $10–13 (entrée salad) · 180 g · 220 cal · 6 g · 30 min · 4 · **Easy** (cold-hold) · 🥘 ⚡",
+    "valueRatio": 6.666666666666667,
+    "valueTier": "Strong Earner",
+    "cuisine": "middle-eastern",
+    "cuisineName": "Middle Eastern",
+    "courses": [
+      "starter"
+    ],
+    "url": "https://cookieandkate.com/best-tabbouleh-recipe/",
+    "urlStatus": "verified",
+    "urlNote": null,
+    "description": "Easy — cold-hold · bulk-prep, fast-service.",
+    "cost": 1.2,
+    "menuPrice": "$7–9 (side) / $10–13 (entrée salad)",
+    "weight": "180 g",
+    "calories": 220,
+    "protein": "6 g",
+    "time": "30m",
+    "prep": "30m",
+    "servings": 4,
+    "serves": 4,
+    "difficulty": 1,
+    "difficultyLabel": "Easy",
+    "difficultyNote": "cold-hold",
+    "tags": [
+      "bulk-prep",
+      "fast-service"
+    ],
+    "sourcingTier": "in-house",
+    "subs": [],
+    "alternatives": [],
+    "photo": "plate",
+    "photoLabel": "tabbouleh",
+    "badge": "Strong Earner",
+    "ingredients": [
+      "1 cup (180 g) medium-grain bulgur wheat",
+      "1 cup (240 ml) boiling water",
+      "2 cups (100 g) flat-leaf parsley, finely chopped",
+      "½ cup (25 g) fresh mint, finely chopped",
+      "4 medium tomatoes, seeded and finely diced",
+      "1 English cucumber, finely diced",
+      "4 green onions, thinly sliced",
+      "¼ cup (60 ml) extra virgin olive oil",
+      "3 tablespoons fresh lemon juice (about 1 large lemon)",
+      "½ teaspoon salt",
+      "¼ teaspoon black pepper"
+    ],
+    "ingredientSource": "authored",
+    "allergens": [
+      "gluten"
+    ],
+    "allergenSubs": [
+      {
+        "from": "bulgur wheat",
+        "to": "quinoa (1:1 swap, reduce water by ¼ cup)",
+        "removes": "gluten"
+      }
+    ],
+    "urlFixedAt": "2026-05-01T02:12:45.907Z",
+    "urlFixReason": "old slug redirects to videos; new slug serves recipe"
+  },
+  {
+    "id": "middle-eastern-vegan-baba-ganoush-loving-it-vegan",
+    "title": "Baba Ganoush (بدون قسوة · Bidoun qaswa)",
+    "source": "Loving It Vegan",
+    "rawTitle": "### Vegan Baba Ganoush — Loving It Vegan",
+    "rawBody": "- **URL:** https://lovingitvegan.com/baba-ganoush/ ✓ VERIFIED\n- $1.15/serving · **Menu price:** $8–11 · 110 g · 180 cal · 5 g · 60 min · 8 · **Easy** · 🥘 ⚡",
+    "valueRatio": 8.260869565217392,
+    "valueTier": "Margin King",
+    "cuisine": "middle-eastern",
+    "cuisineName": "Middle Eastern",
+    "courses": [
+      "starter"
+    ],
+    "url": "https://cookieandkate.com/epic-baba-ganoush-recipe/",
+    "urlStatus": "verified",
+    "urlNote": "URL replaced via url_overrides.json",
+    "description": "Charred eggplant blended with tahini, lemon, and garlic for a smoky, creamy dip. Naturally vegan; flame-roast the eggplant for the deepest flavor.",
+    "cost": 1.15,
+    "menuPrice": "$8–11",
+    "weight": "110 g",
+    "calories": 180,
+    "protein": "5 g",
+    "time": "60m",
+    "prep": "60m",
+    "servings": 8,
+    "serves": 8,
+    "difficulty": 1,
+    "difficultyLabel": "Easy",
+    "difficultyNote": null,
+    "tags": [
+      "bulk-prep",
+      "fast-service"
+    ],
+    "sourcingTier": "in-house",
+    "subs": [],
+    "alternatives": [],
+    "photo": "plate",
+    "photoLabel": "baba · ganoush",
+    "badge": "Margin King",
+    "ingredients": [
+      "2 pounds Italian eggplants (about 2 small-to-medium eggplants*)",
+      "2 medium cloves of garlic, pressed or minced",
+      "2 tablespoons lemon juice, more if necessary",
+      "&frac14; cup tahini",
+      "⅓ cup extra-virgin olive oil, plus more for brushing the eggplant and garnish",
+      "2 tablespoons chopped fresh flat-leaf parsley, plus extra for garnish",
+      "&frac34; teaspoon salt, to taste",
+      "&frac14; teaspoon ground cumin",
+      "Pinch of smoked paprika, for garnish",
+      "Serving suggestions: warmed or toasted pita wedges, carrot sticks, bell pepper strips, cucumber slices, etc."
+    ],
+    "steps": [
+      "Preheat the oven to 450 degrees Fahrenheit with a rack in the upper third of the oven. Line a large, rimmed baking sheet with parchment paper to prevent the eggplant from sticking to the pan. Halve the eggplants lengthwise and brush the cut sides lightly with olive oil. Place them in the prepared pan with the halved sides down.",
+      "Roast the eggplant until the interior is very tender throughout and the skin is collapsing, about 35 to 40 minutes (this might take longer if you are using 1 large eggplant). Set the eggplant aside to cool for a few minutes. Flip the eggplants over and scoop out the flesh with a large spoon, leaving the skin behind.",
+      "Place a mesh strainer over a mixing bowl, then transfer the flesh to the strainer and discard the skins. Pick out any stray bits of eggplant skin and discard. You want to remove as much moisture from the eggplant here as possible, so let the eggplant rest for a few minutes and shake/stir the eggplant to release some more moisture.",
+      "Discard all of the eggplant drippings, drain and wipe out the bowl, and dump the eggplant into the bowl. Add the garlic and lemon juice to the eggplant and stir vigorously with a fork until eggplant breaks down. Add the tahini to the bowl and stir until it’s incorporated. While stirring, slowly drizzle in the olive oil. Continue stirring until the mixture is pale and creamy, and use your fork to break up any particularly long strings of eggplant.",
+      "Stir in the parsley, salt and cumin. Season to taste with more salt (I usually add another &frac14; teaspoon) and more lemon juice, if you’d like a more tart flavor.",
+      "Transfer the baba ganoush to a serving bowl and lightly drizzle olive oil on top. Lastly, sprinkle parsley and smoked paprika on top. Serve with accompaniments of your choice. It’s also great on sandwiches!"
+    ],
+    "ingredientSource": "json-ld",
+    "allergens": [
+      "gluten"
+    ],
+    "allergenSubs": [
+      {
+        "from": "pita",
+        "to": "gluten-free flatbread",
+        "removes": "gluten"
+      }
+    ]
+  },
+  {
+    "id": "middle-eastern-vegan-baklava",
+    "title": "Baklava (بدون قسوة · Bidoun qaswa)",
+    "source": "Lazy Cat Kitchen",
+    "rawTitle": "### Vegan Baklava (**DESSERT**)",
+    "rawBody": "- **URL:** https://www.lazycatkitchen.com/vegan-date-baklava/ ✓ VERIFIED *(Lazy Cat Kitchen's date-and-nut baklava with date-syrup glaze — the slug is `vegan-date-baklava`, not `vegan-baklava`. Alt: their `vegan-baklava-cigars` if you prefer the cigar-shape format)*\n- **Description:** Layered phyllo with vegan butter, walnut-pistachio-cinnamon filling, baked deep amber, drenched while hot in lemon-orange-blossom syrup. Holds 7+ days at room temp; the texture-and-flavor *improves* on day 2. The dessert that anchors a Middle Eastern menu — equally at home in a Mediterranean or Greek section, but most strongly associated here.\n- **Wholesale food cost:** $1.65 / piece · **Menu price:** $5–7 (single) / $9–12 (3-piece) / $13–16 (mixed sweets plate w/ tea)\n- **Weight:** 70 g / piece · **Calories:** 320 · **Protein:** 4 g · **Time:** 90 min · **Servings:** 16 / pan\n- **Restaurant difficulty:** **Medium** — phyllo handling is the only skill barrier; everything bulk-preps and holds.\n- **Tags:** 🥘 Bulk-Prep · ⚡ Fast-Service\n\n| Sub | Effect | Cost delta |\n|---|---|---|\n| Walnut-pistachio (default) | Classic | baseline |\n| All-pistachio (premium) | Higher menu listing | +$0.40 → menu $7–10 |\n| Add date-tahini ice cream alongside | Premium duo | +$1.00 → menu $11–14 |",
+    "valueRatio": 3.6363636363636367,
+    "valueTier": "Solid",
+    "cuisine": "middle-eastern",
+    "cuisineName": "Middle Eastern",
+    "courses": [
+      "dessert"
+    ],
+    "url": "https://www.lazycatkitchen.com/vegan-date-baklava/",
+    "urlStatus": "verified",
+    "urlNote": "Lazy Cat Kitchen's date-and-nut baklava with date-syrup glaze — the slug is `vegan-date-baklava`, not `vegan-baklava`. Alt: their `vegan-baklava-cigars` if you prefer the cigar-shape format",
+    "description": "Layered phyllo with vegan butter, walnut-pistachio-cinnamon filling, baked deep amber, drenched while hot in lemon-orange-blossom syrup. Holds 7+ days at room temp; the texture-and-flavor *improves* on day 2. The dessert that anchors a Middle Eastern menu — equally at home in a Mediterranean or Greek section, but most strongly associated here.",
+    "cost": 1.65,
+    "menuPrice": "$5–7 (single) / $9–12 (3-piece) / $13–16 (mixed sweets plate w/ tea)",
+    "weight": "70 g / piece",
+    "calories": 320,
+    "protein": "4 g",
+    "time": "90m",
+    "prep": "90m",
+    "servings": 16,
+    "serves": 16,
+    "difficulty": 2,
+    "difficultyLabel": "Medium",
+    "difficultyNote": "phyllo handling is the only skill barrier; everything bulk-preps and holds.",
+    "tags": [
+      "bulk-prep",
+      "fast-service"
+    ],
+    "sourcingTier": "in-house",
+    "subs": [
+      {
+        "from": "Walnut-pistachio (default)",
+        "effect": "Classic",
+        "delta": "baseline"
+      },
+      {
+        "from": "All-pistachio (premium)",
+        "effect": "Higher menu listing",
+        "delta": "+$0.40 → menu $7–10"
+      },
+      {
+        "from": "Add date-tahini ice cream alongside",
+        "effect": "Premium duo",
+        "delta": "+$1.00 → menu $11–14"
+      }
+    ],
+    "alternatives": [],
+    "photo": "layered",
+    "photoLabel": "baklava",
+    "badge": "Solid",
+    "ingredients": [
+      "80 ml / 1/3 cup water",
+      "120 ml / ½ cup date syrup, shop-bought or homemade",
+      "2 tbsp lemon juice, adjust to taste",
+      "350 g / approx. 2 cups dates",
+      "1½ cups / approx. 185 g almonds",
+      "1½ cup / approx. 150 g walnuts",
+      "zest of 1 orange",
+      "1½ tsp ground cinnamon",
+      "¼ tsp fine sea salt",
+      "vegan filo pastry sheets (mine had 7 sheets, 48 cm / 19″ x 25 cm / 10″ each), thawed",
+      "3 tbsp mild tasting oil (I used mild olive oil)",
+      "2 tbsp shelled pistachios, very finely chopped"
+    ],
+    "ingredientSource": "manual",
+    "allergens": [
+      "nuts"
+    ],
+    "allergenSubs": [
+      {
+        "from": "almonds",
+        "to": "pumpkin seeds (pepitas)",
+        "removes": "nuts"
+      }
+    ]
+  }
+]

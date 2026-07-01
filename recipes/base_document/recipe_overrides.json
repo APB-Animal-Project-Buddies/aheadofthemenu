@@ -1,0 +1,19 @@
+{
+  "_comment": "Per-recipe field patches — used when the catalog markdown's compact format doesn't parse (e.g. unusual units like /piece or /batch, or fields the parser couldn't extract). Keyed by recipe id; values are partial Recipe objects merged shallowly.",
+
+  "ethiopian-authentic-vegan-injera": {
+    "cost": 0.55,
+    "menuPrice": "$1.50–2.50/piece (included in combo)",
+    "weight": "110 g",
+    "calories": 180,
+    "protein": "6 g",
+    "time": "3d",
+    "prep": "3d",
+    "servings": 12,
+    "serves": 12,
+    "difficulty": 2,
+    "difficultyLabel": "Medium",
+    "difficultyNote": "ferment timing",
+    "tags": ["bulk-prep"]
+  }
+}

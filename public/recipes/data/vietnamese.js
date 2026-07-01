@@ -1,0 +1,357 @@
+// Auto-generated from vegan-restaurant-catalog-v5.md — do not edit by hand.
+(window.APB_RECIPES = window.APB_RECIPES || []).push(...[
+  {
+    "id": "vietnamese-vegan-ph-chay-the-viet-vegan",
+    "title": "Phở Chay (Không tàn nhẫn)",
+    "source": "The Viet Vegan",
+    "rawTitle": "### Vegan Phở Chay — The Viet Vegan",
+    "rawBody": "- **URL:** https://thevietvegan.com/homemade-vegan-vietnamese-pho/ ✓ VERIFIED\n- $2.65/serving · **Menu price:** $13–17 · 600 g · 480 cal · 18 g · 90 min broth · 4 · **Easy** (broth bulk; ladle assemble) · 🥘 ⚡",
+    "valueRatio": 5.660377358490567,
+    "valueTier": "Strong Earner",
+    "cuisine": "vietnamese",
+    "cuisineName": "Vietnamese",
+    "courses": [
+      "main"
+    ],
+    "url": "https://thevietvegan.com/homemade-vegan-vietnamese-pho/",
+    "urlStatus": "verified",
+    "urlNote": null,
+    "description": "Easy — broth bulk; ladle assemble · bulk-prep, fast-service.",
+    "cost": 2.65,
+    "menuPrice": "$13–17",
+    "weight": "600 g",
+    "calories": 480,
+    "protein": "18 g",
+    "time": "90m",
+    "prep": "90m",
+    "servings": 4,
+    "serves": 4,
+    "difficulty": 1,
+    "difficultyLabel": "Easy",
+    "difficultyNote": "broth bulk; ladle assemble",
+    "tags": [
+      "bulk-prep",
+      "fast-service"
+    ],
+    "sourcingTier": "in-house",
+    "subs": [],
+    "alternatives": [],
+    "photo": "plate",
+    "photoLabel": "chay",
+    "badge": "Strong Earner"
+  },
+  {
+    "id": "vietnamese-vegan-b-nh-m-nora-cooks",
+    "title": "Bánh Mì (Không tàn nhẫn)",
+    "source": "Nora Cooks",
+    "rawTitle": "### Vegan Bánh Mì — Nora Cooks",
+    "rawBody": "- **URL:** https://www.noracooks.com/vegan-banh-mi/ ✓ VERIFIED\n- $2.40/serving · **Menu price:** $11–14 · 280 g · 540 cal · 18 g · 30 min · 4 · **Easy** (cold assembly) · ⚡\n- **Premium row:** Chunk Pulled lemongrass-marinated +$1.90",
+    "valueRatio": 5.208333333333334,
+    "valueTier": "Strong Earner",
+    "cuisine": "vietnamese",
+    "cuisineName": "Vietnamese",
+    "courses": [
+      "main"
+    ],
+    "url": "https://www.noracooks.com/vegan-banh-mi/",
+    "urlStatus": "verified",
+    "urlNote": null,
+    "description": "Easy — cold assembly · fast-service.",
+    "cost": 2.4,
+    "menuPrice": "$11–14",
+    "weight": "280 g",
+    "calories": 540,
+    "protein": "18 g",
+    "time": "30m",
+    "prep": "30m",
+    "servings": 4,
+    "serves": 4,
+    "difficulty": 1,
+    "difficultyLabel": "Easy",
+    "difficultyNote": "cold assembly",
+    "tags": [
+      "fast-service"
+    ],
+    "sourcingTier": "in-house",
+    "subs": [],
+    "alternatives": [],
+    "photo": "plate",
+    "photoLabel": "bánh mì (không tàn nhẫn)",
+    "badge": "Strong Earner"
+  },
+  {
+    "id": "vietnamese-vegan-spring-rolls-g-i-cu-n-the-viet-vegan",
+    "title": "Spring Rolls (Gỏi Cuốn)",
+    "source": "The Viet Vegan",
+    "rawTitle": "### Vegan Spring Rolls (Gỏi Cuốn) — The Viet Vegan",
+    "rawBody": "- **URL:** https://thevietvegan.com/spring-rolls/ ✓ VERIFIED\n- $1.85/serving · **Menu price:** $9–12 (3-pc app) · 240 g · 280 cal · 8 g · 30 min · 4 · **Medium** (rolling labor) · ⚡",
+    "valueRatio": 5.675675675675675,
+    "valueTier": "Strong Earner",
+    "cuisine": "vietnamese",
+    "cuisineName": "Vietnamese",
+    "courses": [
+      "main"
+    ],
+    "url": "https://thevietvegan.com/spring-rolls/",
+    "urlStatus": "verified",
+    "urlNote": null,
+    "description": "Medium — rolling labor · fast-service.",
+    "cost": 1.85,
+    "menuPrice": "$9–12 (3-pc app)",
+    "weight": "240 g",
+    "calories": 280,
+    "protein": "8 g",
+    "time": "30m",
+    "prep": "30m",
+    "servings": 4,
+    "serves": 4,
+    "difficulty": 2,
+    "difficultyLabel": "Medium",
+    "difficultyNote": "rolling labor",
+    "tags": [
+      "fast-service"
+    ],
+    "sourcingTier": "in-house",
+    "subs": [],
+    "alternatives": [],
+    "photo": "plate",
+    "photoLabel": "spring · rolls",
+    "badge": "Strong Earner"
+  },
+  {
+    "id": "vietnamese-vegan-bun-bowls-pick-up-limes",
+    "title": "Bun Bowls (Không tàn nhẫn)",
+    "source": "Pick Up Limes",
+    "rawTitle": "### Vegan Bun Bowls — Pick Up Limes",
+    "rawBody": "- **URL:** https://www.pickuplimes.com/recipe/vegan-vermicelli-noodle-bowl-104 ✓ VERIFIED\n- $2.40/serving · **Menu price:** $13–16 · 380 g · 460 cal · 16 g · 30 min · 4 · **Easy** (assembly) · 🥘 ⚡",
+    "valueRatio": 6.041666666666667,
+    "valueTier": "Strong Earner",
+    "cuisine": "vietnamese",
+    "cuisineName": "Vietnamese",
+    "courses": [
+      "main"
+    ],
+    "url": "https://thevietvegan.com/lemongrass-tofu-vermicelli-bowl/",
+    "urlStatus": "verified",
+    "urlNote": "URL replaced via url_overrides.json",
+    "description": "Easy — assembly · bulk-prep, fast-service.",
+    "cost": 2.4,
+    "menuPrice": "$13–16",
+    "weight": "380 g",
+    "calories": 460,
+    "protein": "16 g",
+    "time": "30m",
+    "prep": "30m",
+    "servings": 4,
+    "serves": 4,
+    "difficulty": 1,
+    "difficultyLabel": "Easy",
+    "difficultyNote": "assembly",
+    "tags": [
+      "bulk-prep",
+      "fast-service"
+    ],
+    "sourcingTier": "in-house",
+    "subs": [],
+    "alternatives": [],
+    "photo": "plate",
+    "photoLabel": "bun · bowls",
+    "badge": "Strong Earner"
+  },
+  {
+    "id": "vietnamese-vegan-lemongrass-tofu-the-viet-vegan",
+    "title": "Lemongrass Tofu (Không tàn nhẫn)",
+    "source": "The Viet Vegan",
+    "rawTitle": "### Vegan Lemongrass Tofu — The Viet Vegan",
+    "rawBody": "- **URL:** https://thevietvegan.com/vegan-lemongrass-tofu/ ✓ VERIFIED\n- $2.10/serving · **Menu price:** $13–16 · 280 g · 380 cal · 22 g · 30 min · 4 · **Medium** (per-plate sear) · ⚡\n- **Premium row:** Chunk Pulled lemongrass +$2.00",
+    "valueRatio": 6.904761904761904,
+    "valueTier": "Strong Earner",
+    "cuisine": "vietnamese",
+    "cuisineName": "Vietnamese",
+    "courses": [
+      "main"
+    ],
+    "url": "https://thevietvegan.com/vegan-lemongrass-tofu/",
+    "urlStatus": "verified",
+    "urlNote": null,
+    "description": "Medium — per-plate sear · fast-service.",
+    "cost": 2.1,
+    "menuPrice": "$13–16",
+    "weight": "280 g",
+    "calories": 380,
+    "protein": "22 g",
+    "time": "30m",
+    "prep": "30m",
+    "servings": 4,
+    "serves": 4,
+    "difficulty": 2,
+    "difficultyLabel": "Medium",
+    "difficultyNote": "per-plate sear",
+    "tags": [
+      "fast-service"
+    ],
+    "sourcingTier": "in-house",
+    "subs": [],
+    "alternatives": [],
+    "photo": "plate",
+    "photoLabel": "lemongrass · tofu",
+    "badge": "Strong Earner"
+  },
+  {
+    "id": "vietnamese-vegan-b-n-ri-u-chay-cinnamon-snail-viet-vegan",
+    "title": "Bún Riêu Chay (Không tàn nhẫn)",
+    "source": "Cinnamon Snail / Viet Vegan",
+    "rawTitle": "### Vegan Bún Riêu Chay — Cinnamon Snail / Viet Vegan",
+    "rawBody": "- **URL:** https://thevietvegan.com/vegan-bun-rieu-chay/ ✓ VERIFIED\n- $3.10/serving · **Menu price:** $14–17 · 580 g · 480 cal · 18 g · 90 min · 4 · **Medium** · 🥘 ⚡",
+    "valueRatio": 5,
+    "valueTier": "Strong Earner",
+    "cuisine": "vietnamese",
+    "cuisineName": "Vietnamese",
+    "courses": [
+      "main"
+    ],
+    "url": "https://thevietvegan.com/vegan-bun-rieu-chay/",
+    "urlStatus": "verified",
+    "urlNote": null,
+    "description": "Tomato-fermented-soybean broth with rice noodles, crispy tofu, and herbs. Saigon-market lunch — vegan rebuild of bún riêu, naturally bright and balanced.",
+    "cost": 3.1,
+    "menuPrice": "$14–17",
+    "weight": "580 g",
+    "calories": 480,
+    "protein": "18 g",
+    "time": "90m",
+    "prep": "90m",
+    "servings": 4,
+    "serves": 4,
+    "difficulty": 2,
+    "difficultyLabel": "Medium",
+    "difficultyNote": null,
+    "tags": [
+      "bulk-prep",
+      "fast-service"
+    ],
+    "sourcingTier": "in-house",
+    "subs": [],
+    "alternatives": [],
+    "photo": "plate",
+    "photoLabel": "chay",
+    "badge": "Strong Earner"
+  },
+  {
+    "id": "vietnamese-vegan-b-kho",
+    "title": "Bò Kho (Không tàn nhẫn)",
+    "source": "The Viet Vegan",
+    "rawTitle": "### Vegan Bò Kho (**SHOWSTOPPER**)",
+    "rawBody": "- **URL:** https://thevietvegan.com/vegan-beef-stew/ ✓ VERIFIED *(Lisa's Viet Vegan recipe — she titles it \"Vegan Beef Stew\" but explicitly notes in the post that readers requested a Bò Kho version, and her recipe uses lemongrass, star anise, and the classic Bò Kho aromatics. Built around Gardein Beefless Tips. **Recommended swap: Chunk Steakhouse Cut** for the upscale rebuild.)*\n- **Description:** **Lead protein:** Chunk Foods Steakhouse Cut, cubed and slow-braised with lemongrass, star anise, annatto seed oil, ginger, fish-sauce-substitute (mushroom-soy), tomato, and fork-tender carrots. The Vietnamese answer to a French daube — actually a French-Vietnamese hybrid, which is why it shines with the structure of a real whole-muscle plant-meat. Plates with a crusty banh mi for dipping or over fresh rice noodles.\n- **Wholesale food cost:** $6.40 / serving · **Menu price:** **$20–24** (upscale Vietnamese ÷ 0.30)\n- **Weight:** 480 g (stew + bread/noodles) · **Calories:** 580 · **Protein:** 30 g · **Time:** 90 min (mostly unattended) · **Servings:** 4\n- **Restaurant difficulty:** **Easy** — quintessential braise: bulk-prep, hold 4+ days, plate over noodles or with banh mi to order.\n- **Tags:** 🥘 Bulk-Prep · ⚡ Fast-Service\n\n| Sub | Effect | Cost delta |\n|---|---|---|\n| **Lead protein:** Chunk Steakhouse Cut (default) | Best whole-muscle braise | baseline |\n| Chunk Pulled | Looser, \"shredded-beef\" effect | −$0.70 |\n| Beyond Steak Tips | Pre-seasoned shortcut | −$1.40 |\n| Seitan or jackfruit | Budget tier | −$3.20 → menu $14–17 |",
+    "valueRatio": null,
+    "valueTier": "Showpiece",
+    "cuisine": "vietnamese",
+    "cuisineName": "Vietnamese",
+    "courses": [
+      "showstopper"
+    ],
+    "url": "https://thevietvegan.com/vegan-beef-stew/",
+    "urlStatus": "verified",
+    "urlNote": "Lisa's Viet Vegan recipe — she titles it \"Vegan Beef Stew\" but explicitly notes in the post that readers requested a Bò Kho version, and her recipe uses lemongrass, star anise, and the classic Bò Kho aromatics. Built around Gardein Beefless Tips. **Recommended swap: Chunk Steakhouse Cut** for the upscale rebuild.",
+    "description": "**Lead protein:** Chunk Foods Steakhouse Cut, cubed and slow-braised with lemongrass, star anise, annatto seed oil, ginger, fish-sauce-substitute (mushroom-soy), tomato, and fork-tender carrots. The Vietnamese answer to a French daube — actually a French-Vietnamese hybrid, which is why it shines with the structure of a real whole-muscle plant-meat. Plates with a crusty banh mi for dipping or over fresh rice noodles.",
+    "cost": 6.4,
+    "menuPrice": null,
+    "weight": "480 g (stew + bread/noodles)",
+    "calories": 580,
+    "protein": "30 g",
+    "time": "90m",
+    "prep": "90m",
+    "servings": 4,
+    "serves": 4,
+    "difficulty": 1,
+    "difficultyLabel": "Easy",
+    "difficultyNote": "quintessential braise: bulk-prep, hold 4+ days, plate over noodles or with banh mi to order.",
+    "tags": [
+      "bulk-prep",
+      "fast-service"
+    ],
+    "sourcingTier": "branded",
+    "subs": [
+      {
+        "from": "**Lead protein:** Chunk Steakhouse Cut (default)",
+        "effect": "Best whole-muscle braise",
+        "delta": "baseline"
+      },
+      {
+        "from": "Chunk Pulled",
+        "effect": "Looser, \"shredded-beef\" effect",
+        "delta": "−$0.70"
+      },
+      {
+        "from": "Beyond Steak Tips",
+        "effect": "Pre-seasoned shortcut",
+        "delta": "−$1.40"
+      },
+      {
+        "from": "Seitan or jackfruit",
+        "effect": "Budget tier",
+        "delta": "−$3.20 → menu $14–17"
+      }
+    ],
+    "alternatives": [],
+    "photo": "plate",
+    "photoLabel": "kho",
+    "badge": "Showpiece"
+  },
+  {
+    "id": "vietnamese-vegan-ch-chu-i",
+    "title": "Chè Chuối (Không tàn nhẫn)",
+    "source": "Veggie Anh",
+    "rawTitle": "### Vegan Chè Chuối (Banana-Coconut-Tapioca Pudding) (**DESSERT**)",
+    "rawBody": "- **URL:** https://veggieanh.com/banana-tapioca-pudding/ ✓ VERIFIED *(Veggie Anh — a Vietnamese food blogger, so this is an authoritative source. Recipe she learned from her university roommate; classic preparation, naturally vegan, 30 min total.)*\n\n  **Recipe** (4 servings, per Anh): 4 tbsp tapioca pearls (soak in 1 cup warm water for 10 min), 4 medium ripe bananas/plantains (sliced into 2 cm chunks), 200 ml full-fat coconut milk, 4–5 tbsp sugar, 300 ml cold water for the cooking liquid. Optional toppings: 50 g roasted coconut flakes, 25 g chopped peanuts, fresh banana slices. Bring 300 ml water to a boil; add banana chunks + drained tapioca; simmer on low 3 min until tapioca pearls turn transparent. Add sugar + coconut milk; stir 5 min more. Chill 15 min before serving. Holds 3–4 days refrigerated; serve warm or cold.\n- **Description:** Sweet ripe bananas simmered in coconut milk with small tapioca pearls, served warm or chilled, topped with toasted coconut flakes and chopped peanuts. The Vietnamese sweet that translates effortlessly — naturally vegan in its traditional form.\n- **Wholesale food cost:** $1.50 / serving · **Menu price:** $6–9\n- **Weight:** 220 g · **Calories:** 320 · **Protein:** 4 g · **Time:** 30 min · **Servings:** 6\n- **Restaurant difficulty:** **Easy** — bulk-cook, hold warm in bain or chilled in cold-line; portion to order.\n- **Tags:** 🥘 Bulk-Prep · ⚡ Fast-Service\n\n| Sub | Effect | Cost delta |\n|---|---|---|\n| Banana + tapioca (default) | Classic | baseline |\n| Add black sesame swirl | Visual + flavor accent | +$0.20 |\n| Combo plate with mini banh chuoi nuong (banana cake) | Vietnamese sweets duo | +$1.20 → menu $9–12 |",
+    "valueRatio": 5,
+    "valueTier": "Strong Earner",
+    "cuisine": "vietnamese",
+    "cuisineName": "Vietnamese",
+    "courses": [
+      "dessert"
+    ],
+    "url": "https://veggieanh.com/banana-tapioca-pudding/",
+    "urlStatus": "verified",
+    "urlNote": "Veggie Anh — a Vietnamese food blogger, so this is an authoritative source. Recipe she learned from her university roommate; classic preparation, naturally vegan, 30 min total.",
+    "description": "Sweet ripe bananas simmered in coconut milk with small tapioca pearls, served warm or chilled, topped with toasted coconut flakes and chopped peanuts. The Vietnamese sweet that translates effortlessly — naturally vegan in its traditional form.",
+    "cost": 1.5,
+    "menuPrice": "$6–9",
+    "weight": "220 g",
+    "calories": 320,
+    "protein": "4 g",
+    "time": "30m",
+    "prep": "30m",
+    "servings": 6,
+    "serves": 6,
+    "difficulty": 1,
+    "difficultyLabel": "Easy",
+    "difficultyNote": "bulk-cook, hold warm in bain or chilled in cold-line; portion to order.",
+    "tags": [
+      "bulk-prep",
+      "fast-service"
+    ],
+    "sourcingTier": "in-house",
+    "subs": [
+      {
+        "from": "Banana + tapioca (default)",
+        "effect": "Classic",
+        "delta": "baseline"
+      },
+      {
+        "from": "Add black sesame swirl",
+        "effect": "Visual + flavor accent",
+        "delta": "+$0.20"
+      },
+      {
+        "from": "Combo plate with mini banh chuoi nuong (banana cake)",
+        "effect": "Vietnamese sweets duo",
+        "delta": "+$1.20 → menu $9–12"
+      }
+    ],
+    "alternatives": [],
+    "photo": "plate",
+    "photoLabel": "chu",
+    "badge": "Strong Earner"
+  }
+]);

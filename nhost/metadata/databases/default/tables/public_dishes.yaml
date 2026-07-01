@@ -1,0 +1,3 @@
+table:
+  name: dishes
+  schema: public

@@ -1,0 +1,44 @@
+{
+  "_comment": "Hand-curated descriptions for recipes whose catalog markdown lacks a `**Description:**` line. Keyed by recipe id. Re-runs of parse-catalog.ts merge these in.",
+
+  "ethiopian-misir-wot":                "Slow-simmered red lentils in berbere-spiced caramelized-onion sauce. The Ethiopian platter's red workhorse — naturally vegan, gluten-free, tastes better day two.",
+  "ethiopian-shiro-wot":                "Toasted chickpea flour whisked into berbere stew until silky. Naturally vegan and gluten-free; the creamy umami complement to spicier wots.",
+  "ethiopian-atakilt-wat":              "Cabbage, potato, and carrot stewed gently with turmeric and onion until everything melts together. The mild, golden anchor of any Ethiopian combo platter.",
+  "ethiopian-kik-alicha":               "Yellow split peas simmered with turmeric, ginger, and garlic until creamy. Mellow and golden — the tame counterpart to fierier wots.",
+  "ethiopian-gomen-wat":                "Collard greens slow-cooked with onion, garlic, ginger, and a hit of jalapeño until silky. The bitter-green balance on the combo platter.",
+  "ethiopian-authentic-vegan-injera":   "Fermented teff sourdough flatbread — spongy, sour, naturally gluten-free. The base of every Ethiopian platter; tear, scoop, repeat.",
+
+  "caribbean-vegan-jamaican-rice-and-peas-make-it-dairy-free": "Long-grain rice simmered in coconut milk with kidney beans, scotch bonnet, thyme, and allspice. Naturally vegan; the foundation of any Jamaican plate.",
+  "caribbean-jamaican-chickpea-curry-sweet-potato-soul":       "Curried chickpeas in a rich coconut-tomato gravy with thyme and scotch bonnet. Plant-based by default; pairs with rice and peas or roti.",
+  "caribbean-cuban-black-beans-loving-it-vegan":               "Black beans slow-stewed with sofrito of onion, pepper, and garlic, finished with cumin, oregano, and a splash of vinegar. Naturally vegan; gets better day two.",
+  "caribbean-caribbean-pelau-healthier-steps":                 "One-pot rice with pigeon peas, coconut milk, and burnt-sugar caramelization for the signature deep amber color. Trinidad's national one-pot — built for batch service.",
+
+  "mexican-pozole-rojo":                "Hominy and jackfruit in a guajillo-ancho-arbol chile broth, topped with shredded cabbage, radish, and oregano. The vegan rebuild reads as real-deal posole — hold-and-finish friendly.",
+  "mexican-tortilla-soup":              "Tomato-and-dried-chile broth ladled over crispy tortilla strips, finished with avocado and lime. Sopa azteca, plant-based — quick build from a held base.",
+
+  "chinese-kung-pao-tofu-nora-cooks":          "Cubed crispy tofu wok-tossed with peanuts, dried chiles, and a soy-vinegar sauce kissed with Sichuan peppercorn. Six-minute service from prepped components.",
+  "chinese-vegan-general-tsos-tofu-loving-it-vegan": "Crispy battered tofu glazed in a sweet-spicy garlic-ginger sauce. American-Chinese takeout staple — fryer-and-toss in two minutes per ticket.",
+  "chinese-dan-dan-noodles-pickled-plum":      "Wheat noodles tossed in sesame-soy sauce with crumbled spiced tofu or mushroom, topped with chili oil and Sichuan peppercorn. Sichuan street food — ferocious flavor, fast plate.",
+
+  "mediterranean-vegan-greek-salad-horiatiki-the-mediterranean-dish": "Tomato, cucumber, red onion, kalamata olives, and bell pepper dressed simply with olive oil, oregano, and red-wine vinegar. Vegan with the feta omitted (or swap with vegan feta).",
+  "mediterranean-vegan-briam-holy-cow-vegan":          "Sliced potato, zucchini, eggplant, tomato, and red onion baked in olive oil and oregano until everything melts. Greek roasted-vegetable casserole — naturally vegan, holds well.",
+  "mediterranean-vegan-gigantes-plaki-diane-kochilas": "Greek giant white beans baked low and slow in tomato, olive oil, dill, and parsley until creamy. Naturally vegan; a meze workhorse that's better the next day.",
+
+  "japanese-easy-vegan-ramen-minimalist-baker": "Quick miso-shoyu broth with chewy noodles, marinated tofu, and seasonal vegetables. A weeknight ramen build that holds at the pass for fast-service tickets.",
+
+  "thai-tom-kha-six-hungry-feet":                 "Coconut-galangal soup with mushrooms, lime leaf, and chile, brightened with fresh lime. Naturally vegan; ladle over rice or rice noodles as a hot-line bowl.",
+  "thai-red-curry-tofu-nora-cooks":               "Red curry paste bloomed in coconut milk with crispy tofu and Thai basil. Pantry curry — six-minute plate from prepped components.",
+  "thai-easy-tofu-pad-thai-minimalist-baker":     "Rice noodles wok-tossed with crispy tofu, bean sprouts, and tamarind-palm-sugar sauce, finished with peanuts and lime. Plant-based pad thai with no fish-sauce shortcuts.",
+  "thai-vegan-massaman-yellow-curry-hot-thai-kitchen": "Massaman paste simmered with potato, tofu (or jackfruit), peanuts, and warm spices in coconut milk. Mild, sweet-savory, and family-friendly.",
+
+  "middle-eastern-classic-hummus-the-mediterranean-dish": "Cooked chickpeas blended with tahini, lemon, and garlic until silky. Naturally vegan; the meze plate's anchor — peel the chickpeas for the smoothest finish.",
+  "middle-eastern-mujadara-cookie-and-kate":              "Lentils and rice cooked together, crowned with deeply caramelized onions and cumin. Levantine pantry classic — dirt-cheap, naturally vegan, freezer-friendly.",
+  "middle-eastern-vegan-baba-ganoush-loving-it-vegan":    "Charred eggplant blended with tahini, lemon, and garlic for a smoky, creamy dip. Naturally vegan; flame-roast the eggplant for the deepest flavor.",
+
+  "spanish-vegan-romesco-minimalist-baker":   "Roasted red peppers, almonds (or hazelnuts), tomato, garlic, and smoked paprika blended into a thick, smoky sauce. Spoon over grilled vegetables or use as a dip.",
+  "spanish-pan-con-tomate-simple-vegan-blog": "Toasted bread rubbed with garlic and ripe tomato, finished with olive oil and salt. Two minutes from prepped components; the platonic Spanish tapa.",
+
+  "vietnamese-vegan-b-n-ri-u-chay-cinnamon-snail-viet-vegan": "Tomato-fermented-soybean broth with rice noodles, crispy tofu, and herbs. Saigon-market lunch — vegan rebuild of bún riêu, naturally bright and balanced.",
+
+  "korean-vegan-tteokbokki-the-korean-vegan": "Chewy rice cakes simmered in a gochujang-soy-sugar sauce until glossy. Korean comfort food — built for fast service from a held base."
+}

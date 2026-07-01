@@ -1,0 +1,337 @@
+/* Tips & Tricks — magazine-style spreads. Built on the recipes design system. */
+
+.tips-hero {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 64px 32px 36px;
+  border-bottom: 1px dashed var(--line);
+  position: relative;
+  overflow: hidden;
+}
+.tips-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(60% 80% at 100% 0%, oklch(0.78 0.13 85 / 0.18), transparent 60%),
+    radial-gradient(50% 60% at 0% 100%, oklch(0.62 0.14 45 / 0.10), transparent 60%);
+  pointer-events: none;
+  z-index: 0;
+}
+.tips-hero > * { position: relative; z-index: 1; }
+
+.tips-hero .eyebrow {
+  font-family: var(--mono);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 11px;
+  color: var(--moss);
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+.tips-hero .eyebrow .dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--leaf);
+  box-shadow: 0 0 0 4px oklch(0.68 0.16 140 / 0.18);
+}
+.tips-hero h1 {
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: clamp(38px, 4.4vw, 64px);
+  line-height: 1.0;
+  letter-spacing: -0.025em;
+  margin: 0 0 20px;
+  color: var(--moss-ink);
+  text-wrap: balance;
+  max-width: 18ch;
+}
+.tips-hero h1 em {
+  font-style: italic;
+  font-weight: 500;
+  color: var(--terracotta);
+}
+.tips-hero .lede {
+  max-width: 60ch;
+  font-size: 17px;
+  line-height: 1.55;
+  color: oklch(0.18 0.04 145 / 0.78);
+  text-wrap: pretty;
+}
+
+/* ---------- Archetype strip ---------- */
+.archetype-strip {
+  max-width: 1280px;
+  margin: -8px auto 0;
+  padding: 36px 32px 24px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 18px;
+}
+.archetype-strip .arch {
+  position: relative;
+  padding: 24px 22px 22px;
+  border-radius: 18px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  transition: transform 180ms cubic-bezier(.2,.8,.2,1), box-shadow 180ms ease, border-color 180ms ease;
+}
+.archetype-strip .arch:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 24px 40px -28px oklch(0.18 0.04 145 / 0.30);
+  border-color: var(--moss);
+}
+.archetype-strip .arch .eyebrow {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--moss);
+  margin-bottom: 10px;
+}
+.archetype-strip .arch h3 {
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: 26px;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--moss-ink);
+  margin: 0 0 10px;
+}
+.archetype-strip .arch .blurb {
+  font-size: 14px;
+  line-height: 1.5;
+  color: oklch(0.18 0.04 145 / 0.72);
+  margin: 0 0 14px;
+}
+.archetype-strip .arch .examples {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.archetype-strip .arch .examples li {
+  font-family: var(--mono);
+  font-size: 11px;
+  padding: 4px 9px;
+  border-radius: 999px;
+  background: oklch(0.78 0.13 85 / 0.18);
+  color: var(--moss-ink);
+  white-space: nowrap;
+}
+.archetype-strip .arch-anchor   { background: oklch(0.96 0.025 100); }
+.archetype-strip .arch-showcase { background: oklch(0.94 0.04  60); }
+.archetype-strip .arch-fast     { background: oklch(0.95 0.04 130); }
+
+/* ---------- Tip sections ---------- */
+.tips {
+  max-width: 1100px;
+  margin: 24px auto 0;
+  padding: 24px 32px 96px;
+  display: grid;
+  gap: 28px;
+}
+.tip-section {
+  position: relative;
+  padding: 36px 40px 32px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 22px;
+}
+.tip-section .tip-num {
+  position: absolute;
+  top: -14px;
+  left: 32px;
+  padding: 5px 14px;
+  border-radius: 999px;
+  background: var(--moss);
+  color: var(--cream);
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+}
+.tip-section h2 {
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: clamp(28px, 3.0vw, 38px);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin: 0 0 28px;
+  color: var(--moss-ink);
+  text-wrap: balance;
+}
+
+.tip-body {
+  display: grid;
+  gap: 26px;
+}
+.tip-body .cluster.intro {
+  font-size: 16px;
+  line-height: 1.55;
+  color: oklch(0.18 0.04 145 / 0.85);
+}
+.tip-body .cluster-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--line-soft);
+}
+.tip-body .cluster-head h4 {
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: 22px;
+  letter-spacing: -0.01em;
+  margin: 0;
+  color: var(--moss-ink);
+}
+.tip-body .cluster-head .cluster-sub {
+  font-family: var(--mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: oklch(0.18 0.04 145 / 0.55);
+}
+
+.tip-body p {
+  font-family: var(--sans);
+  font-size: 15.5px;
+  line-height: 1.6;
+  color: oklch(0.18 0.04 145 / 0.85);
+  margin: 0 0 14px;
+}
+.tip-body p:last-child { margin-bottom: 0; }
+.tip-body strong { color: var(--moss-ink); font-weight: 600; }
+.tip-body em { font-style: italic; color: var(--terracotta); font-weight: 500; }
+.tip-body code {
+  font-family: var(--mono);
+  font-size: 12.5px;
+  background: oklch(0.32 0.06 145 / 0.06);
+  padding: 1px 6px;
+  border-radius: 6px;
+}
+.tip-body .price {
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--terracotta);
+  background: oklch(0.62 0.14 45 / 0.08);
+  padding: 1px 6px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+/* Plain bullets / numbered lists */
+.tip-body ul.bulleted, .tip-body ol.numbered {
+  padding-left: 0;
+  list-style: none;
+  display: grid;
+  gap: 12px;
+  margin: 0;
+}
+.tip-body ul.bulleted li {
+  position: relative;
+  padding-left: 22px;
+  font-size: 15px;
+  line-height: 1.55;
+  color: oklch(0.18 0.04 145 / 0.85);
+}
+.tip-body ul.bulleted li::before {
+  content: '';
+  position: absolute;
+  left: 4px;
+  top: 10px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--terracotta);
+}
+.tip-body ol.numbered {
+  counter-reset: tipnum;
+}
+.tip-body ol.numbered li {
+  position: relative;
+  padding-left: 38px;
+  font-size: 15px;
+  line-height: 1.55;
+  color: oklch(0.18 0.04 145 / 0.85);
+  counter-increment: tipnum;
+}
+.tip-body ol.numbered li::before {
+  content: counter(tipnum, decimal-leading-zero);
+  position: absolute;
+  left: 0;
+  top: 1px;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--terracotta);
+  letter-spacing: 0.08em;
+  width: 28px;
+}
+
+/* Dish-card grid: dishes with $price callouts */
+.tip-body .dish-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 12px;
+}
+.tip-body .dish-pill {
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: oklch(0.99 0.01 85);
+  border: 1px solid var(--line-soft);
+  display: grid;
+  gap: 6px;
+  transition: transform 140ms ease, border-color 140ms ease;
+}
+.tip-body .dish-pill:hover {
+  transform: translateY(-1px);
+  border-color: var(--moss);
+}
+.tip-body .dish-pill .dish-name {
+  font-family: var(--sans);
+  font-size: 14.5px;
+  line-height: 1.35;
+  font-weight: 500;
+  color: var(--moss-ink);
+}
+.tip-body .dish-pill .dish-name strong { font-weight: 700; }
+.tip-body .dish-pill .dish-meta {
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: oklch(0.18 0.04 145 / 0.65);
+}
+
+/* Footer */
+.tips-page .foot {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 32px 64px;
+  font-size: 13px;
+  color: oklch(0.18 0.04 145 / 0.55);
+  text-align: center;
+  border-top: 1px dashed var(--line);
+  padding-top: 22px;
+}
+.tips-page .foot em {
+  font-family: var(--mono);
+  font-style: normal;
+  color: oklch(0.18 0.04 145 / 0.7);
+}
+
+/* Mobile */
+@media (max-width: 720px) {
+  .tips-hero { padding: 36px 18px 28px; }
+  .archetype-strip { padding: 24px 18px 18px; gap: 12px; }
+  .archetype-strip .arch { padding: 20px 18px; }
+  .tips { padding: 18px 18px 60px; gap: 22px; }
+  .tip-section { padding: 30px 22px 26px; }
+  .tip-body .dish-grid { grid-template-columns: 1fr; }
+}

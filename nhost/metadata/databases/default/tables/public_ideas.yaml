@@ -1,0 +1,3 @@
+table:
+  name: ideas
+  schema: public

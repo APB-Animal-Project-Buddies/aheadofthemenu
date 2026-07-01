@@ -1,0 +1,11 @@
+{
+  "_comment": "Per-recipe alternative recipe URLs — surfaced in the modal under the primary URL. Useful for showing a cheaper / different-protein / different-method version of the same dish without giving it its own card. Keyed by recipe id.",
+
+  "american-impossible-meatloaf": [
+    {
+      "url": "https://www.noracooks.com/vegan-meatloaf/",
+      "source": "Nora Cooks",
+      "note": "Cheaper, lentil-and-chickpea-based alternative — drop the Impossible Beef and use the same ketchup-glaze finish."
+    }
+  ]
+}

@@ -1,0 +1,727 @@
+[
+  {
+    "id": "chinese-vegan-mapo-tofu-woks-of-life",
+    "title": "Mapo Tofu (零残忍 · Líng cánrěn)",
+    "source": "Woks of Life",
+    "rawTitle": "### Vegan Mapo Tofu — Woks of Life",
+    "rawBody": "- **URL:** https://thewoksoflife.com/vegan-mapo-tofu/ ✓ VERIFIED\n- $1.85/serving · **Menu price:** $13–16 · 340 g · 360 cal · 18 g · 25 min · 4 · **Medium** (per-plate wok; tofu IS the dish) · ⚡\n- **Premium row:** Beyond Beef crumble in mapo +$1.20 (keeps tofu primary)",
+    "valueRatio": 7.837837837837838,
+    "valueTier": "Strong Earner",
+    "cuisine": "chinese",
+    "cuisineName": "Chinese",
+    "courses": [
+      "main"
+    ],
+    "url": "https://thewoksoflife.com/vegan-mapo-tofu/",
+    "urlStatus": "verified",
+    "urlNote": null,
+    "description": "Medium — per-plate wok; tofu IS the dish · fast-service.",
+    "cost": 1.85,
+    "menuPrice": "$13–16",
+    "weight": "340 g",
+    "calories": 360,
+    "protein": "18 g",
+    "time": "25m",
+    "prep": "25m",
+    "servings": 4,
+    "serves": 4,
+    "difficulty": 2,
+    "difficultyLabel": "Medium",
+    "difficultyNote": "per-plate wok; tofu IS the dish",
+    "tags": [
+      "fast-service"
+    ],
+    "sourcingTier": "in-house",
+    "subs": [],
+    "alternatives": [],
+    "photo": "plate",
+    "photoLabel": "mapo · tofu",
+    "badge": "Strong Earner",
+    "ingredients": [
+      "4 tablespoons vegetable oil",
+      "1 1/2 tablespoons Sichuan peppercorns ((coarsely ground, reserve 1/4 teaspoon for garnish at the end))",
+      "3 tablespoons ginger ((finely minced))",
+      "3 tablespoons garlic ((finely minced))",
+      "1 tablespoon fermented black beans",
+      "1-2 Thai bird chilies ((thinly sliced))",
+      "4 ounces shiitake mushrooms ((110g, finely chopped))",
+      "1-2 tablespoons spicy bean sauce ((depending on your desired salt/spice levels))",
+      "1 tablespoon chili oil",
+      "2/3 cup water ((or vegetable or mushroom broth))",
+      "2 teaspoons cornstarch ((mixed with 1 tablespoon water))",
+      "1 pound silken tofu ((or soft tofu, 450g, cut into 1-inch cubes))",
+      "1/4 teaspoon sesame oil",
+      "1/4 teaspoon sugar",
+      "1 scallion ((finely chopped))"
+    ],
+    "steps": [
+      "In a wok over medium low heat, add the vegetable oil and ground Sichuan peppercorns (remember to reserve ¼ teaspoon for garnishing the dish at the end).",
+      "Cook for 30 seconds, and add the ginger. Cook for another 1 minute and add the garlic. Cook for another 1 minute. Add the black beans, and chilies. Cook for another 1-2 minutes.",
+      "Turn up the heat to medium, and add the mushrooms. Cook until the mushrooms are cooked down and slightly caramelized, about 5 minutes.",
+      "Add the spicy bean sauce and chili oil to the mixture and stir it in well. Turn up the heat to high, and add ⅔ cups water or broth and stir. Bring the mixture up to a simmer, and allow to bubble for 1 minute.",
+      "Stir the cornstarch and water mixture to make sure the cornstarch is dissolved, and add it to the sauce. Allow the sauce to thicken (if it gets too thick, splash in more water or stock). If the sauce is too thin, make a little more cornstarch slurry and add it in. There will be variations depending on how high your heat is.",
+      "Add the tofu to the wok and gently toss the tofu in the sauce. Allow the tofu to simmer for 3-5 minutes, and then add the sesame oil, sugar, and scallions.",
+      "Give everything a final stir, and taste for seasoning (you likely won’t have to add any additional salt, as the spicy bean sauce and fermented black beans are quite salty). Serve, garnished with a last sprinkle of Sichuan peppercorn powder."
+    ],
+    "ingredientSource": "json-ld",
+    "allergens": [
+      "soy"
+    ],
+    "allergenSubs": [
+      {
+        "from": "silken tofu",
+        "to": "chickpea tofu (Burmese tofu)",
+        "removes": "soy"
+      }
+    ]
+  },
+  {
+    "id": "chinese-kung-pao-tofu-nora-cooks",
+    "title": "Kung Pao Tofu",
+    "source": "Nora Cooks",
+    "rawTitle": "### Kung Pao Tofu — Nora Cooks",
+    "rawBody": "- **URL:** https://www.noracooks.com/kung-pao-tofu/ ✓ VERIFIED\n- $2.20/serving · **Menu price:** $13–16 · 320 g · 460 cal · 22 g · 25 min · 4 · **Medium** · ⚡",
+    "valueRatio": 6.59090909090909,
+    "valueTier": "Strong Earner",
+    "cuisine": "chinese",
+    "cuisineName": "Chinese",
+    "courses": [
+      "main"
+    ],
+    "url": "https://www.noracooks.com/kung-pao-tofu/",
+    "urlStatus": "verified",
+    "urlNote": null,
+    "description": "Cubed crispy tofu wok-tossed with peanuts, dried chiles, and a soy-vinegar sauce kissed with Sichuan peppercorn. Six-minute service from prepped components.",
+    "cost": 2.2,
+    "menuPrice": "$13–16",
+    "weight": "320 g",
+    "calories": 460,
+    "protein": "22 g",
+    "time": "25m",
+    "prep": "25m",
+    "servings": 4,
+    "serves": 4,
+    "difficulty": 2,
+    "difficultyLabel": "Medium",
+    "difficultyNote": null,
+    "tags": [
+      "fast-service"
+    ],
+    "sourcingTier": "in-house",
+    "subs": [],
+    "alternatives": [],
+    "photo": "plate",
+    "photoLabel": "kung · pao · tofu",
+    "badge": "Strong Earner",
+    "ingredients": [
+      "(2) 14.5 ounce blocks extra-firm tofu",
+      "4 tablespoons cornstarch",
+      "4 tablespoons peanut oil",
+      "1/2 cup water",
+      "6 tablespoons soy sauce",
+      "1/4 cup rice wine",
+      "2 tablespoons seasoned rice vinegar",
+      "1/4 cup granulated sugar",
+      "2 teaspoons sesame oil",
+      "2 teaspoons ground Szechuan peppercorns (see Notes)",
+      "2 tablespoons cornstarch",
+      "1 tablespoon peanut oil",
+      "1 large red bell pepper (cut into 1-inch pieces)",
+      "1 large green bell pepper (cut into 1-inch pieces)",
+      "4 green onions (white separated from green and cut into 1-inch pieces)",
+      "6-10 whole dried red chilies (cut smaller if needed)",
+      "5 cloves garlic (minced)",
+      "1 tablespoon fresh grated ginger",
+      "1/2 cup peanuts"
+    ],
+    "steps": [
+      "Press the tofu: Press the tofu by wrapping it in paper towels (or a clean dry tea towel). Place a plate or pan on top of the wrapped tofu, and put a couple of heavy books or cast iron pan on top of that. Let the tofu press for 30 minutes to an hour.",
+      "Rip the tofu into 1-inch pieces and add to a large bowl. Sprinkle on the cornstarch and toss gently to coat.",
+      "Heat a large non-stick pan or wok (or cast iron) over medium-high heat and add the peanut oil to coat the pan. Once the oil is hot, add the tofu in batches. Let the tofu brown on all sides, it should be nice and golden all over. I use a fork to gently flip the pieces over in the pan.",
+      "Transfer the tofu to a plate nearby and continue frying until it's all cooked.",
+      "Make the sauce: In a medium bowl, whisk all sauce ingredients together until well combined.",
+      "Add a little more oil to the pan if needed. Stir fry the bell peppers, white part of the onions and dried red chilies for 2-3 minutes over medium-high heat. Now add the garlic and ginger and cook for 1 more minute.",
+      "Pour the sauce into the pan and stir constantly until it thickens.",
+      "Now add the tofu back to the pan, along with the green parts of the onions and peanuts.",
+      "Serve over rice."
+    ],
+    "ingredientSource": "json-ld",
+    "allergens": [
+      "nuts",
+      "soy"
+    ],
+    "allergenSubs": [
+      {
+        "from": "peanuts",
+        "to": "roasted sunflower seeds",
+        "removes": "nuts"
+      },
+      {
+        "from": "tofu",
+        "to": "chickpea tofu (Burmese tofu)",
+        "removes": "soy"
+      }
+    ]
+  },
+  {
+    "id": "chinese-vegan-general-tsos-tofu-loving-it-vegan",
+    "title": "General Tso's Tofu (零残忍 · Líng cánrěn)",
+    "source": "Loving It Vegan",
+    "rawTitle": "### Vegan General Tso's Tofu — Loving It Vegan",
+    "rawBody": "- **URL:** https://lovingitvegan.com/general-tsos-tofu/ ✓ VERIFIED\n- $2.30/serving · **Menu price:** $13–16 · 320 g · 520 cal · 22 g · 35 min · 4 · **Medium** · ⚡",
+    "valueRatio": 6.304347826086957,
+    "valueTier": "Strong Earner",
+    "cuisine": "chinese",
+    "cuisineName": "Chinese",
+    "courses": [
+      "main"
+    ],
+    "url": "https://lovingitvegan.com/general-tsos-tofu/",
+    "urlStatus": "verified",
+    "urlNote": null,
+    "description": "Crispy battered tofu glazed in a sweet-spicy garlic-ginger sauce. American-Chinese takeout staple — fryer-and-toss in two minutes per ticket.",
+    "cost": 2.3,
+    "menuPrice": "$13–16",
+    "weight": "320 g",
+    "calories": 520,
+    "protein": "22 g",
+    "time": "35m",
+    "prep": "35m",
+    "servings": 4,
+    "serves": 4,
+    "difficulty": 2,
+    "difficultyLabel": "Medium",
+    "difficultyNote": null,
+    "tags": [
+      "fast-service"
+    ],
+    "sourcingTier": "in-house",
+    "subs": [],
+    "alternatives": [],
+    "photo": "plate",
+    "photoLabel": "general · tso · tofu",
+    "badge": "Strong Earner",
+    "ingredients": [
+      "16 ounces Extra Firm Tofu ((450g))",
+      "1 Tbsp Sesame Oil",
+      "1 Tbsp Maple Syrup",
+      "1/8 tsp Cayenne Pepper",
+      "4 Tbsp Cornstarch",
+      "1 Tbsp Sesame Oil (for frying)",
+      "1 Tbsp Sesame Oil",
+      "1 Tbsp Minced Ginger",
+      "1 tsp Crushed Garlic",
+      "1/4 tsp Red Chili Flakes",
+      "1 Tbsp Rice Vinegar",
+      "1 Tbsp Sesame Oil",
+      "2 Tbsp Soy Sauce*",
+      "1 Tbsp Hoisin Sauce*",
+      "1 tsp Onion Powder",
+      "2 Tbsp Coconut Sugar",
+      "1 Tbsp Cornstarch",
+      "1/4 cup Vegetable Stock ((60ml))"
+    ],
+    "steps": [
+      "Press the tofu for 30 minutes either using a tofu press or by placing the tofu onto a plate with another plate on top of it and then putting something heavy on top like a heavy pot.",
+      "While the tofu is pressing, you can prepare your sauce by just mixing all the ingredients up in a measuring jug. Set aside.",
+      "When the tofu is pressed, cut it into cubes and place it into a container with a lid. Add sesame oil, maple syrup and cayenne pepper and then seal the container and gently rotate it so that the tofu is evenly coated.",
+      "Then add in the cornstarch to the container, 1 tablespoon at a time and gently toss until the tofu is well coated.",
+      "Add the sesame oil to a frying pan and when hot add in the battered tofu and gently fry until golden brown. Remove the tofu from the pan.",
+      "Add the sesame oil, minced ginger, crushed garlic and red chili flakes to the frying pan and fry until toasted and then add the tofu back in.",
+      "Pour over the sauce and flash fry for 1 minute to coat the tofu with the sauce. Don't fry it for too long or the batter will start coming off the tofu.",
+      "Serve with basmati rice and chopped chives."
+    ],
+    "ingredientSource": "json-ld",
+    "allergens": [
+      "soy",
+      "coconut"
+    ],
+    "allergenSubs": [
+      {
+        "from": "tofu",
+        "to": "chickpea tofu (Burmese tofu)",
+        "removes": "soy"
+      },
+      {
+        "from": "coconut sugar",
+        "to": "brown sugar",
+        "removes": "coconut"
+      }
+    ]
+  },
+  {
+    "id": "chinese-chinese-fried-rice-omnivores-cookbook",
+    "title": "Chinese Fried Rice",
+    "source": "Omnivore's Cookbook",
+    "rawTitle": "### Chinese Fried Rice — Omnivore's Cookbook",
+    "rawBody": "- **URL:** https://omnivorescookbook.com/chinese-fried-rice/ ✓ VERIFIED  (vegan adaptation)\n- $1.45/serving · **Menu price:** $10–13 · 320 g · 480 cal · 12 g · 20 min · 4 · **Easy** (rice cold-hold; wok plates fast) · 🥘 ⚡",
+    "valueRatio": 7.931034482758621,
+    "valueTier": "Strong Earner",
+    "cuisine": "chinese",
+    "cuisineName": "Chinese",
+    "courses": [
+      "main"
+    ],
+    "url": "https://minimalistbaker.com/easy-vegan-fried-rice/",
+    "urlStatus": "verified",
+    "urlNote": "URL replaced via url_overrides.json",
+    "description": "Easy — rice cold-hold; wok plates fast · bulk-prep, fast-service.",
+    "cost": 1.45,
+    "menuPrice": "$10–13",
+    "weight": "320 g",
+    "calories": 480,
+    "protein": "12 g",
+    "time": "20m",
+    "prep": "20m",
+    "servings": 4,
+    "serves": 4,
+    "difficulty": 1,
+    "difficultyLabel": "Easy",
+    "difficultyNote": "rice cold-hold; wok plates fast",
+    "tags": [
+      "bulk-prep",
+      "fast-service"
+    ],
+    "sourcingTier": "in-house",
+    "subs": [],
+    "alternatives": [],
+    "photo": "plate",
+    "photoLabel": "chinese · fried · rice",
+    "badge": "Strong Earner",
+    "ingredients": [
+      "1 cup extra-firm tofu* ((8 ounces yields ~1 cup))",
+      "1 cup long- or short-grain brown rice* ((rinsed thoroughly in a fine mesh strainer))",
+      "4 cloves garlic ((minced))",
+      "1 cup chopped green onion",
+      "1/2 cup peas",
+      "1/2 cup carrots ((finely diced))",
+      "3 Tbsp tamari or soy sauce ((plus more for veggies + to taste))",
+      "1 Tbsp peanut butter",
+      "2-3 Tbsp organic brown sugar, muscovado sugar, or maple syrup",
+      "1 clove garlic ((minced))",
+      "1-2 tsp chili garlic sauce ((more or less depending on preferred spice))",
+      "1 tsp toasted sesame oil ((optional // or sub peanut or avocado oil))"
+    ],
+    "steps": [
+      "Preheat oven to 400 degrees F (204 C) and line a baking sheet with parchment paper (or lightly grease with non-stick spray).",
+      "In the meantime wrap tofu in a clean, absorbent towel and set something heavy on top (such as a cast iron skillet) to press out the liquid.",
+      "Once the oven is preheated, dice tofu into 1/4-inch cubes and arrange on baking sheet. Bake for 26-30 minutes. You’re looking for golden brown edges and a texture that’s firm to the touch. The longer it bakes, the firmer and crispier it will become, so if you’re looking for softer tofu remove from the oven around the 26-28 minute mark. I prefer crispy tofu, so I bake mine the full 30 minutes. Set aside.",
+      "While the tofu bakes prepare your rice by bringing 12 cups of water to a boil in a large pot. Once boiling, add rinsed rice and stir. Boil on high uncovered for 30 minutes, then strain for 10 seconds and return to pot removed from the heat. Cover with a lid and let steam for 10 minutes*.",
+      "While rice and tofu are cooking, prepare sauce by adding all ingredients to a medium-size mixing bowl and whisking to combine. Taste and adjust flavor as needed, adding more tamari or soy sauce for saltiness, peanut butter for creaminess, brown sugar for sweetness, or chili garlic sauce for heat.",
+      "Once the tofu is done baking, add directly to the sauce and marinate for 5 minutes, stirring occasionally.",
+      "Heat a large metal or cast iron skillet over medium heat. Once hot, use a slotted spoon to scoop the tofu into the pan leaving most of the sauce behind. Cook for 3-4 minutes, stirring occasionally, until deep golden brown on all sides (see photo). Lower heat if browning too quickly. Remove from pan and set aside.",
+      "To the still hot pan add garlic, green onion, peas and carrots. Sauté for 3-4 minutes, stirring occasionally, and season with 1 Tbsp (15 ml) tamari or soy sauce (amount as original recipe is written // adjust if altering batch size).",
+      "Add cooked rice, tofu, and remaining sauce and stir. Cook over medium-high heat for 3-4 minutes, stirring frequently.",
+      "Serve immediately with extra chili garlic sauce or sriracha for heat (optional). Crushed salted, roasted peanuts or cashews make a lovely additional garnish. Leftovers keep well in the refrigerator for 3-4 days, though best when fresh. Reheat in a skillet over medium heat or in the microwave."
+    ],
+    "ingredientSource": "json-ld",
+    "allergens": [
+      "nuts",
+      "soy"
+    ],
+    "allergenSubs": [
+      {
+        "from": "peanut butter",
+        "to": "sunflower seed butter",
+        "removes": "nuts"
+      },
+      {
+        "from": "tofu",
+        "to": "chickpea tofu (Burmese tofu)",
+        "removes": "soy"
+      }
+    ]
+  },
+  {
+    "id": "chinese-dan-dan-noodles-pickled-plum",
+    "title": "Dan Dan Noodles",
+    "source": "Pickled Plum",
+    "rawTitle": "### Dan Dan Noodles — Pickled Plum",
+    "rawBody": "- **URL:** https://pickledplum.com/dan-dan-noodles/ ✓ VERIFIED\n- $2.10/serving · **Menu price:** $13–16 · 320 g · 540 cal · 18 g · 30 min · 4 · **Medium** · ⚡\n- **Premium row:** Beyond Beef preserved-veg crumble topping +$1.10",
+    "valueRatio": 6.904761904761904,
+    "valueTier": "Strong Earner",
+    "cuisine": "chinese",
+    "cuisineName": "Chinese",
+    "courses": [
+      "starter",
+      "main"
+    ],
+    "url": "https://omnivorescookbook.com/vegan-dan-dan-noodles/",
+    "urlStatus": "verified",
+    "urlNote": "URL replaced via url_overrides.json",
+    "description": "Wheat noodles tossed in sesame-soy sauce with crumbled spiced tofu or mushroom, topped with chili oil and Sichuan peppercorn. Sichuan street food — ferocious flavor, fast plate.",
+    "cost": 2.1,
+    "menuPrice": "$13–16",
+    "weight": "320 g",
+    "calories": 540,
+    "protein": "18 g",
+    "time": "30m",
+    "prep": "30m",
+    "servings": 4,
+    "serves": 4,
+    "difficulty": 2,
+    "difficultyLabel": "Medium",
+    "difficultyNote": null,
+    "tags": [
+      "fast-service"
+    ],
+    "sourcingTier": "in-house",
+    "subs": [],
+    "alternatives": [],
+    "photo": "bowl",
+    "photoLabel": "dan · dan · noodles",
+    "badge": "Strong Earner",
+    "ingredients": [
+      "1/2 lb mushrooms",
+      "1/2 cup pecans ((or walnuts))",
+      "3 green onions (, coarsely chopped)",
+      "3 cloves garlic (, peeled)",
+      "1/2 block tofu ((1/2 lb / 225 g))",
+      "1 1/2 tablespoons soy sauce",
+      "1/4 cup Sui Mi Ya Cai ((*Footnote 1))",
+      "2 tablespoons Shaoxing wine",
+      "4 tablespoons Chinese sesame paste ((or unsweetened natural peanut butter))",
+      "4 tablespoons soy sauce",
+      "4 tablespoons Chinkiang vinegar",
+      "4 cloves garlic (, finely minced)",
+      "3 green onions (, finely minced)",
+      "2 tablespoons sugar",
+      "1/3 to 1 cup homemade chili oil with flakes ((or to taste) (*Footnote 2))",
+      "1/2 teaspoon ground Sichuan peppercorns",
+      "10 oz thin wheat noodles (, dried (or 1 lb / 450 g fresh noodles))",
+      "4 to 6 heads baby bok choy (, roughly chopped (or spinach, chard, yu choy etc.))",
+      "1/4 cup roasted peanuts (, crushed (Optional))",
+      "1/2 cup roasted peanuts ((Optional))"
+    ],
+    "steps": [
+      "Whisk sesame paste and light soy sauce until fully incorporated. Add Chinkiang vinegar. Continue stirring until mixed. Then mix in garlic, green onion, and sugar.",
+      "Add homemade chili oil, a tablespoon at a time. Mix and taste the sauce. Add more chili oil if you want more spiciness. It’s always safe to mix in a small amount now, and serve more on the side so each individual could add more to their own bowl.",
+      "Add toasted and ground Sichuan peppercorns, 1/2 teaspoon at a time. Taste as you mix, until you can taste the numbingness but can still handle it. The more chili oil you add, the more Sichuan peppercorns you will need.",
+      "The consistency of the sauce can vary depending on the thickness of the sesame paste (peanut butter). If the sauce is too thick, add some water and mix well.",
+      "Combine the mushrooms, pecans, onion, and garlic in a food processor. Blend until the ingredients are chopped into small bits. Add the tofu. Pulse a few times until the tofu is coarsely chopped. You can also use your hands to break up the bigger pieces of tofu.",
+      "Heat oil in a skillet or a wok over medium heat until hot. Add Sui Mi Ya Cai. Stir a few times to release the fragrance.",
+      "Add the tofu mixture; cook and stir until the bottom of the pan looks dry, 1 to 2 minutes.",
+      "Add the soy sauce and cooking wine. Use a spatula to release any bits that are stuck to the pan. Turn to medium to medium-low heat. Cook, stirring occasionally, until some part of the paste turns golden brown, 6 to 8 minutes.",
+      "Transfer everything to a bowl and set aside.",
+      "Bring a medium pot of water to a boil. Add the baby bok choy. Cook for 40 seconds to 1 minute, until turning tender. Remove the baby bok choys using a slotted spoon, rinse with cold tap water to stop the cooking, then thoroughly drain and set aside.",
+      "In the same pot of water, cook noodles according to the package instructions. Drain the noodles, rinse with cold tap water to stop cooking, then drain again.",
+      "For each noodle bowl, add the noodles, spoon some sauce onto them, add the vegan meat topping, garnish with baby bok choy, sprinkle the crushed peanuts (if using), and mix well. Serve hot or at room temperature."
+    ],
+    "ingredientSource": "json-ld",
+    "allergens": [
+      "gluten",
+      "nuts",
+      "soy"
+    ],
+    "allergenSubs": [
+      {
+        "from": "wheat noodles",
+        "to": "100% rice ramen or glass noodles",
+        "removes": "gluten"
+      },
+      {
+        "from": "peanut butter",
+        "to": "sunflower seed butter",
+        "removes": "nuts"
+      },
+      {
+        "from": "tofu",
+        "to": "chickpea tofu (Burmese tofu)",
+        "removes": "soy"
+      }
+    ]
+  },
+  {
+    "id": "chinese-vegetable-lo-mein",
+    "title": "Vegetable Lo Mein",
+    "source": "The Woks of Life",
+    "rawTitle": "### Vegetable Lo Mein",
+    "rawBody": "- **URL:** https://thewoksoflife.com/vegetable-lo-mein/ ✓ VERIFIED\n- **Description:** The American-Chinese restaurant noodle staple. Wheat egg-substitute lo mein noodles tossed in a wok with shiitake, bok choy, carrot, scallion, and a soy-sesame-shaoxing sauce. Pairs naturally with Beyond Steak Tips, Chunk Pulled, or stays vegetable-led for a $11–14 entrée. The dish a Chinese-restaurant guest most expects to find.\n- **Wholesale food cost:** $2.10 / serving · **Menu price:** $11–14 (vegetable) / $14–17 (with Beyond/Chunk)\n- **Weight:** 380 g · **Calories:** 540 · **Protein:** 14 g · **Time:** 20 min · **Servings:** 4\n- **Restaurant difficulty:** **Easy** — components prep cold, sauce holds, wok-toss per ticket in 4 min.\n- **Tags:** 🥘 Bulk-Prep (components) · ⚡ Fast-Service\n\n| Sub | Effect | Cost delta |\n|---|---|---|\n| Vegetable + tofu (default) | Workhorse | baseline |\n| **Premium faux-meat:** Beyond Steak Tips | Pre-seasoned, branded | +$1.40 |\n| Chunk Pulled \"char siu\"-style | Heartier upsell | +$2.00 |",
+    "valueRatio": 5.9523809523809526,
+    "valueTier": "Strong Earner",
+    "cuisine": "chinese",
+    "cuisineName": "Chinese",
+    "courses": [
+      "main"
+    ],
+    "url": "https://thewoksoflife.com/vegetable-lo-mein/",
+    "urlStatus": "verified",
+    "urlNote": null,
+    "description": "The American-Chinese restaurant noodle staple. Wheat egg-substitute lo mein noodles tossed in a wok with shiitake, bok choy, carrot, scallion, and a soy-sesame-shaoxing sauce. Pairs naturally with Beyond Steak Tips, Chunk Pulled, or stays vegetable-led for a $11–14 entrée. The dish a Chinese-restaurant guest most expects to find.",
+    "cost": 2.1,
+    "menuPrice": "$11–14 (vegetable) / $14–17 (with Beyond/Chunk)",
+    "weight": "380 g",
+    "calories": 540,
+    "protein": "14 g",
+    "time": "20m",
+    "prep": "20m",
+    "servings": 4,
+    "serves": 4,
+    "difficulty": 1,
+    "difficultyLabel": "Easy",
+    "difficultyNote": "components prep cold, sauce holds, wok-toss per ticket in 4 min.",
+    "tags": [
+      "bulk-prep",
+      "fast-service"
+    ],
+    "sourcingTier": "in-house",
+    "subs": [
+      {
+        "from": "Vegetable + tofu (default)",
+        "effect": "Workhorse",
+        "delta": "baseline"
+      },
+      {
+        "from": "**Premium faux-meat:** Beyond Steak Tips",
+        "effect": "Pre-seasoned, branded",
+        "delta": "+$1.40"
+      },
+      {
+        "from": "Chunk Pulled \"char siu\"-style",
+        "effect": "Heartier upsell",
+        "delta": "+$2.00"
+      }
+    ],
+    "alternatives": [],
+    "photo": "plate",
+    "photoLabel": "vegetable · mein",
+    "badge": "Strong Earner",
+    "ingredients": [
+      "1 pound fresh white noodles or lo mein egg noodles ((450g))",
+      "1 tablespoon dark soy sauce",
+      "2 tablespoons light soy sauce",
+      "1 teaspoon sesame oil",
+      "1 teaspoon sugar ((plus 1 teaspoon hot water to dissolve the sugar in))",
+      "Pinch of five spice powder ((optional))",
+      "1 tablespoon oil",
+      "1 clove garlic ((minced))",
+      "1 cup sliced mushrooms ((shiitakes, button mushrooms, or anything you like))",
+      "1 scallion ((split at the thick parts and cut into 2-inch lengths))",
+      "1 bell pepper ((red, orange, or yellow; julienned))",
+      "1 small carrot ((julienned))",
+      "1 tablespoon Shaoxing wine",
+      "1 cup snow peas ((trimmed))",
+      "1 cup leafy greens ((bok choy, choy sum, etc.))"
+    ],
+    "steps": [
+      "Boil water in a large pot for the noodles. If using the lo mein egg noodles, you can skip this step, as those noodles do not require any pre-cooking. But if using fresh white noodles, you will have to boil them. Just cook until al dente, drain, and rinse in cold water. Set aside.",
+      "In a small bowl, combine the soy sauces, sesame oil, dissolved sugar, and five spice powder, if using.",
+      "Heat 1 tablespoon oil in a wok over high heat and add the garlic, mushrooms, and the white parts of the scallions. Stir-fry for 30 seconds and add the peppers and carrots. Make sure your wok is searing hot, and then add the Shaoxing wine. Stir-fry for another minute.",
+      "Next, add the snow peas and leafy greens to the wok and cook until the greens are just wilted. Then add your noodles. Make sure that before you add them, they’re somewhat loose and not all clumped together (you can rinse them in warm water to loosen them up before adding them to the wok).",
+      "Pour your sauce mixture over the noodles and stir-fry until the color of the noodles are uniform. A folding or scoop-and-lift motion works well for that. Once everything is well-combined, dish out the noodles and serve."
+    ],
+    "ingredientSource": "json-ld",
+    "allergens": [
+      "gluten",
+      "soy"
+    ],
+    "allergenSubs": [
+      {
+        "from": "gluten-containing ingredient",
+        "to": "gluten-free equivalent",
+        "removes": "gluten"
+      },
+      {
+        "from": "soy sauce",
+        "to": "coconut aminos",
+        "removes": "soy"
+      }
+    ]
+  },
+  {
+    "id": "chinese-vegan-peking-duck",
+    "title": "Peking \"Duck\" (零残忍 · Líng cánrěn)",
+    "source": "Lazy Cat Kitchen",
+    "rawTitle": "### Vegan Peking \"Duck\" (**SHOWSTOPPER**)",
+    "rawBody": "- **URL:** https://www.theedgyveg.com/2018/03/27/vegan-peking-duck/ ⚠ REFERENCE (vegan) *(The Edgy Veg's vegan Peking duck uses layered seitan with maltose lacquer and traditional 3-course service. **Recommended swap: Chunk Pulled** in place of the seitan; follow the same lacquer + air-dry + roast protocol. Alt non-vegan technique reference: https://thewoksoflife.com/peking-duck-recipe/ for the classic three-course breakdown.)*\n- **Description:** **Lead protein:** Chunk Pulled or layered seitan, brushed with a maltose-vinegar lacquer and roasted hot until the crust blisters and shines like the original — the iconic \"duck-skin\" effect comes from the lacquer, not the protein. Served as a 3-course experience: (1) crisp-lacquered \"skin\" with sugar dip, (2) sliced \"duck\" with mu-shu pancakes, hoisin, scallion, cucumber rolled tableside, (3) shredded leftovers stir-fried with bean sprouts. The plant-based answer to the Chinese banquet centerpiece.\n- **Wholesale food cost:** $4.80 / serving (Chunk lead) · **Menu price:** **$24–32** (full 3-course) / **$18–22** (course 2 only — sliced + pancakes)\n- **Weight:** 380 g (across courses) · **Calories:** 580 · **Protein:** 28 g · **Time:** 60 min cook + 4 hr air-dry for the lacquer crust · **Servings:** 2 (one half \"duck\" feeds two as full experience, four as appetizer)\n- **Restaurant difficulty:** **Hard** — air-dry overnight is non-negotiable for the lacquer crust; tableside slicing & rolling protocol required for the full experience.\n- **Tags:** 🥘 (par-lacquer/dry) · — (per-ticket finish + tableside)\n\n| Sub | Effect | Cost delta |\n|---|---|---|\n| **Lead protein:** Chunk Pulled (default), pressed and layered | Best whole-muscle \"duck\" pull | baseline |\n| Layered seitan \"duck\" (vital wheat gluten) | Authentic Buddhist-cuisine method | −$2.20 → menu $19–24 |\n| Roasted king oyster mushroom \"duck\" | Mushroom-forward variant | −$3.20 → menu $16–20 |",
+    "valueRatio": null,
+    "valueTier": "Showpiece",
+    "cuisine": "chinese",
+    "cuisineName": "Chinese",
+    "courses": [
+      "main",
+      "showstopper"
+    ],
+    "url": "https://www.lazycatkitchen.com/vegan-duck-pancakes/",
+    "urlStatus": "verified",
+    "urlNote": "The Edgy Veg's vegan Peking duck uses layered seitan with maltose lacquer and traditional 3-course service. **Recommended swap: Chunk Pulled** in place of the seitan; follow the same lacquer + air-dry + roast protocol. Alt non-vegan technique reference: https://thewoksoflife.com/peking-duck-recipe/ for the classic three-course breakdown. · URL replaced via url_overrides.json",
+    "description": "**Lead protein:** Chunk Pulled or layered seitan, brushed with a maltose-vinegar lacquer and roasted hot until the crust blisters and shines like the original — the iconic \"duck-skin\" effect comes from the lacquer, not the protein. Served as a 3-course experience: (1) crisp-lacquered \"skin\" with sugar dip, (2) sliced \"duck\" with mu-shu pancakes, hoisin, scallion, cucumber rolled tableside, (3) shredded leftovers stir-fried with bean sprouts. The plant-based answer to the Chinese banquet centerpiece.",
+    "cost": 4.8,
+    "menuPrice": null,
+    "weight": "380 g (across courses)",
+    "calories": 580,
+    "protein": "28 g",
+    "time": "60m",
+    "prep": "60m",
+    "servings": 2,
+    "serves": 2,
+    "difficulty": 3,
+    "difficultyLabel": "Hard",
+    "difficultyNote": "air-dry overnight is non-negotiable for the lacquer crust; tableside slicing & rolling protocol required for the full experience.",
+    "tags": [
+      "bulk-prep"
+    ],
+    "sourcingTier": "in-house",
+    "subs": [
+      {
+        "from": "**Lead protein:** Chunk Pulled (default), pressed and layered",
+        "effect": "Best whole-muscle \"duck\" pull",
+        "delta": "baseline"
+      },
+      {
+        "from": "Layered seitan \"duck\" (vital wheat gluten)",
+        "effect": "Authentic Buddhist-cuisine method",
+        "delta": "−$2.20 → menu $19–24"
+      },
+      {
+        "from": "Roasted king oyster mushroom \"duck\"",
+        "effect": "Mushroom-forward variant",
+        "delta": "−$3.20 → menu $16–20"
+      }
+    ],
+    "alternatives": [],
+    "photo": "layered",
+    "photoLabel": "peking · duck",
+    "badge": "Showpiece",
+    "ingredients": [
+      "2 tins of young (green) jackfruit in water",
+      "2 tbsp oil (I used peanut oil)",
+      "2 large spring onions, white part only – finely diced",
+      "3 cloves garlic, finely diced",
+      "2 tbsp finely diced ginger",
+      "1 tsp Chinese five spice",
+      "2-3 tbsp tamari (for GF version) or soy sauce",
+      "3 tbsp hoisin sauce",
+      "2 tsp toasted sesame oil",
+      "2 tsp rice vinegar",
+      "¼ tsp white pepper (black is okay too)",
+      "ground Szechuan peppercorns , adjust to taste",
+      "pancakes for crispy duck (or GF pancakes if needed)",
+      "hoisin sauce , to serve",
+      "1 cucumber, cored and cut into matchsticks",
+      "1 spring onion, cut into thin strips lengthwise",
+      "sesame seeds, to garnish (optional)",
+      "fresh coriander leaves, to garnish (optional)"
+    ],
+    "ingredientSource": "manual",
+    "allergens": [
+      "nuts",
+      "soy"
+    ],
+    "allergenSubs": [
+      {
+        "from": "peanuts",
+        "to": "roasted sunflower seeds",
+        "removes": "nuts"
+      },
+      {
+        "from": "hoisin sauce",
+        "to": "coconut aminos-based hoisin (Lee Kum Kee gluten-free blend)",
+        "removes": "soy"
+      }
+    ]
+  },
+  {
+    "id": "chinese-vegan-mango-pudding",
+    "title": "Mango Pudding (零残忍 · Líng cánrěn)",
+    "source": "Omnivore's Cookbook",
+    "rawTitle": "### Vegan Mango Pudding (**DESSERT**)",
+    "rawBody": "- **URL:** https://omnivorescookbook.com/vegan-mango-pudding/ ✓ VERIFIED *(Maggie Zhu / Omnivore's Cookbook — Beijing-born Chinese cookbook author and ATK Editor in Residence, so this is culturally authentic and professionally tested. Recipe is fully vegan from the ground up: ataulfo mangoes + lemon juice + coconut sugar blended with agar-set light coconut beverage. Note: Maggie's version uses **Pacific Foods light coconut beverage** (45 cal/cup) for a jelly-like texture rather than traditional dim-sum-cart full-fat creaminess — both work; pick by concept. She explicitly documents the swap to regular coconut milk: 1 cup coconut milk + 1½ cups water replaces the 2½ cups of coconut beverage.)*\n\n  **Recipe** (8 servings, per Maggie Zhu): 24 oz / 700 g ataulfo mangoes (peeled, diced — about 2½ cups flesh; or 1–2 large overripe regular mangoes), 6 tbsp coconut sugar, 4 tsp lemon juice, 2½ cups Pacific Foods Organic Unsweetened Coconut beverage (or 1 cup full-fat coconut milk + 1½ cups water for a richer version), 2 tsp powdered agar-agar. Blend mango + sugar + lemon juice on high 1 min until smooth (strain if fibrous; should yield ~2 cups purée). Whisk coconut beverage + agar in a small pot, bring to a boil, then reduce and simmer 3–5 min until agar dissolves completely (no granules on a dipped spoon). Off heat, whisk in mango purée; taste, adjust with more sugar/lemon. **Pour HOT** into serving bowls (agar sets at room temp — don't wait). Chill 4 hr; serve cold with sliced mango garnish.\n- **Description:** Silky agar-set mango purée with coconut beverage (or coconut cream for a richer dim-sum-cart texture), plated cold with a fresh mango-cube garnish. The dim-sum classic, light, refreshing, naturally gluten-free; cold-holds for days, plates instantly.\n- **Wholesale food cost:** $1.40 / serving (light coconut beverage version) / $1.85 / serving (full-fat coconut milk version) · **Menu price:** $7–10\n- **Weight:** 110 g (½ cup serving per Maggie's portioning) · **Calories:** 162 (light) / 240 (full-fat) · **Protein:** 0.4 g · **Time:** 15 min active + 4 hr chill · **Servings:** 8 / batch\n- **Restaurant difficulty:** **Easy** — set in individual ramekins or a half-hotel pan; portion cold, plate per ticket.\n- **Tags:** 🥘 Bulk-Prep · ⚡ Fast-Service\n\n| Sub | Effect | Cost delta |\n|---|---|---|\n| Light coconut beverage (Maggie's default — jelly-like, refreshing, lower-cal) | Lighter dessert read; pairs well after rich mains | baseline ($1.40) |\n| Full-fat coconut milk (1 cup + 1½ cups water) — traditional dim-sum-cart texture | Richer, creamier mouthfeel | +$0.45 → $1.85 |\n| Ataulfo mango (default) | Creamier texture, more consistent | baseline |\n| Frozen Alphonso pulp | Year-round availability, more aromatic | flat |\n| Lychee or pandan variation | Seasonal LTO | +$0.20 |\n| Pair with vegan sesame balls (jian dui) | Dessert duo | +$1.00 → menu $9–12 |",
+    "valueRatio": 6.071428571428572,
+    "valueTier": "Strong Earner",
+    "cuisine": "chinese",
+    "cuisineName": "Chinese",
+    "courses": [
+      "dessert"
+    ],
+    "url": "https://omnivorescookbook.com/vegan-mango-pudding/",
+    "urlStatus": "verified",
+    "urlNote": null,
+    "description": "Silky agar-set mango purée with coconut beverage (or coconut cream for a richer dim-sum-cart texture), plated cold with a fresh mango-cube garnish. The dim-sum classic, light, refreshing, naturally gluten-free; cold-holds for days, plates instantly.",
+    "cost": 1.4,
+    "menuPrice": "$7–10",
+    "weight": "110 g (½ cup serving per Maggie's portioning)",
+    "calories": 162,
+    "protein": "0.4 g",
+    "time": "15m",
+    "prep": "15m",
+    "servings": 8,
+    "serves": 8,
+    "difficulty": 1,
+    "difficultyLabel": "Easy",
+    "difficultyNote": "set in individual ramekins or a half-hotel pan; portion cold, plate per ticket.",
+    "tags": [
+      "bulk-prep",
+      "fast-service"
+    ],
+    "sourcingTier": "in-house",
+    "subs": [
+      {
+        "from": "Light coconut beverage (Maggie's default — jelly-like, refreshing, lower-cal)",
+        "effect": "Lighter dessert read; pairs well after rich mains",
+        "delta": "baseline ($1.40)"
+      },
+      {
+        "from": "Full-fat coconut milk (1 cup + 1½ cups water) — traditional dim-sum-cart texture",
+        "effect": "Richer, creamier mouthfeel",
+        "delta": "+$0.45 → $1.85"
+      },
+      {
+        "from": "Ataulfo mango (default)",
+        "effect": "Creamier texture, more consistent",
+        "delta": "baseline"
+      },
+      {
+        "from": "Frozen Alphonso pulp",
+        "effect": "Year-round availability, more aromatic",
+        "delta": "flat"
+      },
+      {
+        "from": "Lychee or pandan variation",
+        "effect": "Seasonal LTO",
+        "delta": "+$0.20"
+      },
+      {
+        "from": "Pair with vegan sesame balls (jian dui)",
+        "effect": "Dessert duo",
+        "delta": "+$1.00 → menu $9–12"
+      }
+    ],
+    "alternatives": [],
+    "photo": "plate",
+    "photoLabel": "mango · pudding",
+    "badge": "Strong Earner",
+    "ingredients": [
+      "2 cups (480 ml) fresh or thawed frozen mango purée",
+      "1 can (13.5 oz) full-fat coconut milk",
+      "3 tablespoons agar-agar powder (or flakes per package instructions)",
+      "¼ cup (50 g) granulated sugar",
+      "1 tablespoon fresh lime juice",
+      "1 teaspoon vanilla extract",
+      "1 pinch fine salt",
+      "fresh mango slices and mint (for garnish)"
+    ],
+    "steps": [
+      "Measure the cut mango to make sure you have around 2 1/2 cups of flesh (16 oz./ 450 g). Slice more mango for garnish if needed.",
+      "Have your serving bowls ready to go. Any glass or small bowl that holds about 2/3 cup of water will work.",
+      "Add the mango, sugar, and lemon juice to a blender and blend on high for 1 minute. If using a common mango, check for any remaining fibers. You may need to blend for longer or run the puree through a strainer to filter out the fibers.",
+      "Measure out the blended mango, it should be just about 2 cups.",
+      "Add the coconut beverage and agar agar to a small pot and whisk them together. Turn the heat to medium-high and bring to a boil, whisking regularly. Once it is boiling, reduce the heat slightly and simmer for 3 to 5 minutes until the agar agar is dissolved completely. You can check that it's dissolved by dipping a spoon into the liquid and checking for obvious granules.",
+      "Add the mango puree and whisk until the mixture is even and smooth. Turn the heat off. Taste the mixture and adjust the taste by adding sugar and/or lemon juice, if needed.",
+      "Pour the hot pudding into the serving bowls. (Do not wait for it to cool down, agar agar sets at room temperature so it will begin to set in the pot if you wait to pour it.)",
+      "Chill the puddings for 4 hours in the refrigerator. You can let them set at room temperature, but they taste better chilled.",
+      "Serve cold or at room temperature with extra sliced mango on top. Enjoy!"
+    ],
+    "ingredientSource": "authored",
+    "allergens": [
+      "coconut"
+    ],
+    "allergenSubs": [
+      {
+        "from": "coconut milk",
+        "to": "oat cream + 1 tsp olive oil (per 1 cup)",
+        "removes": "coconut"
+      }
+    ]
+  }
+]

@@ -1,0 +1,621 @@
+/* Reverse-lookup page — inherits APB Seattle's design tokens from /styles.css
+   (Inter, --primary-color, --accent-color, etc.) and layers on a card UX
+   inspired by the recipe page's grid + chip language. */
+
+.reverse-lookup-page {
+  background: var(--bg-cream, #faf8f5);
+  min-height: 100vh;
+}
+
+/* ---------- Hero ---------- */
+
+.rl-hero {
+  background:
+    radial-gradient(circle at 15% 0%, rgba(45, 122, 62, 0.10), transparent 55%),
+    radial-gradient(circle at 95% 80%, rgba(255, 107, 53, 0.10), transparent 50%),
+    linear-gradient(180deg, #fdfcf9 0%, #faf8f5 100%);
+  border-bottom: 1px solid rgba(30, 77, 43, 0.08);
+  padding: 3.5rem 1.25rem 2.75rem;
+}
+
+.rl-hero-inner {
+  max-width: 920px;
+  margin: 0 auto;
+}
+
+.rl-eyebrow {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--primary-light, #2d7a3e);
+  background: rgba(45, 122, 62, 0.08);
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  margin-bottom: 1rem;
+}
+
+.rl-title {
+  font-family: inherit;
+  font-size: clamp(2rem, 4.5vw, 2.85rem);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+  color: var(--primary-dark, #0f2515);
+  margin: 0 0 0.85rem;
+  max-width: 22ch;
+}
+
+.rl-title em {
+  font-style: normal;
+  color: var(--accent-color, #ff6b35);
+}
+
+.rl-subtitle {
+  font-size: 1.1rem;
+  line-height: 1.55;
+  color: #4a5550;
+  margin: 0;
+  max-width: 60ch;
+}
+
+/* ---------- Container ---------- */
+
+.rl-container {
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 2rem 1.25rem 4rem;
+}
+
+/* ---------- Search + filters ---------- */
+
+.rl-controls {
+  display: grid;
+  gap: 1rem;
+  margin-bottom: 1.75rem;
+}
+
+.rl-search-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.rl-search-wrap {
+  position: relative;
+  flex: 1;
+}
+
+.rl-search-icon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 18px;
+  color: var(--primary-color, #1e4d2b);
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+.rl-search {
+  width: 100%;
+  padding: 0.95rem 1rem 0.95rem 2.85rem;
+  font-family: inherit;
+  font-size: 1rem;
+  color: var(--text-dark, #1a1a1a);
+  border: 1.5px solid rgba(30, 77, 43, 0.18);
+  border-radius: 14px;
+  background: #fff;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+}
+
+.rl-search::placeholder {
+  color: #9aa1a0;
+}
+
+.rl-search:focus {
+  border-color: var(--primary-light, #2d7a3e);
+  box-shadow: 0 0 0 4px rgba(45, 122, 62, 0.14);
+}
+
+.rl-result-count {
+  font-size: 0.85rem;
+  color: #6b7470;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Tag-filter chip row */
+.rl-tag-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  align-items: center;
+}
+
+.rl-tag-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #8a928d;
+  margin-right: 0.35rem;
+}
+
+.rl-tag-chip {
+  font-family: inherit;
+  font-size: 0.82rem;
+  font-weight: 500;
+  padding: 0.35rem 0.85rem;
+  border-radius: 999px;
+  border: 1px solid rgba(30, 77, 43, 0.18);
+  background: #fff;
+  color: var(--primary-dark, #0f2515);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.rl-tag-chip:hover {
+  border-color: var(--primary-light, #2d7a3e);
+  color: var(--primary-light, #2d7a3e);
+}
+
+.rl-tag-chip.active {
+  background: var(--primary-color, #1e4d2b);
+  border-color: var(--primary-color, #1e4d2b);
+  color: #fff;
+}
+
+.rl-tag-chip.active:hover {
+  background: var(--primary-light, #2d7a3e);
+  color: #fff;
+}
+
+/* ---------- Empty / loading / error states ---------- */
+
+.rl-loading,
+.rl-error,
+.rl-empty {
+  padding: 3rem 1.5rem;
+  text-align: center;
+  background: #fff;
+  border: 1px dashed rgba(30, 77, 43, 0.18);
+  border-radius: 18px;
+  color: #6b7470;
+  font-size: 0.95rem;
+  line-height: 1.55;
+}
+
+.rl-empty-title {
+  font-weight: 700;
+  color: var(--primary-dark, #0f2515);
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+
+.rl-error {
+  color: #a13e2c;
+  border-color: rgba(255, 107, 53, 0.35);
+  background: rgba(255, 107, 53, 0.05);
+}
+
+.rl-empty a,
+.rl-footer a {
+  color: var(--primary-light, #2d7a3e);
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 1.5px solid rgba(45, 122, 62, 0.35);
+  transition: border-color 0.15s ease;
+}
+
+.rl-empty a:hover,
+.rl-footer a:hover {
+  border-bottom-color: var(--primary-light, #2d7a3e);
+}
+
+/* ---------- Dish cards ---------- */
+
+.rl-dish-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 1.25rem;
+}
+
+.rl-dish {
+  background: #fff;
+  border: 1px solid rgba(30, 77, 43, 0.08);
+  border-radius: 20px;
+  padding: 1.75rem;
+  box-shadow: var(--shadow-sm, 0 2px 8px rgba(0, 0, 0, 0.05));
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.rl-dish:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(30, 77, 43, 0.08);
+}
+
+.rl-dish-head {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.5rem;
+}
+
+.rl-dish-name {
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.015em;
+  color: var(--primary-dark, #0f2515);
+  margin: 0;
+}
+
+.rl-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  background: rgba(45, 122, 62, 0.10);
+  color: var(--primary-light, #2d7a3e);
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+  font-weight: 700;
+}
+
+.rl-badge::before {
+  content: "•";
+  color: var(--accent-color, #ff6b35);
+  font-size: 1rem;
+  line-height: 0;
+}
+
+.rl-dish-desc {
+  margin: 0 0 1.1rem;
+  color: #4a5550;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+/* Detail rows (Flavors / Key ingredients / Allergens) */
+.rl-detail-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+  margin-bottom: 0.85rem;
+  flex-wrap: wrap;
+}
+
+.rl-detail-row:last-of-type {
+  margin-bottom: 1.5rem;
+}
+
+.rl-detail-label {
+  flex-shrink: 0;
+  min-width: 6rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #8a928d;
+  padding-top: 0.32rem;
+}
+
+/* Ingredient chip row */
+.rl-ingredients {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.rl-ingredient {
+  font-size: 0.78rem;
+  color: var(--primary-dark, #0f2515);
+  background: var(--bg-cream, #faf8f5);
+  border: 1px solid rgba(30, 77, 43, 0.10);
+  padding: 0.25rem 0.7rem;
+  border-radius: 999px;
+  font-weight: 500;
+}
+
+/* Flavors — playful pastel chips */
+.rl-flavor-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.rl-flavor {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--primary-dark, #0f2515);
+  background: rgba(255, 107, 53, 0.10);
+  border: 1px solid rgba(255, 107, 53, 0.25);
+  padding: 0.28rem 0.75rem;
+  border-radius: 999px;
+  text-transform: capitalize;
+}
+
+/* Allergens — warning-toned but soft */
+.rl-allergen-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.rl-allergen {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.28rem 0.7rem;
+  border-radius: 999px;
+  text-transform: capitalize;
+}
+
+.rl-allergen.is-always {
+  background: rgba(177, 60, 30, 0.08);
+  border: 1px solid rgba(177, 60, 30, 0.25);
+  color: #8a3318;
+}
+
+.rl-allergen.is-optional {
+  background: #fff;
+  border: 1px dashed rgba(177, 60, 30, 0.35);
+  color: #8a3318;
+}
+
+.rl-allergen-flag {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: rgba(177, 60, 30, 0.12);
+  color: #8a3318;
+  padding: 0.1rem 0.4rem;
+  border-radius: 999px;
+}
+
+@media (max-width: 640px) {
+  .rl-detail-row {
+    flex-direction: column;
+    gap: 0.4rem;
+    margin-bottom: 1.1rem;
+  }
+  .rl-detail-label {
+    min-width: 0;
+    padding-top: 0;
+  }
+}
+
+.rl-tag-pill {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent-color, #ff6b35);
+  background: rgba(255, 107, 53, 0.08);
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  margin-left: auto;
+}
+
+/* "Where to find it" block */
+.rl-where {
+  border-top: 1px solid rgba(30, 77, 43, 0.08);
+  padding-top: 1.1rem;
+  margin-top: 0.25rem;
+}
+
+.rl-where-label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #8a928d;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+}
+
+.rl-restaurants {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.rl-restaurant {
+  position: relative;
+  padding: 0.9rem 1.1rem;
+  background: var(--bg-cream, #faf8f5);
+  border-radius: 12px;
+  border: 1px solid rgba(30, 77, 43, 0.06);
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.rl-restaurant:hover {
+  border-color: rgba(30, 77, 43, 0.14);
+  background: #fff;
+}
+
+.rl-restaurant-main {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  font-size: 1rem;
+}
+
+.rl-restaurant-name {
+  font-weight: 700;
+  color: var(--primary-dark, #0f2515);
+}
+
+a.rl-restaurant-name {
+  color: var(--primary-light, #2d7a3e);
+  text-decoration: none;
+  border-bottom: 1.5px solid rgba(45, 122, 62, 0.3);
+}
+
+a.rl-restaurant-name:hover {
+  border-bottom-color: var(--primary-light, #2d7a3e);
+}
+
+.rl-restaurant-city {
+  color: #6b7470;
+  font-weight: 500;
+}
+
+.rl-restaurant-addr,
+.rl-restaurant-notes {
+  font-size: 0.85rem;
+  color: #6b7470;
+  margin-top: 0.25rem;
+}
+
+.rl-rating-slot {
+  margin-top: 0.5rem;
+  font-size: 0.78rem;
+}
+
+.rl-rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: var(--accent-color, #ff6b35);
+  font-weight: 700;
+}
+
+.rl-rating-empty {
+  color: #9aa1a0;
+  font-style: italic;
+  font-size: 0.78rem;
+}
+
+/* ---------- Submit CTA card ---------- */
+
+.rl-submit-card {
+  margin-top: 1.5rem;
+  padding: 1.6rem 1.75rem;
+  background: linear-gradient(135deg, rgba(30, 77, 43, 0.04), rgba(255, 107, 53, 0.04));
+  border: 1px dashed rgba(30, 77, 43, 0.22);
+  border-radius: 18px;
+  text-align: center;
+}
+
+.rl-submit-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--primary-dark, #0f2515);
+  margin: 0 0 0.4rem;
+}
+
+.rl-submit-body {
+  font-size: 0.92rem;
+  color: #4a5550;
+  margin: 0 0 1rem;
+  line-height: 1.55;
+}
+
+.rl-submit-btn {
+  display: inline-block;
+  padding: 0.7rem 1.4rem;
+  background: var(--accent-color, #ff6b35);
+  color: #fff;
+  text-decoration: none;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: background 0.15s ease, transform 0.1s ease;
+}
+
+.rl-submit-btn:hover {
+  background: var(--accent-light, #ff8c61);
+  transform: translateY(-1px);
+}
+
+/* ---------- Footer ---------- */
+
+.rl-footer {
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(30, 77, 43, 0.08);
+  color: #6b7470;
+  font-size: 0.88rem;
+  line-height: 1.6;
+  text-align: center;
+}
+
+.rl-city-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: #fff;
+  border: 1px solid rgba(30, 77, 43, 0.14);
+  padding: 0.35rem 0.8rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--primary-dark, #0f2515);
+  margin-bottom: 1rem;
+}
+
+.rl-city-pill-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent-color, #ff6b35);
+}
+
+.rl-city-pill-soft {
+  color: #9aa1a0;
+  font-weight: 500;
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 640px) {
+  .rl-hero {
+    padding: 2.5rem 1rem 2rem;
+  }
+  .rl-container {
+    padding: 1.5rem 1rem 3rem;
+  }
+  .rl-search-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .rl-result-count {
+    text-align: right;
+  }
+  .rl-dish {
+    padding: 1.35rem;
+  }
+  .rl-dish-name {
+    font-size: 1.25rem;
+  }
+}

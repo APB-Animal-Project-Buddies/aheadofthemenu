@@ -1,0 +1,10 @@
+-- Seed projects from ARE Seattle accounts config
+INSERT INTO projects (project_handle, project_website, project_description) VALUES
+    ('chicken-nor-egg', 'https://stopfactoryfarms.org/', 'A social-media focused channel focused on fighting factory farming.'),
+    ('ahimsa-in-action', 'https://www.instagram.com/ahimsa.in.action', 'Promoting non-violence through animal rights advocacy and compassionate action.'),
+    ('kind-state', 'https://www.youtube.com/@KindState', 'A YouTube channel that explores the quiet moments that remind us what compassion means — through short cinematic stories about connection, awareness, and everyday kindness.'),
+    ('clean-meat-alliance', 'https://cleanmeatalliance.org/', 'Advancing cellular agriculture and cultivated meat to create a sustainable food system.'),
+    ('feeding-progress', 'https://feedingprogress.com/', 'Essays on animal welfare, technology, and progress.'),
+    ('vishnus-thoughts', 'https://vishnuamrit.substack.com/', 'Short, readable bites focused on promoting philanthropy, compassion, and animal welfare.'),
+    ('viniths-thoughts', 'https://vinithsthoughts.substack.com/', 'Personal reflections on animal rights advocacy and amplifying compassion.')
+ON CONFLICT (project_handle) DO NOTHING;

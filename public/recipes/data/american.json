@@ -1,0 +1,796 @@
+[
+  {
+    "id": "american-vegan-mac-cheese",
+    "title": "Mac & Cheese (No Cruelty)",
+    "source": "Nora Cooks",
+    "rawTitle": "### Vegan Mac & Cheese (Nora Cooks)",
+    "rawBody": "- **URL:** https://www.noracooks.com/vegan-mac-and-cheese/ ✓ VERIFIED\n- **Description:** Cashew-and-potato cream cheese sauce tossed with elbow pasta. Comfort-food workhorse — sauce holds well in a bain-marie and reheats into noodles to order.\n- **Wholesale food cost:** $1.85 / serving · **Menu price:** $11–14 (entrée) / $7–9 (side)\n- **Weight:** 320 g · **Calories:** 540 · **Protein:** 18 g · **Time:** 30 min · **Servings:** 4\n- **Restaurant difficulty:** **Easy** — sauce bulk-preps; just plate over hot pasta.\n- **Tags:** 🥘 Bulk-Prep · ⚡ Fast-Service\n\n| Sub | Effect | Cost delta |\n|---|---|---|\n| Cashew → sunflower-seed base | Nut-free | −$0.20 |\n| Add Beyond Beef crumble (taco mac) | Hearty entrée | +$1.40 |\n| **Premium faux-meat:** Impossible Beef \"chili-mac\" | Chain-quality cross-utilization | +$1.40 |",
+    "valueRatio": 6.756756756756756,
+    "valueTier": "Strong Earner",
+    "cuisine": "american",
+    "cuisineName": "American",
+    "courses": [
+      "main"
+    ],
+    "url": "https://www.noracooks.com/vegan-mac-and-cheese/",
+    "urlStatus": "verified",
+    "urlNote": null,
+    "description": "Cashew-and-potato cream cheese sauce tossed with elbow pasta. Comfort-food workhorse — sauce holds well in a bain-marie and reheats into noodles to order.",
+    "cost": 1.85,
+    "menuPrice": "$11–14 (entrée) / $7–9 (side)",
+    "weight": "320 g",
+    "calories": 540,
+    "protein": "18 g",
+    "time": "30m",
+    "prep": "30m",
+    "servings": 4,
+    "serves": 4,
+    "difficulty": 1,
+    "difficultyLabel": "Easy",
+    "difficultyNote": "sauce bulk-preps; just plate over hot pasta.",
+    "tags": [
+      "bulk-prep",
+      "fast-service"
+    ],
+    "sourcingTier": "in-house",
+    "subs": [
+      {
+        "from": "Cashew → sunflower-seed base",
+        "effect": "Nut-free",
+        "delta": "−$0.20"
+      },
+      {
+        "from": "Add Beyond Beef crumble (taco mac)",
+        "effect": "Hearty entrée",
+        "delta": "+$1.40"
+      },
+      {
+        "from": "**Premium faux-meat:** Impossible Beef \"chili-mac\"",
+        "effect": "Chain-quality cross-utilization",
+        "delta": "+$1.40"
+      }
+    ],
+    "alternatives": [],
+    "photo": "plate",
+    "photoLabel": "mac · cheese",
+    "badge": "Strong Earner",
+    "ingredients": [
+      "1 1/2 cups raw cashews",
+      "2 cups water (or less if not using vegan cheese, see Notes)",
+      "3 tablespoons fresh lemon juice",
+      "1/2 cup nutritional yeast",
+      "1/4 teaspoon turmeric",
+      "1/2 teaspoon garlic powder",
+      "1 1/2 teaspoons salt",
+      "1 (7-oz) bag shredded vegan cheddar cheese, optional",
+      "12 ounces elbow pasta",
+      "1 1/2 cups panko breadcrumbs",
+      "4 tablespoons vegan butter, melted",
+      "1/4 teaspoon smoked paprika"
+    ],
+    "steps": [
+      "Preheat oven and prep - If planning on baking it with the breadcrumb topping, preheat the oven to 350 degrees F and lightly grease a casserole dish (I used a 9x13 inch dish). Skip this step for stovetop mac and cheese.",
+      "Soak the cashews - Soften your cashews by covering them in boiling water for 5 minutes. I do this by heating up water in my tea kettle, and then pouring the boiling water over the cashews in a large glass measuring cup.",
+      "Cook pasta - Cook the pasta according to package instructions, but do not overcook. Drain and set aside.",
+      "Blend cheese sauce - Drain the soaked cashews and discard the soaking water. Add the cashews, fresh water, lemon juice, nutritional yeast, turmeric, garlic powder, salt and bag of shredded cheese (if using) to a high powered blender and blend until very smooth.",
+      "Simply return the pasta to the pot and pour in the cheese sauce. Stir until the sauce thickens and serve immediately.",
+      "Make the breadcrumb topping by mixing the breadcrumbs, melted vegan butter and smoked paprika in a small bowl until crumbly and moist.",
+      "Add the drained pasta to the prepared casserole dish, and pour in the cheese sauce. Stir to coat the noodles. Sprinkle the breadcrumb mixture on the pasta and bake, uncovered for 15 minutes. I also broiled it for a few minutes until golden brown. Serve immediately and enjoy!"
+    ],
+    "ingredientSource": "json-ld",
+    "allergens": [
+      "gluten",
+      "nuts"
+    ],
+    "allergenSubs": [
+      {
+        "from": "panko breadcrumbs",
+        "to": "gluten-free breadcrumbs (Ian's brand)",
+        "removes": "gluten"
+      },
+      {
+        "from": "cashews",
+        "to": "soaked sunflower seeds",
+        "removes": "nuts"
+      }
+    ]
+  },
+  {
+    "id": "american-impossible-meatloaf",
+    "title": "Impossible Meatloaf",
+    "source": "Karissa's Vegan Kitchen",
+    "rawTitle": "### Impossible Meatloaf",
+    "rawBody": "- **URL:** https://www.noracooks.com/vegan-meatloaf/ ✓ VERIFIED *(Nora Cooks's chickpea-based loaf is the verified base. Recommended: swap in Impossible Beef or Beyond Beef for tighter slice integrity; calibrate binder + cook time during a service test since plant-meat renders fat differently than chickpeas.)*\n- **Description:** Built directly on **Impossible Beef** for tight, sliceable texture; ketchup-glazed loaf, par-baked in batches and finished à la minute.\n- **Wholesale food cost:** $3.65 / serving · **Menu price:** $18–22\n- **Weight:** 285 g · **Calories:** 510 · **Protein:** 28 g · **Time:** 65 min · **Servings:** 6\n- **Restaurant difficulty:** **Easy** — bake whole loaves, slice, finish with glaze under salamander.\n- **Tags:** 🥘 Bulk-Prep · ⚡ Fast-Service\n\n| Sub | Effect | Cost delta |\n|---|---|---|\n| **Lead protein:** Impossible Beef (default) | Best slice integrity | baseline |\n| Beyond Beef | Slightly looser; saucier glaze recommended | −$0.05 |\n| Lentil-walnut | Budget alt | −$1.80 |",
+    "valueRatio": 5.47945205479452,
+    "valueTier": "Strong Earner",
+    "cuisine": "american",
+    "cuisineName": "American",
+    "courses": [
+      "main"
+    ],
+    "url": "https://www.karissasvegankitchen.com/impossible-burger-meatloaf/",
+    "urlStatus": "verified",
+    "urlNote": "Nora Cooks's chickpea-based loaf is the verified base. Recommended: swap in Impossible Beef or Beyond Beef for tighter slice integrity; calibrate binder + cook time during a service test since plant-meat renders fat differently than chickpeas. · URL replaced via url_overrides.json",
+    "description": "Built directly on **Impossible Beef** for tight, sliceable texture; ketchup-glazed loaf, par-baked in batches and finished à la minute.",
+    "cost": 3.65,
+    "menuPrice": "$18–22",
+    "weight": "285 g",
+    "calories": 510,
+    "protein": "28 g",
+    "time": "65m",
+    "prep": "65m",
+    "servings": 6,
+    "serves": 6,
+    "difficulty": 1,
+    "difficultyLabel": "Easy",
+    "difficultyNote": "bake whole loaves, slice, finish with glaze under salamander.",
+    "tags": [
+      "bulk-prep",
+      "fast-service"
+    ],
+    "sourcingTier": "branded",
+    "subs": [
+      {
+        "from": "**Lead protein:** Impossible Beef (default)",
+        "effect": "Best slice integrity",
+        "delta": "baseline"
+      },
+      {
+        "from": "Beyond Beef",
+        "effect": "Slightly looser; saucier glaze recommended",
+        "delta": "−$0.05"
+      },
+      {
+        "from": "Lentil-walnut",
+        "effect": "Budget alt",
+        "delta": "−$1.80"
+      }
+    ],
+    "alternatives": [
+      {
+        "url": "https://www.noracooks.com/vegan-meatloaf/",
+        "source": "Nora Cooks",
+        "note": "Cheaper, lentil-and-chickpea-based alternative — drop the Impossible Beef and use the same ketchup-glaze finish."
+      }
+    ],
+    "photo": "plate",
+    "photoLabel": "impossible · meatloaf",
+    "badge": "Strong Earner",
+    "ingredients": [
+      "1 package Impossible burger (3/4 pound)",
+      "1/4 cup breadcrumbs",
+      "2 tablespoons ketchup (or tomato sauce)",
+      "1 teaspoon garlic powder",
+      "1 teaspoon vegan Worcestershire sauce",
+      "1 teaspoon onion powder",
+      "1/2 teaspoon parsley",
+      "1/4 teaspoon salt",
+      "1/4 teaspoon pepper"
+    ],
+    "steps": [
+      "Preheat oven to 400°F. Line a baking sheet with parchment paper or a silicone baking mat.",
+      "In a bowl, mix all ingredients together (Impossible burger, breadcrumbs, ketchup, garlic powder, Worcestershire sauce, onion powder, parsley, salt, and pepper.",
+      "Form into a loaf shape on the baking sheet.",
+      "Bake for 25-30 minutes, or until browned.",
+      "Brush some ketchup or BBQ on top if desired, or serve with gravy."
+    ],
+    "ingredientSource": "json-ld",
+    "allergens": [
+      "gluten"
+    ],
+    "allergenSubs": [
+      {
+        "from": "breadcrumbs",
+        "to": "gluten-free breadcrumbs",
+        "removes": "gluten"
+      }
+    ]
+  },
+  {
+    "id": "american-ultimate-vegan-chili",
+    "title": "Ultimate Vegan Chili",
+    "source": "Nora Cooks",
+    "rawTitle": "### Ultimate Vegan Chili",
+    "rawBody": "- **URL:** https://www.noracooks.com/vegan-chili/ ✓ VERIFIED\n- **Description:** Three-bean chili with smoked paprika, cumin, cocoa. Holds 3 days; better next-day. The classic restaurant batch item.\n- **Wholesale food cost:** $1.40 / serving · **Menu price:** $9–12 (bowl) / $5–7 (cup)\n- **Weight:** 360 g · **Calories:** 410 · **Protein:** 19 g · **Time:** 45 min · **Servings:** 6\n- **Restaurant difficulty:** **Easy** — quintessential bulk-prep.\n- **Tags:** 🥘 Bulk-Prep · ⚡ Fast-Service\n\n| Sub | Effect | Cost delta |\n|---|---|---|\n| **Premium faux-meat:** Beyond Beef crumble (1 lb / batch) | Chili-con-carne style | +$1.10/serving |\n| Impossible Beef | Slightly richer | +$1.05/serving |\n| TVP | Budget protein boost | +$0.30 |",
+    "valueRatio": 7.500000000000001,
+    "valueTier": "Strong Earner",
+    "cuisine": "american",
+    "cuisineName": "American",
+    "courses": [
+      "main"
+    ],
+    "url": "https://www.noracooks.com/ultimate-vegan-chili/",
+    "urlStatus": "verified",
+    "urlNote": null,
+    "description": "Three-bean chili with smoked paprika, cumin, cocoa. Holds 3 days; better next-day. The classic restaurant batch item.",
+    "cost": 1.4,
+    "menuPrice": "$9–12 (bowl) / $5–7 (cup)",
+    "weight": "360 g",
+    "calories": 410,
+    "protein": "19 g",
+    "time": "45m",
+    "prep": "45m",
+    "servings": 6,
+    "serves": 6,
+    "difficulty": 1,
+    "difficultyLabel": "Easy",
+    "difficultyNote": "quintessential bulk-prep.",
+    "tags": [
+      "bulk-prep",
+      "fast-service"
+    ],
+    "sourcingTier": "in-house",
+    "subs": [
+      {
+        "from": "**Premium faux-meat:** Beyond Beef crumble (1 lb / batch)",
+        "effect": "Chili-con-carne style",
+        "delta": "+$1.10/serving"
+      },
+      {
+        "from": "Impossible Beef",
+        "effect": "Slightly richer",
+        "delta": "+$1.05/serving"
+      },
+      {
+        "from": "TVP",
+        "effect": "Budget protein boost",
+        "delta": "+$0.30"
+      }
+    ],
+    "alternatives": [],
+    "photo": "bowl",
+    "photoLabel": "ultimate · chili",
+    "badge": "Strong Earner",
+    "ingredients": [
+      "2 cans (15 oz each) kidney beans, drained and rinsed",
+      "1 can (15 oz) black beans, drained and rinsed",
+      "1 can (15 oz) pinto beans, drained and rinsed",
+      "1 can (28 oz) crushed tomatoes",
+      "1 can (14 oz) diced tomatoes",
+      "1 medium onion, diced",
+      "1 green bell pepper, diced",
+      "1 red bell pepper, diced",
+      "4 cloves garlic, minced",
+      "2 jalapeños, seeded and diced",
+      "2 tablespoons olive oil",
+      "2 tablespoons chili powder",
+      "1 tablespoon ground cumin",
+      "1 teaspoon smoked paprika",
+      "1 teaspoon dried oregano",
+      "1 cup (240 ml) vegetable broth",
+      "salt and black pepper to taste",
+      "fresh cilantro, sliced green onion, vegan sour cream (for serving)"
+    ],
+    "ingredientSource": "authored",
+    "allergens": [],
+    "allergenSubs": [],
+    "urlFixedAt": "2026-05-01T02:12:45.906Z",
+    "urlFixReason": "old slug Yoast-redirected to a JPG; new slug serves the actual recipe page"
+  },
+  {
+    "id": "american-bbq-pulled-jackfruit-sandwiches",
+    "title": "BBQ Pulled Jackfruit Sandwiches",
+    "source": "Vegan Richa",
+    "rawTitle": "### BBQ Pulled Jackfruit Sandwiches",
+    "rawBody": "- **URL:** https://www.noracooks.com/bbq-jackfruit/ ✓ VERIFIED\n- **Description:** Brined young jackfruit shredded and simmered in BBQ sauce. Sandwich on brioche with slaw.\n- **Wholesale food cost:** $2.65 / serving · **Menu price:** $12–15\n- **Weight:** 280 g · **Calories:** 520 · **Protein:** 11 g · **Time:** 40 min · **Servings:** 4\n- **Restaurant difficulty:** **Easy** — pulled holds in steam table.\n- **Tags:** 🥘 Bulk-Prep · ⚡ Fast-Service\n\n| Sub | Effect | Cost delta |\n|---|---|---|\n| **Premium faux-meat:** Chunk Pulled in BBQ sauce | Heartier, more \"meaty\" pull, higher protein | +$2.20/serving |\n| Beyond Beef \"shredded\" hack | Looser texture | +$1.00 |",
+    "valueRatio": 5.09433962264151,
+    "valueTier": "Strong Earner",
+    "cuisine": "american",
+    "cuisineName": "American",
+    "courses": [
+      "main"
+    ],
+    "url": "https://www.veganricha.com/pulled-jackfruit-sandwiches/",
+    "urlStatus": "verified",
+    "urlNote": "URL replaced via url_overrides.json",
+    "description": "Brined young jackfruit shredded and simmered in BBQ sauce. Sandwich on brioche with slaw.",
+    "cost": 2.65,
+    "menuPrice": "$12–15",
+    "weight": "280 g",
+    "calories": 520,
+    "protein": "11 g",
+    "time": "40m",
+    "prep": "40m",
+    "servings": 4,
+    "serves": 4,
+    "difficulty": 1,
+    "difficultyLabel": "Easy",
+    "difficultyNote": "pulled holds in steam table.",
+    "tags": [
+      "bulk-prep",
+      "fast-service"
+    ],
+    "sourcingTier": "in-house",
+    "subs": [
+      {
+        "from": "**Premium faux-meat:** Chunk Pulled in BBQ sauce",
+        "effect": "Heartier, more \"meaty\" pull, higher protein",
+        "delta": "+$2.20/serving"
+      },
+      {
+        "from": "Beyond Beef \"shredded\" hack",
+        "effect": "Looser texture",
+        "delta": "+$1.00"
+      }
+    ],
+    "alternatives": [],
+    "photo": "flat",
+    "photoLabel": "bbq · pulled · jackfruit",
+    "badge": "Strong Earner",
+    "ingredients": [
+      "2 20 oz cans young green unripe jackfruit",
+      "1/2 medium red onion (thinly sliced)",
+      "1 tsp minced garlic",
+      "1 tsp minced ginger",
+      "1/4 tsp salt (or more, depending on taste)",
+      "2 to 3 tbsp bbq seasoning",
+      "3/4 cup bbq sauce (, plus more for dressing)",
+      "3 cups slaw mix ((I use shredded cabbage, carrot, brussel sprouts, baby kale mix))",
+      "1/4 cup vegan mayo",
+      "1 tbsp apple cider vinegar (or lemon juice)",
+      "1/2 tbsp maple syrup (or sugar to taste)",
+      "dashes of salt and freshly ground black pepper"
+    ],
+    "steps": [
+      "Drain the jackfruit. Place in a thick kitchen towel, fold and squeeze out as much liquid as possible. This will shred some of the jackfruit. Slice the rest using a knife or separate using hands until somewhat shredded. Remove any hard seeds if any (There are rarely hard seeds in the canned version. The tender seedbox and stem area are all edible).",
+      "Add the jackfruit to a large bowl with sliced onion, garlic and ginger. Add bbq seasoning and sugar mixture, and salt and mix well.",
+      "Add 1/2 to 2/3 cup bbq sauce and mix. Add 2 tbsp veggie broth if the bbq sauce is too thick and mix in (I use 2 tbsp of broth to clean out the mixing bowl after transferring to the baking dish). Spread the mixture in a large baking dish (parchment lined).",
+      "Bake at 400 deg F For 30 minutes. Shred some of the larger pieces by pressing with a spatula. Taste and adjust salt, sweet, heat at this point. Add some salt, sugar/maple syrup and cayenne for heat if needed and mix in and move the jackfruit around.",
+      "Spread well again and continue to bake for another 15 to 25 mins (depends on moisture content, pan/oven and preferred texture.) I like some edges caramelized and crispy)",
+      "Prepare your buns tacos and slaw. Mix everything under slaw. Taste and adjust flavor. Chill for 15 mins and use. ",
+      "Mix in 2 to 4 tbsp bbq sauce into the baked jackfruit and assemble the sandwiches with generous layers of jackfruit, more bbq sauce, slaw. You can also fill this in wraps or tacos. "
+    ],
+    "ingredientSource": "json-ld",
+    "allergens": [],
+    "allergenSubs": []
+  },
+  {
+    "id": "american-buffalo-cauliflower-wings",
+    "title": "Buffalo Cauliflower Wings",
+    "source": "Nora Cooks",
+    "rawTitle": "### Buffalo Cauliflower Wings",
+    "rawBody": "- **URL:** https://www.noracooks.com/buffalo-cauliflower-wings/ ✓ VERIFIED\n- **Description:** Battered cauliflower florets fried/baked, tossed in vegan buffalo sauce. Bar staple.\n- **Wholesale food cost:** $2.10 / serving · **Menu price:** $10–13 (app)\n- **Weight:** 220 g · **Calories:** 380 · **Protein:** 8 g · **Time:** 35 min · **Servings:** 4\n- **Restaurant difficulty:** **Medium** — requires per-plate fry; battered florets need timing.\n- **Tags:** ⚡ Fast-Service\n\n| Sub | Effect | Cost delta |\n|---|---|---|\n| **Premium faux-meat:** Beyond Chicken Tenders / Impossible Nuggets tossed buffalo | \"Wing\"-format, more protein | +$2.40 |",
+    "valueRatio": 5.476190476190476,
+    "valueTier": "Strong Earner",
+    "cuisine": "american",
+    "cuisineName": "American",
+    "courses": [
+      "starter"
+    ],
+    "url": "https://www.noracooks.com/vegan-cauliflower-buffalo-wings/",
+    "urlStatus": "verified",
+    "urlNote": "URL replaced via url_overrides.json",
+    "description": "Battered cauliflower florets fried/baked, tossed in vegan buffalo sauce. Bar staple.",
+    "cost": 2.1,
+    "menuPrice": "$10–13 (app)",
+    "weight": "220 g",
+    "calories": 380,
+    "protein": "8 g",
+    "time": "35m",
+    "prep": "35m",
+    "servings": 4,
+    "serves": 4,
+    "difficulty": 2,
+    "difficultyLabel": "Medium",
+    "difficultyNote": "requires per-plate fry; battered florets need timing.",
+    "tags": [
+      "fast-service"
+    ],
+    "sourcingTier": "in-house",
+    "subs": [
+      {
+        "from": "**Premium faux-meat:** Beyond Chicken Tenders / Impossible Nuggets tossed buffalo",
+        "effect": "\"Wing\"-format, more protein",
+        "delta": "+$2.40"
+      }
+    ],
+    "alternatives": [],
+    "photo": "flat",
+    "photoLabel": "buffalo · cauliflower · wings",
+    "badge": "Strong Earner",
+    "ingredients": [
+      "1 large head cauliflower (about 5 cups)",
+      "1 cup water",
+      "3/4 cup all purpose flour",
+      "1 tablespoon garlic powder",
+      "1 tablespoon onion powder",
+      "1/4 teaspoon salt",
+      "1 cup Frank's Red Hot Sauce",
+      "1 tablespoon vegan butter, melted",
+      "1 tablespoon pure maple syrup or agave",
+      "1 cup vegan mayo",
+      "1 teaspoon apple cider vinegar",
+      "1 teaspoon dried dill",
+      "1 teaspoon onion powder",
+      "1/2 teaspoon garlic powder",
+      "tiny pinch of paprika",
+      "tiny pinch of black pepper",
+      "salt, to taste",
+      "2 tablespoons unsweetened soy milk, or even water, to thin as needed"
+    ],
+    "steps": [
+      "Preheat the oven to 425 degrees F. Line a large baking sheet with parchment paper. Spray generously with oil.",
+      "Wash and cut cauliflower into bite sized pieces.",
+      "In a large bowl, add water, flour, garlic and onion powder, and salt. Whisk until well combined.",
+      "Add the cauliflower to the batter in the bowl, and toss to combine and really coat the cauliflower. Remove the pieces of cauliflower, one by one, and tap off the excess batter a few times on the side of the bowl.",
+      "Place on the prepared baking sheet and make sure they are not touching each other, or they will all get stuck together as they bake. Spray the tops with oil, this will help them get super crispy.",
+      "Bake for 20 minutes. Flip them over and bake for 15 more minutes, until golden and crispy.",
+      "While the cauliflower are baking, prepare the hot sauce/butter mixture. Melt the butter in a saucepan on the stove over medium heat. Once melted, add the hot sauce, maple syrup or agave and stir. Set aside.",
+      "Once the cauliflower have cooked and are crispy, toss the florets with the sauce in a large bowl, then return to the pan. You can serve them immediately, or to make them crispier, put them back in the oven for 15-20 minutes. If you want them super crispy, leave the buffalo sauce on the side for dipping as you go.",
+      "Serve with easy vegan ranch (recipe included), my cashew based vegan ranch or vegan blue cheese.",
+      "Add all the ranch ingredients to a medium bowl and whisk until combined. Taste and add salt, if desired, or more herbs. That's it! Enjoy."
+    ],
+    "ingredientSource": "json-ld",
+    "allergens": [
+      "soy"
+    ],
+    "allergenSubs": [
+      {
+        "from": "soy milk",
+        "to": "oat milk",
+        "removes": "soy"
+      }
+    ]
+  },
+  {
+    "id": "american-biscuits-gravy",
+    "title": "Biscuits & Gravy",
+    "source": "Nora Cooks",
+    "rawTitle": "### Biscuits & Gravy",
+    "rawBody": "- **URL:** https://www.noracooks.com/vegan-biscuits-and-gravy/ ✓ VERIFIED\n- **Description:** Flaky vegan biscuits + sausage-pepper-cream gravy. Brunch hero; gravy holds in a bain.\n- **Wholesale food cost:** $2.25 / serving · **Menu price:** $11–14 (brunch entrée)\n- **Weight:** 320 g · **Calories:** 620 · **Protein:** 16 g · **Time:** 50 min · **Servings:** 6\n- **Restaurant difficulty:** **Easy** — biscuits par-baked, gravy held warm.\n- **Tags:** 🥘 Bulk-Prep · ⚡ Fast-Service\n\n| Sub | Effect | Cost delta |\n|---|---|---|\n| **Premium faux-meat:** Impossible Sausage in gravy | Brand-recognizable; tighter crumble | +$1.40 |\n| Beyond Sausage | Slightly fattier mouthfeel | +$1.30 |",
+    "valueRatio": 5.555555555555555,
+    "valueTier": "Strong Earner",
+    "cuisine": "american",
+    "cuisineName": "American",
+    "courses": [
+      "main"
+    ],
+    "url": "https://www.noracooks.com/vegan-biscuits-and-gravy/",
+    "urlStatus": "verified",
+    "urlNote": null,
+    "description": "Flaky vegan biscuits + sausage-pepper-cream gravy. Brunch hero; gravy holds in a bain.",
+    "cost": 2.25,
+    "menuPrice": "$11–14 (brunch entrée)",
+    "weight": "320 g",
+    "calories": 620,
+    "protein": "16 g",
+    "time": "50m",
+    "prep": "50m",
+    "servings": 6,
+    "serves": 6,
+    "difficulty": 1,
+    "difficultyLabel": "Easy",
+    "difficultyNote": "biscuits par-baked, gravy held warm.",
+    "tags": [
+      "bulk-prep",
+      "fast-service"
+    ],
+    "sourcingTier": "in-house",
+    "subs": [
+      {
+        "from": "**Premium faux-meat:** Impossible Sausage in gravy",
+        "effect": "Brand-recognizable; tighter crumble",
+        "delta": "+$1.40"
+      },
+      {
+        "from": "Beyond Sausage",
+        "effect": "Slightly fattier mouthfeel",
+        "delta": "+$1.30"
+      }
+    ],
+    "alternatives": [],
+    "photo": "flat",
+    "photoLabel": "biscuits · gravy",
+    "badge": "Strong Earner",
+    "ingredients": [
+      "1 Recipe Southern-Style Vegan Buttermilk Biscuits",
+      "14 ounces vegan sausage crumbles, or chopped pieces (*I used Impossible brand, see Notes)",
+      "1/3 cup all purpose flour",
+      "3 cups unsweetened, unflavored cashew milk",
+      "1 tablespoon vegan butter",
+      "1/8 teaspoon dried thyme",
+      "1/8 teaspoon dried crushed rosemary",
+      "1/8 teaspoon crushed red pepper flakes",
+      "1 teaspoon salt, or more to taste",
+      "1/2 teaspoon ground black pepper"
+    ],
+    "steps": [
+      "In a large pan over medium-high heat, cook the vegan sausage.",
+      "Now add the flour, cashew milk and vegan butter. Cook on medium heat for 5-10 minutes, stirring constantly, until the gravy thickens.",
+      "Add the thyme, rosemary, red pepper flakes, salt and pepper. Taste the gravy and add any additional seasonings, salt or pepper, as desired.",
+      "Serve immediately over warm biscuits and enjoy!"
+    ],
+    "ingredientSource": "json-ld",
+    "allergens": [
+      "nuts"
+    ],
+    "allergenSubs": [
+      {
+        "from": "cashews",
+        "to": "soaked sunflower seeds",
+        "removes": "nuts"
+      }
+    ]
+  },
+  {
+    "id": "american-vegan-eggs-benedict",
+    "title": "Eggs Benedict (No Cruelty)",
+    "source": "School Night Vegan",
+    "rawTitle": "### Vegan Eggs Benedict — School Night Vegan",
+    "rawBody": "- **URL:** https://schoolnightvegan.com/home/vegan-eggs-benedict/ ✓ VERIFIED *(Restaurant-ops fields below — wholesale cost, menu price, weight, calories, protein, difficulty, tags, and subs — are first-pass estimates extrapolated from comparable brunch plates; not yet calibrated by a service test. The recipe / ingredients / steps come directly from School Night Vegan.)*\n- **Description:** Toasted English muffin layered with kala-namak-seared tofu rounds, vegan smoked \"ham,\" and a creamy vegan hollandaise. Brunch hero — hollandaise + ham hold cold, tofu sears à la minute.\n- **Wholesale food cost:** $2.40 / serving *(est.)* · **Menu price:** $13–16 (brunch entrée) *(est.)*\n- **Weight:** 280 g *(est.)* · **Calories:** 480 *(est.)* · **Protein:** 22 g *(est.)* · **Time:** 20 min · **Servings:** 2\n- **Restaurant difficulty:** **Easy** *(est.)* — components prep cold, plate hot to order.\n- **Tags:** 🥘 Bulk-Prep · ⚡ Fast-Service *(est.)*\n\n| Sub | Effect | Cost delta |\n|---|---|---|\n| Vegan smoked \"ham\" (default) | Closest to canonical Benedict | baseline *(est.)* |\n| Marinated smoked tofu in place of vegan ham | Budget; relies on smoke flavor | −$0.80 *(est.)* |\n| Sub Just Egg \"frittata\" round for the tofu | Brand-recognizable yolk colour | +$1.10 *(est.)* |\n| Add capers + dill + lemon zest crown | Premium brunch listing | +$0.20 → menu $15–18 *(est.)* |",
+    "valueRatio": 6.041666666666667,
+    "valueTier": "Strong Earner",
+    "cuisine": "american",
+    "cuisineName": "American",
+    "courses": [
+      "main"
+    ],
+    "url": "https://schoolnightvegan.com/home/vegan-eggs-benedict/",
+    "urlStatus": "verified",
+    "urlNote": "Restaurant-ops fields (cost, menu price, weight, calories, protein, difficulty, tags, subs, allergen subs, value tier) are first-pass estimates extrapolated from comparable brunch plates; not yet calibrated by a service test. The recipe — ingredients, steps, time, servings — comes directly from School Night Vegan.",
+    "description": "Toasted English muffin layered with kala-namak-seared tofu rounds, vegan smoked \"ham,\" and a creamy vegan hollandaise. Brunch hero — hollandaise + ham hold cold, tofu sears à la minute.",
+    "cost": 2.4,
+    "menuPrice": "$13–16 (brunch entrée)",
+    "weight": "280 g",
+    "calories": 480,
+    "protein": "22 g",
+    "time": "20m",
+    "prep": "20m",
+    "servings": 2,
+    "serves": 2,
+    "difficulty": 1,
+    "difficultyLabel": "Easy",
+    "difficultyNote": "components prep cold, plate hot to order.",
+    "tags": [
+      "bulk-prep",
+      "fast-service"
+    ],
+    "sourcingTier": "in-house",
+    "subs": [
+      {
+        "from": "Vegan smoked \"ham\" (default)",
+        "effect": "Closest to canonical Benedict",
+        "delta": "baseline (est.)"
+      },
+      {
+        "from": "Marinated smoked tofu in place of vegan ham",
+        "effect": "Budget; relies on smoke flavor",
+        "delta": "−$0.80 (est.)"
+      },
+      {
+        "from": "Sub Just Egg \"frittata\" round for the tofu",
+        "effect": "Brand-recognizable yolk colour",
+        "delta": "+$1.10 (est.)"
+      },
+      {
+        "from": "Add capers + dill + lemon zest crown",
+        "effect": "Premium brunch listing",
+        "delta": "+$0.20 → menu $15–18 (est.)"
+      }
+    ],
+    "alternatives": [],
+    "photo": "layered",
+    "photoLabel": "eggs · benedict",
+    "badge": "Strong Earner",
+    "estimatesPending": true,
+    "ingredients": [
+      "1 batch vegan hollandaise sauce",
+      "1 English muffin, halved",
+      "200 g firm or medium-firm tofu",
+      "2 teaspoons olive oil",
+      "Pinch kala namak (or fine sea salt)",
+      "Pinch black pepper",
+      "4 pieces vegan smoked ham",
+      "Fresh chives, finely chopped"
+    ],
+    "steps": [
+      "Prepare the vegan hollandaise sauce beforehand.",
+      "Toast both halves of the English muffin.",
+      "Slice the tofu horizontally into two 1.5–2 cm thick pieces; use a cookie cutter to cut circles slightly smaller than the muffin halves.",
+      "Heat the olive oil in a frying pan over medium heat and fry the tofu rounds about 5 minutes per side until browned; season with kala namak and black pepper.",
+      "Spread hollandaise on each toasted muffin half, then layer with the vegan smoked ham followed by the seared tofu round.",
+      "Top with the remaining hollandaise and garnish with fresh chives before serving."
+    ],
+    "ingredientSource": "source-page",
+    "allergens": [
+      "gluten",
+      "soy"
+    ],
+    "allergenSubs": [
+      {
+        "from": "English muffin",
+        "to": "gluten-free English muffin (est.)",
+        "removes": "gluten"
+      },
+      {
+        "from": "tofu",
+        "to": "chickpea-flour 'tofu' rounds (est.)",
+        "removes": "soy"
+      }
+    ]
+  },
+  {
+    "id": "american-vegan-beef-wellington",
+    "title": "Beef Wellington (No Cruelty)",
+    "source": "Juicy Marbles",
+    "rawTitle": "### Vegan Beef Wellington (**SHOWSTOPPER** — Juicy Marbles Loin)",
+    "rawBody": "- **URL:** https://juicymarbles.com/blogs/recipes/vegan-wellington-mushroom-duxelle ✓ VERIFIED *(Juicy Marbles' own official Wellington recipe — uses their whole-cut loin as our spec calls for, includes mushroom duxelles, eggplant layer, blueberry-wine chutney)*\n- **Description:** **Lead protein:** Juicy Marbles Whole-Cut Loin (6 oz portion, seared hard) wrapped in mushroom-shallot-thyme duxelles, vegan prosciutto-style crepe layer, and all-butter vegan puff pastry. Egg-washed with maple-soy, scored, and roasted to a deep mahogany. Sliced tableside or à la minute, served with red-wine demi, pommes purée, and roasted hen-of-the-woods. The American steakhouse's plant-based holiday/anniversary plate.\n- **Wholesale food cost:** $13.50 / serving · **Menu price:** **$45–52** (upscale ÷ 0.27)\n- **Weight:** 380 g · **Calories:** 720 · **Protein:** 38 g · **Time:** 90 min (incl. par-sear, chill, wrap, bake) · **Servings:** 4 (one whole loin yields four 6-oz portions)\n- **Restaurant difficulty:** **Hard** — multi-component build; pastry must be cold when going in, internal must hit 130°F, slice-cleanly requires a 10-min rest. Par-build whole Wellingtons during prep, finish-bake per ticket window.\n- **Tags:** 🥘 (par-build only) · — (per-ticket finish)\n\n| Sub | Effect | Cost delta |\n|---|---|---|\n| **Lead protein:** Juicy Marbles Whole-Cut Loin (default) | Closest to traditional Wellington presentation | baseline |\n| Juicy Marbles Thick-Cut Filets × 2 stacked | Easier portioning | −$2.00 |\n| Chunk Foods Steakhouse Cut 6 oz | Steakhouse-grade, more savings | −$5.50 |\n| Mushroom-lentil \"loaf\" core | Budget-tier Wellington (no faux-meat brand) | −$9.00 → menu $24–29 |",
+    "valueRatio": null,
+    "valueTier": "Showpiece",
+    "cuisine": "american",
+    "cuisineName": "American",
+    "courses": [
+      "main",
+      "showstopper"
+    ],
+    "url": "https://juicymarbles.com/blogs/recipes/vegan-wellington-mushroom-duxelle",
+    "urlStatus": "verified",
+    "urlNote": "Juicy Marbles' own official Wellington recipe — uses their whole-cut loin as our spec calls for, includes mushroom duxelles, eggplant layer, blueberry-wine chutney",
+    "description": "**Lead protein:** Juicy Marbles Whole-Cut Loin (6 oz portion, seared hard) wrapped in mushroom-shallot-thyme duxelles, vegan prosciutto-style crepe layer, and all-butter vegan puff pastry. Egg-washed with maple-soy, scored, and roasted to a deep mahogany. Sliced tableside or à la minute, served with red-wine demi, pommes purée, and roasted hen-of-the-woods. The American steakhouse's plant-based holiday/anniversary plate.",
+    "cost": 13.5,
+    "menuPrice": null,
+    "weight": "380 g",
+    "calories": 720,
+    "protein": "38 g",
+    "time": "90m",
+    "prep": "90m",
+    "servings": 4,
+    "serves": 4,
+    "difficulty": 3,
+    "difficultyLabel": "Hard",
+    "difficultyNote": "multi-component build; pastry must be cold when going in, internal must hit 130°F, slice-cleanly requires a 10-min rest. Par-build whole Wellingtons during prep, finish-bake per ticket window.",
+    "tags": [
+      "bulk-prep"
+    ],
+    "sourcingTier": "branded",
+    "subs": [
+      {
+        "from": "**Lead protein:** Juicy Marbles Whole-Cut Loin (default)",
+        "effect": "Closest to traditional Wellington presentation",
+        "delta": "baseline"
+      },
+      {
+        "from": "Juicy Marbles Thick-Cut Filets × 2 stacked",
+        "effect": "Easier portioning",
+        "delta": "−$2.00"
+      },
+      {
+        "from": "Chunk Foods Steakhouse Cut 6 oz",
+        "effect": "Steakhouse-grade, more savings",
+        "delta": "−$5.50"
+      },
+      {
+        "from": "Mushroom-lentil \"loaf\" core",
+        "effect": "Budget-tier Wellington (no faux-meat brand)",
+        "delta": "−$9.00 → menu $24–29"
+      }
+    ],
+    "alternatives": [],
+    "photo": "flat",
+    "photoLabel": "beef · wellington",
+    "badge": "Showpiece",
+    "ingredients": [
+      "1 lb (450 g) seitan, shaped into a log",
+      "8 oz (225 g) cremini mushrooms, finely chopped (duxelles)",
+      "1 small shallot, finely diced",
+      "3 cloves garlic, minced",
+      "2 tablespoons olive oil",
+      "2 tablespoons soy sauce",
+      "1 teaspoon fresh thyme leaves",
+      "2 tablespoons Dijon mustard",
+      "1 sheet (14 oz) vegan puff pastry, thawed",
+      "2 tablespoons plant milk (for brushing)",
+      "1 teaspoon paprika",
+      "salt and black pepper to taste"
+    ],
+    "ingredientSource": "authored",
+    "allergens": [
+      "gluten",
+      "soy"
+    ],
+    "allergenSubs": [
+      {
+        "from": "seitan",
+        "to": "king trumpet mushrooms, scored and seared",
+        "removes": "gluten"
+      },
+      {
+        "from": "soy sauce",
+        "to": "coconut aminos",
+        "removes": "soy"
+      }
+    ]
+  },
+  {
+    "id": "american-vegan-new-york-cheesecake",
+    "title": "New York Cheesecake (No Cruelty)",
+    "source": "Nora Cooks",
+    "rawTitle": "### Vegan New York Cheesecake (**DESSERT**)",
+    "rawBody": "- **URL:** https://www.noracooks.com/vegan-cheesecake/ ✓ VERIFIED *(Nora Cooks — uses Tofutti or Kite Hill cream cheese + coconut cream baked NY-style)*\n- **Description:** Cashew-and-tofu-based cream cheese filling on a vegan graham crust, baked in a water bath for the dense, crackless NY style. Holds 4–5 days; portion-cuts cleanly cold. Top per-ticket with macerated berries, salted caramel, or cocoa.\n- **Wholesale food cost:** $1.95 / serving · **Menu price:** $9–12\n- **Weight:** 220 g · **Calories:** 480 · **Protein:** 9 g · **Time:** 60 min active + 4 hr chill · **Servings:** 12 / 9-inch springform\n- **Restaurant difficulty:** **Easy** — bake whole, slice, plate cold per ticket with one warm topping option.\n- **Tags:** 🥘 Bulk-Prep · ⚡ Fast-Service\n\n| Sub | Effect | Cost delta |\n|---|---|---|\n| Cashew-tofu base (default) | Densest NY-style texture | baseline |\n| Vegan cream cheese (Kite Hill / Tofutti) base | Faster build, slightly looser | +$0.40 |\n| Add seasonal berry compote topping | Premium menu listing | +$0.30 → menu $11–14 |",
+    "valueRatio": 5.384615384615385,
+    "valueTier": "Strong Earner",
+    "cuisine": "american",
+    "cuisineName": "American",
+    "courses": [
+      "dessert"
+    ],
+    "url": "https://www.noracooks.com/vegan-cheesecake/",
+    "urlStatus": "verified",
+    "urlNote": "Nora Cooks — uses Tofutti or Kite Hill cream cheese + coconut cream baked NY-style",
+    "description": "Cashew-and-tofu-based cream cheese filling on a vegan graham crust, baked in a water bath for the dense, crackless NY style. Holds 4–5 days; portion-cuts cleanly cold. Top per-ticket with macerated berries, salted caramel, or cocoa.",
+    "cost": 1.95,
+    "menuPrice": "$9–12",
+    "weight": "220 g",
+    "calories": 480,
+    "protein": "9 g",
+    "time": "60m",
+    "prep": "60m",
+    "servings": 12,
+    "serves": 12,
+    "difficulty": 1,
+    "difficultyLabel": "Easy",
+    "difficultyNote": "bake whole, slice, plate cold per ticket with one warm topping option.",
+    "tags": [
+      "bulk-prep",
+      "fast-service"
+    ],
+    "sourcingTier": "in-house",
+    "subs": [
+      {
+        "from": "Cashew-tofu base (default)",
+        "effect": "Densest NY-style texture",
+        "delta": "baseline"
+      },
+      {
+        "from": "Vegan cream cheese (Kite Hill / Tofutti) base",
+        "effect": "Faster build, slightly looser",
+        "delta": "+$0.40"
+      },
+      {
+        "from": "Add seasonal berry compote topping",
+        "effect": "Premium menu listing",
+        "delta": "+$0.30 → menu $11–14"
+      }
+    ],
+    "alternatives": [],
+    "photo": "flat",
+    "photoLabel": "new · york · cheesecake",
+    "badge": "Strong Earner",
+    "ingredients": [
+      "1 1/2 cups vegan graham cracker crumbs*",
+      "5 tablespoons melted vegan butter (or coconut oil)",
+      "1/4 cup granulated sugar",
+      "32 ounces (4 8-ounce packages) Tofutti vegan cream cheese (See notes, do NOT use Trader Joe's!)",
+      "(1) 13.5 ounce can coconut cream",
+      "1 1/4 cups granulated sugar",
+      "4 tablespoons cornstarch",
+      "2 teaspoons pure vanilla extract",
+      "3 tablespoons lemon juice, from about 2 small lemons",
+      "1 1/2 cups fresh strawberries, hulled and sliced",
+      "1/4 cup granulated sugar",
+      "1 teaspoon lemon zest, from 1 small lemon"
+    ],
+    "steps": [
+      "Preheat the oven to 350 degrees F. Wrap a 9 inch springform pan with 1-2 layers of aluminum foil, covering the bottom and the sides. Cut a circle of parchment paper for the bottom of the pan, and spray lightly with oil.",
+      "In a medium bowl, add the cookie crumbs, melted vegan butter and sugar. Stir well to combine, then press down into the bottom of the prepared pan. Press down firmly and evenly, going up the sides a little. Set aside.",
+      "In the bowl of an electric mixer with the whisk attachment, or using a handheld mixer, beat the vegan cream cheese until smooth, about 1 minute.",
+      "Now add the rest of the filling ingredients and beat until smooth, scraping down the sides and bottom of the bowl as needed.",
+      "Once it's completely smooth, pour into prepared pan over the crust and spread evenly.",
+      "Place in the oven and bake for 50 minutes. Do not open the oven door during this time. Turn off the heat, and let it sit in the oven for 10 more minutes. The cheesecake will be slightly jiggly, and not look very done in the middle. That is correct, it will firm up when it cools.",
+      "Remove from the oven, and let it cool for about 15 minutes at room temperature before moving to the refrigerator to cool for at least 4 hours, preferably overnight, before slicing and serving. When ready to serve, slice and serve with any optional toppings.",
+      "In a food processor, add 1 1/4 cups of the sliced strawberries (reserving 1/4 cup), sugar and lemon zest. Process until smooth. Toss with the sliced strawberries in a small bowl and chill for at least an hour before serving.",
+      "Storing: Leftover cheesecake will keep for up to 7 days in the refrigerator. It can also be frozen."
+    ],
+    "ingredientSource": "json-ld",
+    "allergens": [
+      "coconut"
+    ],
+    "allergenSubs": [
+      {
+        "from": "coconut oil",
+        "to": "refined avocado oil or vegan butter",
+        "removes": "coconut"
+      }
+    ]
+  }
+]

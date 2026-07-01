@@ -1,0 +1,738 @@
+[
+  {
+    "id": "thai-pad-mee-korat-pad-thai-hot-thai-kitchen",
+    "title": "Pad Mee Korat / Pad Thai",
+    "source": "Hot Thai Kitchen",
+    "rawTitle": "### Pad Mee Korat / Pad Thai — Hot Thai Kitchen",
+    "rawBody": "- **URL:** https://hot-thai-kitchen.com/pad-mee-korat/ ✓ VERIFIED\n- $2.20/serving · **Menu price:** $13–16 · 360 g · 540 cal · 18 g · 30 min · 2 · **Medium** (per-plate wok) · ⚡",
+    "valueRatio": 6.59090909090909,
+    "valueTier": "Strong Earner",
+    "cuisine": "thai",
+    "cuisineName": "Thai",
+    "courses": [
+      "main"
+    ],
+    "url": "https://hot-thai-kitchen.com/vegan-pad-thai/",
+    "urlStatus": "verified",
+    "urlNote": "URL replaced via url_overrides.json",
+    "description": "Medium — per-plate wok · fast-service.",
+    "cost": 2.2,
+    "menuPrice": "$13–16",
+    "weight": "360 g",
+    "calories": 540,
+    "protein": "18 g",
+    "time": "30m",
+    "prep": "30m",
+    "servings": 2,
+    "serves": 2,
+    "difficulty": 2,
+    "difficultyLabel": "Medium",
+    "difficultyNote": "per-plate wok",
+    "tags": [
+      "fast-service"
+    ],
+    "sourcingTier": "in-house",
+    "subs": [],
+    "alternatives": [],
+    "photo": "plate",
+    "photoLabel": "pad · mee · korat",
+    "badge": "Strong Earner",
+    "ingredients": [
+      "4 oz (112 g) dry rice noodles, medium size (2 mm wide)",
+      "3 Tbsp (45 ml) vegetable oil",
+      "¾ cup (85 g) pressed tofu, cut into small pieces",
+      "1 cup fresh shiitake mushrooms, stems removed, thinly sliced",
+      "3 Tbsp (35 g) finely chopped palm sugar, packed",
+      "¼ cup chopped shallot",
+      "4 cloves garlic, chopped",
+      "¾ cup (180 ml) garlic chives, cut into 2-inch pieces",
+      "1 cup (50 g) bean sprouts, plus extra for serving",
+      "¼ cup roasted peanuts, chopped (optional)",
+      "1 Tbsp soy sauce",
+      "1 ½ Tbsp fermented soybean paste or \"tao jiew\" or substitute 1 Tbsp Korean doenjang or Japanese miso (what is tao jiew)",
+      "2 ½ - 3 Tbsp tamarind paste, store bought or homemade (see note)",
+      "½ - 1 tsp chili flakes, or to taste",
+      "3 Tbsp water"
+    ],
+    "steps": [
+      "Soak rice noodles in room temperature water for 1 hour or until they turn white. Drain and set aside. You can soak the noodles in advance, drain, and keep in a sealed container in the fridge until ready to use, up to 2-3 days.",
+      "Make the sauce: Add tao jiew to a small bowl and mash roughly with a fork to break up the soybeans (if using miso or doenjang, place in a small bowl it with 1 Tbsp of water and stir to loosen the paste.) Add all remaining sauce ingredients and stir to mix.",
+      "Add about 1 Tbsp of oil to a wok or a large sauté pan and heat over medium high heat. Once hot, add mushrooms and tofu. Spread them out and let sear until golden. Toss and continue to cook for 1 more minute or until the mushrooms are cooked through. Remove from pan and set aside.",
+      "To the same pan, heat about 2 Tbsp of oil over medium high heat. Add garlic, shallots and palm sugar and cook, stirring frequently until the sugar caramelizes into a deep brown colour.",
+      "Deglaze with the sauce mixture then add the rice noodles, mushrooms and tofu. Keep tossing until all the sauce has been absorbed. Taste the noodles, and if they are still undercooked, add a splash of water and let cook until dry again. You can also add a little more tamarind if you think it needs it.",
+      "If you want to add eggs: Once the noodles have absorbed most of the sauce, push the noodles to one side. Add eggs into the empty space, break the yolks and let the eggs set about half way. Then put the noodles over the eggs and let the eggs cook for 30 more seconds until the egg is set. Then toss to break up the eggs.",
+      "Turn off the heat, add bean sprouts and garlic chives and toss to mix. Taste and adjust seasoning. Plate and sprinkle with roasted peanuts, if using."
+    ],
+    "ingredientSource": "json-ld",
+    "allergens": [
+      "nuts",
+      "soy"
+    ],
+    "allergenSubs": [
+      {
+        "from": "peanuts",
+        "to": "roasted sunflower seeds",
+        "removes": "nuts"
+      },
+      {
+        "from": "tofu",
+        "to": "chickpea tofu (Burmese tofu)",
+        "removes": "soy"
+      }
+    ]
+  },
+  {
+    "id": "thai-thai-green-curry-rainbow-plant-life",
+    "title": "Thai Green Curry",
+    "source": "Rainbow Plant Life",
+    "rawTitle": "### Thai Green Curry — Rainbow Plant Life",
+    "rawBody": "- **URL:** https://rainbowplantlife.com/vegan-thai-green-curry/ ✓ VERIFIED\n- $2.85/serving · **Menu price:** $14–17 · 380 g · 520 cal · 16 g · 35 min · 4 · **Easy** (sauce holds) · 🥘 ⚡",
+    "valueRatio": 5.43859649122807,
+    "valueTier": "Strong Earner",
+    "cuisine": "thai",
+    "cuisineName": "Thai",
+    "courses": [
+      "main"
+    ],
+    "url": "https://rainbowplantlife.com/vegan-thai-green-curry/",
+    "urlStatus": "verified",
+    "urlNote": null,
+    "description": "Easy — sauce holds · bulk-prep, fast-service.",
+    "cost": 2.85,
+    "menuPrice": "$14–17",
+    "weight": "380 g",
+    "calories": 520,
+    "protein": "16 g",
+    "time": "35m",
+    "prep": "35m",
+    "servings": 4,
+    "serves": 4,
+    "difficulty": 1,
+    "difficultyLabel": "Easy",
+    "difficultyNote": "sauce holds",
+    "tags": [
+      "bulk-prep",
+      "fast-service"
+    ],
+    "sourcingTier": "in-house",
+    "subs": [],
+    "alternatives": [],
+    "photo": "bowl",
+    "photoLabel": "thai · green · curry",
+    "badge": "Strong Earner",
+    "ingredients": [
+      "1 batch Homemade Thai Green Curry Paste (OR)",
+      "4 to 5 tablespoons canned Thai green curry paste, (plus the below \"extras\" (Note 1))",
+      "5 garlic cloves, (minced)",
+      "1- inch piece ginger (or galangal, grated or minced)",
+      "2 fresh lemongrass stalks, (minced or grated (Note 2))",
+      "1 (14-ounce/400g) block of firm or extra firm tofu",
+      "1 tablespoon kosher salt ((or ½ tablespoon sea salt))",
+      "1.5 OR 2 (13.5-oz/400 mL) cans of full-fat coconut milk ((Note 4) )",
+      "8 fresh makrut (kaffir) lime leaves, (bruised or crushed with your hands (Note 5))",
+      "1 tablespoon coconut sugar or brown sugar, (more to taste)",
+      "1 ½ tablespoons soy sauce ((tamari for GF))",
+      "1 cup (240 mL) vegetable broth, vegan “chicken broth,” or water",
+      "1 Chinese or Japanese eggplant,",
+      "1 medium or large red bell pepper, (sliced)",
+      "1 cup (18g) Thai basil leaves, (kept whole (large leaves torn), plus more for garnish )",
+      "Freshly squeezed lime juice ((if not using lime leaves))",
+      "1 to 2 mild red chile peppers (sliced thinly for garnish (optional, for color))",
+      "Cooked jasmine white rice or brown rice to serve 5"
+    ],
+    "steps": [
+      "Make the homemade Green Curry Paste in advance, if using.",
+      "Boil the tofu (Note 2). Bring a medium saucepan of water to a boil. Slice the tofu into 4 vertical slabs, and gently press down with a towel several times to remove excess water. Chop into ½ to ¾-inch (~1.5 cm) cubes. Add 1 TBSP kosher salt to boiling water (or 1 ½ to 2 tsp sea salt), followed by tofu. When water returns to a boil, set a timer for 2 minutes. Gently drain.",
+      "Heat a deep 12-inch sauté pan or medium Dutch oven over medium-high heat. Once hot, add about 4 tablespoons of the coconut milk. Let it bubble and sizzle, and cook until the oil starts to separate from the milk, 1 ½ to 2 minutes. If it doesn’t really separate, don't worry (depends on the brand).",
+      "Add curry paste, plus extras if using store-bought curry paste. Cook, stirring frequently, for 3 minutes, until it starts to dry out a bit. The curry paste might sputter so stand back. If the paste sticks, deglaze with a splash of water.",
+      "Pour in rest of the coconut milk (1.5 cans for jarred curry paste, 2 full cans for homemade curry paste). Add lime leaves, sugar, and soy sauce, and stir. Bring to a rapid simmer and cook for 3 to 4 minutes, or until it just starts to thicken.",
+      "Add the boiled tofu (if using) and gently toss. Add vegetables of choice and the vegetable broth. Stir to submerge the veg (it's okay if not totally submerged). Partially cover the pan and bring to a rapid simmer, and cook for 6 to 8 minutes, or until the veg is tender but still crisp.",
+      "If using baked or fried tofu, add it in. Taste, adding more soy sauce or sugar as needed. If you used lime leaves, remove them; if not, add a squeeze of lime juice. Stir in Thai basil. Flavors will meld and mellow a bit after 15-20 min. Serve over rice and garnish with extra basil and mild red chiles, if using."
+    ],
+    "ingredientSource": "json-ld",
+    "allergens": [
+      "soy",
+      "coconut"
+    ],
+    "allergenSubs": [
+      {
+        "from": "tofu",
+        "to": "chickpea tofu (Burmese tofu)",
+        "removes": "soy"
+      },
+      {
+        "from": "coconut milk",
+        "to": "oat cream + 1 tsp olive oil (per 1 cup)",
+        "removes": "coconut"
+      }
+    ]
+  },
+  {
+    "id": "thai-tom-kha-six-hungry-feet",
+    "title": "Tom Kha",
+    "source": "Six Hungry Feet",
+    "rawTitle": "### Tom Kha — Six Hungry Feet",
+    "rawBody": "- **URL:** https://www.sixhungryfeet.com/vegan-tom-kha-soup/ ✓ VERIFIED\n- $2.40/serving · **Menu price:** $9–12 (cup) / $13–16 (bowl) · 360 g · 380 cal · 12 g · 30 min · 4 · **Easy** · 🥘 ⚡",
+    "valueRatio": 4.375,
+    "valueTier": "Strong Earner",
+    "cuisine": "thai",
+    "cuisineName": "Thai",
+    "courses": [
+      "starter",
+      "main"
+    ],
+    "url": "https://www.sixhungryfeet.com/vegan-tom-kha-soup/",
+    "urlStatus": "verified",
+    "urlNote": null,
+    "description": "Coconut-galangal soup with mushrooms, lime leaf, and chile, brightened with fresh lime. Naturally vegan; ladle over rice or rice noodles as a hot-line bowl.",
+    "cost": 2.4,
+    "menuPrice": "$9–12 (cup) / $13–16 (bowl)",
+    "weight": "360 g",
+    "calories": 380,
+    "protein": "12 g",
+    "time": "30m",
+    "prep": "30m",
+    "servings": 4,
+    "serves": 4,
+    "difficulty": 1,
+    "difficultyLabel": "Easy",
+    "difficultyNote": null,
+    "tags": [
+      "bulk-prep",
+      "fast-service"
+    ],
+    "sourcingTier": "in-house",
+    "subs": [],
+    "alternatives": [],
+    "photo": "bowl",
+    "photoLabel": "tom · kha",
+    "badge": "Strong Earner",
+    "ingredients": [
+      "10-15 Bird's eye chillis",
+      "1 tablespoon coconut oil (or other vegetable oil)",
+      "1 carrot",
+      "1 shallot ( or 1/4 white onion)",
+      "4 garlic cloves",
+      "1 tablespoon soy sauce (or vegan fish sauce)",
+      "3 tablespoon red chili paste (or 1 1/2 tablespoon store-bought red curry paste)",
+      "2 lemongrass stalks",
+      "2-3 inch galangal",
+      "1 litre vegetable stock",
+      "4-5 kaffir lime leaves",
+      "A handful of mushrooms",
+      "9 oz firm tofu",
+      "1 teaspoon palm sugar",
+      "3 tablespoon soy sauce (or tamari for gluten-free option)",
+      "1 1/2 cup coconut milk (canned)",
+      "A splash freshly squeeze lime",
+      "A handful chopped cilantro"
+    ],
+    "steps": [
+      "Using gloves, cut the red chills, remove the seeds and roughly chop them.",
+      "Roughly chop the carrot, shallot, and garlic. Heat some coconut oil in a pan and add the ingredients. Once they start to brown, transfer to a blender jug, add soy sauce, and blend until you have a smooth paste.",
+      "Chop the galangal in 3 or 4 big chunks and the lemongrass stalks broken into two parts.",
+      "Using a big pot, briefly stirfry the red chili paste with the galangal and the lemongrass stalks.",
+      "Pour the vegetable stock into the pot and add the kaffir lime leaves, mushrooms, tofu, and sugar. Bring to a simmer and leave simmering for 10-15 minutes.",
+      "Add the coconut milk and soy sauce. Stir for 2 minutes making sure it doesn't get to a boiling point as it could curdle, and remove from the heat.",
+      "Serve with chopped cilantro and a splash of freshly squeezed lime."
+    ],
+    "ingredientSource": "json-ld",
+    "allergens": [
+      "soy",
+      "coconut"
+    ],
+    "allergenSubs": [
+      {
+        "from": "tofu",
+        "to": "chickpea tofu (Burmese tofu)",
+        "removes": "soy"
+      },
+      {
+        "from": "coconut milk",
+        "to": "oat cream + 1 tsp olive oil (per 1 cup)",
+        "removes": "coconut"
+      }
+    ]
+  },
+  {
+    "id": "thai-red-curry-tofu-nora-cooks",
+    "title": "Red Curry Tofu",
+    "source": "Nora Cooks",
+    "rawTitle": "### Red Curry Tofu — Nora Cooks",
+    "rawBody": "- **URL:** https://www.noracooks.com/red-thai-curry-vegetables/ ✓ VERIFIED\n- $2.55/serving · **Menu price:** $14–17 · 380 g · 480 cal · 18 g · 30 min · 4 · **Easy** · 🥘 ⚡",
+    "valueRatio": 6.07843137254902,
+    "valueTier": "Strong Earner",
+    "cuisine": "thai",
+    "cuisineName": "Thai",
+    "courses": [
+      "main"
+    ],
+    "url": "https://www.noracooks.com/red-thai-curry-vegetables/",
+    "urlStatus": "verified",
+    "urlNote": null,
+    "description": "Red curry paste bloomed in coconut milk with crispy tofu and Thai basil. Pantry curry — six-minute plate from prepped components.",
+    "cost": 2.55,
+    "menuPrice": "$14–17",
+    "weight": "380 g",
+    "calories": 480,
+    "protein": "18 g",
+    "time": "30m",
+    "prep": "30m",
+    "servings": 4,
+    "serves": 4,
+    "difficulty": 1,
+    "difficultyLabel": "Easy",
+    "difficultyNote": null,
+    "tags": [
+      "bulk-prep",
+      "fast-service"
+    ],
+    "sourcingTier": "in-house",
+    "subs": [],
+    "alternatives": [],
+    "photo": "bowl",
+    "photoLabel": "red · curry · tofu",
+    "badge": "Strong Earner",
+    "ingredients": [
+      "1-2 tablespoons olive oil",
+      "1 small yellow onion, chopped",
+      "4 cloves garlic, minced",
+      "1 tablespoon fresh ginger, grated",
+      "1 red bell pepper, thinly sliced into 2 inch slices",
+      "1 yellow bell pepper, thinly sliced into 2 inch slices",
+      "2 medium carrots, peeled and cut into matchsticks or small rounds",
+      "1 cup broccoli florets",
+      "1 cup cauliflower florets",
+      "2 1/2 tablespoons Thai red curry paste",
+      "1 15-oz can full fat coconut milk",
+      "1/2 cup water",
+      "2 cups thinly sliced kale OR spinach",
+      "2 medium roma tomatoes, diced",
+      "2 teaspoons pure maple syrup",
+      "1 tablespoon low sodium soy sauce (tamari for gluten free)",
+      "1 tablespoon fresh lime juice (about 1 lime)",
+      "4 cups cooked white or brown rice",
+      "Optional: Sriracha hot sauce, fresh chopped basil or cilantro"
+    ],
+    "steps": [
+      "First, prepare all of the vegetables and have them close by before you heat the pan. To make the recipe easier, purchase pre-chopped vegetables or frozen. Cook your rice according to package instructions.",
+      "Heat 1-2 tablespoons olive oil in a large skillet over medium high heat. Once it's warm, add the chopped onion and cook, stirring often, until the onion is translucent, about 3 minutes. Add the garlic and ginger and cook for 30 seconds.",
+      "Now add the bell peppers, carrots, broccoli and cauliflower. Continue to cook, stirring frequently, for about 2-3 minutes.",
+      "To the pan, add the red curry paste, coconut milk, and water. Stir well for a few minutes, until the curry paste is dissolved in the coconut milk/water. Now add the kale or spinach and stir it in. Bring to a simmer, then lower the heat and cook covered for 5-10 minutes, until the vegetables have softened.",
+      "Stir in the chopped tomatoes, pure maple syrup, soy sauce and fresh lime juice. Remove from heat.",
+      "Serve immediately with cooked rice and optional Sriracha and fresh basil/cilantro if desired. Enjoy!"
+    ],
+    "ingredientSource": "json-ld",
+    "allergens": [
+      "soy",
+      "coconut"
+    ],
+    "allergenSubs": [
+      {
+        "from": "tamari",
+        "to": "coconut aminos",
+        "removes": "soy"
+      },
+      {
+        "from": "coconut milk",
+        "to": "oat cream + 1 tsp olive oil (per 1 cup)",
+        "removes": "coconut"
+      }
+    ]
+  },
+  {
+    "id": "thai-easy-tofu-pad-thai-minimalist-baker",
+    "title": "Easy Tofu Pad Thai",
+    "source": "Minimalist Baker",
+    "rawTitle": "### Easy Tofu Pad Thai — Minimalist Baker",
+    "rawBody": "- **URL:** https://minimalistbaker.com/easy-tofu-pad-thai/ ✓ VERIFIED\n- $2.30/serving · **Menu price:** $13–16 · 360 g · 520 cal · 18 g · 30 min · 4 · **Medium** · ⚡",
+    "valueRatio": 6.304347826086957,
+    "valueTier": "Strong Earner",
+    "cuisine": "thai",
+    "cuisineName": "Thai",
+    "courses": [
+      "main"
+    ],
+    "url": "https://minimalistbaker.com/easy-tofu-pad-thai/",
+    "urlStatus": "verified",
+    "urlNote": null,
+    "description": "Rice noodles wok-tossed with crispy tofu, bean sprouts, and tamarind-palm-sugar sauce, finished with peanuts and lime. Plant-based pad thai with no fish-sauce shortcuts.",
+    "cost": 2.3,
+    "menuPrice": "$13–16",
+    "weight": "360 g",
+    "calories": 520,
+    "protein": "18 g",
+    "time": "30m",
+    "prep": "30m",
+    "servings": 4,
+    "serves": 4,
+    "difficulty": 2,
+    "difficultyLabel": "Medium",
+    "difficultyNote": null,
+    "tags": [
+      "fast-service"
+    ],
+    "sourcingTier": "in-house",
+    "subs": [],
+    "alternatives": [],
+    "photo": "plate",
+    "photoLabel": "easy · tofu · pad",
+    "badge": "Strong Earner",
+    "ingredients": [
+      "1 ½ tsp tamarind paste / concentrate* ((or sub additional 1 Tbsp / 15 ml lime juice as recipe is written))",
+      "1/3 cup coconut aminos ((or sub half the amount with tamari or soy sauce and work your way up as it’s saltier))",
+      "3 ½ Tbsp coconut sugar",
+      "1 ½ tsp chili garlic sauce",
+      "1 ½ Tbsp lime juice",
+      "1-2 tsp Vegetarian Fish Sauce ((or store-bought // optional)",
+      "1 Tbsp sesame oil ((if avoiding oil, omit and use a nonstick pan))",
+      "1 cup cubed extra firm tofu",
+      "2 Thai red chilies (fresh or dried), chopped OR 1/2 tsp chili flakes ((optional))",
+      "2 cloves garlic, minced ((2 cloves yield ~1 Tbsp or 6 g))",
+      "1 Tbsp coconut aminos ((or tamari))",
+      "1 cup bean sprouts",
+      "1 cup chopped green onions",
+      "1/3 cup chopped roasted salted peanuts",
+      "8 ounces Pad Thai rice noodles ((We like Annie Chun’s brand))",
+      "Lime wedges",
+      "Bean sprouts",
+      "Peanut sauce",
+      "Shredded carrot",
+      "Cilantro",
+      "Sriracha or Chili Garlic Sauce ((we like Huy Fong Foods brand))"
+    ],
+    "steps": [
+      "To a small saucepan, add tamarind, coconut aminos, coconut sugar, chili garlic sauce, lime juice, and vegetarian fish sauce (optional) and heat over medium heat until just simmering. Cook for 30 seconds, stirring occasionally, then turn off heat. Set aside.",
+      "Ensure all stir fry ingredients are prepped, including cubed (briefly pressed) tofu, chopped green onions, minced garlic, bean sprouts, and chopped peanuts. If serving with peanut sauce (optional), prepare at this time.",
+      "Add Pad Thai noodles to a large bowl and cover with just boiling water. Stir and cover and cook according to package instructions (usually about 5-6 minutes or until al dente).",
+      "Drain noodles and toss with a little sesame oil to prevent sticking. Set aside.",
+      "Heat a large-rimmed skillet over medium heat. Once hot, add oil and tofu and sauté for about 4 minutes, turning occasionally, so it browns on all sides. Add red pepper flakes or Thai chilies, garlic, and coconut aminos (be careful, as the coconut aminos can splatter). Toss gently to combine until garlic is just slightly browned.",
+      "Add noodles, Pad Thai sauce, bean sprouts, green onions, and peanuts and cook over medium-high heat, tossing occasionally (tongs are most useful) for about 2-3 minutes or until the sauce has coated everything and the dish is hot.",
+      "To serve, plate with additional garnishes such as lime wedges, bean sprouts, peanut sauce, shredded carrot, cilantro, and sriracha or chili garlic sauce (all optional).",
+      "Leftovers will keep in the refrigerator for approximately 3-4 days."
+    ],
+    "ingredientSource": "json-ld",
+    "allergens": [
+      "nuts",
+      "soy",
+      "coconut"
+    ],
+    "allergenSubs": [
+      {
+        "from": "peanuts",
+        "to": "roasted sunflower seeds",
+        "removes": "nuts"
+      },
+      {
+        "from": "tofu",
+        "to": "chickpea tofu (Burmese tofu)",
+        "removes": "soy"
+      },
+      {
+        "from": "coconut sugar",
+        "to": "brown sugar",
+        "removes": "coconut"
+      }
+    ]
+  },
+  {
+    "id": "thai-vegan-massaman-yellow-curry-hot-thai-kitchen",
+    "title": "Massaman / Yellow Curry (ไร้ความโหดร้าย)",
+    "source": "Hot Thai Kitchen",
+    "rawTitle": "### Vegan Massaman / Yellow Curry — Hot Thai Kitchen",
+    "rawBody": "- **URL:** https://hot-thai-kitchen.com/vegan-massaman/ ✓ VERIFIED\n- $2.95/serving · **Menu price:** $14–17 · 420 g · 540 cal · 16 g · 60 min · 4 · **Easy** · 🥘 ⚡\n- **Premium:** Chunk 4-oz Steak in massaman +$2.40",
+    "valueRatio": 5.2542372881355925,
+    "valueTier": "Strong Earner",
+    "cuisine": "thai",
+    "cuisineName": "Thai",
+    "courses": [
+      "main"
+    ],
+    "url": "https://minimalistbaker.com/easy-1-pot-massaman-curry/",
+    "urlStatus": "verified",
+    "urlNote": "URL replaced via url_overrides.json",
+    "description": "Massaman paste simmered with potato, tofu (or jackfruit), peanuts, and warm spices in coconut milk. Mild, sweet-savory, and family-friendly.",
+    "cost": 2.95,
+    "menuPrice": "$14–17",
+    "weight": "420 g",
+    "calories": 540,
+    "protein": "16 g",
+    "time": "60m",
+    "prep": "60m",
+    "servings": 4,
+    "serves": 4,
+    "difficulty": 1,
+    "difficultyLabel": "Easy",
+    "difficultyNote": null,
+    "tags": [
+      "bulk-prep",
+      "fast-service"
+    ],
+    "sourcingTier": "in-house",
+    "subs": [],
+    "alternatives": [],
+    "photo": "bowl",
+    "photoLabel": "massaman · yellow · curry",
+    "badge": "Strong Earner",
+    "ingredients": [
+      "1 batch Crispy Baked Peanut Tofu ((vegan-option))",
+      "1/2 lb. shrimp ((seafood option — wild caught when possible))",
+      "1 large skinless chicken breast, cubed ((meat option — free-range, local, organic when possible))",
+      "2 Tbsp coconut or avocado oil ((if avoiding oil, sub water and add more as needed))",
+      "3 medium shallots, thinly sliced ((or sub 1 small onion))",
+      "1 tsp whole cumin seed ((or sub powder))",
+      "1 tsp whole coriander seed ((or sub powder))",
+      "5 Tbsp red curry paste ((we love Thai Kitchen brand))",
+      "1 ½ cups baby potatoes cut into bite-size pieces",
+      "2 large carrots, peeled and diced 1/4-inch thick",
+      "2 14-oz. cans light fat coconut milk",
+      "1-1 ½ cups water",
+      "1/4 tsp ground cinnamon",
+      "1 dash each cardamom and nutmeg ((if you don't have, omit))",
+      "2-3 Tbsp coconut aminos ((or sub tamari or soy sauce, but start with less as they're saltier))",
+      "1-2 Tbsp maple syrup or coconut sugar ((or sub stevia to taste))",
+      "2 Tbsp peanut butter ((in place of traditional roasted peanuts — can sub roasted peanuts))",
+      "1-2 Tbsp lime juice ((or lemon))",
+      "Cauliflower Rice, Rice, or Quinoa",
+      "Lime wedges",
+      "Fresh cilantro",
+      "Steamed or curried greens",
+      "Roasted salted peanuts, chopped"
+    ],
+    "steps": [
+      "You have options for added protein or you can just stick with vegetables. To keep it vegan-friendly, follow the link above to make Crispy Peanut Tofu. Or, to keep this a 1-pot recipe, simply add (pressed) cubed extra-firm tofu to the curry in the last 10 minutes of cooking or sauté pressed tofu in a little oil and season with salt, pepper, and curry powder before cooking the curry. Set aside, then add back in in the last few minutes of cooking for best results. Alternatively, add meat such as shrimp or chicken to the curry once it's simmering (during step 4) and simmer until cooked completely through. ",
+      "Heat a large pot or dutch oven (we like this one) over medium heat. Once hot, add oil (or water) and shallot. Sauté 2 minutes, stirring frequently. Turn down heat if browning too quickly.",
+      "Add whole cumin and coriander seeds (or powder) and sauté for another 1-2 minutes, stirring frequently. Then add red curry paste and stir to combine. Cook for 1 minute more.",
+      "Add potatoes and carrots and stir to coat. Cook for 2 minutes. Then add coconut milk, water (starting with the lesser amount), cinnamon, cardamom, nutmeg, coconut aminos, maple syrup, and peanut butter. (Reserve lime juice for later).",
+      "The liquid should cover all of the ingredients — if it does not, add a bit more coconut milk or water to cover. Bring to a simmer over medium-high heat. Once it reaches a low boil, reduce heat to a simmer (add meat at this time if cooking with shrimp or chicken) and cook for 10-15 minutes uncovered. You don't want it boiling, so ensure it's cooking over low heat at a simmer.",
+      "Add lime in the last few minutes of cooking and stir. Then taste and adjust flavor as needed, adding more lime for acidity, salt or coconut aminos for saltiness, curry paste for heat / more intense curry taste, maple syrup for sweetness, cinnamon or nutmeg for warmth, or peanut butter for creaminess / more intense peanut flavor. Stir and cook a few minutes more. Then turn off heat and let stand for at least 5 minutes before serving (this allows the flavors to meld).",
+      "To serve, divide between serving bowls and enjoy as is or with a side of rice, cauliflower rice, quinoa, or steamed greens (optional). Fresh lime juice, cilantro, and roasted peanuts (optional) make lovely additions as well.",
+      "Store cooled leftovers in the refrigerator up to 4-5 days or in the freezer up to 1 month. Reheat in the microwave or in a saucepan. Add more water or coconut milk as needed to rehydrate."
+    ],
+    "ingredientSource": "json-ld",
+    "allergens": [
+      "nuts",
+      "soy",
+      "coconut"
+    ],
+    "allergenSubs": [
+      {
+        "from": "peanut butter",
+        "to": "sunflower seed butter",
+        "removes": "nuts"
+      },
+      {
+        "from": "tofu",
+        "to": "chickpea tofu (Burmese tofu)",
+        "removes": "soy"
+      },
+      {
+        "from": "coconut milk",
+        "to": "oat cream + 1 tsp olive oil (per 1 cup)",
+        "removes": "coconut"
+      }
+    ]
+  },
+  {
+    "id": "thai-vegan-crying-tiger-suea-rong-hai",
+    "title": "Crying Tiger / Suea Rong Hai (ไร้ความโหดร้าย)",
+    "source": "Hot Thai Kitchen",
+    "rawTitle": "### Vegan Crying Tiger / Suea Rong Hai (**SHOWSTOPPER**)",
+    "rawBody": "- **URL:** https://hot-thai-kitchen.com/crying-tiger/ ⚠ REFERENCE (non-vegan / technique) *(Pailin Chongchitnant / Hot Thai Kitchen — the authoritative Thai technique reference: marinated grilled steak from Northeastern Thailand (Isaan), thinly sliced and served with nam jim jaew dipping sauce + sticky rice. Pailin's marinade is the gold-standard ratio (oyster sauce + soy + sugar + black pepper + garlic). Original uses real beef + real oyster sauce + fish sauce. **Vegan rebuild swaps all three: Chunk Steakhouse Cut 6oz** in place of the steak; **vegan oyster sauce** (mushroom-based — Wan Ja Shan or LKK Vegetarian) in the marinade; **vegan fish sauce** (Ocean's Halo, 3 Crabs Mushroom, or coconut-based) in the jaew. Toasted rice powder, palm sugar, lime juice, roasted chili flakes, shallots, mint, cilantro all naturally vegan. The dish is named for spice so intense even a tiger weeps — and for the dripping fat that looks like tears.)*\n- **Description:** A whole grilled-to-order Chunk Steakhouse Cut, marinated in classic Thai marinade (vegan oyster + soy + palm sugar + black pepper + garlic + lime), seared hard on a plancha or charcoal grill until heavily caramelized outside / barely-pink inside, rested, then **sliced thin against the grain at the pass or tableside** and fanned over a banana leaf. Served with a ramekin of nam jim jaew (vegan fish sauce + lime + palm sugar + roasted chili flakes + toasted rice powder + shallots + mint + cilantro) and a basket of warm sticky rice. The most theatrical Thai plate that doesn't require a deep fryer or fish-shaping armature — clean, fast, premium.\n- **Wholesale food cost:** $4.20 / serving (Chunk Steakhouse 6oz ~$3.50 + marinade/jaew $0.40 + sticky rice $0.30) · **Menu price:** **$24–28** (upscale Thai; ÷ 0.30 cost-to-menu ratio)\n- **Weight:** 280 g (170 g sliced \"steak\" + 110 g sticky rice + 30 ml jaew) · **Calories:** 480 · **Protein:** 38 g · **Time:** 30 min marinate (4 hr ideal) + 6 min sear + 5 min rest + 1 min slice · **Servings:** 1\n- **Restaurant difficulty:** **Medium** — par-marinate Chunk steaks during prep (good 24 hr advance); jaew batched 24 hr ahead and held cold; sticky rice steamed in batches and held warm. Per-ticket: grill 6 min + rest 5 min + slice & plate. **Way cleaner execution than the whole fish — no fryer real estate, no shaping labor, faster ticket time.**\n- **Tags:** 🥘 (par-marinate, batch jaew & sticky rice) · ⚡ Fast-Service (12 min total grill-to-pass)\n\n| Sub | Effect | Cost delta |\n|---|---|---|\n| **Chunk Steakhouse Cut 6 oz (default)** | Most steak-like sear and slice; premium positioning | baseline ($4.20) |\n| Juicy Marbles Thick-Cut Filet | More visible marbling = more \"tears\" theater | +$1.00 → $5.20 / menu $28–34 |\n| Beyond Steak Tips (cubed, skewered) | Pre-seasoned shortcut, casual tier | −$1.40 → casual $14–17 |\n| Coconut sticky rice in place of plain | Premium flavor upcharge | +$0.30 → menu $26–30 |\n| Add green papaya som tum side | Full Isaan combo | +$1.20 → menu $28–32 |",
+    "valueRatio": null,
+    "valueTier": "Showpiece",
+    "cuisine": "thai",
+    "cuisineName": "Thai",
+    "courses": [
+      "main",
+      "showstopper"
+    ],
+    "url": "https://hot-thai-kitchen.com/crying-tiger/",
+    "urlStatus": "reference-technique",
+    "urlNote": null,
+    "description": "A whole grilled-to-order Chunk Steakhouse Cut, marinated in classic Thai marinade (vegan oyster + soy + palm sugar + black pepper + garlic + lime), seared hard on a plancha or charcoal grill until heavily caramelized outside / barely-pink inside, rested, then **sliced thin against the grain at the pass or tableside** and fanned over a banana leaf. Served with a ramekin of nam jim jaew (vegan fish sauce + lime + palm sugar + roasted chili flakes + toasted rice powder + shallots + mint + cilantro) and a basket of warm sticky rice. The most theatrical Thai plate that doesn't require a deep fryer or fish-shaping armature — clean, fast, premium.",
+    "cost": 4.2,
+    "menuPrice": null,
+    "weight": "280 g (170 g sliced \"steak\" + 110 g sticky rice + 30 ml jaew)",
+    "calories": 480,
+    "protein": "38 g",
+    "time": "30m",
+    "prep": "30m",
+    "servings": 1,
+    "serves": 1,
+    "difficulty": 2,
+    "difficultyLabel": "Medium",
+    "difficultyNote": "par-marinate Chunk steaks during prep (good 24 hr advance); jaew batched 24 hr ahead and held cold; sticky rice steamed in batches and held warm. Per-ticket: grill 6 min + rest 5 min + slice & plate. **Way cleaner execution than the whole fish — no fryer real estate, no shaping labor, faster ticket time.**",
+    "tags": [
+      "bulk-prep",
+      "fast-service"
+    ],
+    "sourcingTier": "branded",
+    "subs": [
+      {
+        "from": "**Chunk Steakhouse Cut 6 oz (default)**",
+        "effect": "Most steak-like sear and slice; premium positioning",
+        "delta": "baseline ($4.20)"
+      },
+      {
+        "from": "Juicy Marbles Thick-Cut Filet",
+        "effect": "More visible marbling = more \"tears\" theater",
+        "delta": "+$1.00 → $5.20 / menu $28–34"
+      },
+      {
+        "from": "Beyond Steak Tips (cubed, skewered)",
+        "effect": "Pre-seasoned shortcut, casual tier",
+        "delta": "−$1.40 → casual $14–17"
+      },
+      {
+        "from": "Coconut sticky rice in place of plain",
+        "effect": "Premium flavor upcharge",
+        "delta": "+$0.30 → menu $26–30"
+      },
+      {
+        "from": "Add green papaya som tum side",
+        "effect": "Full Isaan combo",
+        "delta": "+$1.20 → menu $28–32"
+      }
+    ],
+    "alternatives": [],
+    "photo": "bowl",
+    "photoLabel": "crying · tiger · suea",
+    "badge": "Showpiece",
+    "ingredients": [
+      "1.5 lb steaks (see note)",
+      "½ tsp black peppercorns",
+      "2 cloves garlic",
+      "2 Tbsp soy sauce",
+      "1 ½ Tbsp oyster sauce",
+      "2 tsp sugar",
+      "1 Tbsp lime juice",
+      "2 Tbsp neutral oil",
+      "Sticky rice (for serving, see note)",
+      "2 Tbsp tamarind paste",
+      "1 Tbsp fish sauce",
+      "1 Tbsp lime juice",
+      "1 Tbsp palm sugar (very finely chopped)",
+      "2 Tbsp minced shallots or chopped green onion",
+      "1/2 teaspoon roasted chili flakes (or to taste)",
+      "1 Tbsp uncooked jasmine or sticky rice ((for toasted rice powder))",
+      "3 sprigs cilantro or mint (chopped)"
+    ],
+    "steps": [
+      "To make the marinade, pound the black pepper in a mortar and pestle into a powder, then add the garlic and pound into a fine paste. Add all remaining marinade ingredients and stir to mix well.",
+      "Place the steaks into a dish just big enough to hold them in one layer, or put them in a freezer bag. Add the marinade and move the steaks around to ensure they're thoroughly coated.",
+      "Marinate the steaks for a minimum of 3 hours and up to overnight. Bring the steaks out 1 hour before grilling so they will not be too cold and will cook more evenly.Note: Marinated steaks, especially ones with sugar like this, are better suited for the grill. Pan searing is fine but the marinade will more easily burn with direct contact to the hot oil. So without a grill, I would recommend doing a quick sear on the pan just to get it nice and browned, then finishing it off on a rack in the oven.",
+      "Grill the steaks to your preferred doneness. I like grilling them on high heat with the lid open to ensure they have nice grill marks. See the video above for more grilling tips.",
+      "In a small bowl, combine the tamarind, fish sauce, lime juice and palm sugar and stir until the sugar is mostly dissolved. Stir in the shallots and the chili flakes and set aside while you make the toasted rice powder; don't worry about any undissolved sugar chunks.",
+      "Make the toasted rice powder: In a dry skillet, add the rice and toast it over medium high heat, stirring constantly, until the grains are deep brown (see video for the colour you're going for). Pour onto a plate to cool, then grind in a mortar and pestle or coffee grinder into a mostly-fine powder.",
+      "Close to serving time, stir the sauce; the sugar should now be completely dissolved, and if there are a few stubborn chunks, they can be easily smushed with the back of a spoon. Stir in the toasted rice powder and cilantro or mint."
+    ],
+    "ingredientSource": "json-ld",
+    "allergens": [
+      "soy"
+    ],
+    "allergenSubs": [
+      {
+        "from": "tamari",
+        "to": "coconut aminos",
+        "removes": "soy"
+      }
+    ]
+  },
+  {
+    "id": "thai-vegan-mango-sticky-rice",
+    "title": "Mango Sticky Rice (ไร้ความโหดร้าย)",
+    "source": "Hot Thai Kitchen",
+    "rawTitle": "### Vegan Mango Sticky Rice (Khao Niao Mamuang) (**DESSERT**)",
+    "rawBody": "- **URL:** https://hot-thai-kitchen.com/mango-sticky-rice/ ✓ VERIFIED *(Pailin's authoritative Thai recipe; naturally vegan)*\n- **Description:** Glutinous rice steamed and dressed with sweetened salted coconut cream, plated with sliced ripe mango and toasted mung beans or sesame. The dessert every Thai-restaurant guest already wants. Naturally vegan; only seasonality (mango) is a constraint.\n- **Wholesale food cost:** $2.40 / serving · **Menu price:** $8–11\n- **Weight:** 220 g · **Calories:** 420 · **Protein:** 6 g · **Time:** 30 min (rice soak overnight) · **Servings:** 4\n- **Restaurant difficulty:** **Easy** — rice cooks in batches and holds warm; assemble per ticket with cold mango.\n- **Tags:** 🥘 Bulk-Prep · ⚡ Fast-Service\n\n| Sub | Effect | Cost delta |\n|---|---|---|\n| Fresh ripe mango (default, in-season) | Best version | baseline |\n| Off-season frozen Thai yellow mango | Year-round availability | +$0.40 |\n| Add a scoop of vegan coconut ice cream | Premium upsell | +$0.80 → menu $10–13 |",
+    "valueRatio": 3.9583333333333335,
+    "valueTier": "Solid",
+    "cuisine": "thai",
+    "cuisineName": "Thai",
+    "courses": [
+      "dessert"
+    ],
+    "url": "https://hot-thai-kitchen.com/mango-sticky-rice/",
+    "urlStatus": "verified",
+    "urlNote": "Pailin's authoritative Thai recipe; naturally vegan",
+    "description": "Glutinous rice steamed and dressed with sweetened salted coconut cream, plated with sliced ripe mango and toasted mung beans or sesame. The dessert every Thai-restaurant guest already wants. Naturally vegan; only seasonality (mango) is a constraint.",
+    "cost": 2.4,
+    "menuPrice": "$8–11",
+    "weight": "220 g",
+    "calories": 420,
+    "protein": "6 g",
+    "time": "30m",
+    "prep": "30m",
+    "servings": 4,
+    "serves": 4,
+    "difficulty": 1,
+    "difficultyLabel": "Easy",
+    "difficultyNote": "rice cooks in batches and holds warm; assemble per ticket with cold mango.",
+    "tags": [
+      "bulk-prep",
+      "fast-service"
+    ],
+    "sourcingTier": "in-house",
+    "subs": [
+      {
+        "from": "Fresh ripe mango (default, in-season)",
+        "effect": "Best version",
+        "delta": "baseline"
+      },
+      {
+        "from": "Off-season frozen Thai yellow mango",
+        "effect": "Year-round availability",
+        "delta": "+$0.40"
+      },
+      {
+        "from": "Add a scoop of vegan coconut ice cream",
+        "effect": "Premium upsell",
+        "delta": "+$0.80 → menu $10–13"
+      }
+    ],
+    "alternatives": [],
+    "photo": "plate",
+    "photoLabel": "mango · sticky · rice",
+    "badge": "Solid",
+    "ingredients": [
+      "1 cup white glutinous rice (see notes 1 and 2)",
+      "⅔ cup coconut milk",
+      "½ teaspoon table salt",
+      "½ cup sugar",
+      "½ cup coconut milk",
+      "¼ teaspoon table salt",
+      "1 teaspoon rice flour",
+      "1 Tablespoon water",
+      "2 Tablespoons shelled and split mung beans",
+      "3 sweet, ripe mangoes (see note 3)"
+    ],
+    "steps": [
+      "*If you want to make colourful rice, first prepare the soaking water using instructions in the blog post above.Wash the rice by placing it in a mixing bowl and cover with cold water, then vigorously swish the rice with your hand to release loose starch. Pour off the cloudy water and repeat the process 4 more times or until the water runs mostly clear.",
+      "Soak the rice with room temp water for at least 4 hours and up to overnight. If you're using naturally dyed water to soak the rice, refrigerate the rice after 4 hours of soaking if you're not yet ready to steam.While the rice is soaking, make the salted coconut sauce and the crispy mung beans (below).",
+      "Preheat the steamer by bringing it to a full boil over high heat. While you wait for the water to boil, drain the rice very well, shaking off excess water in a sieve until there is no more dripping. Line a steamer rack with moist muslin (not soaking wet!) or a thin white tea towel and place the rice on the cloth. Fold the edges of the cloth over the rice, making sure the rice doesn't cover the entire rack - there should be space around the rice to allow steam to come up. Cover the steamer rack with a lid.",
+      "Steam the rice for 20-25 minutes over rapidly boiling water, until the rice is fully cooked through (it should not be crunchy in the middle).",
+      "While the rice is cooking, make the coconut syrup. Combine the coconut milk, sugar, and salt in a small pot. If you have a pandan leaf handy, tie it into a knot and throw it in for extra aroma. Cook it over medium heat, and as soon as it starts to bubble, turn off the heat and cover. You will need to reheat this once the rice is ready.",
+      "Few minutes before the rice is done, reheat the syrup so it is steaming hot then keep covered. When the rice is done, immediately place the rice into a mixing bowl and immediately pour the syrup over the rice. Stir to break up any lumps, then cover with a lid, a plate, or aluminum foil and let sit for 20 minutes.",
+      "After 20 minutes, use a rubber spatula to fold the bottom part of the rice up to the top to help redistribute the syrup, and let sit for at least another 20 minutes or until ready to serve. At this stage the rice will keep at room temp all day.",
+      "Stir the rice flour into the water until there are no more lumps.",
+      "Combine the rice flour slurry, coconut milk, and salt in a small pot. Cook over medium high heat, stirring constantly, until the mixture comes to a boil. Remove from heat and pour into a bowl. Let cool completely before serving.",
+      "Rinse the beans in cold water and add them to a small pot and cover with about 2 cups of water.",
+      "Over medium heat, bring the water to a simmer. Once simmering, immediately remove from the heat and cover the pot for 10 minutes ONLY. Do not over-soak.",
+      "Drain off the cooking water and rinse the beans in cold water. Lay the beans on a paper towel to dry.",
+      "In a lightly greased sauté pan, toast the beans over medium high heat, stirring frequently until the beans are dry, crunchy and start developing a light golden colour.",
+      "Let cool on a plate. This can be kept in an airtight container for up to 1 month.",
+      "Serve the rice beside sweet, fresh cut mangoes. Spoon some salted coconut sauce over the rice and sprinkle with the crispy mung beans."
+    ],
+    "ingredientSource": "json-ld",
+    "allergens": [
+      "coconut"
+    ],
+    "allergenSubs": [
+      {
+        "from": "coconut milk",
+        "to": "oat cream + 1 tsp olive oil (per 1 cup)",
+        "removes": "coconut"
+      }
+    ]
+  }
+]

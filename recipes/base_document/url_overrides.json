@@ -1,0 +1,59 @@
+{
+  "_comment": "Manual URL overrides for recipes whose catalog URL is dead. Keyed by recipe id. All replacements verified live and chosen from highly-rated, well-known recipe sources (Nora Cooks, Holy Cow Vegan, Vegan Richa, Rainbow Plant Life, Minimalist Baker, Cookie and Kate, The Mediterranean Dish, RecipeTin Eats, Hot Thai Kitchen, etc.). Re-runs of parse-catalog.ts merge this in.",
+
+  "american-impossible-meatloaf":                                  "https://www.karissasvegankitchen.com/impossible-burger-meatloaf/",
+  "ethiopian-misir-wot":                                           "https://holycowvegan.net/misir-wot-ethiopian-red-lentils/",
+  "ethiopian-shiro-wot":                                           "https://holycowvegan.net/ethiopian-shiro-wot-ground-chickpea-stew/",
+  "ethiopian-atakilt-wat":                                         "https://www.veganricha.com/atakilt-wat-ethiopian-cabbage-potato/",
+  "ethiopian-kik-alicha":                                          "https://www.veganricha.com/ethiopian-split-pea-stew-kik-alicha/",
+  "ethiopian-gomen-wat":                                           "https://urbanfarmie.com/gomen-wat-spicy-ethiopian-greens/",
+  "ethiopian-authentic-vegan-injera":                              "https://www.veganricha.com/ethiopian-injera-100-teff-flatbread/",
+
+  "spanish-authentic-vegetable-paella-spain-on-a-fork":            "https://simpleveganblog.com/vegan-spanish-paella/",
+  "spanish-spanish-gazpacho-simple-vegan-blog":                    "https://thespanishradish.com/recipes/tapas-recipes/spanish-gazpacho-recipe-super-easy-vegan-summer-soup/",
+  "spanish-vegan-patatas-bravas-spain-on-a-fork":                  "https://schoolnightvegan.com/home/patatas-bravas/",
+  "spanish-vegan-spanish-tortilla-espa-ola-loving-it-vegan":       "https://biancazapatka.com/en/spanish-tortilla/",
+  "spanish-vegan-romesco-minimalist-baker":                        "https://cookieandkate.com/easy-romesco-sauce-recipe/",
+
+  "mexican-best-vegan-enchiladas":                                 "https://www.noracooks.com/the-best-vegan-enchiladas/",
+  "mexican-chilaquiles-rojos":                                     "https://brokebankvegan.com/chilaquiles-rojos-recipe/",
+  "mexican-pozole-rojo":                                           "https://dorastable.com/jackfruit-vegan-pozole-rojo/",
+  "mexican-tortilla-soup":                                         "https://mexicanmademeatless.com/authentic-mexican-tortilla-soup/",
+
+  "caribbean-vegan-jamaican-rice-and-peas-make-it-dairy-free":     "https://makeitdairyfree.com/vegan-jamaican-rice-and-peas/",
+  "caribbean-cuban-black-beans-loving-it-vegan":                   "https://thatgirlcookshealthy.com/cuban-black-beans/",
+  "caribbean-caribbean-pelau-healthier-steps":                     "https://cookingwithria.com/2024/10/trinidad-vegan-pelau/",
+  "caribbean-vegan-jamaican-patties-make-it-dairy-free":           "https://makeitdairyfree.com/authentic-vegan-jamaican-beef-patty/",
+
+  "italian-lentil-bolognese":                                      "https://rainbowplantlife.com/10-ingredient-vegan-red-lentil-bolognese/",
+  "italian-tuscan-gnocchi":                                        "https://www.noracooks.com/vegan-gnocchi/",
+
+  "french-ratatouille":                                            "https://www.recipetineats.com/ratatouille/",
+
+  "american-bbq-pulled-jackfruit-sandwiches":                      "https://www.veganricha.com/pulled-jackfruit-sandwiches/",
+  "american-buffalo-cauliflower-wings":                            "https://www.noracooks.com/vegan-cauliflower-buffalo-wings/",
+
+  "chinese-chinese-fried-rice-omnivores-cookbook":                 "https://minimalistbaker.com/easy-vegan-fried-rice/",
+  "chinese-dan-dan-noodles-pickled-plum":                          "https://omnivorescookbook.com/vegan-dan-dan-noodles/",
+  "chinese-vegan-peking-duck":                                     "https://www.lazycatkitchen.com/vegan-duck-pancakes/",
+
+  "indian-palak-tofu":                                             "https://rainbowplantlife.com/vegan-palak-paneer-with-tofu/",
+  "indian-vegetable-biryani":                                      "https://holycowvegan.net/vegetable-biryani/",
+
+  "mediterranean-vegan-stuffed-grape-leaves-dolmades-holy-cow-vegan": "https://www.themediterraneandish.com/stuffed-grape-leaves-dolmades/",
+  "mediterranean-vegan-briam-holy-cow-vegan":                      "https://www.themediterraneandish.com/briam-greek-roasted-vegetables/",
+  "mediterranean-vegan-gigantes-plaki-diane-kochilas":             "https://www.themediterraneandish.com/gigantes-plaki-greek-giant-beans/",
+
+  "middle-eastern-classic-vegan-falafel-loving-it-vegan":          "https://cookieandkate.com/crispy-falafel-recipe/",
+  "middle-eastern-vegan-baba-ganoush-loving-it-vegan":             "https://cookieandkate.com/epic-baba-ganoush-recipe/",
+
+  "thai-pad-mee-korat-pad-thai-hot-thai-kitchen":                  "https://hot-thai-kitchen.com/vegan-pad-thai/",
+  "thai-vegan-massaman-yellow-curry-hot-thai-kitchen":             "https://minimalistbaker.com/easy-1-pot-massaman-curry/",
+
+  "vietnamese-vegan-bun-bowls-pick-up-limes":                      "https://thevietvegan.com/lemongrass-tofu-vermicelli-bowl/",
+
+  "fast-food-vegan-chick-fil-a-sandwich":                          "https://makeitdairyfree.com/copycat-chick-fil-a-vegan-chicken/",
+  "fast-food-chipotle-burrito-bowl":                               "https://rainbowplantlife.com/vegan-burrito-bowl/",
+
+  "brazilian-vegan-churrasco-lingui-a-platter":                    "https://veganeating.com/vegan-churrasco/"
+}

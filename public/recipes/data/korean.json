@@ -1,0 +1,567 @@
+[
+  {
+    "id": "korean-vegan-bibimbap-okonomi-kitchen",
+    "title": "Bibimbap (학대 없는 · Hakdae eomneun)",
+    "source": "Okonomi Kitchen",
+    "rawTitle": "### Vegan Bibimbap — Okonomi Kitchen",
+    "rawBody": "- **URL:** https://www.okonomikitchen.com/vegan-bibimbap/ ✓ VERIFIED\n- **Description:** Banchan + rice + protein in dolsot (sizzling stone bowl). Tofu primary; Chunk Steak slices a strong upsell.\n- $3.10/serving · **Menu price:** $15–19 · 480 g · 580 cal · 22 g · 60 min · 4 · **Hard** (multiple banchan + sizzle bowl per ticket) · 🥘\n- **Premium row:** **Chunk Steak** bulgogi-marinated slices replace tofu protein +$2.40 → menu $20–24",
+    "valueRatio": 5.483870967741935,
+    "valueTier": "Strong Earner",
+    "cuisine": "korean",
+    "cuisineName": "Korean",
+    "courses": [
+      "main"
+    ],
+    "url": "https://www.okonomikitchen.com/vegan-bibimbap/",
+    "urlStatus": "verified",
+    "urlNote": null,
+    "description": "Banchan + rice + protein in dolsot (sizzling stone bowl). Tofu primary; Chunk Steak slices a strong upsell.",
+    "cost": 3.1,
+    "menuPrice": "$15–19",
+    "weight": "480 g",
+    "calories": 580,
+    "protein": "22 g",
+    "time": "60m",
+    "prep": "60m",
+    "servings": 4,
+    "serves": 4,
+    "difficulty": 3,
+    "difficultyLabel": "Hard",
+    "difficultyNote": "multiple banchan + sizzle bowl per ticket",
+    "tags": [
+      "bulk-prep"
+    ],
+    "sourcingTier": "in-house",
+    "subs": [],
+    "alternatives": [],
+    "photo": "bowl",
+    "photoLabel": "bibimbap",
+    "badge": "Strong Earner",
+    "ingredients": [
+      "½ lbs daikon (250g)",
+      "2.5 tbsp cane sugar (33g)",
+      "2.5 tbsp rice vinegar (37ml)",
+      "2.5 tbsp water (37ml)",
+      "½ tsp salt",
+      "½ tbsp gochugaru (7g)",
+      "1 medium zucchini (approx. 200g)",
+      "1 garlic clove, minced (3g)",
+      "½ tsp toasted sesame oil (3ml)",
+      "salt and pepper to taste",
+      "1 medium carrot (120g)",
+      "salt and pepper to taste",
+      "1 bunch of spinach (approx. 225g)",
+      "1 garlic clove, minced (3g)",
+      "½ tsp toasted sesame oil (3ml)",
+      "1 tsp toasted sesame seeds (3g)",
+      "salt and pepper to taste",
+      "4 dried shiitake mushrooms, rehydrated (32g)",
+      "Salt and pepper to taste",
+      "1/2 english cucumber (150g)",
+      "½ tsp salt",
+      "1 garlic clove, minced (3g)",
+      "1 tsp toasted sesame oil (5ml)",
+      "½ tsp toasted sesame seeds (2g)",
+      "1/2 lbs soy bean sprouts (225g // or mung bean sprouts)",
+      "½ scallion, chopped (6g)",
+      "1 garlic clove, minced (3g)",
+      "½ tsp toasted sesame oil (3ml)",
+      "salt and pepper to taste",
+      "2 tbsp gochujang (40g)",
+      "1 garlic clove, minced (3g)",
+      "¼ apple or pear, grated or pureed (45g, optional)",
+      "2-3 tsp toasted sesame oil, to taste (10g)",
+      "1 1/2 tsp soy sauce (22g // tamari for gluten free)",
+      "2-3 tsp cane sugar, to taste (10-14g)",
+      "2 tsp rice vinegar (10ml)",
+      "1 tbsp water (15ml)",
+      "1/4 cup soy sauce (60ml // tamari for gluten free)",
+      "2 tsp toasted sesame oil (10ml)",
+      "1-2 tbsp oligo syrup (30g // or sugar)",
+      "1 garlic clove, minced (5g)",
+      "1/2 scallion, sliced (6g)",
+      "1/2 tbsp toasted sesame seeds (5g)",
+      "2 cups cooked short grain rice (500g)",
+      "2 tsp toasted sesame seeds (10g)",
+      "2 servings fresh soft, traditional or medium firm tofu, sliced* (250g, or protein of choice)",
+      "½ cup vegan kimchi (100g, optional)"
+    ],
+    "steps": [
+      "Slice daikon into matchsticks. Add all the ingredients to a bowl and let it rest while cooking remaining vegetables to allow them to pickle.",
+      "Slice zucchini into matchsticks or into semi-circles. Sprinkle some salt over and rest for 10 minutes. Squeeze excess liquid and pat dry. Over medium high heat, sautee the zucchini with garlic for 1-2 minutes (do not overcook or it will be soggy). Remove from heat, add to a bowl and toss in sesame oil. Add salt to taste.",
+      "Slice carrots into matchsticks or semi-circles. Over medium high heat, sautee for 1-2 minute or until softened but still have a snappy texture. Remove from heat, add to a bowl and toss with salt and pepper to taste.",
+      "If using dried shiitake mushrooms, soak in hot water for 15 minutes or until softened. Over medium high heat, sautee for 1-2 minutes. Season with salt and pepper to taste.",
+      "Thinly slice cucumber into rounds or semi-circles and place into a bowl. Massage some salt into the cucumbers and rest for 10-15 minutes (until they release water). Drain the water and pat them dry. Toss with garlic, sesame seeds and sesame oil. Add salt to taste.",
+      "Bring a pot of water to a boil and then cook the bean sprouts for 1-2 minutes, or until lightly softened (but still remains some texture). Drain under cold water and then strain. Toss in garlic, scallion, sesame seeds, sesame oil and season with salt and pepper to taste.",
+      "Add all the ingredients to a bowl and whisk to combine. Taste and adjust to your liking.",
+      "Add 1 cup of rice to a bowl. Arrange all the vegetable side dishes on top. Add the tofu, kimchi and bibimbap sauce. Finish with sesame seeds and a drizzle of sesame oil, if desired. Serve and enjoy!",
+      "Brush some sesame oil inside the dolsot. Add rice to the bowl and then arrange all the vegetables on top along with the tofu and kimchi. Set the gas stove over medium high heat and let it cook until you begin to hear cracking sounds. Remove from heat, add sauce on top and garnish with sesame seeds. Serve and enjoy!"
+    ],
+    "ingredientSource": "json-ld",
+    "allergens": [
+      "soy"
+    ],
+    "allergenSubs": [
+      {
+        "from": "tofu",
+        "to": "chickpea tofu (Burmese tofu)",
+        "removes": "soy"
+      }
+    ]
+  },
+  {
+    "id": "korean-vegan-japchae-okonomi-kitchen",
+    "title": "Japchae (학대 없는 · Hakdae eomneun)",
+    "source": "Okonomi Kitchen",
+    "rawTitle": "### Vegan Japchae — Okonomi Kitchen",
+    "rawBody": "- **URL:** https://www.okonomikitchen.com/vegan-japchae/ ✓ VERIFIED\n- $2.40/serving · **Menu price:** $13–16 · 320 g · 480 cal · 12 g · 35 min · 4 · **Medium** (per-plate toss; components bulk-prep) · 🥘 ⚡",
+    "valueRatio": 6.041666666666667,
+    "valueTier": "Strong Earner",
+    "cuisine": "korean",
+    "cuisineName": "Korean",
+    "courses": [
+      "main"
+    ],
+    "url": "https://www.okonomikitchen.com/vegan-japchae/",
+    "urlStatus": "verified",
+    "urlNote": null,
+    "description": "Medium — per-plate toss; components bulk-prep · bulk-prep, fast-service.",
+    "cost": 2.4,
+    "menuPrice": "$13–16",
+    "weight": "320 g",
+    "calories": 480,
+    "protein": "12 g",
+    "time": "35m",
+    "prep": "35m",
+    "servings": 4,
+    "serves": 4,
+    "difficulty": 2,
+    "difficultyLabel": "Medium",
+    "difficultyNote": "per-plate toss; components bulk-prep",
+    "tags": [
+      "bulk-prep",
+      "fast-service"
+    ],
+    "sourcingTier": "in-house",
+    "subs": [],
+    "alternatives": [],
+    "photo": "plate",
+    "photoLabel": "japchae",
+    "badge": "Strong Earner",
+    "ingredients": [
+      "1 package sweet potato noodles (250g)",
+      "1 package smoked firm tofu (300g)",
+      "1 medium zucchini (200g)",
+      "1 small carrot (130g)",
+      "1 medium onion (150g)",
+      "3 scallion stalks",
+      "3 garlic cloves",
+      "6 shiitake mushrooms, rehydrated",
+      "large handful of spinach",
+      "sesame seeds",
+      "5 tbsp soy sauce",
+      "2 tbsp sugar",
+      "1 tbsp sesame oil"
+    ],
+    "steps": [
+      "Bring a large pot of water to a boil and cook sweet potato noodles following the directions on the package. Once cooked, drain and rinse with cold water to stop the cooking process. Add 1 tsp of sesame oil to coat the noodles, and then use scissors to cut the noodles (around 3-4 times). In the same pot, add in the spinach and blanch for 30 seconds. Rinse with cold water and squeeze the excess liquid out using a towel. Chop the bundled up spinach in half.",
+      "Slice all the vegetables into match stick sized pieces. They should all be relatively the same size. Cut the tofu into thin rectangles.",
+      "Put all the sauce ingredients into a small bowl and stir.",
+      "In a large wok, over medium high heat fry the smoked tofu with a little bit of sesame oil just until lightly browned on each side. Transfer into another bowl and set aside.",
+      "In the same wok, fry onions and garlic for 1 minute. Then add in the shiitake mushrooms and carrot and fry for another minute. Add in the zucchini and scallions and fry for one more minute. Slightly turn down the heat and add in the noodles, spinach tofu and sauce. Toss and cook until all the sauce is all soaked up.",
+      "Serve and garnish with toasted sesame seeds."
+    ],
+    "ingredientSource": "json-ld",
+    "allergens": [
+      "soy"
+    ],
+    "allergenSubs": [
+      {
+        "from": "tofu",
+        "to": "chickpea tofu (Burmese tofu)",
+        "removes": "soy"
+      }
+    ]
+  },
+  {
+    "id": "korean-vegan-tteokbokki-the-korean-vegan",
+    "title": "Tteokbokki (학대 없는 · Hakdae eomneun)",
+    "source": "The Korean Vegan",
+    "rawTitle": "### Vegan Tteokbokki — The Korean Vegan",
+    "rawBody": "- **URL:** https://thekoreanvegan.com/korean-fire-cakes-ddukbokee/ ✓ VERIFIED\n- $2.10/serving · **Menu price:** $11–14 · 320 g · 480 cal · 10 g · 25 min · 4 · **Medium** · ⚡",
+    "valueRatio": 5.9523809523809526,
+    "valueTier": "Strong Earner",
+    "cuisine": "korean",
+    "cuisineName": "Korean",
+    "courses": [
+      "starter",
+      "main"
+    ],
+    "url": "https://thekoreanvegan.com/korean-fire-cakes-ddukbokee/",
+    "urlStatus": "verified",
+    "urlNote": null,
+    "description": "Chewy rice cakes simmered in a gochujang-soy-sugar sauce until glossy. Korean comfort food — built for fast service from a held base.",
+    "cost": 2.1,
+    "menuPrice": "$11–14",
+    "weight": "320 g",
+    "calories": 480,
+    "protein": "10 g",
+    "time": "25m",
+    "prep": "25m",
+    "servings": 4,
+    "serves": 4,
+    "difficulty": 2,
+    "difficultyLabel": "Medium",
+    "difficultyNote": null,
+    "tags": [
+      "fast-service"
+    ],
+    "sourcingTier": "in-house",
+    "subs": [],
+    "alternatives": [],
+    "photo": "plate",
+    "photoLabel": "tteokbokki",
+    "badge": "Strong Earner",
+    "ingredients": [
+      "4 2 x 2-inch pieces dashima",
+      "2 scallions, whites and greens separated and chopped",
+      "1 tbsp toasted sesame oil, plus more for garnish",
+      "16 ounces Korean rice cakes (cylindrical)",
+      "1 tsp cracked black pepper, plus more for garnish",
+      "2 tbsp gochugaru",
+      "1/4 cup gochujang",
+      "2 tbsp brown rice syrup",
+      "2 tbsp toasted sesame seeds"
+    ],
+    "steps": [
+      "Add dashima and scallion whites to 2 1/2 cups of water in a deep pan or pot and bring to a boil.",
+      "While water is coming to a boil, add sesame oil, black pepper, gochugaru, and 2 tablespoons of gochujang to the rice cakes (they should be thawed if you're using frozen). Stir until the rice cakes are evenly coated and set aside.",
+      "When the water has come to a boil, add your rice cakes to the water, along with remaining gochujang. Cook for about 5 minutes, until the rice cakes are tender and the sauce has reduced to a thick stew consistency. Add your maple syrup and continue stirring until incorporated.",
+      "Garnish with scallion greens, sesame seeds, black pepper, and a drizzle of sesame oil."
+    ],
+    "ingredientSource": "json-ld",
+    "allergens": [
+      "soy"
+    ],
+    "allergenSubs": [
+      {
+        "from": "gochujang",
+        "to": "soy-free gochujang (Mother-in-Law's soy-free variety)",
+        "removes": "soy"
+      }
+    ]
+  },
+  {
+    "id": "korean-vegan-kimchi-jjigae-the-korean-vegan",
+    "title": "Kimchi Jjigae (학대 없는 · Hakdae eomneun)",
+    "source": "The Korean Vegan",
+    "rawTitle": "### Vegan Kimchi Jjigae — The Korean Vegan",
+    "rawBody": "- **URL:** https://thekoreanvegan.com/vegan-kimchi-jjigae-reigns-supreme/ ✓ VERIFIED\n- $2.30/serving · **Menu price:** $13–16 · 380 g · 380 cal · 16 g · 35 min · 4 · **Easy** (stew holds) · 🥘 ⚡",
+    "valueRatio": 6.304347826086957,
+    "valueTier": "Strong Earner",
+    "cuisine": "korean",
+    "cuisineName": "Korean",
+    "courses": [
+      "main"
+    ],
+    "url": "https://thekoreanvegan.com/vegan-kimchi-jjigae-reigns-supreme/",
+    "urlStatus": "verified",
+    "urlNote": null,
+    "description": "Easy — stew holds · bulk-prep, fast-service.",
+    "cost": 2.3,
+    "menuPrice": "$13–16",
+    "weight": "380 g",
+    "calories": 380,
+    "protein": "16 g",
+    "time": "35m",
+    "prep": "35m",
+    "servings": 4,
+    "serves": 4,
+    "difficulty": 1,
+    "difficultyLabel": "Easy",
+    "difficultyNote": "stew holds",
+    "tags": [
+      "bulk-prep",
+      "fast-service"
+    ],
+    "sourcingTier": "in-house",
+    "subs": [],
+    "alternatives": [],
+    "photo": "bowl",
+    "photoLabel": "kimchi · jjigae",
+    "badge": "Strong Earner",
+    "ingredients": [
+      "1 tbsp sesame oil ((plus more for garnish))",
+      "3 large shiitake mushrooms, sliced",
+      "1/4 cup diced onion",
+      "3 scallion whites, chopped",
+      "2 cloves garlic, minced",
+      "1/2 cup diced potato",
+      "2 cups aged kimchi, cut into bite-sized pieces ((not diced))",
+      "2 tbsp gochugaru",
+      "2 tbsp gochujang",
+      "2 tbsp soup soy sauce",
+      "1/2 cup kimchi liquid",
+      "1/2 tsp cracked black pepper",
+      "2 cups vegetable broth",
+      "15 grams dashima",
+      "16 ounces medium firm tofu, sliced intro 1/2-inch thick slabs",
+      "1 3/4 cup cooked black beans",
+      "3 scallion greens, chopped ((for garnish))",
+      "1 ounce enoki mushroom"
+    ],
+    "steps": [
+      "To a large ddukbaeggi (clay Korean pot) or medium Dutch oven over medium heat, add sesame oil (or vegetable broth) and gochugaru. Cook for about 1 minute until gochugaru starts to froth. Add shiitake mushrooms and stir until they are coated with oil and gochugaru. Cook for about 2 minutes, until mushrooms start to brown.",
+      "Add diced onion, scallion whites, and garlic until garlic softens and onions begin to throw translucent (about 2 minutes). Make sure to stir regularly, so that the gochugaru doesn't burn.",
+      "Next, add your potatoes, kimchi, and gochujang. Stir all the contents of the pot together until they are all evenly coated. Deglaze your pot with kimchi liquid and soy sauce, stirring so that everything is well-incorporated. Add cracked black pepper. Then, add your vegetable broth (or water). Drop in the dashima and increase the heat to a medium-high until the pot comes to a boil. Then reduce heat to low and allow the pot to simmer for about 10 minutes, until potatoes are almost cooked.",
+      "Add your sliced tofu, black beans, and enoki mushrooms. Cook for an additional 3 minutes, until potatoes are fully cooked. Garnish with scallion greens, an extra drizzle of sesame oil (optional), and remove from heat. Serve with bowl of rice."
+    ],
+    "ingredientSource": "json-ld",
+    "allergens": [
+      "soy"
+    ],
+    "allergenSubs": [
+      {
+        "from": "tofu",
+        "to": "chickpea tofu (Burmese tofu)",
+        "removes": "soy"
+      }
+    ]
+  },
+  {
+    "id": "korean-vegan-korean-bbq-tofu-the-korean-vegan",
+    "title": "Korean BBQ Tofu (학대 없는 · Hakdae eomneun)",
+    "source": "The Korean Vegan",
+    "rawTitle": "### Vegan Korean BBQ Tofu — The Korean Vegan",
+    "rawBody": "- **URL:** https://thekoreanvegan.com/favorite-tofu-recipe-evar/ ✓ VERIFIED\n- **Description:** Tofu marinated bulgogi-style. **Strong Chunk lead candidate** for menu upgrade.\n- $2.85/serving (tofu) / $5.30 (Chunk) · **Menu price:** $14–17 / $22–28\n- 320 g · 480 cal · 22 g · 45 min + marinate · 4 · **Medium** (per-plate sear; marinade bulk-preps) · 🥘 ⚡\n\n| Lead | Notes | Cost delta |\n|---|---|---|\n| Tofu (default) | Casual tier | baseline |\n| **Premium lead:** Chunk Steak (4 oz) bulgogi-marinated, sliced | Steakhouse-Korean fusion | +$2.45 |\n| Beyond Steak Tips | Pre-seasoned shortcut | +$1.40 |",
+    "valueRatio": 5.43859649122807,
+    "valueTier": "Strong Earner",
+    "cuisine": "korean",
+    "cuisineName": "Korean",
+    "courses": [
+      "main"
+    ],
+    "url": "https://thekoreanvegan.com/favorite-tofu-recipe-evar/",
+    "urlStatus": "verified",
+    "urlNote": null,
+    "description": "Tofu marinated bulgogi-style. **Strong Chunk lead candidate** for menu upgrade.",
+    "cost": 2.85,
+    "menuPrice": "$14–17 / $22–28",
+    "weight": "320 g",
+    "calories": 480,
+    "protein": "22 g",
+    "time": "45m",
+    "prep": "45m",
+    "servings": 4,
+    "serves": 4,
+    "difficulty": 2,
+    "difficultyLabel": "Medium",
+    "difficultyNote": "per-plate sear; marinade bulk-preps",
+    "tags": [
+      "bulk-prep",
+      "fast-service"
+    ],
+    "sourcingTier": "in-house",
+    "subs": [
+      {
+        "from": "Tofu (default)",
+        "effect": "Casual tier",
+        "delta": "baseline"
+      },
+      {
+        "from": "**Premium lead:** Chunk Steak (4 oz) bulgogi-marinated, sliced",
+        "effect": "Steakhouse-Korean fusion",
+        "delta": "+$2.45"
+      },
+      {
+        "from": "Beyond Steak Tips",
+        "effect": "Pre-seasoned shortcut",
+        "delta": "+$1.40"
+      }
+    ],
+    "alternatives": [],
+    "photo": "plate",
+    "photoLabel": "korean · bbq · tofu",
+    "badge": "Strong Earner",
+    "ingredients": [
+      "14 oz (400 g) extra-firm tofu, pressed and sliced into planks",
+      "3 tablespoons soy sauce",
+      "2 tablespoons gochujang",
+      "2 tablespoons sesame oil",
+      "2 tablespoons maple syrup or brown sugar",
+      "4 cloves garlic, minced",
+      "1 teaspoon grated fresh ginger",
+      "1 tablespoon rice vinegar",
+      "1 tablespoon neutral oil (for grilling/pan-frying)",
+      "2 teaspoons sesame seeds (for garnish)",
+      "2 green onions, thinly sliced (for garnish)",
+      "steamed white rice (for serving)"
+    ],
+    "ingredientSource": "authored",
+    "allergens": [
+      "soy"
+    ],
+    "allergenSubs": [
+      {
+        "from": "tofu",
+        "to": "chickpea tofu (Burmese tofu)",
+        "removes": "soy"
+      }
+    ]
+  },
+  {
+    "id": "korean-vegan-sundubu-jjigae-the-korean-vegan",
+    "title": "Sundubu Jjigae (학대 없는 · Hakdae eomneun)",
+    "source": "The Korean Vegan",
+    "rawTitle": "### Vegan Sundubu Jjigae — The Korean Vegan",
+    "rawBody": "- **URL:** https://thekoreanvegan.com/one-box-soon-tofu-stew/ ✓ VERIFIED\n- $2.20/serving · **Menu price:** $13–16 · 420 g · 320 cal · 18 g · 30 min · 4 · **Easy** (broth holds) · 🥘 ⚡",
+    "valueRatio": 6.59090909090909,
+    "valueTier": "Strong Earner",
+    "cuisine": "korean",
+    "cuisineName": "Korean",
+    "courses": [
+      "main"
+    ],
+    "url": "https://thekoreanvegan.com/one-box-soon-tofu-stew/",
+    "urlStatus": "verified",
+    "urlNote": null,
+    "description": "Easy — broth holds · bulk-prep, fast-service.",
+    "cost": 2.2,
+    "menuPrice": "$13–16",
+    "weight": "420 g",
+    "calories": 320,
+    "protein": "18 g",
+    "time": "30m",
+    "prep": "30m",
+    "servings": 4,
+    "serves": 4,
+    "difficulty": 1,
+    "difficultyLabel": "Easy",
+    "difficultyNote": "broth holds",
+    "tags": [
+      "bulk-prep",
+      "fast-service"
+    ],
+    "sourcingTier": "in-house",
+    "subs": [],
+    "alternatives": [],
+    "photo": "bowl",
+    "photoLabel": "sundubu · jjigae",
+    "badge": "Strong Earner",
+    "ingredients": [
+      "1 lb (450 g) soft silken tofu (sundubu), broken into large pieces",
+      "4 oz (115 g) shiitake or oyster mushrooms, sliced",
+      "1 small zucchini, diced",
+      "3 cloves garlic, minced",
+      "1 tablespoon gochugaru (Korean red chili flakes)",
+      "1 tablespoon gochujang",
+      "1 tablespoon soy sauce",
+      "1 tablespoon sesame oil",
+      "4 cups (960 ml) dashima (kombu) or vegetable broth",
+      "1 teaspoon salt (or to taste)",
+      "2 green onions, sliced (for garnish)",
+      "steamed white rice (for serving)"
+    ],
+    "ingredientSource": "authored",
+    "allergens": [
+      "soy"
+    ],
+    "allergenSubs": [
+      {
+        "from": "silken tofu",
+        "to": "chickpea tofu (Burmese tofu)",
+        "removes": "soy"
+      }
+    ]
+  },
+  {
+    "id": "korean-vegan-hotteok",
+    "title": "Hotteok (학대 없는 · Hakdae eomneun)",
+    "source": "Girl Meets Radish",
+    "rawTitle": "### Vegan Hotteok (Korean Sweet Pancakes) (**DESSERT**)",
+    "rawBody": "- **URL:** https://www.girlmeetsradish.com/hotteok-korean-pancakes/ ✓ VERIFIED *(Constance Lee / Girl Meets Radish — fully vegan dough recipe + a non-traditional **red bean + medjool date filling** (instead of the classic brown-sugar + cinnamon + walnut). The dough is the key verified element; operators can use it with either filling. Constance's red-bean-date filling is healthier, less cloying, and reads as a more upscale Korean-dessert experience; the classic brown-sugar-walnut filling is the street-food benchmark.)*\n\n  **Recipe** (5–6 pancakes, per Constance Lee): **Dough** — 1 tsp active dry yeast, 1 tbsp coconut sugar, ½ cup lukewarm water (110–115°F), 1 cup all-purpose flour (150 g), ¼ tsp salt, ½ tbsp oil. Combine yeast + coconut sugar + lukewarm water; rest 15 min until foamy. Sieve flour into a bowl with salt; add yeast mixture and oil. Cover and rise 60 min until doubled (longer if room is cool). Punch down, rest 20 min more. Oil hands generously, divide into 5–6 pieces, flatten each, fill with 1.5–2 tbsp filling, pinch seams to seal into a ball. Heat pan to medium-high with generous oil; place pancake seam-down, press flat with spatula. Cook ~1 min per side, then lid the pan and cook 1 more min. **Red bean + date filling** — 1¼ cup canned adzuki beans, 8 medjool dates (soak in hot water 10 min if dry, drain, squeeze out excess moisture); pulse in food processor until combined. **Classic brown-sugar filling alternative** (substitutable into the verified dough): ⅓ cup brown sugar + 2 tsp cinnamon + ¼ cup crushed walnuts + 2 tbsp pumpkin seeds.\n- **Description:** Yeasted dough pockets pressed flat and pan-fried until crispy outside / chewy inside, with a sweet filling that molten-caramelizes during cooking. Korean street-food classic, naturally vegan in both filling variants.\n- **Wholesale food cost:** $0.85 / piece (red-bean-date) / $0.65 / piece (classic walnut-brown-sugar) · **Menu price:** $5–7 (2-piece) / $8–11 (3-piece w/ vegan ice cream)\n- **Weight:** 90 g / piece · **Calories:** 280 · **Protein:** 4 g · **Time:** 90 min (yeast rise dominates) · **Servings:** 5–6 / batch\n- **Restaurant difficulty:** **Medium** — par-portion filled, sealed dough balls during prep (hold up to 4 hr refrigerated, longer freezer); press-and-fry per ticket in 3 min.\n- **Tags:** 🥘 (dough par-portioned) · ⚡ Fast-Service\n\n| Sub | Effect | Cost delta |\n|---|---|---|\n| Red bean + medjool date filling (Girl Meets Radish default) | Healthier, refined-sugar-free, upscale-Korean read | baseline ($0.85) |\n| Classic walnut-brown-sugar-cinnamon filling | Street-food benchmark; cheaper and more dramatic (molten sugar pour) | −$0.20 → $0.65 / pc |\n| Black sesame paste filling | Premium variation | +$0.30 |\n| Add vegan vanilla ice cream | Sundae-format | +$0.80 → menu $9–12 |",
+    "valueRatio": 7.0588235294117645,
+    "valueTier": "Strong Earner",
+    "cuisine": "korean",
+    "cuisineName": "Korean",
+    "courses": [
+      "dessert"
+    ],
+    "url": "https://www.girlmeetsradish.com/hotteok-korean-pancakes/",
+    "urlStatus": "verified",
+    "urlNote": null,
+    "description": "Yeasted dough pockets pressed flat and pan-fried until crispy outside / chewy inside, with a sweet filling that molten-caramelizes during cooking. Korean street-food classic, naturally vegan in both filling variants.",
+    "cost": 0.85,
+    "menuPrice": "$5–7 (2-piece) / $8–11 (3-piece w/ vegan ice cream)",
+    "weight": "90 g / piece",
+    "calories": 280,
+    "protein": "4 g",
+    "time": "90m",
+    "prep": "90m",
+    "servings": 5,
+    "serves": 5,
+    "difficulty": 2,
+    "difficultyLabel": "Medium",
+    "difficultyNote": "par-portion filled, sealed dough balls during prep (hold up to 4 hr refrigerated, longer freezer); press-and-fry per ticket in 3 min.",
+    "tags": [
+      "bulk-prep",
+      "fast-service"
+    ],
+    "sourcingTier": "in-house",
+    "subs": [
+      {
+        "from": "Red bean + medjool date filling (Girl Meets Radish default)",
+        "effect": "Healthier, refined-sugar-free, upscale-Korean read",
+        "delta": "baseline ($0.85)"
+      },
+      {
+        "from": "Classic walnut-brown-sugar-cinnamon filling",
+        "effect": "Street-food benchmark; cheaper and more dramatic (molten sugar pour)",
+        "delta": "−$0.20 → $0.65 / pc"
+      },
+      {
+        "from": "Black sesame paste filling",
+        "effect": "Premium variation",
+        "delta": "+$0.30"
+      },
+      {
+        "from": "Add vegan vanilla ice cream",
+        "effect": "Sundae-format",
+        "delta": "+$0.80 → menu $9–12"
+      }
+    ],
+    "alternatives": [],
+    "photo": "plate",
+    "photoLabel": "hotteok",
+    "badge": "Strong Earner",
+    "ingredients": [
+      "2 cups (250 g) all-purpose flour",
+      "1 packet (7 g) instant yeast",
+      "1 tablespoon sugar",
+      "½ teaspoon salt",
+      "¾ cup (180 ml) warm water",
+      "1 tablespoon neutral oil (for dough)",
+      "½ cup (80 g) brown sugar",
+      "1 teaspoon ground cinnamon",
+      "½ cup (60 g) walnuts or pecans, roughly chopped",
+      "neutral oil for pan-frying"
+    ],
+    "ingredientSource": "authored",
+    "allergens": [
+      "gluten",
+      "nuts"
+    ],
+    "allergenSubs": [
+      {
+        "from": "all-purpose flour",
+        "to": "gluten-free all-purpose flour (Bob's Red Mill 1-to-1)",
+        "removes": "gluten"
+      },
+      {
+        "from": "walnuts",
+        "to": "sunflower seeds",
+        "removes": "nuts"
+      }
+    ]
+  }
+]

@@ -1,0 +1,646 @@
+[
+  {
+    "id": "fast-food-vegan-kfc",
+    "title": "KFC (No Cruelty)",
+    "source": "Gaz Oakley",
+    "rawTitle": "### Vegan KFC (fried \"chicken\")",
+    "rawBody": "- **URL:** https://www.gazoakleychef.com/recipes/kentucky-fried-chickn-burger/ ✓ VERIFIED  (Gaz Oakley's KFC-style chick'n burger; alt: https://www.gazoakleychef.com/recipes/vegan-fried-chicken-experiment/)\n- **Description:** Marinated scratch seitan (vital wheat gluten + KFC-style 11-spice blend, made in-house in 5-lb batches) with buttermilk-substitute dredge, pressure- or deep-fried in peanut oil. Scratch-seitan keeps food cost in the fast-food zone; Beyond Chicken Tenders are the fast-casual premium tier.\n- **Wholesale food cost:** **$0.95 / serving** (4-piece basket, scratch seitan) · **Menu price:** **$5–8** (fast-food tier)\n- **Weight:** 220 g · **Calories:** 480 · **Protein:** 24 g · **Time:** 45 min (seitan made ahead in bulk; fries per ticket) · **Servings:** 4\n- **Restaurant difficulty:** **Medium** — per-plate fry. **Tags:** 🥘 (seitan bulk-prep) · ⚡\n\n| Sub | Effect | Cost delta |\n|---|---|---|\n| Scratch seitan (default fast-food lead) | True fast-food economics | baseline ($0.95) |\n| **Premium upsell:** Beyond Chicken Tenders (5-lb foodservice) | Branded; fast-casual tier | +$1.20 → $2.15 / menu $9–12 |\n| **Premium upsell:** Impossible Nuggets reformatted as tenders | Pre-breaded, no fry-batter step | +$1.10 → $2.05 / menu $9–12 |",
+    "valueRatio": null,
+    "valueTier": null,
+    "cuisine": "fast-food",
+    "cuisineName": "Fast-Food",
+    "courses": [
+      "main"
+    ],
+    "url": "https://www.gazoakleychef.com/recipes/kentucky-fried-chickn-burger/",
+    "urlStatus": "verified",
+    "urlNote": null,
+    "description": "Marinated scratch seitan (vital wheat gluten + KFC-style 11-spice blend, made in-house in 5-lb batches) with buttermilk-substitute dredge, pressure- or deep-fried in peanut oil. Scratch-seitan keeps food cost in the fast-food zone; Beyond Chicken Tenders are the fast-casual premium tier.",
+    "cost": 0.95,
+    "menuPrice": null,
+    "weight": "220 g",
+    "calories": 480,
+    "protein": "24 g",
+    "time": "45m",
+    "prep": "45m",
+    "servings": 4,
+    "serves": 4,
+    "difficulty": 2,
+    "difficultyLabel": "Medium",
+    "difficultyNote": "per-plate fry. **Tags:** 🥘 (seitan bulk-prep) · ⚡",
+    "tags": [],
+    "sourcingTier": "in-house",
+    "subs": [
+      {
+        "from": "Scratch seitan (default fast-food lead)",
+        "effect": "True fast-food economics",
+        "delta": "baseline ($0.95)"
+      },
+      {
+        "from": "**Premium upsell:** Beyond Chicken Tenders (5-lb foodservice)",
+        "effect": "Branded; fast-casual tier",
+        "delta": "+$1.20 → $2.15 / menu $9–12"
+      },
+      {
+        "from": "**Premium upsell:** Impossible Nuggets reformatted as tenders",
+        "effect": "Pre-breaded, no fry-batter step",
+        "delta": "+$1.10 → $2.05 / menu $9–12"
+      }
+    ],
+    "alternatives": [],
+    "photo": "plate",
+    "photoLabel": "kfc",
+    "badge": "Margin King",
+    "ingredients": [
+      "1 lb (450 g) chicken-style seitan (or extra-firm tofu), cut into cutlets",
+      "1 cup (240 ml) plant milk (for the brine)",
+      "1 tablespoon apple cider vinegar",
+      "1 cup (125 g) all-purpose flour",
+      "½ cup (60 g) cornstarch",
+      "1 tablespoon garlic powder",
+      "1 teaspoon onion powder",
+      "1 teaspoon smoked paprika",
+      "1 teaspoon white pepper",
+      "1 teaspoon celery salt",
+      "1 teaspoon dried thyme",
+      "1 teaspoon dried oregano",
+      "neutral oil for deep-frying",
+      "4 vegan brioche buns",
+      "vegan mayo, shredded lettuce, pickles (for serving)"
+    ],
+    "ingredientSource": "authored",
+    "allergens": [
+      "gluten",
+      "soy"
+    ],
+    "allergenSubs": [
+      {
+        "from": "seitan",
+        "to": "king trumpet mushrooms, scored and seared",
+        "removes": "gluten"
+      },
+      {
+        "from": "tofu",
+        "to": "chickpea tofu (Burmese tofu)",
+        "removes": "soy"
+      }
+    ]
+  },
+  {
+    "id": "fast-food-vegan-mcnuggets",
+    "title": "McNuggets (No Cruelty)",
+    "source": "It Doesn't Taste Like Chicken",
+    "rawTitle": "### Vegan McNuggets",
+    "rawBody": "- **URL:** https://itdoesnttastelikechicken.com/vegan-chicken-nuggets/ ✓ VERIFIED\n- **Description:** TVP-and-vital-wheat-gluten homemade nuggets, hand-formed and breaded. The TVP base is foodservice-cheap (~$4/lb, 0.5 oz dry per 6pc) and replicates the soft-bite QSR-nugget mouthfeel. Par-fry & freeze, finish on order.\n- **Wholesale food cost:** **$0.55 / 6-pc** · **Menu price:** **$4–6** (6pc) / **$7–9** (10pc) — fast-food tier\n- 180 g · 380 cal · 22 g · 35 min · 4 batches of 6pc · **Easy** (par-fry, finish on order) · 🥘 ⚡\n\n| Sub | Effect | Cost delta |\n|---|---|---|\n| TVP-seitan baseline (default) | True fast-food food cost | baseline ($0.55) |\n| **Premium upsell:** Impossible Nuggets (foodservice 5-lb, pre-breaded) | Branded, no scratch labor | +$1.10 → $1.65 / menu $8–11 |\n| **Premium upsell:** Beyond Chicken Pieces, formed | Pre-marinated tenders | +$1.00 → $1.55 / menu $8–11 |",
+    "valueRatio": null,
+    "valueTier": null,
+    "cuisine": "fast-food",
+    "cuisineName": "Fast-Food",
+    "courses": [
+      "starter",
+      "main"
+    ],
+    "url": "https://itdoesnttastelikechicken.com/vegan-chicken-nuggets/",
+    "urlStatus": "verified",
+    "urlNote": null,
+    "description": "TVP-and-vital-wheat-gluten homemade nuggets, hand-formed and breaded. The TVP base is foodservice-cheap (~$4/lb, 0.5 oz dry per 6pc) and replicates the soft-bite QSR-nugget mouthfeel. Par-fry & freeze, finish on order.",
+    "cost": 0.55,
+    "menuPrice": null,
+    "weight": "180 g",
+    "calories": 380,
+    "protein": "22 g",
+    "time": "35m",
+    "prep": "35m",
+    "servings": null,
+    "serves": null,
+    "difficulty": 1,
+    "difficultyLabel": "Easy",
+    "difficultyNote": "par-fry, finish on order",
+    "tags": [
+      "bulk-prep",
+      "fast-service"
+    ],
+    "sourcingTier": "in-house",
+    "subs": [
+      {
+        "from": "TVP-seitan baseline (default)",
+        "effect": "True fast-food food cost",
+        "delta": "baseline ($0.55)"
+      },
+      {
+        "from": "**Premium upsell:** Impossible Nuggets (foodservice 5-lb, pre-breaded)",
+        "effect": "Branded, no scratch labor",
+        "delta": "+$1.10 → $1.65 / menu $8–11"
+      },
+      {
+        "from": "**Premium upsell:** Beyond Chicken Pieces, formed",
+        "effect": "Pre-marinated tenders",
+        "delta": "+$1.00 → $1.55 / menu $8–11"
+      }
+    ],
+    "alternatives": [],
+    "photo": "flat",
+    "photoLabel": "mcnuggets",
+    "badge": "Service-friendly",
+    "ingredients": [
+      "2 cans (20 oz each) young green jackfruit in brine or in water ((see step 1 for prep))",
+      "2 cups vegan chickenless broth or vegetable broth",
+      "3 tablespoons nutritional yeast",
+      "1 teaspoon onion powder",
+      "1 teaspoon garlic powder",
+      "1/2 teaspoon salt",
+      "1/4 teaspoon black pepper",
+      "1 cup all-purpose flour ((gluten-free if preferred))",
+      "1 1/2 cup panko breadcrumbs ((gluten-free if preferred))",
+      "1 teaspoon paprika",
+      "1/2 teaspoon onion powder",
+      "1/2 teaspoon garlic powder",
+      "1/4 teaspoon salt",
+      "1/4 teaspoon black pepper"
+    ],
+    "steps": [
+      "Drain the jackfruit and rinse well. Pat dry with a clean dish towel and try to get out as much water as possible. Cut the jackfruit into nugget-sized pieces. (Some cans of jackfruit come already chopped so you may not need to do this if your jackfruit pieces are a good size already).",
+      "In a medium bowl or sealable container, mix together the broth, nutritional yeast, onion powder, garlic powder, salt, and pepper. Add the jackfruit. Marinate for a minimum of 30 minutes, but overnight in the fridge is best.",
+      "Separate the marinade from the jackfruit and pour the marinade into a separate bowl. Place the flour in another bowl. In a third bowl, mix the panko with the paprika, onion powder, garlic powder, and pepper.",
+      "Take a piece of jackfruit and coat it in the flour shaking off the excess. Dip it back into the marinade to wet the flour. Then finally dip it into the panko mixture, evenly coating it. Place the coated jackfruit a prepared baking sheet or plate (see cooking options below). Repeat with all the jackfruit to coat. Spray the top of the coated jackfruit pieces with spray oil so that there are no dry spots.",
+      "Oven method: Preheat your oven to 400°F (200°C). Line a large baking sheet with parchment paper or lightly grease it.Bake for 10 minutes, flip, spray with more oil to cover any dry spots, and bake for another 5–10 minutes, until they are evenly browned and crispy.",
+      "Air-fryer method: When you are ready to cook the jackfruit, preheat your air fryer to 370°F (188°C). Air-fry the nuggets in a single layer for 8 minutes (working in batches if needed). Flip, spray with more oil to cover any dry spots, and air-fry for another 4–8 minutes, until they are evenly browned and crispy.",
+      "Frying method: In a large skillet, add about ½ inch of oil and heat. To test if the oil is hot, drop a small piece into the oil. If it bubbles the oil is ready to use. Working in batches, carefully drop the jackfruit nuggets into the oil in a single layer. Fry for a couple minutes per side until golden, then flip and fry for a couple minutes more on the other side. Drain on a paper towel-lined plate."
+    ],
+    "ingredientSource": "json-ld",
+    "allergens": [
+      "gluten"
+    ],
+    "allergenSubs": [
+      {
+        "from": "panko breadcrumbs",
+        "to": "gluten-free breadcrumbs (Ian's brand)",
+        "removes": "gluten"
+      }
+    ]
+  },
+  {
+    "id": "fast-food-vegan-big-mac-two-tier",
+    "title": "Big Mac (No Cruelty)",
+    "source": "TWO-TIER (Fast-Food + Fast-Casual)",
+    "rawTitle": "### Vegan Big Mac — TWO-TIER (Fast-Food + Fast-Casual)",
+    "rawBody": "- **URL:** https://theeburgerdude.com/vegan-big-mac/ ✓ VERIFIED  (faux-meat lead build); https://www.anediblemosaic.com/vegan-big-macs/ (lentil-burger baseline reference)\n- **Description:** Three-bun architecture with special sauce, shredded lettuce, pickles, onion, vegan cheese. **Two protein tiers** — pick one based on your menu concept:\n  - **Fast-food lead:** Bean-lentil-walnut patties (formed in-house, $0.30/4-oz patty) × 2 → sub-$1 food cost\n  - **Fast-casual lead:** Beyond Burger 4-oz patties × 2 (the v4 Beyond-led build preserved here as the premium tier)\n- **Wholesale food cost:** **$0.85 / serving** (bean-patty baseline) / **$5.10 / serving** (Beyond premium)\n- **Menu price:** **$5–8** (fast-food tier) / **$13–16** (fast-casual)\n- **Weight:** 320 g · **Calories:** 640 (bean) / 720 (Beyond) · **Protein:** 22 g (bean) / 32 g (Beyond) · **Time:** 12 min · **Servings:** 1\n- **Restaurant difficulty:** **Easy** — flat-top griddle, assemble. **Tags:** 🥘 (patties bulk-prep) · ⚡\n\n| Sub | Effect | Cost delta |\n|---|---|---|\n| **Lead protein:** Bean-lentil-walnut patty (default — fast-food tier) | Sub-$1 food cost; clean-label; bulk-prep + freeze | baseline ($0.85) |\n| **Premium upsell:** Beyond Burger 4-oz patty × 2 | v4 Beyond-led build; brand recognition; fast-casual tier | +$4.25 → $5.10 / menu $13–16 |\n| **Premium upsell:** Impossible Burger 4-oz patty × 2 | Slightly tighter griddle behavior | +$4.15 → $5.00 / menu $13–16 |\n| Tofurky / Field Roast 2.5-oz patties × 2 | Mid-tier — better than scratch, cheaper than Beyond | +$1.40 → $2.25 / menu $7–10 |",
+    "valueRatio": null,
+    "valueTier": null,
+    "cuisine": "fast-food",
+    "cuisineName": "Fast-Food",
+    "courses": [
+      "main"
+    ],
+    "url": "https://theeburgerdude.com/vegan-big-mac/",
+    "urlStatus": "verified",
+    "urlNote": null,
+    "description": "Three-bun architecture with special sauce, shredded lettuce, pickles, onion, vegan cheese. **Two protein tiers** — pick one based on your menu concept:",
+    "cost": 0.85,
+    "menuPrice": null,
+    "weight": "320 g",
+    "calories": 640,
+    "protein": "22 g (bean) / 32 g (Beyond)",
+    "time": "12m",
+    "prep": "12m",
+    "servings": 1,
+    "serves": 1,
+    "difficulty": 1,
+    "difficultyLabel": "Easy",
+    "difficultyNote": "flat-top griddle, assemble. **Tags:** 🥘 (patties bulk-prep) · ⚡",
+    "tags": [],
+    "sourcingTier": "hybrid",
+    "subs": [
+      {
+        "from": "**Lead protein:** Bean-lentil-walnut patty (default — fast-food tier)",
+        "effect": "Sub-$1 food cost; clean-label; bulk-prep + freeze",
+        "delta": "baseline ($0.85)"
+      },
+      {
+        "from": "**Premium upsell:** Beyond Burger 4-oz patty × 2",
+        "effect": "v4 Beyond-led build; brand recognition; fast-casual tier",
+        "delta": "+$4.25 → $5.10 / menu $13–16"
+      },
+      {
+        "from": "**Premium upsell:** Impossible Burger 4-oz patty × 2",
+        "effect": "Slightly tighter griddle behavior",
+        "delta": "+$4.15 → $5.00 / menu $13–16"
+      },
+      {
+        "from": "Tofurky / Field Roast 2.5-oz patties × 2",
+        "effect": "Mid-tier — better than scratch, cheaper than Beyond",
+        "delta": "+$1.40 → $2.25 / menu $7–10"
+      }
+    ],
+    "alternatives": [],
+    "photo": "plate",
+    "photoLabel": "big · mac",
+    "badge": "Margin King",
+    "ingredients": [
+      "2 Plant-Based Meat Patties⁣⁣⁣ (3 oz each)",
+      "2 Slices Vegan American Cheese ⁣⁣⁣",
+      "1/2 Cup Shredded Iceberg Lettuce⁣⁣⁣",
+      "5-6 Dill Pickle Slices⁣⁣⁣",
+      "2 Tbsp Diced Onion⁣⁣⁣",
+      "1 Sesame Bun + Bottom Half of another Bun⁣⁣⁣",
+      "1 cup Vegan Mayo",
+      "1/4 cup Ketchup",
+      "2 Tbsp Yellow Mustard",
+      "2 Tbsp Sweet Relish",
+      "1 tsp Onion Powder",
+      "1 tsp Garlic Powder",
+      "1/2 tsp Smoked Paprika",
+      "1 Tbsp White Vinegar"
+    ],
+    "steps": [
+      "Combine ingredients for the Big Mac Sauce. Stir until well combined. ⁣⁣Season to taste and then set aside in the fridge for 30 minutes.",
+      "To prepare your middle bun (aka the Club), use a serrated knife and shave off just the bottom of the extra bottom bun. ⁣⁣⁣",
+      "Press or form your burger patties so they match the circumference of your buns.",
+      "Grill buns in a bit of oil or vegan butter (or do a dry toast) until lightly golden brown. Set aside (ideally on a wire rack so they don't get soggy). ⁣⁣⁣",
+      "To the same pan or griddle, over medium - medium high heat, add a little oil and then add the burger patties to the pan. Season with salt and pepper and grill for about 3 minutes. Once patties are browned, give 'em a flip!",
+      "After you flip the patties, add a slice of vegan cheese to each one and cover with a melting dome. ⁣⁣⁣You can add a little water before covering to steam the cheese too!",
+      "Once Cheese is melted, assemble as follows; Bottom Bun, Sauce, Lettuce, Burger Patty, Onions, Middle Bun, Sauce, Pickles, Lettuce, Burger Patty, Sauce, Top Bun. ⁣⁣⁣",
+      "ENJOY!⁣⁣"
+    ],
+    "ingredientSource": "json-ld",
+    "allergens": [],
+    "allergenSubs": []
+  },
+  {
+    "id": "fast-food-vegan-crunchwrap-supreme-two-tier",
+    "title": "Crunchwrap Supreme (No Cruelty)",
+    "source": "TWO-TIER (Fast-Food + Fast-Casual)",
+    "rawTitle": "### Vegan Crunchwrap Supreme — TWO-TIER (Fast-Food + Fast-Casual)",
+    "rawBody": "- **URL:** https://rainbowplantlife.com/the-best-vegan-crunchwrap-supreme/ ✓ VERIFIED  (Rainbow Plant Life — recipe leads with homemade lentil-mushroom-walnut taco meat, perfect for the fast-food tier; Beyond Beef called out as a faster substitute)\n- **Description:** Layered tortilla crunchwrap with vegan nacho cheese (cashew-based), crisped tostada, lettuce, tomato, sour cream, folded and griddled. **Two protein tiers:**\n  - **Fast-food lead:** Homemade lentil-mushroom-walnut taco meat (the RPL recipe's default) — sub-$1.50 food cost\n  - **Fast-casual lead:** Beyond Beef crumbled taco-style (the v4 Beyond-led build, preserved here as a premium option)\n- **Wholesale food cost:** **$1.20 / serving** (lentil-walnut baseline — near-floor for the format; the multi-component crunchwrap simply has too many fillings for true sub-$1) / **$4.40 / serving** (Beyond premium)\n- **Menu price:** **$5–8** (fast-food tier) / **$11–14** (fast-casual)\n- **Weight:** 360 g · **Calories:** 580 (lentil) / 680 (Beyond) · **Protein:** 22 g (lentil) / 26 g (Beyond) · **Time:** 30 min (taco meat bulk-preps in advance; assemble per ticket) · **Servings:** 2\n- **Restaurant difficulty:** **Medium** — folded press requires care; taco meat and queso bulk-prep on Mon/Wed/Fri. **Tags:** 🥘 (taco meat + queso) · ⚡ (assembly fast)\n\n| Sub | Effect | Cost delta |\n|---|---|---|\n| **Lead protein:** Lentil-mushroom-walnut taco meat (default — fast-food tier; from the RPL recipe) | Sub-$1.50 food cost; clean-label; bulk-batch & freeze | baseline ($1.20) |\n| **Premium upsell:** Beyond Beef crumble (v4 Beyond-led build) | Branded; fast-casual tier | +$3.20 → $4.40 / menu $11–14 |\n| **Premium upsell:** Impossible Beef crumble | Tighter crumble | +$3.10 → $4.30 / menu $11–14 |\n| TVP crumbles | Cheapest; slightly less satisfying texture than RPL's lentil-walnut blend | −$0.20 → $1.00 / menu $4–7 |",
+    "valueRatio": null,
+    "valueTier": null,
+    "cuisine": "fast-food",
+    "cuisineName": "Fast-Food",
+    "courses": [
+      "main"
+    ],
+    "url": "https://rainbowplantlife.com/the-best-vegan-crunchwrap-supreme/",
+    "urlStatus": "verified",
+    "urlNote": null,
+    "description": "Layered tortilla crunchwrap with vegan nacho cheese (cashew-based), crisped tostada, lettuce, tomato, sour cream, folded and griddled. **Two protein tiers:**",
+    "cost": 1.2,
+    "menuPrice": null,
+    "weight": "360 g",
+    "calories": 580,
+    "protein": "22 g (lentil) / 26 g (Beyond)",
+    "time": "30m",
+    "prep": "30m",
+    "servings": 2,
+    "serves": 2,
+    "difficulty": 2,
+    "difficultyLabel": "Medium",
+    "difficultyNote": "folded press requires care; taco meat and queso bulk-prep on Mon/Wed/Fri. **Tags:** 🥘 (taco meat + queso) · ⚡ (assembly fast)",
+    "tags": [],
+    "sourcingTier": "hybrid",
+    "subs": [
+      {
+        "from": "**Lead protein:** Lentil-mushroom-walnut taco meat (default — fast-food tier; from the RPL recipe)",
+        "effect": "Sub-$1.50 food cost; clean-label; bulk-batch & freeze",
+        "delta": "baseline ($1.20)"
+      },
+      {
+        "from": "**Premium upsell:** Beyond Beef crumble (v4 Beyond-led build)",
+        "effect": "Branded; fast-casual tier",
+        "delta": "+$3.20 → $4.40 / menu $11–14"
+      },
+      {
+        "from": "**Premium upsell:** Impossible Beef crumble",
+        "effect": "Tighter crumble",
+        "delta": "+$3.10 → $4.30 / menu $11–14"
+      },
+      {
+        "from": "TVP crumbles",
+        "effect": "Cheapest; slightly less satisfying texture than RPL's lentil-walnut blend",
+        "delta": "−$0.20 → $1.00 / menu $4–7"
+      }
+    ],
+    "alternatives": [],
+    "photo": "layered",
+    "photoLabel": "crunchwrap · supreme",
+    "badge": "Margin King",
+    "ingredients": [
+      "4 large (12-inch) flour tortillas",
+      "4 small (6-inch) corn tortillas (tostada size)",
+      "1 lb (450 g) vegan ground beef (or seasoned lentil-walnut mixture)",
+      "1 tablespoon taco seasoning",
+      "1 cup (240 ml) vegan nacho cheese sauce",
+      "1 cup (240 g) prepared guacamole",
+      "1 cup (100 g) shredded iceberg lettuce",
+      "2 medium tomatoes, diced",
+      "½ cup (120 ml) vegan sour cream",
+      "½ cup (80 g) pickled jalapeños",
+      "1 tablespoon neutral oil (for grilling)"
+    ],
+    "steps": [
+      "Place a flour tortilla on a flat surface. Reserve an extra tortilla and cut it into four wedges - you’ll use it to patch up the bottom of each crunchwrap (most burrito-size tortillas are not large enough; see notes and photos in blog post).NOTE: if you’re just making one crunchwrap, you can use your tostada shell to cut out a round of the flour tortilla of the same size and use it to patch up the bottom of the crunchwrap (this is the prettier option but more wasteful if you’re making more than one crunchwrap).",
+      "Add all of the fillings, but do not overstuff or overfill! Spread out a layer of the Vegan Nacho Cheese Sauce in the middle, in roughly the same size as the tostada shell, but leave a generous border. Add some of the Vegan Taco Meat on top, spreading out to the border of the cheese sauce.",
+      "Spread some Vegan Sour Cream onto a Tostada Shell. Place the tostada shell on top of the vegan ground beef, sour cream side face up.",
+      "Top the sour cream with a small handful of chopped tomatoes, followed by a few spoons of salsa, a small handful of shredded lettuce, a few spoons of the Guacamole, and a few cilantro leaves. Place one of the extra tortilla cut-wedges on top of the fillings.",
+      "To fold, start with the bottom of the flour tortilla and fold the edge up over the center. Continue this process, for a total of 6 folds (like a hexagon) and press down to ensure the tortilla doesn’t unfold. NOTE: If your flour tortillas are dry, I recommend briefly microwaving them in a damp paper towel to add some moisture, as dry tortillas will start to unfold.",
+      "Cook the crunchwraps. Heat a skillet with a bit of oil over medium heat. Add a crunchwrap, seam-side down and cook for 2-3 minutes, until the surface is golden brown. Flip and cook for another 2-3 minutes until the second side is golden-brown. Take off the heat, slice in half, and enjoy!"
+    ],
+    "ingredientSource": "authored",
+    "allergens": [
+      "nuts"
+    ],
+    "allergenSubs": [
+      {
+        "from": "walnuts",
+        "to": "sunflower seeds",
+        "removes": "nuts"
+      }
+    ]
+  },
+  {
+    "id": "fast-food-vegan-chick-fil-a-sandwich",
+    "title": "Chick-fil-A Sandwich (No Cruelty)",
+    "source": "Make It Dairy Free",
+    "rawTitle": "### Vegan Chick-fil-A Sandwich",
+    "rawBody": "- **URL:** https://www.gazoakleychef.com/recipes/vegan-chick-fil-a/ ✓ VERIFIED  (Gaz Oakley)\n- **Description:** Pickle-brined scratch seitan, peanut-oil-fried, on toasted bun. **Fast-food lead** with seitan, **fast-casual upsell** with Beyond Chicken Tender slab.\n- **Wholesale food cost:** **$1.20 / serving** (scratch seitan) / **$2.40 / serving** (Beyond Chicken Tender)\n- **Menu price:** **$5–8** (fast-food tier) / **$9–12** (fast-casual)\n- 240 g · 540 cal · 26 g · 30 min · 4 · **Medium** (per-plate fry; seitan bulk-preps) · ⚡ 🥘 (seitan)\n\n| Sub | Effect | Cost delta |\n|---|---|---|\n| Scratch pickle-brined seitan (default) | True fast-food food cost | baseline ($1.20) |\n| **Premium upsell:** Beyond Chicken Tender slab pickle-brined | Branded; fast-casual tier | +$1.20 → $2.40 / menu $9–12 |",
+    "valueRatio": null,
+    "valueTier": null,
+    "cuisine": "fast-food",
+    "cuisineName": "Fast-Food",
+    "courses": [
+      "main"
+    ],
+    "url": "https://makeitdairyfree.com/copycat-chick-fil-a-vegan-chicken/",
+    "urlStatus": "verified",
+    "urlNote": "URL replaced via url_overrides.json",
+    "description": "Pickle-brined scratch seitan, peanut-oil-fried, on toasted bun. **Fast-food lead** with seitan, **fast-casual upsell** with Beyond Chicken Tender slab.",
+    "cost": 1.2,
+    "menuPrice": null,
+    "weight": "240 g",
+    "calories": 540,
+    "protein": "26 g",
+    "time": "30m",
+    "prep": "30m",
+    "servings": 4,
+    "serves": 4,
+    "difficulty": 2,
+    "difficultyLabel": "Medium",
+    "difficultyNote": "per-plate fry; seitan bulk-preps",
+    "tags": [
+      "bulk-prep",
+      "fast-service"
+    ],
+    "sourcingTier": "in-house",
+    "subs": [
+      {
+        "from": "Scratch pickle-brined seitan (default)",
+        "effect": "True fast-food food cost",
+        "delta": "baseline ($1.20)"
+      },
+      {
+        "from": "**Premium upsell:** Beyond Chicken Tender slab pickle-brined",
+        "effect": "Branded; fast-casual tier",
+        "delta": "+$1.20 → $2.40 / menu $9–12"
+      }
+    ],
+    "alternatives": [],
+    "photo": "flat",
+    "photoLabel": "chick · fil · sandwich",
+    "badge": "Service-friendly",
+    "ingredients": [
+      "1 block extra firm tofu",
+      "1/2 cup dill pickle juice",
+      "1 tbsp vegan cane sugar",
+      "1/4 cup water",
+      "2 tsp paprika",
+      "2 tsp brown sugar",
+      "2 tsp salt",
+      "1 tsp black pepper",
+      "1 tsp garlic powder'",
+      "1 tsp onion powder",
+      "1/2 tsp cayenne pepper",
+      "1 cup all-purpose flour ((sub for cornmeal if gluten free))",
+      "1/4 cup cornstarch ((sub for arrowroot powder))",
+      "3 tbsp powdered sugar",
+      "1 tsp black pepper",
+      "1/2 tsp paprika",
+      "1/2 tsp chili powder",
+      "1/2 tsp salt",
+      "1/2 tsp baking soda",
+      "1/2 cup dairy free milk ((we like oat))",
+      "1 1/2 tsp apple cider vinegar",
+      "2 tbsp vegan butter, (melted)",
+      "oil for frying (peanut is best or vegetable if allergens)"
+    ],
+    "steps": [
+      "Place tofu, in package, in the freezer and freeze overnight.*This step is crucial for texture, don't skip.",
+      "Defrost by sitting out until thawed or microwaving for 10-15 minutes at a time.",
+      "Press tofu out for 30 mins by using a tofu press.*See post for details if you don't have a press.",
+      "Carefully pat dry any excess moisture with a towel.",
+      "Cut the tofu in half lengthwise, then diagonal to end up with 4 pieces (can cut smaller to make 8 if desired).",
+      "Whisk the brine ingredients together in a shallow bowl (cake pans or pie plates work great) and add tofu pieces and push down gently with hands.Remove and lightly pat dry the excess moistness just on the outside (do not press down). Do not let tofu pieces sit in the brine for more than 1 minute. Set aside.",
+      "In 3 separate shallow bowls or dishes, mix together the ingredients for the seasoning, breading and dredge. Set up an assembly line.",
+      "Bring a deep fryer to 375˚F (can use a heavy bottom skillet or pot if needed)",
+      "Evenly rub the seasoning mixture over both sides of all your tofu pieces.",
+      "Dip each piece into the breading and carefully push to coat evenly.",
+      "Move into the dredge and coat and then bring it back to the breading and coat.",
+      "Add tofu to deep frying basket, lower, and let cook for 1 1/2 to 2 mins until golden brown.",
+      "Place on paper towels or drying rack to let cool down.",
+      "Serve warm on sandwiches, biscuits, and more."
+    ],
+    "ingredientSource": "json-ld",
+    "allergens": [
+      "gluten",
+      "nuts",
+      "soy"
+    ],
+    "allergenSubs": [
+      {
+        "from": "all-purpose flour",
+        "to": "gluten-free all-purpose flour (Bob's Red Mill 1-to-1)",
+        "removes": "gluten"
+      },
+      {
+        "from": "peanuts",
+        "to": "roasted sunflower seeds",
+        "removes": "nuts"
+      },
+      {
+        "from": "tofu",
+        "to": "chickpea tofu (Burmese tofu)",
+        "removes": "soy"
+      }
+    ]
+  },
+  {
+    "id": "fast-food-chipotle-burrito-bowl",
+    "title": "Chipotle Burrito Bowl",
+    "source": "Rainbow Plant Life",
+    "rawTitle": "### Chipotle Burrito Bowl",
+    "rawBody": "- **URL:** https://thefoodietakesflight.com/chipotle-burrito-bowl/ ✓ VERIFIED\n- **Description:** Sofritas tofu, cilantro-lime rice, beans, salsas, guac. Build-line dream. **Note: this is \"fast-casual,\" not true fast-food** — Chipotle's own model runs $9–12 menu / 30% food cost. A \"Value Bowl\" sub (no guac, no sour cream) hits true fast-food economics for operators that want one.\n- **Wholesale food cost:** $3.20 / serving (full bowl with guac) / **$1.50 / Value Bowl** · **Menu price:** $11–14 (fast-casual) / **$7–10 (Value Bowl, fast-food)**\n- 480 g · 620 cal · 22 g · 30 min · 2 · **Easy** · 🥘 ⚡\n\n| Sub | Effect | Cost delta |\n|---|---|---|\n| Sofritas tofu (default) | Authentic Chipotle build | baseline ($3.20) |\n| Drop guac + sour cream → \"Value Bowl\" | True fast-food food cost | −$1.70 → $1.50 / menu $7–10 |\n| **Premium upsell:** Chunk Pulled in adobo (sofritas-grade) | Premium pulled-protein | +$2.00 → $5.20 / menu $14–17 |",
+    "valueRatio": null,
+    "valueTier": null,
+    "cuisine": "fast-food",
+    "cuisineName": "Fast-Food",
+    "courses": [
+      "main"
+    ],
+    "url": "https://rainbowplantlife.com/vegan-burrito-bowl/",
+    "urlStatus": "verified",
+    "urlNote": "URL replaced via url_overrides.json",
+    "description": "Sofritas tofu, cilantro-lime rice, beans, salsas, guac. Build-line dream. **Note: this is \"fast-casual,\" not true fast-food** — Chipotle's own model runs $9–12 menu / 30% food cost. A \"Value Bowl\" sub (no guac, no sour cream) hits true fast-food economics for operators that want one.",
+    "cost": 3.2,
+    "menuPrice": null,
+    "weight": "480 g",
+    "calories": 620,
+    "protein": "22 g",
+    "time": "30m",
+    "prep": "30m",
+    "servings": 2,
+    "serves": 2,
+    "difficulty": 1,
+    "difficultyLabel": "Easy",
+    "difficultyNote": null,
+    "tags": [
+      "bulk-prep",
+      "fast-service"
+    ],
+    "sourcingTier": "in-house",
+    "subs": [
+      {
+        "from": "Sofritas tofu (default)",
+        "effect": "Authentic Chipotle build",
+        "delta": "baseline ($3.20)"
+      },
+      {
+        "from": "Drop guac + sour cream → \"Value Bowl\"",
+        "effect": "True fast-food food cost",
+        "delta": "−$1.70 → $1.50 / menu $7–10"
+      },
+      {
+        "from": "**Premium upsell:** Chunk Pulled in adobo (sofritas-grade)",
+        "effect": "Premium pulled-protein",
+        "delta": "+$2.00 → $5.20 / menu $14–17"
+      }
+    ],
+    "alternatives": [],
+    "photo": "bowl",
+    "photoLabel": "chipotle · burrito · bowl",
+    "badge": "Service-friendly",
+    "ingredients": [
+      "Sofritas and/or",
+      "Mexican Black Beans",
+      "1 cup (190g) white Jasmine rice*",
+      "1 bay leaf",
+      "1 ½ cups (360 mL) room temperature water",
+      "½ teaspoon kosher salt, (more to taste)",
+      "2 teaspoons olive oil, (divided)",
+      "1 medium lime, (zested + 1 ½ tablespoons juice)",
+      "½ tablespoon lemon juice",
+      "1 cup (16g) fresh cilantro leaves and tender stems, chopped",
+      "1 ½ tablespoons avocado oil ((or oil of choice))",
+      "1 medium to large red onion, (thinly sliced)",
+      "1 large green bell pepper, (thinly sliced into strips**)",
+      "½ tablespoon fresh oregano, (finely chopped (or ½ teaspoon dried Mexican oregano))",
+      "½ teaspoon kosher salt",
+      "Freshly cracked black pepper",
+      "Charred Corn and Tomato Salsa ((recipe below) (or salsa of choice))",
+      "Lazy Guacamole ((recipe below))",
+      "Chopped cilantro",
+      "Vegan sour cream",
+      "Shredded romaine lettuce"
+    ],
+    "steps": [
+      "Make the protein of your choice. Both the Sofritas and Mexican Black Beans can be made a few days ahead of time.",
+      "Make the Charred Corn and Tomato Salsa, if using.",
+      "Prep the rice. Add the rice to a bowl under cold tap water and rinse for 1 minute while you agitate the rice with your hands.*** Drain in a fine-mesh sieve and transfer the rice to a medium saucepan. Add the water, ½ teaspoon kosher salt, bay leaf, and 1 teaspoon oil to the rice, stir well.",
+      "Cook the rice****. Bring to a boil, then reduce the heat to a simmer. Cover the pan of rice and simmer for 7 minutes, without stirring, until all liquid is absorbed and the rice is tender (you may want to uncover once or twice to ensure it’s at a simmer and not at a boil, but don’t stir. Take off the heat, uncover the pan, layer a clean dish towel on top of the pan, and place the lid back on. Steam for 10 minutes.",
+      "Finish the rice. Remove the bay leaf and fluff the rice with a fork. Stir in the lime zest, lime juice, lemon juice, and cilantro. Toss, and season with salt. If desired, add the extra teaspoon of olive oil for a little richness.",
+      "Meanwhile, make the Fajita Veggies. Heat the 1 ½ tablespoons oil in a 12-inch frying pan over medium-high heat until the oil shimmers. Add the peppers, onions, oregano, ½ teaspoon kosher salt, and pepper to season. Toss occasionally but not too often, and cook for 8 to 10 minutes, or until peppers are tender-crisp and the onions are starting to get caramelized. If there are lots of brown bits on the bottom of the pan, you can deglaze with a splash of water.",
+      "Make the Lazy Guacamole, if desired (recipe below).",
+      "Assemble the bowls: Layer some cooked rice into bowls, top with Sofritas and/or Mexican Black Beans, add a scoop of fajita veggies, a scoop of salsa, and a scoop of guacamole. If desired, finish with chopped cilantro and other toppings, such as vegan sour cream or shredded romaine lettuce."
+    ],
+    "ingredientSource": "json-ld",
+    "allergens": [],
+    "allergenSubs": []
+  },
+  {
+    "id": "fast-food-vegan-apple-hand-pie",
+    "title": "Apple Hand-Pie (No Cruelty)",
+    "source": "Nora Cooks",
+    "rawTitle": "### Vegan Apple Hand-Pie (**DESSERT** — McDonald's-Style)",
+    "rawBody": "- **URL:** https://www.noracooks.com/vegan-apple-pie/ ⚠ REFERENCE (vegan) *(Nora Cooks's full-size vegan apple pie is the verified filling base. Adapted here to the QSR hand-pie format: same filling, but enclosed in vegan puff pastry sleeves, par-baked then fried to order. **Full vegan hand-pie recipe TBD in v6.**)*\n- **Description:** Spiced apple-cinnamon filling sealed in a vegan puff pastry sleeve, par-baked then deep-fried to order for the bubbled, blistered McDonald's-style crust. The QSR comfort dessert — pairs with vegan soft-serve as a \"pie & cone\" combo upsell.\n- **Wholesale food cost:** $1.20 / piece · **Menu price:** $4–6 ea / $7–9 (pie + soft-serve combo)\n- **Weight:** 90 g / piece · **Calories:** 280 · **Protein:** 3 g · **Time:** 45 min build (assemble + par-bake), 4 min fry per ticket · **Servings:** 8 / batch\n- **Restaurant difficulty:** **Medium** — par-bake & freeze; fry from frozen 4 min per ticket. Holds 30+ days frozen.\n- **Tags:** 🥘 Bulk-Prep (par-baked frozen) · ⚡ Fast-Service\n\n| Sub | Effect | Cost delta |\n|---|---|---|\n| Apple-cinnamon (default) | QSR classic | baseline |\n| Berry / cherry filling | Seasonal LTO | +$0.20 |\n| Add vegan soft-serve scoop | Combo upsell | +$0.60 → menu $7–9 |",
+    "valueRatio": 4.166666666666667,
+    "valueTier": "Strong Earner",
+    "cuisine": "fast-food",
+    "cuisineName": "Fast-Food",
+    "courses": [
+      "dessert"
+    ],
+    "url": "https://www.noracooks.com/vegan-apple-pie/",
+    "urlStatus": "reference-vegan",
+    "urlNote": "Nora Cooks's full-size vegan apple pie is the verified filling base. Adapted here to the QSR hand-pie format: same filling, but enclosed in vegan puff pastry sleeves, par-baked then fried to order. **Full vegan hand-pie recipe TBD in v6.**",
+    "description": "Spiced apple-cinnamon filling sealed in a vegan puff pastry sleeve, par-baked then deep-fried to order for the bubbled, blistered McDonald's-style crust. The QSR comfort dessert — pairs with vegan soft-serve as a \"pie & cone\" combo upsell.",
+    "cost": 1.2,
+    "menuPrice": "$4–6 ea / $7–9 (pie + soft-serve combo)",
+    "weight": "90 g / piece",
+    "calories": 280,
+    "protein": "3 g",
+    "time": "45m",
+    "prep": "45m",
+    "servings": 8,
+    "serves": 8,
+    "difficulty": 2,
+    "difficultyLabel": "Medium",
+    "difficultyNote": "par-bake & freeze; fry from frozen 4 min per ticket. Holds 30+ days frozen.",
+    "tags": [
+      "bulk-prep",
+      "fast-service"
+    ],
+    "sourcingTier": "in-house",
+    "subs": [
+      {
+        "from": "Apple-cinnamon (default)",
+        "effect": "QSR classic",
+        "delta": "baseline"
+      },
+      {
+        "from": "Berry / cherry filling",
+        "effect": "Seasonal LTO",
+        "delta": "+$0.20"
+      },
+      {
+        "from": "Add vegan soft-serve scoop",
+        "effect": "Combo upsell",
+        "delta": "+$0.60 → menu $7–9"
+      }
+    ],
+    "alternatives": [],
+    "photo": "flat",
+    "photoLabel": "apple · hand · pie",
+    "badge": "Strong Earner",
+    "ingredients": [
+      "2 vegan pie crusts ((double recipe))",
+      "7-8 medium sized apples (granny smith or honey crisp are best)",
+      "1 tablespoon lemon juice",
+      "1/2 cup granulated sugar",
+      "3 tablespoons all purpose flour",
+      "1 teaspoon ground cinnamon",
+      "1 teaspoon pure vanilla extract",
+      "2 tablespoons vegan butter",
+      "few tablespoons non-dairy milk for brushing pie crust + sprinkle of coarse sugar, optional"
+    ],
+    "steps": [
+      "Prepare the crusts: Make a double recipe of Vegan Pie Crust. Do not roll out immediately, but chill the two pie crusts as balls of dough in the refrigerator to rest until the filling is ready. Alternatively, you may use two store bought pie crusts, but the crust won't taste as good!",
+      "Make the apple filling: Peel and slice or chop the apples and add to a large saucepan. Add the lemon juice, sugar, flour, cinnamon and vanilla. Cook over medium heat, stirring frequently, just until the apples start to soften, about 10-15 minutes. Remove from heat and set aside.",
+      "Preheat the oven to 425 degrees F.",
+      "Sprinkle flour on a clean counter or surface and roll out the bottom pie crust to about 12 inches in diameter. Wrap it around your rolling pin and gently transfer to a 9 inch pie pan and cut off any excess hanging dough.",
+      "Add the apple filling, mounding it slightly in the center. Dab the top of the apple mixture with vegan butter.",
+      "Roll out the second crust and gently place it on top of the filling. Trim, seal and flute the edges. Cut a few slits in the crust to vent. Brush with a little non-dairy milk and sprinkle with coarse sugar, if desired.",
+      "Bake for about 40 minutes, until the crust is golden brown and the apple juices are bubbly. If the crust gets too brown, place a pie shield around the crust.",
+      "Let the pie cool at room temperature for 30 minutes if you can (the filling will thicken a bit and cool down). Serve with vegan whipped cream or non-dairy vanilla ice cream. Enjoy!"
+    ],
+    "ingredientSource": "json-ld",
+    "allergens": [],
+    "allergenSubs": []
+  }
+]
