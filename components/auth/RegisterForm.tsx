@@ -130,16 +130,18 @@ export function RegisterForm() {
 
   if (status === "success") {
     return (
-      <div style={s.successBox}>
-        <div style={s.successIcon}>✉</div>
-        <h2 style={s.successHeading}>Check your email</h2>
-        <p style={s.successText}>
-          We sent a verification link to <strong>{formData.email}</strong>. Click it to activate
-          your account, then sign in.
-        </p>
-        <p style={s.successText}>
-          <Link href="/login" style={s.link}>Go to sign in</Link>
-        </p>
+      <div style={s.formCard}>
+        <div style={s.successBox}>
+          <div style={s.successIcon}>✉</div>
+          <h2 style={s.successHeading}>Check your email</h2>
+          <p style={s.successText}>
+            We sent a verification link to <strong>{formData.email}</strong>. Click it to activate
+            your account, then sign in.
+          </p>
+          <p style={s.successText}>
+            <Link href="/login" style={s.link}>Go to sign in</Link>
+          </p>
+        </div>
       </div>
     );
   }

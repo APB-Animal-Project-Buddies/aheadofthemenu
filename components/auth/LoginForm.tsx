@@ -71,10 +71,12 @@ export function LoginForm() {
 
   if (status === "success") {
     return (
-      <div style={s.successBox}>
-        <div style={s.successIcon}>✓</div>
-        <h2 style={s.successHeading}>Logged in!</h2>
-        <p style={s.successText}>Taking you to Ahead of the Menu…</p>
+      <div style={s.formCard}>
+        <div style={s.successBox}>
+          <div style={s.successIcon}>✓</div>
+          <h2 style={s.successHeading}>Logged in!</h2>
+          <p style={s.successText}>Taking you to Ahead of the Menu…</p>
+        </div>
       </div>
     );
   }
