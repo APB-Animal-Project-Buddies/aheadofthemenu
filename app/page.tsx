@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { LandingAuth } from "@/components/LandingAuth";
 import "./aotm.css";
 
 export const metadata: Metadata = {
@@ -21,8 +21,7 @@ export default function AheadOfTheMenu() {
         </span>
 
         <nav className="aotm-auth" aria-label="Account">
-          <Link className="aotm-auth-login" href="/login">Log in</Link>
-          <Link className="aotm-auth-signup" href="/register">Sign up</Link>
+          <LandingAuth />
         </nav>
       </header>
 

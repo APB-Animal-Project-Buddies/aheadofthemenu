@@ -104,6 +104,28 @@
   border-color: var(--accent-2);
   transform: translateY(-1px);
 }
+/* logged-in: avatar + name linking to the profile */
+.aotm-auth-account {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 40px;
+  padding: 0 0.7rem 0 0.35rem;
+  border-radius: 999px;
+  color: var(--cream);
+  text-decoration: none;
+  border: 1px solid transparent;
+  transition: background 0.25s ease, border-color 0.25s ease;
+}
+.aotm-auth-account:hover { background: rgba(250, 248, 245, 0.1); border-color: var(--cream-faint); }
+.aotm-auth-name {
+  font-size: 0.9rem;
+  font-weight: 600;
+  max-width: 11rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 
 /* The global fixed "Home" button (app/layout.tsx) is redundant on the landing
    itself and would sit on top of the auth buttons — hide it here. */
