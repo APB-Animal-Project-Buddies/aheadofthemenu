@@ -2,8 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { getNhost } from "@/lib/nhost/client";
+import { getNhost, nhostAuthUrl } from "@/lib/nhost/client";
 import { authStyles as s } from "@/components/auth/authStyles";
 
 /**
@@ -12,7 +11,6 @@ import { authStyles as s } from "@/components/auth/authStyles";
  * in the URL; we exchange it for a session (logging the user in) and go home.
  */
 export default function VerifyPage() {
-  const router = useRouter();
   const [state, setState] = useState<"working" | "done" | "error">("working");
 
   useEffect(() => {
@@ -21,14 +19,43 @@ export default function VerifyPage() {
       setState("error");
       return;
     }
-    getNhost()
-      .auth.refreshToken({ refreshToken })
-      .then(() => {
-        setState("done");
-        setTimeout(() => router.replace("/"), 1500);
-      })
-      .catch(() => setState("error"));
-  }, [router]);
+    let cancelled = false;
+    (async () => {
+      // The email is already verified server-side by the time Nhost redirects
+      // here. Try to establish a session from the refreshToken via a direct
+      // fetch (the SDK method stalls here) — with an abort timeout so it can
+      // never hang — then hard-navigate. Fall back to /login if it doesn't take.
+      let dest = "/login";
+      try {
+        const ctrl = new AbortController();
+        const timer = setTimeout(() => ctrl.abort(), 4000);
+        const res = await fetch(`${nhostAuthUrl()}/token`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ refreshToken }),
+          signal: ctrl.signal,
+        });
+        clearTimeout(timer);
+        if (res.ok) {
+          const session = await res.json();
+          try {
+            getNhost().sessionStorage.set(session);
+            dest = "/"; // logged in — go home
+          } catch {
+            dest = "/login";
+          }
+        }
+      } catch {
+        /* timed out or blocked — email is still verified, just send to login */
+      }
+      if (cancelled) return;
+      setState("done");
+      setTimeout(() => window.location.assign(dest), 1200);
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   return (
     <div style={s.container}>

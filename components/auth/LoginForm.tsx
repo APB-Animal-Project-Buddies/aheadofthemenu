@@ -2,17 +2,15 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useAuth, authErrorMessage, isUnverifiedError } from "@/components/AuthProvider";
 import { authStyles as s } from "./authStyles";
 
 /**
- * Sign-in card. Rendered both as a full page (/login) and inside
- * the modal (intercepted route). On success it routes to /, which
- * also dismisses the modal when shown as one.
+ * Sign-in card. Rendered both as a full page (/login) and inside the modal
+ * (intercepted route). On success it hard-navigates to / — reliably dismissing
+ * the modal and reloading with the fresh session.
  */
 export function LoginForm() {
-  const router = useRouter();
   const { signIn, resendVerification } = useAuth();
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
@@ -47,7 +45,9 @@ export function LoginForm() {
     try {
       await signIn(formData.email, formData.password);
       setStatus("success");
-      setTimeout(() => router.push("/"), 800);
+      // Hard-navigate: reliably leaves the intercepting-route modal AND reloads
+      // with the fresh session (router.push from inside the modal was stalling).
+      setTimeout(() => window.location.assign("/"), 600);
     } catch (err) {
       if (isUnverifiedError(err)) {
         setUnverified(true);

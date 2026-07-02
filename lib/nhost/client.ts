@@ -37,6 +37,12 @@ function resolveConfig(): { subdomain: string; region: string } {
   );
 }
 
+/** Base URL of the Nhost Auth service, e.g. https://<sub>.auth.<region>.nhost.run/v1 */
+export function nhostAuthUrl(): string {
+  const { subdomain, region } = resolveConfig();
+  return `https://${subdomain}.auth.${region}.nhost.run/v1`;
+}
+
 let client: NhostClient | null = null;
 
 /**
