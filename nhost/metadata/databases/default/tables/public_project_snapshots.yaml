@@ -1,7 +1,0 @@
-table:
-  name: project_snapshots
-  schema: public
-object_relationships:
-  - name: project
-    using:
-      foreign_key_constraint_on: project_handle

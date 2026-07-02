@@ -1,7 +1,0 @@
-table:
-  name: dish_edits
-  schema: public
-object_relationships:
-  - name: dish
-    using:
-      foreign_key_constraint_on: dish_id
