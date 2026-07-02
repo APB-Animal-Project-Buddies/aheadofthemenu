@@ -1,0 +1,3 @@
+[submodule "backend_migrations"]
+	path = backend_migrations
+	url = https://github.com/APB-Animal-Project-Buddies/backend_migrations.git
