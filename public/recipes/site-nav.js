@@ -9,10 +9,12 @@
 
 (function () {
   const TABS = [
-    { id: 'menus',    href: '/menus',            label: 'Menus' },
     { id: 'recipes',  href: '/recipes',          label: 'Recipes' },
+    { id: 'menus',    href: '/menus',            label: 'Menus' },
+    { id: 'dishes',   href: '/dishes',           label: 'Dishes' },
     { id: 'dairy',    href: '/top-alternatives', label: 'Top Alternatives' },
     { id: 'tips',     href: '/tips-and-tricks',  label: 'Tips & Tricks' },
+    { id: 'reverse',  href: '/reverse-lookup',   label: 'Reverse Lookup' },
   ];
 
   function render() {
@@ -29,7 +31,6 @@
               <span class="leaf-mark" aria-hidden="true"></span>
               <span class="wordmark">Ahead of the <span style="color:#ff6b35;font-style:italic;">Menu</span></span>
             </a>
-            <div class="powered-by">powered by <a href="/" title="Animal Project Buddies">Animal Project Buddies</a></div>
           </div>
           <button class="nav-burger" type="button" aria-label="Menu" aria-expanded="false">
             <span></span><span></span><span></span>

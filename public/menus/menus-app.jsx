@@ -604,7 +604,7 @@ function App() {
       {history.length > 0 && <History items={history} activeId={menu?.id} onPick={handlePickHistory} />}
       <Tips />
       <footer className="foot" style={{ marginTop: 0 }}>
-        Animal Project Buddies · Sample menus are starting points — tune courses and dishes to your kitchen
+        Ahead of the Menu · Sample menus are starting points — tune courses and dishes to your kitchen
       </footer>
     </>
   );

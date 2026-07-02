@@ -252,9 +252,9 @@ function App() {
         </>
 
       <footer className="foot">
-        Animal Project Buddies · Recipes are free to use, share, and adapt for your kitchen ·
+        Ahead of the Menu · Recipes are free to use, share, and adapt for your kitchen ·
         Source recipes are linked to their authors. Found an issue?{' '}
-        <a href="mailto:hello@animalprojectbuddies.com?subject=Recipes feedback" style={{ color: 'var(--moss)' }}>Email us</a>.
+        <a href="mailto:hello@www.aheadofthemenu.com?subject=Recipes feedback" style={{ color: 'var(--moss)' }}>Email us</a>.
       </footer>
 
       <window.MenuDrawer

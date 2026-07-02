@@ -451,7 +451,7 @@ function MenuDrawer({ open, items, onClose, onChangeQty, onRemove, menuName, set
       `Dishes:`,
       ...items.map(it => `  • ${it.title} — ×${it.qty} @ ${window.fmtCost(it.cost)}/plate`),
       ``,
-      `Generated from animalprojectbuddies.com/recipes`,
+      `Generated from www.aheadofthemenu.com/recipes`,
     ];
     const subject = encodeURIComponent(`Menu: ${menuName}`);
     const body = encodeURIComponent(lines.join('\n'));
