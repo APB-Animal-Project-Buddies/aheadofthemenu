@@ -36,6 +36,11 @@ interface AuthContextValue {
   session: StoredSession | null;
   userId: string | null;
   email: string | null;
+  displayName: string | null;
+  /** Gravatar URL Nhost derives from the email (may resolve to a blank image). */
+  avatarUrl: string | null;
+  emailVerified: boolean;
+  zipCode: string | null;
   role: Role | null;
   userType: UserType | null;
   isAuthenticated: boolean;
@@ -160,6 +165,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     session,
     userId: user?.id ?? null,
     email: user?.email ?? null,
+    displayName: user?.displayName || null,
+    avatarUrl: user?.avatarUrl || null,
+    emailVerified: user?.emailVerified ?? false,
+    zipCode: metaString(user?.metadata, "zip_code"),
     role: metaString(user?.metadata, "role") as Role | null,
     userType: metaString(user?.metadata, "user_type") as UserType | null,
     isAuthenticated: !!session,

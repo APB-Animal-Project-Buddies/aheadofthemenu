@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/components/AuthProvider";
+import { Avatar } from "@/components/Avatar";
 
 type Tab = { href: string; label: string };
 type Variant = "business" | "consumer";
@@ -49,8 +50,9 @@ function variantFor(userType: string | null, pathname: string): Variant {
 
 export function SiteNav() {
   const pathname = usePathname();
-  const { userType, isAuthenticated, email, signOut } = useAuth();
+  const { userType, isAuthenticated, email, displayName, avatarUrl, role, signOut } = useAuth();
   const [open, setOpen] = useState(false);
+  const [accountOpen, setAccountOpen] = useState(false);
 
   if (pathname === "/" || HIDDEN_PREFIXES.some((p) => pathname.startsWith(p))) return null;
 
@@ -104,12 +106,40 @@ export function SiteNav() {
         {/* Auth pill */}
         <div className="ml-auto flex items-center gap-2 text-sm">
           {isAuthenticated ? (
-            <>
-              <span className="hidden max-w-[12rem] truncate text-neutral-500 sm:inline">{email}</span>
-              <button type="button" onClick={() => signOut()} className="rounded-full border border-neutral-200 px-3 py-1.5 font-medium text-neutral-700 transition hover:border-apb-accent hover:text-apb">
-                Sign out
+            <div className="relative">
+              <button
+                type="button"
+                onClick={() => setAccountOpen((v) => !v)}
+                aria-expanded={accountOpen}
+                aria-label="Account menu"
+                className="flex items-center gap-1 rounded-full border border-transparent p-0.5 transition hover:border-neutral-200"
+              >
+                <Avatar email={email} displayName={displayName} avatarUrl={avatarUrl} size={32} />
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className={`text-neutral-500 transition ${accountOpen ? "rotate-180" : ""}`}><path d="m6 9 6 6 6-6" /></svg>
               </button>
-            </>
+              {accountOpen && (
+                <>
+                  <div className="fixed inset-0 z-0" onClick={() => setAccountOpen(false)} />
+                  <div className="absolute right-0 z-10 mt-2 min-w-[14rem] overflow-hidden rounded-xl border border-neutral-200 bg-white py-1 shadow-lg">
+                    <div className="border-b border-neutral-100 px-4 py-3">
+                      <div className="truncate font-semibold text-neutral-800">{displayName || email}</div>
+                      {displayName && <div className="truncate text-xs text-neutral-500">{email}</div>}
+                      {role && (
+                        <span className="mt-1.5 inline-block rounded-full bg-apb-cream px-2 py-0.5 text-[11px] font-medium capitalize text-apb">
+                          {role.replace("-", " ")}
+                        </span>
+                      )}
+                    </div>
+                    <Link href="/profile" onClick={() => setAccountOpen(false)} className="block px-4 py-2.5 text-neutral-700 transition hover:bg-neutral-50">
+                      Profile
+                    </Link>
+                    <button type="button" onClick={() => { setAccountOpen(false); signOut(); }} className="block w-full px-4 py-2.5 text-left text-neutral-700 transition hover:bg-neutral-50">
+                      Sign out
+                    </button>
+                  </div>
+                </>
+              )}
+            </div>
           ) : (
             <>
               <Link href="/login" className="rounded-full px-3 py-1.5 font-medium text-neutral-700 transition hover:text-apb">Log in</Link>
