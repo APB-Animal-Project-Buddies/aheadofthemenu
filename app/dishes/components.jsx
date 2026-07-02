@@ -232,14 +232,7 @@ function DishCard({ dish, saved, inMenu, onToggleSave, onAddToMenu, onOpen }) {
           <div className="m"><div className="v">{fmtCost(dish.cost)}</div><div className="l">/ plate</div></div>
         </div>
       </div>
-      <button
-        className={"add-btn" + (inMenu ? ' added' : '')}
-        onClick={(e) => { e.stopPropagation(); onAddToMenu(dish); }}
-        aria-label={inMenu ? 'In menu' : 'Add to menu'}
-        title={inMenu ? 'In menu' : 'Add to menu'}
-      >
-        {inMenu ? '✓' : '+'}
-      </button>
+      {/* "Add to menu" removed for now (Your Menu feature paused). */}
     </article>
   );
 }
@@ -414,7 +407,7 @@ function MenuDrawer({ open, items, onClose, onChangeQty, onRemove, menuName, set
       `Dishes:`,
       ...items.map(it => `  • ${it.title} — ×${it.qty} @ ${fmtCost(it.cost)}/plate`),
       ``,
-      `Generated from animalprojectbuddies.com/dishes`,
+      `Generated from aheadofthemenu.com/dishes`,
     ];
     const subject = encodeURIComponent(`Menu: ${menuName}`);
     const body = encodeURIComponent(lines.join('\n'));

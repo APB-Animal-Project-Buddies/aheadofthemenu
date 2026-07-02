@@ -299,9 +299,9 @@ export default function DishesPage() {
       </>
 
       <footer className="foot">
-        Animal Project Buddies · Dishs are free to use, share, and adapt for your kitchen ·
+        Ahead of the Menu · Dishs are free to use, share, and adapt for your kitchen ·
         Source dishes are linked to their authors. Found an issue?{' '}
-        <a href="mailto:hello@animalprojectbuddies.com?subject=Dishes feedback" style={{ color: 'var(--moss)' }}>Email us</a>.
+        <a href="mailto:hello@aheadofthemenu.com?subject=Dishes feedback" style={{ color: 'var(--moss)' }}>Email us</a>.
       </footer>
 
       <MenuDrawer
