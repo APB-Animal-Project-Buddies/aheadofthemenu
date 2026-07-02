@@ -1,1 +1,0 @@
-DROP TABLE IF EXISTS dish_edits;
