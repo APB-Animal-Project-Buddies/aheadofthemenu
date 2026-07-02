@@ -1,18 +1,22 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useAuth, authErrorMessage } from "@/components/AuthProvider";
 import { ROLE_OPTIONS, USER_TYPE_LABELS, type Role, type UserType } from "@/lib/nhost/roles";
+import { normalizeHandle, validateHandle } from "@/lib/handle";
 import { authStyles as s } from "./authStyles";
 
 interface RegistrationData {
   email: string;
   password: string;
   confirmPassword: string;
+  handle: string;
   zipCode: string;
   role: Role;
 }
+
+type HandleState = { state: "idle" | "checking" | "ok" | "bad"; msg: string };
 
 // Roles grouped by user type, preserving ROLE_OPTIONS order, for the picker.
 const ROLE_GROUPS = (Object.keys(USER_TYPE_LABELS) as UserType[]).map((userType) => ({
@@ -30,12 +34,37 @@ export function RegisterForm() {
     email: "",
     password: "",
     confirmPassword: "",
+    handle: "",
     zipCode: "",
     role: "homecook",
   });
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
   const [error, setError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
+  const [handleState, setHandleState] = useState<HandleState>({ state: "idle", msg: "" });
+
+  // Live handle check: format first (client), then debounced availability (server).
+  useEffect(() => {
+    const h = formData.handle;
+    if (!h) return setHandleState({ state: "idle", msg: "" });
+    const err = validateHandle(h);
+    if (err) return setHandleState({ state: "bad", msg: err });
+    setHandleState({ state: "checking", msg: "Checking availability…" });
+    const t = setTimeout(async () => {
+      try {
+        const res = await fetch(`/api/handles?handle=${encodeURIComponent(normalizeHandle(h))}`);
+        const data = await res.json();
+        setHandleState(
+          data.available
+            ? { state: "ok", msg: "Available" }
+            : { state: "bad", msg: data.error || "That handle is taken" }
+        );
+      } catch {
+        setHandleState({ state: "idle", msg: "" });
+      }
+    }, 450);
+    return () => clearTimeout(t);
+  }, [formData.handle]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -67,12 +96,24 @@ export function RegisterForm() {
       setStatus("error");
       return;
     }
+    const handleErr = validateHandle(formData.handle);
+    if (handleErr) {
+      setError(handleErr);
+      setStatus("error");
+      return;
+    }
+    if (handleState.state === "bad") {
+      setError(handleState.msg);
+      setStatus("error");
+      return;
+    }
 
     try {
       const { needsVerification } = await signUp({
         email: formData.email,
         password: formData.password,
         role: formData.role,
+        handle: normalizeHandle(formData.handle),
         zipCode: formData.zipCode || undefined,
       });
       setStatus("success");
@@ -112,6 +153,34 @@ export function RegisterForm() {
         <div style={s.field}>
           <label style={s.label}>Email <span style={s.required}>*</span></label>
           <input type="email" name="email" placeholder="you@example.com" value={formData.email} onChange={handleChange} required style={s.input} />
+        </div>
+
+        <div style={s.field}>
+          <label style={s.label}>Handle <span style={s.required}>*</span></label>
+          <input
+            type="text"
+            name="handle"
+            placeholder="e.g. chef_nora"
+            value={formData.handle}
+            onChange={handleChange}
+            autoCapitalize="none"
+            autoCorrect="off"
+            spellCheck={false}
+            required
+            style={s.input}
+          />
+          {handleState.state !== "idle" && (
+            <span
+              style={{
+                fontSize: 12,
+                color:
+                  handleState.state === "ok" ? "#1d9e75" : handleState.state === "bad" ? "#c33" : "#999",
+              }}
+            >
+              {handleState.state === "ok" ? "✓ " : ""}
+              {handleState.msg}
+            </span>
+          )}
         </div>
 
         <div style={s.field}>

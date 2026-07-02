@@ -29,6 +29,7 @@ export interface SignUpParams {
   email: string;
   password: string;
   role: Role;
+  handle: string;
   zipCode?: string;
 }
 
@@ -36,6 +37,7 @@ interface AuthContextValue {
   session: StoredSession | null;
   userId: string | null;
   email: string | null;
+  handle: string | null;
   displayName: string | null;
   /** Gravatar URL Nhost derives from the email (may resolve to a blank image). */
   avatarUrl: string | null;
@@ -115,7 +117,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const signUp = useCallback(
-    async ({ email, password, role, zipCode }: SignUpParams) => {
+    async ({ email, password, role, handle, zipCode }: SignUpParams) => {
       const nhost = getNhost();
       const res = await nhost.auth.signUpEmailPassword({
         email,
@@ -125,6 +127,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           metadata: {
             user_type: userTypeForRole(role),
             role,
+            handle,
             zip_code: zipCode || null,
           },
         },
@@ -165,6 +168,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     session,
     userId: user?.id ?? null,
     email: user?.email ?? null,
+    handle: metaString(user?.metadata, "handle"),
     displayName: user?.displayName || null,
     avatarUrl: user?.avatarUrl || null,
     emailVerified: user?.emailVerified ?? false,
