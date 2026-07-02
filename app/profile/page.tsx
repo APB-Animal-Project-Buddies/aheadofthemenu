@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { QRCodeSVG } from "qrcode.react";
 import { useAuth } from "@/components/AuthProvider";
 import { Avatar } from "@/components/Avatar";
 import { ROLE_OPTIONS, USER_TYPE_LABELS } from "@/lib/nhost/roles";
@@ -20,6 +21,9 @@ export default function ProfilePage() {
     handle, role, userType, zipCode, emailVerified, resendVerification, signOut,
   } = useAuth();
   const [resend, setResend] = useState<"idle" | "sending" | "sent" | "error">("idle");
+  const [origin, setOrigin] = useState("");
+  useEffect(() => setOrigin(window.location.origin), []);
+  const activeDishesUrl = handle && origin ? `${origin}/${handle}/active-dishes` : "";
 
   // --- handle editor ---
   const [editingHandle, setEditingHandle] = useState(false);
@@ -91,6 +95,22 @@ export default function ProfilePage() {
 
   return (
     <main className="mx-auto max-w-2xl px-4 py-10">
+      {activeDishesUrl && (
+        <div className="mb-6 flex items-center gap-4 rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm">
+          <div className="flex-none rounded-lg bg-white p-1">
+            <QRCodeSVG value={activeDishesUrl} size={92} marginSize={1} />
+          </div>
+          <div className="min-w-0">
+            <div className="font-medium text-neutral-900">Your active dishes</div>
+            <a href={`/${handle}/active-dishes`} className="break-all text-sm text-apb hover:underline">
+              {activeDishesUrl}
+            </a>
+            <p className="mt-1 text-xs text-neutral-500">
+              Share this QR — it opens the dishes you currently have open for review.
+            </p>
+          </div>
+        </div>
+      )}
       <div className="overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-sm">
         {/* Header */}
         <div className="flex items-center gap-4 border-b border-neutral-100 bg-apb-cream px-6 py-6">

@@ -111,20 +111,27 @@ export async function POST(request: Request) {
       notes: body.notes ? String(body.notes).trim() : null,
     };
 
-    // 1) Save the review instance. Include substituted/allergens when those columns
-    //    exist; fall back to the base insert if the migration hasn't been applied.
-    const doInsert = (withSub: boolean) =>
+    // Active-review window (auto-expires after 24h) + author (the signed-in
+    // creator, if any — passed via X-User-Id like the dish-submit flow).
+    const activeUntil = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
+    const authorId = request.headers.get("x-user-id") || null;
+    const extraVars = { ...baseVars, substituted, allergens, substitutions, activeUntil, authorId };
+
+    // 1) Save the review instance. Include the extended columns
+    //    (substituted/allergens/active_until/author_id) when they exist; fall
+    //    back to the base insert if the migration hasn't been applied.
+    const doInsert = (withExtra: boolean) =>
       graphql<{ insert_review_instance_one: { id: string } }>(
         `mutation (
            $id: bpchar!, $dishId: Int!, $name: String!, $chefType: String!,
-           $eventContext: String, $difficulty: Int!, $notes: String${withSub ? ", $substituted: Boolean!, $allergens: [String!]!, $substitutions: jsonb!" : ""}
+           $eventContext: String, $difficulty: Int!, $notes: String${withExtra ? ", $substituted: Boolean!, $allergens: [String!]!, $substitutions: jsonb!, $activeUntil: timestamptz, $authorId: uuid" : ""}
          ) {
            insert_review_instance_one(object: {
              id: $id, dish_id: $dishId, name: $name, chef_type: $chefType,
-             event_context: $eventContext, difficulty: $difficulty, notes: $notes${withSub ? ", substituted: $substituted, allergens: $allergens, substitutions: $substitutions" : ""}
+             event_context: $eventContext, difficulty: $difficulty, notes: $notes${withExtra ? ", substituted: $substituted, allergens: $allergens, substitutions: $substitutions, active_until: $activeUntil, author_id: $authorId" : ""}
            }) { id }
          }`,
-        { useAdminSecret: true, variables: withSub ? { ...baseVars, substituted, allergens, substitutions } : baseVars }
+        { useAdminSecret: true, variables: withExtra ? extraVars : baseVars }
       );
 
     let insertInstance = await doInsert(true);

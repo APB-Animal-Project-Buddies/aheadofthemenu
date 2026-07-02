@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { ChipGroup } from "@/components/form/ChipGroup";
 import { ALLERGENS } from "@/lib/dishes";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/components/AuthProvider";
 
 interface DishReview {
     id: number;
@@ -121,6 +122,8 @@ function CreateReviewLinkForm({ dish }: { dish: DishReview }) {
     const [customDraft, setCustomDraft] = useState("");
     const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
     const [error, setError] = useState<string | null>(null);
+    const { userId } = useAuth();
+    const [showConfirm, setShowConfirm] = useState(false);
     const [reviewUrl, setReviewUrl] = useState<string | null>(null);
     const [copied, setCopied] = useState(false);
 
@@ -141,14 +144,20 @@ function CreateReviewLinkForm({ dish }: { dish: DishReview }) {
     const removeCustom = (i: number) =>
         setFormData(prev => ({ ...prev, customSwaps: prev.customSwaps.filter((_, idx) => idx !== i) }));
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    // Generating a link also sets the dish "active" for 24h — confirm first.
+    const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+        setShowConfirm(true);
+    };
+
+    const confirmGenerate = async () => {
+        setShowConfirm(false);
         setStatus("submitting");
         setError(null);
         try {
             const res = await fetch("/api/review-instances", {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: { "Content-Type": "application/json", ...(userId ? { "X-User-Id": userId } : {}) },
                 body: JSON.stringify({
                     dishId: dish.id,
                     name: formData.name.trim(),
@@ -418,6 +427,25 @@ function CreateReviewLinkForm({ dish }: { dish: DishReview }) {
             <Button type="submit" disabled={status === "submitting" || !formData.name.trim()}>
                 {status === "submitting" ? "Creating…" : "Generate review link"}
             </Button>
+
+            {showConfirm && (
+                <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/50 p-4" onClick={() => setShowConfirm(false)}>
+                    <div className="w-full max-w-sm rounded-2xl bg-white p-6 shadow-xl" onClick={(e) => e.stopPropagation()}>
+                        <h3 className="text-lg font-semibold text-apb">Set this as an active dish?</h3>
+                        <p className="mt-2 text-sm text-neutral-600">
+                            Generating the link marks <strong>{dish.dish_name}</strong> as an active dish for <strong>24 hours</strong>. During that window it appears on your active-dishes page, and anyone with the link or QR can review it.
+                        </p>
+                        <div className="mt-5 flex justify-end gap-2">
+                            <button type="button" onClick={() => setShowConfirm(false)} className="rounded-full border border-neutral-200 px-4 py-2 text-sm font-medium text-neutral-600 transition hover:bg-neutral-50">
+                                Cancel
+                            </button>
+                            <button type="button" onClick={confirmGenerate} className="rounded-full bg-apb px-4 py-2 text-sm font-semibold text-white transition hover:opacity-90">
+                                Generate &amp; activate
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </form>
     );
 }
