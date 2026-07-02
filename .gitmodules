@@ -1,3 +1,0 @@
-[submodule "nhost/migrations"]
-	path = nhost/migrations
-	url = https://github.com/APB-Animal-Project-Buddies/backend_migrations.git
