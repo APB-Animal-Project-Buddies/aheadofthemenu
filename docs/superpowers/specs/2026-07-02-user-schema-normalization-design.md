@@ -1,105 +1,127 @@
 # User Schema Normalization: Business vs Consumer Split
 
-**Date:** 2026-07-02  
-**Status:** Design (pending review)  
-**Scope:** MVP — normalize user profile data, split business/consumer roles, add dish ownership
+**Date:** 2026-07-02 (v2: 2026-07-03)
+**Status:** Backend implemented & verified — frontend wiring pending
+**Scope:** Normalize user profile data, split business/consumer roles, add dish
+ownership, and introduce creators (recipe sources) as claimable entities.
 
 ## Overview
 
-Currently, user profile data (handle, user_type, role, zip_code) lives in Nhost's `auth.users.metadata` as JSON. This design replaces that with a proper relational schema: a shared `users` table, plus type-specific `business_users` and `consumer_users` tables. This foundation enables business features (inventory, addresses, etc.) and improves queryability.
+User profile data (handle, user_type, role, zip_code) previously lived in
+Nhost's `auth.users.metadata` as JSON. This design replaces that with a proper
+relational schema: a shared `users` table plus type-specific `business_users`
+and `consumer_users` tables, dish ownership, and a `creators` table for recipe
+sources.
 
-## Current State
+## Migrations (in `backend_migrations`, branch `feat/user-schema-normalization`)
 
-- **auth.users** (Nhost): Auth credentials + metadata JSON
-- **metadata fields**: handle, user_type ("business"|"consumer"), role, zip_code
-- **roles**: restaurant, chef (business); homecook, enthusiast, first-timer (consumer)
-- **dishes table**: No user_id column (no ownership tracking)
+- `1783052535801_normalize_user_schema` — users + business_users + consumer_users, domains, dishes.user_id
+- `1783052535802_add_creators_table` — creators + 56 seeded recipe sources
+- Fix: `1782237340634_add_review_instance_table/down.sql` was a comment-only stub; now drops the table + domain (see Down-migration audit).
 
-## Proposed Schema
+## Schema
 
-### New Tables
+### `users` — shared base (unchanged coupling to auth)
 
 ```sql
--- Shared user base (app-level, not Nhost)
-CREATE TABLE users (
-  id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
-  handle VARCHAR(20) UNIQUE NOT NULL,
-  user_type VARCHAR(20) NOT NULL CHECK (user_type IN ('business', 'consumer')),
-  created_at TIMESTAMPTZ DEFAULT now(),
-  updated_at TIMESTAMPTZ DEFAULT now()
+CREATE TABLE public.users (
+  id         UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
+  handle     VARCHAR(20) NOT NULL,
+  user_type  user_type_enum NOT NULL,   -- domain, not enum/raw string
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT now()   -- bumped by trigger
 );
+CREATE UNIQUE INDEX users_handle_lower_idx ON public.users (lower(handle));  -- ci-unique
+```
 
--- Business-specific profile
-CREATE TABLE business_users (
-  user_id UUID PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
-  created_at TIMESTAMPTZ DEFAULT now(),
-  updated_at TIMESTAMPTZ DEFAULT now()
+`id` is 1:1 with the Nhost auth user. Real accounts only.
+
+### `business_users` / `consumer_users` — type-specific profiles
+
+```sql
+CREATE TABLE public.business_users (
+  user_id UUID PRIMARY KEY REFERENCES public.users(id) ON DELETE CASCADE,
+  role    business_role_enum NOT NULL,   -- 'restaurant' | 'chef'
+  ...
 );
-
--- Consumer-specific profile
-CREATE TABLE consumer_users (
-  user_id UUID PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
-  created_at TIMESTAMPTZ DEFAULT now(),
-  updated_at TIMESTAMPTZ DEFAULT now()
+CREATE TABLE public.consumer_users (
+  user_id UUID PRIMARY KEY REFERENCES public.users(id) ON DELETE CASCADE,
+  role    consumer_role_enum NOT NULL,   -- 'homecook' | 'enthusiast' | 'first-timer'
+  ...
 );
 ```
 
-### Modified Tables
+The row's existence + the role domain make a role/user_type mismatch
+structurally impossible — no app-layer enforcement needed.
+
+### Domains over enums/raw strings
+
+`user_type_enum`, `business_role_enum`, `consumer_role_enum` are Postgres
+DOMAINs (matching the repo's existing `chef_type_enum`). Chosen because a
+domain's CHECK is **mutable** via `ALTER DOMAIN` — adding/removing a role later
+is a one-liner that applies everywhere the domain is used, unlike enums.
+
+### `dishes` — ownership
 
 ```sql
--- Add ownership tracking to dishes
-ALTER TABLE dishes ADD COLUMN user_id UUID REFERENCES users(id) ON DELETE SET NULL;
-
--- Index for "dishes by creator" queries
-CREATE INDEX dishes_user_id_idx ON dishes(user_id);
+ALTER TABLE public.dishes ADD COLUMN user_id UUID REFERENCES public.users(id) ON DELETE SET NULL;
+CREATE INDEX dishes_user_id_idx ON public.dishes (user_id);
 ```
 
-## Data Migration
+Nullable: legacy/ownerless dishes stay valid; on user deletion the dish survives
+with a NULL author.
 
-1. **Backfill** auth.users.metadata → users + (business_users|consumer_users)
-   - Extract handle and user_type from metadata
-   - Create users row with auth.users.id, handle, user_type
-   - Create business_users or consumer_users row (FK to users.id)
-2. **Update AuthProvider** to read from users table instead of metadata
-3. **Drop** users.metadata column (safe after backfill)
+### `creators` — recipe sources, claimable
+
+```sql
+CREATE TABLE public.creators (
+  id           UUID PRIMARY KEY DEFAULT gen_random_uuid(),   -- decoupled from auth/users
+  display_name TEXT NOT NULL,
+  owner_id     UUID REFERENCES public.users(id) ON DELETE SET NULL,  -- NULL = unclaimed
+  ...
+);
+CREATE UNIQUE INDEX creators_display_name_lower_idx ON public.creators (lower(display_name));
+```
+
+**Design fork resolved:** creators are "not yet on the platform," so they have no
+auth account. Rather than decoupling `users.id` from `auth.users` (which would
+force a nullable auth link + a `'creator'` user_type + join gymnastics on every
+read), creators live in their own table. `owner_id IS NULL` means unclaimed; a
+real user claims a creator via a single in-place `UPDATE owner_id`. The common
+read path (recipe-source dropdown, source attribution) is a single-table scan;
+we only join to `users`/auth on the rare "who owns this creator" lookup.
+
+Seeded with 56 recipe sources (Nora Cooks, Vegan Richa, Rainbow Plant Life, …)
+extracted from recipe `source` fields, excluding internal/study entries.
 
 ## Application Flow
 
-### Sign Up
-1. Create auth.users (via Nhost SDK)
-2. Create users row (handle, user_type from signup form)
-3. Create business_users or consumer_users row
+### Sign Up / Sign In
+- Sign up: create `auth.users` (Nhost) → create `users` → create the matching
+  `business_users`/`consumer_users` row. (Signup-trigger atomicity is a
+  recommended hardening — see Open items.)
+- Sign in: `AuthProvider` reads `users` + type row instead of `metadata`.
 
-### Sign In
-1. Nhost SDK authenticates
-2. AuthProvider queries: users + (business_users|consumer_users) by user_id
-3. Expose handle, user_type, role via React context
+### Dish / creator attribution
+- Dish create: set `dishes.user_id = current user`.
+- Recipe-source dropdown: select from `creators` (display_name).
 
-### Dish Ownership
-- When creating a dish: `INSERT INTO dishes (user_id, ...) VALUES (current_user_id, ...)`
-- When fetching dishes: `SELECT ... FROM dishes LEFT JOIN users ON dishes.user_id = users.id`
+## Down-migration audit (all validated)
 
-## Future Additions (Not in MVP)
+Full up→down chain tested against ephemeral Postgres: all 17 migrations apply
+and roll back cleanly, zero residue (only `pg_trgm` extension internals remain,
+correctly). Fixed one comment-only stub down.sql (`add_review_instance_table`).
 
-- **creators** table (original recipe authors: Nora Cooks, Vegan Richa, etc.)
-- **business_users** fields: business_name, business_addresses, etc.
-- **consumer_users** fields: dietary_restrictions, cuisine_preferences, etc.
-- **Preferences** column on users (shared across user types)
+## Open items / not yet done
 
-## Error Handling & Constraints
-
-- **Handle uniqueness**: Enforced via UNIQUE index on users(handle)
-- **Referential integrity**: CASCADE deletes on user_id (dishes revert to NULL author if user deleted)
-- **User type consistency**: business_users and consumer_users are mutually exclusive (enforced at app layer for now)
-
-## Testing Strategy
-
-- **Unit**: Backfill query correctness (handle migration, user_type assignment)
-- **Integration**: Sign up/sign in with new schema; AuthProvider reads correct profile
-- **End-to-end**: Create dish → verify user_id stored → query "my dishes" by user_id
-
-## Rollback Plan
-
-- Keep auth.users.metadata intact during migration (don't drop column immediately)
-- If issues: revert to reading metadata, skip users table queries
-- After 2 weeks stable: drop metadata column
+- **Hasura permissions / RLS** — new tables are registered in metadata but need
+  row permissions keyed to `X-Hasura-User-Id` before GraphQL exposure.
+- **Signup atomicity** — trigger on `auth.users` insert to populate `users` +
+  type row in one transaction (avoids orphaned auth users).
+- **`AuthProvider`** — switch from `metadata` reads to `users` table.
+- **Metadata backfill + drop** — migrate existing `auth.users.metadata` → tables.
+- **Dish instances / Active Dishes (goal #5)** — `review_instance.author_id` FK →
+  `users`, Active Dishes page + "make active (24h QR reviews)" popup.
+  *To be implemented on a separate branch via subagent.*
+- **Recipe/dish → creator FK** — wire the dropdown selection to a `creator_id`.
+```
