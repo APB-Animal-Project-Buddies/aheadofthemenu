@@ -8,17 +8,20 @@ import { Avatar } from "@/components/Avatar";
 
 type Tab = { href: string; label: string };
 
-// Single source of truth for the nav tabs — matches the static prototype's
-// `site-nav.js` so the emerald bar is identical across Next pages and the
-// static /recipes, /menus, /top-alternatives, /reverse-lookup, /tips-and-tricks
-// apps. Add a tab here once and every page picks it up.
-const TABS: Tab[] = [
-  { href: "/recipes", label: "Recipes" },
-  { href: "/menus", label: "Menus" },
+// Nav tabs depend on account mode. Business accounts get the operator tools
+// (recipes, menus); consumers get the diner tools (dishes, reverse lookup);
+// both share Top Alternatives. Signed-out visitors see the consumer set.
+// Keep these lists in sync with the static prototype's `site-nav.js` so the
+// emerald bar is identical across Next pages and the static apps.
+const CONSUMER_TABS: Tab[] = [
   { href: "/dishes", label: "Dishes" },
   { href: "/top-alternatives", label: "Top Alternatives" },
-  { href: "/tips-and-tricks", label: "Tips & Tricks" },
   { href: "/reverse-lookup", label: "Reverse Lookup" },
+];
+const BUSINESS_TABS: Tab[] = [
+  { href: "/recipes", label: "Recipes" },
+  { href: "/menus", label: "Menus" },
+  { href: "/top-alternatives", label: "Top Alternatives" },
 ];
 
 // The nav has its own header on the landing + auth screens, and is intentionally
@@ -66,9 +69,10 @@ const CHEVRON = (
 
 export function SiteNav() {
   const pathname = usePathname();
-  const { isAuthenticated, email, displayName, avatarUrl, role, signOut } = useAuth();
+  const { isAuthenticated, email, displayName, avatarUrl, role, userType, signOut } = useAuth();
   const [accountOpen, setAccountOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const tabs = userType === "business" ? BUSINESS_TABS : CONSUMER_TABS;
 
   if (
     pathname === "/" ||
@@ -79,7 +83,7 @@ export function SiteNav() {
   }
 
   return (
-    <nav className="sticky top-0 z-50 border-b border-white/10 bg-gradient-to-b from-[#163320] to-[#112619] text-apb-cream backdrop-blur-sm">
+    <nav className="sticky top-0 z-50 border-b border-apb-accent/[0.28] bg-gradient-to-b from-[#163320] to-[#112619] text-apb-cream backdrop-blur-sm">
       <div className="mx-auto grid h-16 max-w-[1400px] grid-cols-[auto_1fr_auto] items-center gap-4 px-5 md:px-8">
         {/* Brand */}
         <Link href="/" className="flex items-center gap-2.5 font-serif text-[17px] font-bold tracking-tight text-apb-cream">
@@ -92,7 +96,7 @@ export function SiteNav() {
 
         {/* Tabs — centered on desktop, collapsed into a burger on mobile */}
         <ul className="col-start-2 hidden items-center justify-center gap-7 md:flex">
-          {TABS.map((t) => {
+          {tabs.map((t) => {
             const active = pathname === t.href || pathname.startsWith(t.href + "/");
             return (
               <li key={t.href}>
@@ -171,7 +175,7 @@ export function SiteNav() {
       {/* Mobile tab panel */}
       {mobileOpen && (
         <ul className="border-t border-white/10 px-5 py-2 md:hidden">
-          {TABS.map((t) => {
+          {tabs.map((t) => {
             const active = pathname === t.href || pathname.startsWith(t.href + "/");
             return (
               <li key={t.href}>

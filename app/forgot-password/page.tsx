@@ -87,7 +87,7 @@ export default function ForgotPasswordPage() {
 
         <p style={s.footerText}>
           Remembered it?{" "}
-          <Link href="/login" style={s.link}>Sign in</Link>
+          <Link href="/login" style={s.link}>Log in</Link>
         </p>
       </div>
     </div>

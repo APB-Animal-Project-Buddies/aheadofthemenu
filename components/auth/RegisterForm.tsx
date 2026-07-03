@@ -233,7 +233,7 @@ export function RegisterForm() {
 
       <p style={s.footerText}>
         Already have an account?{" "}
-        <Link href="/login" style={s.link}>Sign in</Link>
+        <Link href="/login" style={s.link}>Log in</Link>
       </p>
     </div>
   );

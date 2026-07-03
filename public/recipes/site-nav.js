@@ -1,27 +1,58 @@
 // Shared "Ahead of the Menu" top nav. Injected into pages so the link list
-// stays in one place — add a tab here once and every page picks it up.
+// stays in one place — keep the tab sets in sync with components/SiteNav.tsx
+// so the emerald bar is identical across the static apps and the Next pages.
 //
-// Usage: <body data-active-nav="menus | recipes | dairy | tips">
+// Usage: <body data-active-nav="menus | recipes | dishes | dairy | reverse">
 //        <script src="/recipes/site-nav.js"></script>
 //
 // The script renders the nav into <div id="site-nav-mount"></div> if present,
 // otherwise it prepends to <body>.
+//
+// Tabs depend on account mode: business accounts get the operator tools
+// (recipes, menus); consumers — and signed-out visitors — get the diner tools
+// (dishes, reverse lookup); both share Top Alternatives. Mode comes from the
+// Nhost session the Next app persists in localStorage ("nhostSession").
 
 (function () {
-  const TABS = [
-    { id: 'recipes',  href: '/recipes',          label: 'Recipes' },
-    { id: 'menus',    href: '/menus',            label: 'Menus' },
+  const CONSUMER_TABS = [
     { id: 'dishes',   href: '/dishes',           label: 'Dishes' },
     { id: 'dairy',    href: '/top-alternatives', label: 'Top Alternatives' },
-    { id: 'tips',     href: '/tips-and-tricks',  label: 'Tips & Tricks' },
     { id: 'reverse',  href: '/reverse-lookup',   label: 'Reverse Lookup' },
   ];
+  const BUSINESS_TABS = [
+    { id: 'recipes',  href: '/recipes',          label: 'Recipes' },
+    { id: 'menus',    href: '/menus',            label: 'Menus' },
+    { id: 'dairy',    href: '/top-alternatives', label: 'Top Alternatives' },
+  ];
+
+  // The session object the Nhost SDK persists; null when signed out or unreadable.
+  function readSession() {
+    try {
+      return JSON.parse(localStorage.getItem('nhostSession')) || null;
+    } catch {
+      return null;
+    }
+  }
 
   function render() {
+    const session = readSession();
+    const userType =
+      session && session.user && session.user.metadata
+        ? session.user.metadata.user_type
+        : null;
+    const TABS = userType === 'business' ? BUSINESS_TABS : CONSUMER_TABS;
+
     const active = (document.body && document.body.dataset.activeNav) || '';
     const links = TABS
       .map(t => `<li><a href="${t.href}"${t.id === active ? ' class="active"' : ''}>${t.label}</a></li>`)
       .join('');
+
+    // Right side mirrors the Next nav: profile link when signed in, otherwise
+    // log in / sign up. (Auth pages themselves live in the Next app.)
+    const auth = session
+      ? `<a class="nav-auth-profile" href="/profile">Profile</a>`
+      : `<a class="nav-auth-login" href="/login">Log in</a>
+         <a class="nav-auth-signup" href="/register">Sign up</a>`;
 
     const html = `
       <nav class="recipes-nav">
@@ -36,7 +67,10 @@
             <span></span><span></span><span></span>
           </button>
           <ul class="recipes-nav-links">${links}</ul>
-          <div id="nav-menu-pill-slot"></div>
+          <div class="recipes-nav-right">
+            <div class="nav-auth">${auth}</div>
+            <div id="nav-menu-pill-slot"></div>
+          </div>
         </div>
       </nav>
     `;

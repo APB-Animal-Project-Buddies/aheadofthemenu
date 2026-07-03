@@ -27,33 +27,12 @@
     <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" crossorigin="anonymous"></script>
   </head>
-  <body class="reverse-lookup-page">
-    <nav class="site-nav">
-      <div class="nav-inner">
-        <a href="/" class="nav-logo">Ahead of the Menu</a>
-        <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
-          <span class="nav-toggle-bar"></span>
-          <span class="nav-toggle-bar"></span>
-          <span class="nav-toggle-bar"></span>
-        </button>
-        <ul class="nav-links">
-          <li><a href="/recipes">Recipes</a></li>
-          <li><a href="/menus">Menus</a></li>
-          <li><a href="/dishes">Dishes</a></li>
-          <li><a href="/top-alternatives">Top Alternatives</a></li>
-          <li><a href="/tips-and-tricks">Tips &amp; Tricks</a></li>
-          <li><a href="/reverse-lookup" class="active">Reverse Lookup</a></li>
-        </ul>
-      </div>
-    </nav>
+  <body class="reverse-lookup-page" data-active-nav="reverse">
+    <div id="site-nav-mount"></div>
 
     <main id="root"></main>
 
+    <script src="/recipes/site-nav.js"></script>
     <script type="text/babel" src="/reverse-lookup/app.jsx"></script>
-    <script>
-      document.querySelector('.nav-toggle').addEventListener('click', function () {
-        document.querySelector('.nav-links').classList.toggle('open');
-      });
-    </script>
   </body>
 </html>

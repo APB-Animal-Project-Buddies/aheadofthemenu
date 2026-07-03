@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { useAuth } from "@/components/AuthProvider";
+import { QrShareCard } from "@/components/QrShareCard";
 import { normalizeHandle } from "@/lib/handle";
 
 type ActiveDish = {
@@ -33,6 +34,12 @@ export default function ActiveDishesPage() {
   const [dishes, setDishes] = useState<ActiveDish[]>([]);
   const [loading, setLoading] = useState(true);
 
+  // Absolute URL of this page, for the shareable QR (origin is client-only).
+  const [pageUrl, setPageUrl] = useState("");
+  useEffect(() => {
+    if (handle) setPageUrl(`${window.location.origin}/${handle}/active-dishes`);
+  }, [handle]);
+
   const load = useCallback(async () => {
     try {
       const res = await fetch(`/api/active-dishes?handle=${encodeURIComponent(handle)}`);
@@ -62,6 +69,15 @@ export default function ActiveDishesPage() {
       <p className="mt-1 text-sm text-neutral-500">
         Dishes open for review right now — each stays active for 24 hours.
       </p>
+
+      {pageUrl && dishes.length > 0 && (
+        <QrShareCard
+          className="mt-6"
+          url={pageUrl}
+          title="Scan for all active dishes"
+          caption={`One code that opens every dish ${isOwner ? "you have" : `@${handle} has`} open for review — handy when several are going at once.`}
+        />
+      )}
 
       {loading ? (
         <p className="mt-8 text-neutral-500">Loading…</p>

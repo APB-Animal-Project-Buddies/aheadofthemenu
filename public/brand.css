@@ -150,6 +150,115 @@
   .recipes-nav.nav-open .nav-burger span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
 }
 
+/* ---- canonical nav structure ----
+ * Matches components/SiteNav.tsx (64px bar, centered 14px/500 DM Sans tabs,
+ * full-height links with a 2px accent underline). Self-sufficient on purpose:
+ * pages that don't load recipes/styles.css (e.g. /reverse-lookup) still get
+ * the identical bar from brand.css alone.
+ */
+.recipes-nav {
+  display: flex;
+  padding: 0 32px;
+  position: sticky;
+  top: 0;
+  z-index: 60;
+}
+.recipes-nav-inner {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  height: 64px;
+}
+.recipes-nav-inner > .recipes-brand      { justify-self: start; }
+.recipes-nav-inner > .recipes-nav-links  { justify-self: center; }
+.recipes-nav-inner > .recipes-nav-right  { justify-self: end; }
+.recipes-nav-right { display: flex; align-items: center; gap: 10px; }
+
+.recipes-brand .brand-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  font-weight: 700;           /* match the Next nav's font-bold wordmark */
+  font-size: 17px;
+  letter-spacing: -0.01em;
+}
+.recipes-brand .leaf-mark { display: inline-block; width: 22px; height: 22px; }
+
+.recipes-nav-links {
+  display: flex;
+  gap: 28px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.recipes-nav-links a {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 64px;
+  font-family: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  padding: 0 2px;
+  transition: opacity 120ms ease;
+}
+.recipes-nav-links a.active::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+}
+
+/* auth cluster — mirrors the Next nav's Log in / Sign up / Profile controls */
+.nav-auth {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
+  font-size: 14px;
+}
+.nav-auth a { text-decoration: none; }
+.nav-auth-login,
+.nav-auth-profile {
+  color: rgba(250, 248, 245, 0.85);
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-weight: 500;
+}
+.nav-auth-login:hover,
+.nav-auth-profile:hover { color: var(--aotm-cream); }
+.nav-auth-signup {
+  background: var(--aotm-accent);
+  color: #112619;
+  font-weight: 600;
+  padding: 6px 16px;
+  border-radius: 999px;
+}
+.nav-auth-signup:hover { background: var(--aotm-accent-2); }
+
+/* re-assert the mobile behavior over the canonical desktop rules above
+ * (equal specificity — these must come later in the file to win) */
+@media (max-width: 760px) {
+  .recipes-nav { padding: 0 18px; }
+  .recipes-nav-inner {
+    display: flex;
+    height: 56px;
+  }
+  .recipes-nav-links a {
+    display: block;
+    height: auto;
+    padding: 13px 22px;
+  }
+  .recipes-nav-links a.active::after { display: none; }
+}
+
 /* deeper, richer accent for the hero headline emphasis (e.g. menus "sample menu") */
 .hero h1 em { color: #bf451c; }
 /* "unforgettable" uses the brand orange */

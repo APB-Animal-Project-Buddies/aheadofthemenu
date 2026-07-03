@@ -83,7 +83,7 @@ export function LoginForm() {
 
   return (
     <div style={s.formCard}>
-      <h1 style={s.title}>Sign in</h1>
+      <h1 style={s.title}>Log in</h1>
       <p style={s.subtitle}>Welcome back to Ahead of the Menu</p>
 
       <form onSubmit={handleSubmit} style={s.form}>
@@ -124,7 +124,7 @@ export function LoginForm() {
         )}
 
         <button type="submit" disabled={status === "submitting"} style={{ ...s.submitBtn, ...(status === "submitting" ? s.submitBtnDisabled : {}) }}>
-          {status === "submitting" ? "Signing in…" : "Sign in"}
+          {status === "submitting" ? "Logging in…" : "Log in"}
         </button>
       </form>
 

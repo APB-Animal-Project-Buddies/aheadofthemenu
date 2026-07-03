@@ -2,9 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { QRCodeSVG } from "qrcode.react";
+import Link from "next/link";
 import { useAuth } from "@/components/AuthProvider";
 import { Avatar } from "@/components/Avatar";
+import { QrShareCard } from "@/components/QrShareCard";
 import { ROLE_OPTIONS, USER_TYPE_LABELS } from "@/lib/nhost/roles";
 import { normalizeHandle, validateHandle } from "@/lib/handle";
 import { getNhost } from "@/lib/nhost/client";
@@ -95,21 +96,36 @@ export default function ProfilePage() {
 
   return (
     <main className="mx-auto max-w-2xl px-4 py-10">
+      <Link
+        href="/"
+        aria-label="Home"
+        className="mb-6 inline-flex items-center gap-3 rounded-2xl bg-apb px-6 py-4 text-xl font-semibold text-white shadow-sm transition hover:opacity-90"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth={2}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="h-8 w-8"
+          aria-hidden="true"
+        >
+          <path d="M3 10.5 12 3l9 7.5" />
+          <path d="M5 9.5V21h14V9.5" />
+        </svg>
+        Home
+      </Link>
+
       {activeDishesUrl && (
-        <div className="mb-6 flex items-center gap-4 rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm">
-          <div className="flex-none rounded-lg bg-white p-1">
-            <QRCodeSVG value={activeDishesUrl} size={92} marginSize={1} />
-          </div>
-          <div className="min-w-0">
-            <div className="font-medium text-neutral-900">Your active dishes</div>
-            <a href={`/${handle}/active-dishes`} className="break-all text-sm text-apb hover:underline">
-              {activeDishesUrl}
-            </a>
-            <p className="mt-1 text-xs text-neutral-500">
-              Share this QR — it opens the dishes you currently have open for review.
-            </p>
-          </div>
-        </div>
+        <QrShareCard
+          className="mb-6"
+          url={activeDishesUrl}
+          title="Your active dishes"
+          link={{ href: `/${handle}/active-dishes`, text: activeDishesUrl }}
+          caption="Share this QR — it opens the dishes you currently have open for review."
+        />
       )}
       <div className="overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-sm">
         {/* Header */}

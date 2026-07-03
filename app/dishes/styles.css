@@ -24,7 +24,7 @@
   --tint-leaf: oklch(0.94 0.04 150);
   --tint-lavender: oklch(0.94 0.04 290);
 
-  --serif: 'Bricolage Grotesque', ui-serif, Georgia, serif;
+  --serif: 'Fraunces', Georgia, 'Times New Roman', serif; /* brand serif — matches globals.css --apb-serif */
   --sans: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
   --mono: 'DM Mono', ui-monospace, Menlo, monospace;
 }
