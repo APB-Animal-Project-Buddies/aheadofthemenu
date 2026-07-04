@@ -48,3 +48,12 @@ export const USER_TYPE_LABELS: Record<UserType, string> = {
   business: "Business",
   consumer: "Consumer",
 };
+
+/**
+ * Where to send a user after login, based on account type: businesses
+ * (restaurants/chefs) land on the operator tools; consumers (and anyone whose
+ * type is unknown) land on the diner-facing dishes feed.
+ */
+export function landingPathForUserType(userType: UserType | null | undefined): string {
+  return userType === "business" ? "/recipes" : "/dishes";
+}

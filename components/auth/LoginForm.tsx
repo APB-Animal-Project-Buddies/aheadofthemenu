@@ -3,6 +3,8 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useAuth, authErrorMessage, isUnverifiedError } from "@/components/AuthProvider";
+import { getNhost } from "@/lib/nhost/client";
+import { landingPathForUserType, type UserType } from "@/lib/nhost/roles";
 import { authStyles as s } from "./authStyles";
 
 /**
@@ -45,9 +47,12 @@ export function LoginForm() {
     try {
       await signIn(formData.email, formData.password);
       setStatus("success");
+      // Land based on account type: businesses -> /recipes, consumers -> /dishes.
+      const userType = getNhost().getUserSession()?.user?.metadata?.user_type;
+      const dest = landingPathForUserType(userType as UserType | null | undefined);
       // Hard-navigate: reliably leaves the intercepting-route modal AND reloads
       // with the fresh session (router.push from inside the modal was stalling).
-      setTimeout(() => window.location.assign("/"), 600);
+      setTimeout(() => window.location.assign(dest), 600);
     } catch (err) {
       if (isUnverifiedError(err)) {
         setUnverified(true);
