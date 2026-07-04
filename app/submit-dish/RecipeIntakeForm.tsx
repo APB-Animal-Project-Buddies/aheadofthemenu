@@ -87,7 +87,10 @@ export function RecipeIntakeForm(
     const body = {
       title: v.title,
       description: v.description,
-      image: cover?.url,
+      // Explicit null when the cover was removed: undefined is dropped by
+      // JSON.stringify, and the propose flow merges the body over the existing
+      // recipe — an absent key reads as "unchanged" and resurrects the old photo.
+      image: cover ? cover.url : null,
       cuisines: v.cuisines,
       dishType: v.dishType,
       tags: v.tags,

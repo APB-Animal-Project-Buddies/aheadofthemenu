@@ -231,3 +231,15 @@ test("buildDishData round-trips a full new-format dish (sections + nested altern
     { name: "salt", quantity: null, unit: "to_taste" },
   ]);
 });
+
+// Regression contract for suggest-edit image removal: an explicit null image
+// (the form's "cover removed" signal) must clear the field — the built data
+// carries NO image key, so a merge over the existing recipe drops the photo.
+// An absent image key on a fresh build also stays absent (never resurrected).
+test("buildDishData drops the image for explicit null and keeps valid URLs", () => {
+  const base = { title: "T", ingredients: [{ name: "x" }] };
+  expect(buildDishData({ ...base, image: "https://example.com/a.webp" } as any).image)
+    .toBe("https://example.com/a.webp");
+  expect("image" in buildDishData({ ...base, image: null } as any)).toBe(false);
+  expect("image" in buildDishData({ ...base, image: "" } as any)).toBe(false);
+});
