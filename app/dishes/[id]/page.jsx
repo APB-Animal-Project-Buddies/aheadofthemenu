@@ -8,6 +8,7 @@ import { notFound } from "next/navigation";
 import { graphql } from "@/lib/nhost";
 import { TRIED_BY_LABELS } from "@/lib/dishes";
 import { DishActions } from "./DishActions";
+import { DishGallery } from "@/components/DishGallery";
 
 export const dynamic = "force-dynamic";
 
@@ -316,6 +317,9 @@ export default async function DishPage({ params, searchParams }) {
       ) : null}
 
       {/* Footer */}
+      {/* Community photos & videos of this recipe. */}
+      <DishGallery dishId={row.id} />
+
       <footer className="mt-10 border-t border-neutral-200 pt-4 text-xs text-neutral-400">
         {d.submittedBy?.name ? <>Submitted by {d.submittedBy.name}</> : "Submitted"}
         {created ? <> · {created}</> : null}

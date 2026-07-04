@@ -122,7 +122,11 @@ export function ActiveDishesList({
         ) : (
           <ul className="mt-6 flex flex-col gap-3">
             {dishes.map((d) => (
-              <li key={d.code} className="rounded-xl border border-neutral-200 bg-white p-4">
+              <li key={d.code} className="relative rounded-xl border border-neutral-200 bg-white p-4">
+                {/* Instance short code — the printable/shareable id for this dish instance. */}
+                <span className="absolute right-3 top-2 font-mono text-[11px] font-medium tracking-wide text-neutral-400">
+                  #{d.code}
+                </span>
                 <div className="flex items-center justify-between gap-4">
                   <div className="min-w-0">
                     <div className="truncate font-medium text-neutral-900">{d.dishName ?? `Dish #${d.dishId}`}</div>
