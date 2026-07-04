@@ -157,6 +157,7 @@ function FilterChips({ activeCourse, onCourseChange, activeSourcing, onSourcingC
         <div className="fchip-group">
           {[
             { id: 'raw', label: '🥗 Raw' },
+            { id: 'raw-vegan', label: '🌱 Raw vegan' },
             { id: 'bulk-prep', label: '🥘 Bulk-prep' },
             { id: 'fast-service', label: '⚡ Fast-service' },
           ].map(t => (
@@ -384,6 +385,9 @@ function DishModal({ dish, open, onClose, onAddToMenu, inMenu }) {
               )}
               {dish.tags.includes('raw') && (
                 <span style={{ padding: '4px 10px', borderRadius: 999, background: 'oklch(0.75 0.15 150 / 0.18)', color: 'oklch(0.35 0.12 150)', fontSize: 11, fontWeight: 600 }}>🥗 Raw</span>
+              )}
+              {dish.tags.includes('raw-vegan') && (
+                <span style={{ padding: '4px 10px', borderRadius: 999, background: 'oklch(0.80 0.14 130 / 0.18)', color: 'oklch(0.35 0.12 130)', fontSize: 11, fontWeight: 600 }}>🌱 Raw vegan</span>
               )}
             </div>
           )}
