@@ -234,7 +234,7 @@ export default async function DishPage({ params, searchParams }) {
           <img
             src={d.image}
             alt={d.title || row.dish_name || "Dish photo"}
-            className="mb-5 max-h-[420px] w-full rounded-[20px] object-cover shadow-sm"
+            className="mx-auto mb-5 max-h-[420px] w-full max-w-2xl rounded-[20px] object-cover shadow-sm"
             loading="eager"
           />
         ) : null}
@@ -315,6 +315,19 @@ export default async function DishPage({ params, searchParams }) {
             ))}
           </ol>
         </Section>
+      ) : null}
+
+      {/* Original recipe — prominent, right where a cook finishes reading the
+          method (also linked in the meta strip up top). */}
+      {d.resourceLink ? (
+        <a
+          href={d.resourceLink}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-6 inline-flex items-center gap-2 rounded-full bg-apb px-6 py-3 text-base font-semibold text-white shadow-sm transition hover:bg-apb-light"
+        >
+          View the original recipe{d.originalCreator ? ` by ${d.originalCreator}` : ""} ↗
+        </a>
       ) : null}
 
       {/* Special products / equipment */}
