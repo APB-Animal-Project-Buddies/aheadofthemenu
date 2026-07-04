@@ -8,8 +8,8 @@ const FIELDS = [
   ["title", "Title"], ["description", "Description"], ["cuisines", "Cuisines"],
   ["dishType", "Dish type"], ["tags", "Tags"], ["ingredients", "Ingredients"],
   ["steps", "Steps"], ["specialProducts", "Special products"], ["specialEquipment", "Special equipment"],
-  ["cost", "Cost"], ["servings", "Servings"], ["prepTime", "Prep time"], ["allergens", "Allergens"],
-  ["resourceLink", "Resource link"], ["originalCreator", "Original creator"], ["notes", "Notes"],
+  ["cost", "Cost"], ["servings", "Servings"], ["prepTime", "Prep time"], ["cookTime", "Cook time"], ["allergens", "Allergens"],
+  ["resourceLink", "Resource link"], ["originalCreator", "Original creator"], ["notes", "Notes"], ["image", "Cover image"],
 ];
 
 const changed = (a, b) => JSON.stringify(a ?? null) !== JSON.stringify(b ?? null);

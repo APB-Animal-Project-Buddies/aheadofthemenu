@@ -105,6 +105,7 @@ export function RecipeIntakeForm(
       cost: numOrNull(v.cost),
       servings: numOrNull(v.servings),
       prepTime: v.prepTime,
+      cookTime: v.cookTime,
       allergens: v.allergens,
       resourceLink: v.resourceLink,
       originalCreator: v.originalCreator,
@@ -183,13 +184,16 @@ export function RecipeIntakeForm(
   return (
     <FormProvider {...methods}>
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
-        {/* Servings + prep time — at the very top */}
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+        {/* Servings + prep/cook time — at the very top */}
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
           <Field label="Servings">
             <Input className="mt-2" type="number" step="1" min="0" placeholder="e.g. 4" {...register("servings")} />
           </Field>
           <Field label="Prep time">
             <Input className="mt-2" placeholder="e.g. 30 min" {...register("prepTime")} />
+          </Field>
+          <Field label="Cook time">
+            <Input className="mt-2" placeholder="e.g. 45 min" {...register("cookTime")} />
           </Field>
         </div>
         {/* Source — paste a link up top; if you do, the steps below are optional */}

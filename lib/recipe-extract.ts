@@ -57,6 +57,7 @@ export const EXTRACT_TOOL = {
       "notes",
       "servings",
       "prepTime",
+      "cookTime",
     ],
     properties: {
       title: {
@@ -237,8 +238,15 @@ export const EXTRACT_TOOL = {
       prepTime: {
         type: ["string", "null"],
         description:
-          "The time the recipe states, kept as readable text (e.g. '30 min', '1 hr 20 min', " +
-          "'45 min active + 5 hr chill'). Prefer total time if given. Null if not stated.",
+          "The prep/active time the recipe states, kept as readable text (e.g. '30 min', " +
+          "'1 hr 20 min', '45 min active + 5 hr chill'). If the recipe gives only one total " +
+          "time, put it here. Null if not stated.",
+      },
+      cookTime: {
+        type: ["string", "null"],
+        description:
+          "The cook/bake time the recipe states separately from prep, kept as readable text " +
+          "(e.g. '45 min', '1 hr'). Null if not stated or not separate from prep time.",
       },
     },
   },

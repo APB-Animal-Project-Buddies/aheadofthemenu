@@ -226,13 +226,16 @@ export default async function DishPage({ params, searchParams }) {
       ) : null}
 
       {/* Meta strip */}
-      {(d.servings != null || d.prepTime || d.cost != null || d.originalCreator || d.resourceLink) ? (
+      {(d.servings != null || d.prepTime || d.cookTime || d.cost != null || d.originalCreator || d.resourceLink) ? (
         <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2 rounded-[16px] border border-neutral-200 bg-white/60 px-5 py-4 text-sm">
           {d.servings != null ? (
             <span className="text-neutral-700"><span className="text-neutral-400">Serves:</span> <strong className="text-apb">{d.servings}</strong></span>
           ) : null}
           {d.prepTime ? (
             <span className="text-neutral-700"><span className="text-neutral-400">Prep:</span> <strong className="text-apb">{d.prepTime}</strong></span>
+          ) : null}
+          {d.cookTime ? (
+            <span className="text-neutral-700"><span className="text-neutral-400">Cook:</span> <strong className="text-apb">{d.cookTime}</strong></span>
           ) : null}
           {d.cost != null ? (
             <span className="text-neutral-700"><span className="text-neutral-400">Cost / serving:</span> <strong className="text-apb">${Number(d.cost).toFixed(2)}</strong></span>

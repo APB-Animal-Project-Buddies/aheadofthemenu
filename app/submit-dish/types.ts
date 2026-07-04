@@ -35,6 +35,7 @@ export type RecipeFormValues = {
   cost: string;
   servings: string;
   prepTime: string;
+  cookTime: string;
   allergens: string[];
   resourceLink: string;
   originalCreator: string;
@@ -59,7 +60,7 @@ export const RECIPE_FORM_DEFAULTS: RecipeFormValues = {
   // exactly like before (no section header shown until a 2nd section is added).
   ingredientGroups: [{ section: "", items: Array.from({ length: 5 }, emptyIngredient) }],
   steps: Array.from({ length: 3 }, () => ({ text: "" })),
-  specialProducts: [], specialEquipment: "", cost: "", servings: "", prepTime: "", allergens: [],
+  specialProducts: [], specialEquipment: "", cost: "", servings: "", prepTime: "", cookTime: "", allergens: [],
   resourceLink: "", originalCreator: "", notes: "",
   name: "", email: "", triedBy: [], feedback: "", reviewCount: "", rating: "", ratingScale: "5",
 };

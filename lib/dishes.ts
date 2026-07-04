@@ -126,6 +126,7 @@ export function buildDishData(input: any): DishData {
     d.servings = servings;
   }
   const prepTime = str(input?.prepTime, MAX_SHORT); if (prepTime) d.prepTime = prepTime;
+  const cookTime = str(input?.cookTime, MAX_SHORT); if (cookTime) d.cookTime = cookTime;
 
   const sbName = str(input?.submittedBy?.name, MAX_NAME);
   const sbEmail = str(input?.submittedBy?.email, MAX_EMAIL);

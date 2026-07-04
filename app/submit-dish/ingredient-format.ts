@@ -86,6 +86,7 @@ export function dishToFormValues(dishData: any): RecipeFormValues {
     cost: num(d.cost),
     servings: num(d.servings),
     prepTime: d.prepTime ?? "",
+    cookTime: d.cookTime ?? "",
     allergens: arr(d.allergens),
     resourceLink: d.resourceLink ?? "",
     originalCreator: d.originalCreator ?? "",
