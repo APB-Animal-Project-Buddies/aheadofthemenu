@@ -3,6 +3,7 @@
 import { useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
 import { QRCodeSVG } from "qrcode.react";
+import ConfettiBoom from "react-confetti-boom";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
@@ -81,6 +82,9 @@ function CreateReviewLinkContent() {
     return (
         <main className="mx-auto max-w-xl px-5 py-10">
             <h1 className="text-2xl font-bold text-apb">Create a review link</h1>
+            <p className="mt-3 rounded-[16px] border border-apb-light/30 bg-apb-light/10 px-5 py-4 text-sm leading-relaxed text-apb">
+                Reviews for dishes help us curate options for other home cooks, chefs, and restaurants — so we can have a better, faster, and happier transition to a sustainable, plant-based future.
+            </p>
             <CreateReviewLinkForm dish={dish} />
         </main>
     );
@@ -204,6 +208,8 @@ function CreateReviewLinkForm({ dish }: { dish: DishReview }) {
     if (status === "success" && reviewUrl) {
         return (
             <div className="mt-6 flex flex-col gap-6 rounded-[16px] border border-neutral-200 bg-white/60 p-6">
+                {/* Boom! Fires once when the review-instance form completes. */}
+                <ConfettiBoom mode="boom" particleCount={140} colors={["#1e4d2b", "#2d7a3e", "#ff6b35", "#ff8c61", "#5bb673"]} />
                 <div>
                     <h2 className="text-xl font-semibold text-apb">Review link created!</h2>
                     <p className="mt-2 text-sm text-neutral-600">
@@ -228,14 +234,17 @@ function CreateReviewLinkForm({ dish }: { dish: DishReview }) {
                     </div>
                 </div>
 
-                <div className="flex items-center justify-between gap-3">
+                <div className="flex flex-col items-center gap-3">
+                    <p className="text-center text-sm font-medium text-apb">
+                        Please help us curate dishes for a more plant-based future
+                    </p>
                     <a
-                        href={reviewUrl}
+                        href={`${reviewUrl}?first_time`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center rounded-[16px] border border-neutral-300 px-5 py-2.5 text-sm font-semibold text-apb transition hover:border-apb"
+                        className="inline-flex items-center rounded-[16px] bg-apb-light/15 px-7 py-3 text-base font-semibold text-apb ring-1 ring-inset ring-apb-light/30 transition hover:bg-apb-light/25"
                     >
-                        Open the form
+                        Rate your own dish 🎉
                     </a>
                     <button
                         type="button"

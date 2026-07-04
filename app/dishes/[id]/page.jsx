@@ -78,7 +78,7 @@ function Ingredients({ ingredients }) {
   return (
     <div className="flex flex-col gap-6">
       {groups.map((g, gi) => (
-        <div key={gi}>
+        <div key={gi} className="rounded-[16px] border border-apb/30 bg-apb-light/10 p-5">
           {g.section ? (
             <h3 className="mb-2 text-lg font-semibold text-apb">{g.section}</h3>
           ) : null}
@@ -108,9 +108,41 @@ function Ingredients({ ingredients }) {
   );
 }
 
-export default async function DishPage({ params }) {
+/** Format one substitution entry from review_instance.substitutions (jsonb). */
+function subText(s) {
+  if (!s || typeof s !== "object") return String(s ?? "");
+  if (s.note) return s.note;
+  const items = Array.isArray(s.items) ? s.items.join(", ") : "";
+  if (s.from && items) return `${s.from} → ${items}`;
+  return s.label || items || s.from || "";
+}
+
+async function getInstance(code, dishId) {
+  if (!code) return null;
+  const query = `
+    query GetInstance($code: bpchar!, $dishId: Int!) {
+      review_instance(where: { id: { _eq: $code }, dish_id: { _eq: $dishId } }, limit: 1) {
+        id name substitutions allergens active_until
+      }
+    }`;
+  const res = await graphql(query, { useAdminSecret: true, variables: { code, dishId: Number(dishId) } });
+  if (res.errors?.length) return null;
+  return res.data?.review_instance?.[0] ?? null;
+}
+
+export default async function DishPage({ params, searchParams }) {
   const row = await getDish(params.id);
   if (!row) notFound();
+
+  // Optional dish-instance overlay: /dishes/[id]?instance=<code> shows this
+  // cook's version (substitutions + allergens) above the base recipe — but only
+  // while the instance is still active.
+  const instanceCode = typeof searchParams?.instance === "string" ? searchParams.instance : null;
+  const instance = instanceCode ? await getInstance(instanceCode, params.id) : null;
+  const instanceActive = instance?.active_until
+    ? new Date(instance.active_until).getTime() > Date.now()
+    : false;
+  const subs = Array.isArray(instance?.substitutions) ? instance.substitutions : [];
 
   const d = row.dish_data || {};
   const v = d.validation || {};
@@ -118,13 +150,43 @@ export default async function DishPage({ params }) {
   const has = (a) => Array.isArray(a) && a.length > 0;
 
   return (
-    <main className="mx-auto max-w-3xl px-4 py-10">
+    <main className="mx-auto max-w-3xl px-4 pb-36 pt-10">
       <div className="flex items-center justify-between gap-3 pr-12">
         <Link href="/dishes" className="text-sm font-medium text-apb hover:underline">
           ← All dishes
         </Link>
         <DishActions dishId={row.id} />
       </div>
+
+      {/* Your version — the selected dish instance's substitutions + allergens,
+          shown above the base recipe while the instance is active. */}
+      {instance && instanceActive ? (
+        <section className="mt-4 rounded-[16px] border-2 border-apb/30 bg-apb-cream p-5">
+          <p className="font-serif text-lg font-semibold text-apb">
+            Your version
+            {instance.name ? <span className="font-normal text-neutral-500"> · by {instance.name}</span> : null}
+          </p>
+          {has(subs) ? (
+            <div className="mt-3">
+              <p className="text-sm font-medium text-neutral-600">Substitutions</p>
+              <ul className="mt-1 list-disc space-y-0.5 pl-5 text-sm text-neutral-700">
+                {subs.map((s, i) => <li key={`sub-${i}`}>{subText(s)}</li>)}
+              </ul>
+            </div>
+          ) : null}
+          {has(instance.allergens) ? (
+            <div className="mt-3 flex flex-wrap items-center gap-2">
+              <span className="text-sm font-medium text-neutral-600">Allergens:</span>
+              {instance.allergens.map((a) => (
+                <span key={`ia-${a}`} className="inline-flex items-center rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold capitalize text-amber-800">
+                  {a}
+                </span>
+              ))}
+            </div>
+          ) : null}
+          <p className="mt-3 text-xs text-neutral-500">The full base recipe is below.</p>
+        </section>
+      ) : null}
 
       {/* Header */}
       <header className="mt-4">
@@ -249,11 +311,18 @@ export default async function DishPage({ params }) {
       <footer className="mt-10 border-t border-neutral-200 pt-4 text-xs text-neutral-400">
         {d.submittedBy?.name ? <>Submitted by {d.submittedBy.name}</> : "Submitted"}
         {created ? <> · {created}</> : null}
-        <span className="mx-2">·</span>
-        <Link href={`/reviews/create?dishId=${row.id}`} className="font-medium text-apb hover:underline">
-          Create a review form
-        </Link>
       </footer>
+
+      {/* Prominent floating CTA to log your own instance of this dish. */}
+      <Link
+        href={`/reviews/create?dishId=${row.id}`}
+        className="fixed inset-x-4 bottom-10 z-40 mx-auto flex max-w-lg flex-col items-center justify-center rounded-3xl bg-apb px-8 py-4 text-center text-white shadow-2xl shadow-apb/40 ring-4 ring-apb-accent/60 transition hover:scale-[1.02] hover:bg-apb-light"
+      >
+        <span className="text-lg font-bold sm:text-xl">🌱 Did you make this dish?</span>
+        <span className="mt-0.5 text-xs font-medium text-white/80 sm:text-sm">
+          Click here to help with the plant-based transition
+        </span>
+      </Link>
     </main>
   );
 }
