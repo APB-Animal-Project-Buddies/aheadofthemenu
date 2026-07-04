@@ -16,6 +16,7 @@ import { StepsSection } from "./sections/StepsSection";
 import { RECIPE_FORM_DEFAULTS, type RecipeFormValues } from "./types";
 import { adminHeaders } from "@/lib/admin-client";
 import { useAuth } from "@/components/AuthProvider";
+import { MediaSection, type StagedMedia } from "./sections/MediaSection";
 
 const numOrNull = (s: string) => (s.trim() === "" ? null : Number(s));
 
@@ -49,9 +50,10 @@ export function RecipeIntakeForm(
   const isEdit = dishId != null && !isPropose;
   const [status, setStatus] = useState<"idle" | "submitting" | "done" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [media, setMedia] = useState<StagedMedia[]>([]);
   const methods = useForm<RecipeFormValues>({ defaultValues: initialValues ?? RECIPE_FORM_DEFAULTS });
   const { register, handleSubmit, control, watch, formState: { errors } } = methods;
-  const { userId } = useAuth();
+  const { userId, session } = useAuth();
 
   async function onSubmit(v: RecipeFormValues) {
     const problem = validateRecipe(v);
@@ -127,6 +129,25 @@ export function RecipeIntakeForm(
         setStatus("error");
         return;
       }
+      // Attach any staged photos/videos to the dish (create/edit only — a
+      // proposed edit shouldn't publish media before review). Best-effort:
+      // the dish is saved either way.
+      const accessToken = session?.accessToken ?? null;
+      if (!isPropose && media.length > 0 && accessToken) {
+        const j = await res.json().catch(() => null);
+        const targetDishId = isEdit ? dishId : j?.id;
+        if (targetDishId != null) {
+          await Promise.allSettled(
+            media.map((m) =>
+              fetch("/api/dish-media", {
+                method: "POST",
+                headers: { "Content-Type": "application/json", Authorization: `Bearer ${accessToken}` },
+                body: JSON.stringify({ dishId: targetDishId, fileId: m.fileId }),
+              })
+            )
+          );
+        }
+      }
       setStatus("done");
     } catch {
       setErrorMsg("Something went wrong. Please try again.");
@@ -182,6 +203,9 @@ export function RecipeIntakeForm(
             above and keep the steps brief or empty.
           </p>
         ) : null}
+
+        {/* Photos & videos — staged in the dish-media bucket, attached on save */}
+        {!isPropose && <MediaSection media={media} onChange={setMedia} />}
 
         {/* Basics */}
         <Field label="Recipe name" required error={errors.title?.message}>

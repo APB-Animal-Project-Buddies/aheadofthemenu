@@ -102,9 +102,30 @@ export async function DELETE(request: NextRequest) {
 
   const body = await request.json().catch(() => ({}));
   const id = String(body?.id ?? "").trim();
-  if (!id) return NextResponse.json({ error: "Missing id" }, { status: 400 });
+  const rawFileId = String(body?.fileId ?? "").trim();
+  if (!id && !rawFileId) return NextResponse.json({ error: "Missing id" }, { status: 400 });
 
   try {
+    // {fileId}: a staged upload that was never registered against a dish
+    // (e.g. picked on the submit form, then removed before submitting). Only
+    // its own uploader may discard it.
+    if (!id && rawFileId) {
+      const f = await graphql<{ file: { uploadedByUserId: string | null } | null }>(
+        `query ($id: uuid!) { file(id: $id) { uploadedByUserId } }`,
+        { useAdminSecret: true, variables: { id: rawFileId } }
+      );
+      if (f.errors?.length) throw new Error(f.errors[0].message);
+      if (!f.data?.file) return NextResponse.json({ error: "Not found" }, { status: 404 });
+      if (f.data.file.uploadedByUserId !== caller.userId) {
+        return NextResponse.json({ error: "You can only remove your own uploads." }, { status: 403 });
+      }
+      const del = await fetch(`${nhost.storageUrl}/files/${rawFileId}`, {
+        method: "DELETE",
+        headers: { "x-hasura-admin-secret": nhost.adminSecret ?? "" },
+      });
+      if (!del.ok) throw new Error(`storage delete ${del.status}`);
+      return NextResponse.json({ ok: true });
+    }
     const res = await graphql<{ dish_media: Array<{ file_id: string; uploader_id: string | null }> }>(
       `query ($id: uuid!) { dish_media(where: { id: { _eq: $id } }, limit: 1) { file_id uploader_id } }`,
       { useAdminSecret: true, variables: { id } }
