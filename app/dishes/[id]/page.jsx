@@ -229,6 +229,15 @@ export default async function DishPage({ params, searchParams }) {
             🌱 Review this dish
           </Link>
         ) : null}
+        {d.image ? (
+          // eslint-disable-next-line @next/next/no-img-element -- nhost storage host isn't in next/image config
+          <img
+            src={d.image}
+            alt={d.title || row.dish_name || "Dish photo"}
+            className="mb-5 max-h-[420px] w-full rounded-[20px] object-cover shadow-sm"
+            loading="eager"
+          />
+        ) : null}
         <h1 className="text-3xl font-bold text-apb">{d.title || row.dish_name || "Untitled dish"}</h1>
         {d.description ? (
           <p className="mt-3 text-lg leading-relaxed text-neutral-700">{d.description}</p>
