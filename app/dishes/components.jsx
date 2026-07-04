@@ -151,6 +151,23 @@ function FilterChips({ activeCourse, onCourseChange, activeSourcing, onSourcingC
           ))}
         </div>
       </div>
+
+      <div className="group">
+        <span className="group-label">Tags</span>
+        <div className="fchip-group">
+          {[
+            { id: 'raw', label: '🥗 Raw' },
+            { id: 'bulk-prep', label: '🥘 Bulk-prep' },
+            { id: 'fast-service', label: '⚡ Fast-service' },
+          ].map(t => (
+            <button
+              key={t.id}
+              className={"fchip" + ((activeTags || []).includes(t.id) ? ' on' : '')}
+              onClick={() => onTagToggle(t.id)}
+            >{t.label}</button>
+          ))}
+        </div>
+      </div>
       </div>
 
     </>
@@ -364,6 +381,9 @@ function DishModal({ dish, open, onClose, onAddToMenu, inMenu }) {
               )}
               {dish.tags.includes('fast-service') && (
                 <span style={{ padding: '4px 10px', borderRadius: 999, background: 'oklch(0.68 0.16 140 / 0.18)', color: 'oklch(0.30 0.10 140)', fontSize: 11, fontWeight: 600 }}>⚡ Fast-service</span>
+              )}
+              {dish.tags.includes('raw') && (
+                <span style={{ padding: '4px 10px', borderRadius: 999, background: 'oklch(0.75 0.15 150 / 0.18)', color: 'oklch(0.35 0.12 150)', fontSize: 11, fontWeight: 600 }}>🥗 Raw</span>
               )}
             </div>
           )}
