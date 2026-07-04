@@ -120,6 +120,7 @@ function CreateReviewLinkForm({ dish }: { dish: DishReview }) {
         difficulty: 3,
         notes: "",
         substituted: false,
+        publishPublic: false,
         allergens: [] as string[],
         chosenAlts: [] as string[],
         customSwaps: [] as string[],
@@ -173,6 +174,7 @@ function CreateReviewLinkForm({ dish }: { dish: DishReview }) {
                     difficulty: formData.difficulty,
                     notes: formData.notes.trim() || null,
                     substituted: formData.substituted,
+                    public: formData.publishPublic,
                     allergens: formData.substituted ? formData.allergens : [],
                     substitutions: formData.substituted
                         ? [
@@ -262,7 +264,7 @@ function CreateReviewLinkForm({ dish }: { dish: DishReview }) {
                         onClick={() => {
                             setReviewUrl(null);
                             setStatus("idle");
-                            setFormData({ name: "", chefExperience: "homecook", eventContext: "", difficulty: 3, notes: "", substituted: false, allergens: [], chosenAlts: [], customSwaps: [] });
+                            setFormData({ name: "", chefExperience: "homecook", eventContext: "", difficulty: 3, notes: "", substituted: false, publishPublic: false, allergens: [], chosenAlts: [], customSwaps: [] });
                             setCustomDraft("");
                         }}
                     >
@@ -439,6 +441,33 @@ function CreateReviewLinkForm({ dish }: { dish: DishReview }) {
                 ) : null}
             </div>
 
+            <div>
+                <button
+                    type="button"
+                    onClick={() => update({ publishPublic: !formData.publishPublic })}
+                    aria-pressed={formData.publishPublic}
+                    className={cn(
+                        "flex w-full items-center gap-3 rounded-[16px] border-2 border-apb bg-white px-5 py-4 text-left text-apb transition",
+                        formData.publishPublic ? "ring-2 ring-apb/40 bg-apb-cream" : "hover:bg-apb-cream/60"
+                    )}
+                >
+                    <span
+                        className={cn(
+                            "flex h-6 w-6 shrink-0 items-center justify-center rounded-md border-2 text-sm font-bold",
+                            formData.publishPublic ? "border-apb bg-apb text-white" : "border-apb/50 text-transparent"
+                        )}
+                    >
+                        ✓
+                    </span>
+                    <span>
+                        <span className="block text-base font-bold">Publish my version publicly</span>
+                        <span className="block text-xs text-apb/70">
+                            Your name, swaps, notes, and allergens appear permanently on this dish&rsquo;s page for everyone.
+                        </span>
+                    </span>
+                </button>
+            </div>
+
             {status === "error" ? (
                 <p className="text-sm text-red-600">{error}</p>
             ) : null}
@@ -454,6 +483,11 @@ function CreateReviewLinkForm({ dish }: { dish: DishReview }) {
                         <p className="mt-2 text-sm text-neutral-600">
                             Generating the link marks <strong>{dish.dish_name}</strong> as an active dish for <strong>24 hours</strong>. During that window it appears on your active-dishes page, and anyone with the link or QR can review it.
                         </p>
+                        {formData.publishPublic ? (
+                            <p className="mt-2 text-sm text-neutral-600">
+                                Your version will also be <strong>published publicly</strong> on the dish page — permanently, visible to everyone.
+                            </p>
+                        ) : null}
                         <div className="mt-5 flex justify-end gap-2">
                             <button type="button" onClick={() => setShowConfirm(false)} className="rounded-full border border-neutral-200 px-4 py-2 text-sm font-medium text-neutral-600 transition hover:bg-neutral-50">
                                 Cancel
