@@ -9,6 +9,7 @@
 import { useRef, useState } from "react";
 import { useAuth } from "@/components/AuthProvider";
 import { getNhost } from "@/lib/nhost/client";
+import { storageErrorMessage } from "@/lib/storage-error";
 
 export type StagedMedia = { fileId: string; kind: "image" | "video"; preview: string };
 
@@ -39,10 +40,10 @@ export function MediaSection({
     try {
       const up = await getNhost().storage.uploadFiles({ "bucket-id": "dish-media", "file[]": [file] });
       const fileId = up.body?.processedFiles?.[0]?.id;
-      if (!fileId) throw new Error("upload failed");
+      if (!fileId) throw new Error("The upload didn't return a file id — please try again.");
       onChange([...media, { fileId, kind, preview: URL.createObjectURL(file) }]);
-    } catch {
-      setError("Upload failed — try a smaller file (max 100MB).");
+    } catch (err) {
+      setError(storageErrorMessage(err));
     } finally {
       setBusy(false);
     }

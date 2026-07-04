@@ -11,6 +11,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useAuth } from "@/components/AuthProvider";
 import { getNhost } from "@/lib/nhost/client";
+import { storageErrorMessage } from "@/lib/storage-error";
 
 type MediaItem = {
   id: string;
@@ -56,7 +57,7 @@ export function DishGallery({ dishId }: { dishId: number }) {
       // 1) Straight to Nhost storage with the user's session.
       const up = await getNhost().storage.uploadFiles({ "bucket-id": "dish-media", "file[]": [file] });
       const fileId = up.body?.processedFiles?.[0]?.id;
-      if (!fileId) throw new Error("upload failed");
+      if (!fileId) throw new Error("The upload didn't return a file id — please try again.");
 
       // 2) Register it in this dish's gallery.
       const res = await fetch("/api/dish-media", {
@@ -68,7 +69,7 @@ export function DishGallery({ dishId }: { dishId: number }) {
       if (!res.ok) throw new Error(data?.error ?? "register failed");
       await load();
     } catch (err) {
-      setError(err instanceof Error && err.message.includes("large") ? err.message : "Upload failed — try a smaller file (max 100MB).");
+      setError(storageErrorMessage(err));
     } finally {
       setBusy(false);
     }
