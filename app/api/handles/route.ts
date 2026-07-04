@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
     // _append merges the key into the existing jsonb metadata (preserves user_type, role, zip_code).
     const res = await graphql(
       `mutation ($id: uuid!, $patch: jsonb!) {
-         update_users(where: { id: { _eq: $id } }, _append: { metadata: $patch }) { affected_rows }
+         updateUsers(where: { id: { _eq: $id } }, _append: { metadata: $patch }) { affected_rows }
        }`,
       { variables: { id: userId, patch: { handle } }, useAdminSecret: true }
     );
