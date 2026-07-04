@@ -5,6 +5,10 @@
 .reverse-lookup-page {
   background: var(--bg-cream, #faf8f5);
   min-height: 100vh;
+  /* The shared nav (brand.css .recipes-nav) is sticky / in normal flow, so the
+     old fixed-nav offset (body { padding-top: 60px } in /styles.css) is no
+     longer needed — it was showing as an empty bar above the nav. */
+  padding-top: 0;
 }
 
 /* ---------- Hero ---------- */

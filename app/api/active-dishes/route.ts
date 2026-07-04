@@ -21,6 +21,7 @@ type Instance = {
   difficulty: number | null;
   active_until: string;
   created_at: string;
+  allergens: string[] | null;
 };
 type Dish = { id: number; dish_name: string; dish_data: Record<string, unknown> | null };
 
@@ -49,7 +50,7 @@ export async function GET(request: NextRequest) {
          review_instance(
            where: { author_id: { _eq: $uid } }
            order_by: { timestamp: desc }
-         ) { id dish_id name difficulty active_until created_at: timestamp }
+         ) { id dish_id name difficulty active_until created_at: timestamp allergens }
        }`,
       { useAdminSecret: true, variables: { uid: user.id } }
     );
@@ -94,9 +95,17 @@ export async function GET(request: NextRequest) {
         // Quick description — truncated.
         description: desc && desc.length > 160 ? `${desc.slice(0, 160).trimEnd()}…` : desc,
         originalCreator: cleanStr(data?.originalCreator),
-        allergens: Array.isArray(data?.allergens)
-          ? (data.allergens as unknown[]).filter((x): x is string => typeof x === "string")
-          : [],
+        // Prefer the instance's own allergens (the cook's swaps can change
+        // them); fall back to the base dish's only when the instance has none.
+        allergens: (() => {
+          const instAllergens = Array.isArray(i.allergens)
+            ? i.allergens.filter((x): x is string => typeof x === "string")
+            : [];
+          if (instAllergens.length) return instAllergens;
+          return Array.isArray(data?.allergens)
+            ? (data.allergens as unknown[]).filter((x): x is string => typeof x === "string")
+            : [];
+        })(),
       };
     };
 

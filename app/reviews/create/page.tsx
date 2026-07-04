@@ -4,6 +4,7 @@ import { useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
 import { QRCodeSVG } from "qrcode.react";
 import ConfettiBoom from "react-confetti-boom";
+import { ReviewForm } from "@/app/s/[code]/ReviewForm";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
@@ -129,6 +130,8 @@ function CreateReviewLinkForm({ dish }: { dish: DishReview }) {
     const { userId } = useAuth();
     const [showConfirm, setShowConfirm] = useState(false);
     const [reviewUrl, setReviewUrl] = useState<string | null>(null);
+    const [reviewCode, setReviewCode] = useState<string | null>(null);
+    const [reviewInline, setReviewInline] = useState(true); // review your own dish inline; on by default
     const [copied, setCopied] = useState(false);
 
     const update = (patch: Partial<typeof formData>) => setFormData(prev => ({ ...prev, ...patch }));
@@ -187,6 +190,7 @@ function CreateReviewLinkForm({ dish }: { dish: DishReview }) {
             }
             const data = await res.json();
             setReviewUrl(`${window.location.origin}${data.path}`);
+            setReviewCode(typeof data.path === "string" ? data.path.split("/").filter(Boolean).pop() ?? null : null);
             setStatus("success");
         } catch (err) {
             setError(err instanceof Error ? err.message : "Something went wrong");
@@ -234,18 +238,24 @@ function CreateReviewLinkForm({ dish }: { dish: DishReview }) {
                     </div>
                 </div>
 
-                <div className="flex flex-col items-center gap-3">
+                <div className="flex flex-col gap-3">
                     <p className="text-center text-sm font-medium text-apb">
                         Please help us curate dishes for a more plant-based future
                     </p>
-                    <a
-                        href={`${reviewUrl}?first_time`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center rounded-[16px] bg-apb-light/15 px-7 py-3 text-base font-semibold text-apb ring-1 ring-inset ring-apb-light/30 transition hover:bg-apb-light/25"
-                    >
-                        Rate your own dish 🎉
-                    </a>
+                    <label className="flex items-center justify-center gap-2 text-sm font-medium text-neutral-800">
+                        <input
+                            type="checkbox"
+                            checked={reviewInline}
+                            onChange={(e) => setReviewInline(e.target.checked)}
+                            className="h-4 w-4 rounded border-neutral-300 accent-apb"
+                        />
+                        Review this dish yourself 🎉
+                    </label>
+                    {reviewInline && reviewCode ? (
+                        <div className="mt-1 rounded-[16px] border border-neutral-200 bg-white p-4 text-left">
+                            <ReviewForm shortCode={reviewCode} />
+                        </div>
+                    ) : null}
                     <button
                         type="button"
                         className="text-sm text-neutral-500 underline hover:text-apb"
