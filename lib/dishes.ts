@@ -110,6 +110,10 @@ export function buildDishData(input: any): DishData {
   const resourceLink = str(input?.resourceLink, MAX_SHORT);
   if (resourceLink) { if (!URL_RE.test(resourceLink)) throw new Error("Resource link must be a valid URL"); d.resourceLink = resourceLink; }
 
+  // Cover image URL (uploaded to storage by the form; rendered by dish cards).
+  const image = str(input?.image, MAX_SHORT);
+  if (image) { if (!URL_RE.test(image)) throw new Error("Cover image must be a valid URL"); d.image = image; }
+
   if (input?.cost != null && input.cost !== "") {
     const cost = num(input.cost);
     if (cost === null || cost < 0) throw new Error("Cost must be a non-negative number");

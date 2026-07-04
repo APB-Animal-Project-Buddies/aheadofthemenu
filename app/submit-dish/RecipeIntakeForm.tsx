@@ -17,6 +17,7 @@ import { RECIPE_FORM_DEFAULTS, type RecipeFormValues } from "./types";
 import { adminHeaders } from "@/lib/admin-client";
 import { useAuth } from "@/components/AuthProvider";
 import { MediaSection, type StagedMedia } from "./sections/MediaSection";
+import { CoverSection, type CoverImage } from "./sections/CoverSection";
 
 const numOrNull = (s: string) => (s.trim() === "" ? null : Number(s));
 
@@ -51,6 +52,10 @@ export function RecipeIntakeForm(
   const [status, setStatus] = useState<"idle" | "submitting" | "done" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [media, setMedia] = useState<StagedMedia[]>([]);
+  // Existing cover (edit mode) has no staged fileId — only a URL to keep.
+  const [cover, setCover] = useState<CoverImage | null>(
+    initialValues?.image ? { fileId: null, url: initialValues.image } : null
+  );
   const methods = useForm<RecipeFormValues>({ defaultValues: initialValues ?? RECIPE_FORM_DEFAULTS });
   const { register, handleSubmit, control, watch, formState: { errors } } = methods;
   const { userId, session } = useAuth();
@@ -63,6 +68,7 @@ export function RecipeIntakeForm(
     const body = {
       title: v.title,
       description: v.description,
+      image: cover?.url,
       cuisines: v.cuisines,
       dishType: v.dishType,
       tags: v.tags,
@@ -204,7 +210,10 @@ export function RecipeIntakeForm(
           </p>
         ) : null}
 
-        {/* Photos & videos — staged in the dish-media bucket, attached on save */}
+        {/* Cover photo (one image, large dropzone), then the gallery strip.
+            Both upload to the dish-media bucket immediately; nothing attaches
+            to the recipe until it's saved. */}
+        <CoverSection cover={cover} onChange={setCover} />
         {!isPropose && <MediaSection media={media} onChange={setMedia} />}
 
         {/* Basics */}

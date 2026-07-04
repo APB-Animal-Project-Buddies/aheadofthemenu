@@ -43,6 +43,12 @@ export function nhostAuthUrl(): string {
   return `https://${subdomain}.auth.${region}.nhost.run/v1`;
 }
 
+/** Public URL of a stored file, e.g. https://<sub>.storage.<region>.nhost.run/v1/files/<id> */
+export function nhostFileUrl(fileId: string): string {
+  const { subdomain, region } = resolveConfig();
+  return `https://${subdomain}.storage.${region}.nhost.run/v1/files/${fileId}`;
+}
+
 let client: NhostClient | null = null;
 
 /**

@@ -23,6 +23,8 @@ export type Step = { text: string };
 export type RecipeFormValues = {
   title: string;
   description: string;
+  /** Cover image URL (uploaded to storage; shown on dish cards). */
+  image?: string;
   cuisines: string[];
   dishType: string[];
   tags: string[];

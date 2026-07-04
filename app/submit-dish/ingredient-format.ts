@@ -75,6 +75,7 @@ export function dishToFormValues(dishData: any): RecipeFormValues {
     ...RECIPE_FORM_DEFAULTS,
     title: d.title ?? "",
     description: d.description ?? "",
+    image: typeof d.image === "string" ? d.image : undefined,
     cuisines: arr(d.cuisines),
     dishType: arr(d.dishType),
     tags: arr(d.tags),
