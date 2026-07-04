@@ -131,6 +131,27 @@ async function getInstance(code, dishId) {
   return res.data?.review_instance?.[0] ?? null;
 }
 
+// Public dish instances — cooks who opted in to publishing their version.
+// Deliberately NO active_until filter: public instances are permanent; the
+// 24h window only governs the review-link lifecycle. Fails quiet (empty
+// list) if the visibility migration isn't applied yet.
+async function getPublicInstances(dishId) {
+  const query = `
+    query PublicInstances($dishId: Int!) {
+      review_instance(
+        where: { dish_id: { _eq: $dishId }, visibility: { _eq: "public" } }
+        order_by: { timestamp: desc }
+      ) { id name chef_type substitutions allergens difficulty notes timestamp }
+    }`;
+  try {
+    const res = await graphql(query, { useAdminSecret: true, variables: { dishId: Number(dishId) } });
+    if (res.errors?.length) return [];
+    return res.data?.review_instance ?? [];
+  } catch {
+    return [];
+  }
+}
+
 export default async function DishPage({ params, searchParams }) {
   const row = await getDish(params.id);
   if (!row) notFound();
@@ -144,6 +165,7 @@ export default async function DishPage({ params, searchParams }) {
     ? new Date(instance.active_until).getTime() > Date.now()
     : false;
   const subs = Array.isArray(instance?.substitutions) ? instance.substitutions : [];
+  const publicInstances = await getPublicInstances(params.id);
 
   const d = row.dish_data || {};
   const v = d.validation || {};
@@ -316,6 +338,47 @@ export default async function DishPage({ params, searchParams }) {
       {d.notes ? (
         <Section title="Notes">
           <p className="whitespace-pre-line text-sm leading-relaxed text-neutral-700">{d.notes}</p>
+        </Section>
+      ) : null}
+
+      {/* Cooked by others — publicly published dish instances (permanent). */}
+      {publicInstances.length ? (
+        <Section title="Cooked by others">
+          <div className="flex flex-col gap-4">
+            {publicInstances.map((pi) => (
+              <div key={pi.id} className="rounded-[16px] border border-apb/30 bg-apb-cream p-5">
+                <p className="font-serif text-lg font-semibold text-apb">
+                  {pi.name}
+                  <span className="font-normal text-neutral-500">
+                    {pi.chef_type ? ` · ${pi.chef_type}` : ""}
+                    {pi.timestamp ? ` · ${new Date(pi.timestamp).toLocaleDateString()}` : ""}
+                  </span>
+                </p>
+                {has(pi.substitutions) ? (
+                  <div className="mt-3">
+                    <p className="text-sm font-medium text-neutral-600">Substitutions</p>
+                    <ul className="mt-1 list-disc space-y-0.5 pl-5 text-sm text-neutral-700">
+                      {pi.substitutions.map((s, i) => <li key={`ps-${pi.id}-${i}`}>{subText(s)}</li>)}
+                    </ul>
+                  </div>
+                ) : null}
+                {has(pi.allergens) ? (
+                  <div className="mt-3 flex flex-wrap items-center gap-2">
+                    <span className="text-sm font-medium text-neutral-600">Allergens:</span>
+                    {pi.allergens.map((a) => (
+                      <span key={`pa-${pi.id}-${a}`} className="inline-flex items-center rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold capitalize text-amber-800">
+                        {a}
+                      </span>
+                    ))}
+                  </div>
+                ) : null}
+                {pi.difficulty != null ? (
+                  <p className="mt-3 text-sm text-neutral-600">Difficulty: <strong className="text-apb">{pi.difficulty}</strong>/5</p>
+                ) : null}
+                {pi.notes ? <p className="mt-2 text-sm italic text-neutral-600">"{pi.notes}"</p> : null}
+              </div>
+            ))}
+          </div>
         </Section>
       ) : null}
 
