@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { useAuth } from "@/components/AuthProvider";
 import { ActiveDishesList } from "@/components/ActiveDishesList";
+import { ClaimQrSection } from "@/components/ClaimQrSection";
 import { normalizeHandle } from "@/lib/handle";
 
 export default function ActiveDishesPage() {
@@ -26,6 +27,8 @@ export default function ActiveDishesPage() {
       </p>
 
       <ActiveDishesList handle={handle} isOwner={isOwner} userId={userId} shareUrl={pageUrl} />
+
+      {isOwner && <ClaimQrSection />}
     </main>
   );
 }

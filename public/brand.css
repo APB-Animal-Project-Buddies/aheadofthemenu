@@ -246,17 +246,42 @@
 /* re-assert the mobile behavior over the canonical desktop rules above
  * (equal specificity — these must come later in the file to win) */
 @media (max-width: 760px) {
-  .recipes-nav { padding: 0 18px; }
+  .recipes-nav { padding: 0 18px; position: relative; }
   .recipes-nav-inner {
     display: flex;
+    align-items: center;
+    justify-content: space-between;
     height: 56px;
   }
+  .nav-burger { display: flex; }
+  #nav-menu-pill-slot { display: none; }
+  /* Collapse the tabs into a burger dropdown (overrides the canonical
+     .recipes-nav-links { display: flex } above — must be the last such rule). */
+  .recipes-nav-links {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    gap: 0;
+    margin: 0;
+    padding: 6px 0;
+    background: var(--aotm-green-900);
+    border-top: 1px solid rgba(255, 107, 53, 0.28);
+    box-shadow: 0 18px 40px -20px rgba(0, 0, 0, 0.8);
+    z-index: 70;
+  }
+  .recipes-nav.nav-open .recipes-nav-links { display: flex; }
   .recipes-nav-links a {
     display: block;
     height: auto;
     padding: 13px 22px;
   }
   .recipes-nav-links a.active::after { display: none; }
+  .recipes-nav.nav-open .nav-burger span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+  .recipes-nav.nav-open .nav-burger span:nth-child(2) { opacity: 0; }
+  .recipes-nav.nav-open .nav-burger span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
 }
 
 /* deeper, richer accent for the hero headline emphasis (e.g. menus "sample menu") */

@@ -30,10 +30,19 @@ export default function DishesPage() {
   const { dishes: dishRows, loading, error } = useDishes() || { dishes: [], loading: false, error: null };
 
   // Extract dish_data from API response (API returns { id, dish_name, dish_data, created_at })
-  const dishes = dishRows.map(d => ({
-    ...d.dish_data,
-    _id: d.id,  // Add the database ID with underscore to avoid conflicts
-  }));
+  // and normalize the field names the sort/filter code reads: dish_data stores
+  // prepTime / dishType / cost-as-string, but sorts read time / courses / numeric cost.
+  const dishes = dishRows.map(d => {
+    const dd = d.dish_data || {};
+    const cost = typeof dd.cost === 'number' ? dd.cost : (parseFloat(dd.cost) || undefined);
+    return {
+      ...dd,
+      _id: d.id,  // database ID with underscore to avoid conflicts
+      time: dd.time ?? dd.prepTime,
+      courses: (Array.isArray(dd.courses) && dd.courses.length ? dd.courses : dd.dishType) || [],
+      cost,
+    };
+  });
 
   // ---------- UI state ----------
   // Deep-link: open dish modal when URL hash is `#r=<dish-id>`
@@ -51,6 +60,7 @@ export default function DishesPage() {
   const [sourcingFilter, setSourcingFilter] = useState('all');
   const [tagFilters, setTagFilters] = useState([]);
   const [dietFilters, setDietFilters] = useState([]);
+  const [savedOnly, setSavedOnly] = useState(false);
 
   // ---------- Saved + menu state (persisted) ----------
   const stored = loadStoredMenu();
@@ -97,6 +107,7 @@ export default function DishesPage() {
       if (sourcingFilter === 'branded' && r.sourcingTier === 'in-house') return false;
       if (tagFilters.length > 0 && !tagFilters.every(t => (r.tags || []).includes(t))) return false;
       if (dietFilters.length > 0 && dietFilters.some(d => (r.allergens || []).includes(d))) return false;
+      if (savedOnly && !saved.has(r.id)) return false;
       if (q) {
         const hay = `${r.title || ''} ${(r.cuisines || []).join(' ')} ${r.description || ''}`.toLowerCase();
         if (!hay.includes(q)) return false;
@@ -119,7 +130,7 @@ export default function DishesPage() {
       });
     }
     return list;
-  }, [dishes, activeCuisine, sortBy, search, courseFilter, sourcingFilter, tagFilters, dietFilters]);
+  }, [dishes, activeCuisine, sortBy, search, courseFilter, sourcingFilter, tagFilters, dietFilters, savedOnly, saved]);
 
   // ---------- Featured (Pick of the week) ----------
   // ---------- Toasts + actions ----------
@@ -274,7 +285,27 @@ export default function DishesPage() {
             onSortChange={setSortBy}
           />
         )}
-        {visible.length === 0 ? (
+        <div style={{ display: 'flex', justifyContent: 'flex-end', margin: '4px 0 12px' }}>
+          <button
+            type="button"
+            onClick={() => setSavedOnly(v => !v)}
+            aria-pressed={savedOnly}
+            style={{
+              padding: '6px 14px', borderRadius: 999, fontSize: 13, fontWeight: 600, cursor: 'pointer',
+              border: '1px solid var(--line)',
+              background: savedOnly ? 'var(--moss, #1e4d2b)' : '#fff',
+              color: savedOnly ? '#fff' : 'var(--moss-ink)',
+            }}
+          >
+            {savedOnly ? '★' : '☆'} Saved{saved.size ? ` (${saved.size})` : ''}
+          </button>
+        </div>
+        {visible.length === 0 && savedOnly ? (
+          <div className="empty-state">
+            <h3>No saved dishes yet.</h3>
+            <p>Tap the bookmark on any dish to save it here.</p>
+          </div>
+        ) : visible.length === 0 ? (
           <div className="empty-state">
             <h3>No dishes match those filters.</h3>
             <p>Try clearing search, course, or sourcing — or pick a different cuisine.</p>

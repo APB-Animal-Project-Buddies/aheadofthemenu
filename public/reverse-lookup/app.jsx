@@ -19,6 +19,7 @@ function App() {
   const [error, setError] = useState(null);
   const [query, setQuery] = useState('');
   const [activeTag, setActiveTag] = useState('all');
+  const [showSuggest, setShowSuggest] = useState(false);
 
   useEffect(() => {
     fetch('/reverse-lookup/data/seattle.json')
@@ -75,6 +76,7 @@ function App() {
 
   return (
     <>
+      {showSuggest ? <SuggestModal onClose={() => setShowSuggest(false)} /> : null}
       <section className="rl-hero">
         <div className="rl-hero-inner">
           <span className="rl-eyebrow">Reverse Lookup · Seattle</span>
@@ -85,6 +87,13 @@ function App() {
             A growing catalog of plant-based dishes around the {data ? data.cityLabel : 'Seattle area'},
             mapped to the local restaurants that serve them. Search by dish, ingredient, or neighbourhood.
           </p>
+          <button
+            type="button"
+            onClick={() => setShowSuggest(true)}
+            style={{ marginTop: 18, padding: '11px 22px', borderRadius: 999, background: '#1e4d2b', color: '#fff', fontWeight: 700, border: 'none', cursor: 'pointer', fontSize: 14 }}
+          >
+            🌱 Suggest a dish
+          </button>
         </div>
       </section>
 
@@ -301,6 +310,66 @@ function averageRating(ratings) {
   if (!ratings.length) return 0;
   const sum = ratings.reduce((acc, r) => acc + (r.stars || 0), 0);
   return sum / ratings.length;
+}
+
+// "Suggest a dish" modal — persists a community suggestion (moderated before it
+// shows on the page). Posts to the Next API route /api/reverse-lookup/suggest.
+function SuggestModal({ onClose }) {
+  const [form, setForm] = useState({ dishName: '', restaurantName: '', neighbourhood: '', description: '', contactEmail: '' });
+  const [status, setStatus] = useState('idle');
+  const set = (k) => (e) => setForm((f) => ({ ...f, [k]: e.target.value }));
+
+  async function submit(e) {
+    e.preventDefault();
+    if (!form.dishName.trim() || !form.restaurantName.trim()) return;
+    setStatus('submitting');
+    try {
+      const res = await fetch('/api/reverse-lookup/suggest', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      });
+      if (!res.ok) throw new Error();
+      setStatus('done');
+    } catch (err) {
+      setStatus('error');
+    }
+  }
+
+  const overlay = { position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.45)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16, zIndex: 1000 };
+  const card = { width: '100%', maxWidth: 440, background: '#fff', borderRadius: 16, padding: 24, maxHeight: '90vh', overflowY: 'auto' };
+  const input = { width: '100%', padding: '10px 12px', borderRadius: 10, border: '1px solid #d4d4d4', marginTop: 4, fontSize: 14, boxSizing: 'border-box' };
+  const label = { display: 'block', marginTop: 12, fontSize: 13, fontWeight: 600, color: '#1e4d2b' };
+  const btn = { padding: '10px 18px', borderRadius: 999, background: '#1e4d2b', color: '#fff', fontWeight: 600, border: 'none', cursor: 'pointer' };
+
+  return (
+    <div style={overlay} onClick={onClose}>
+      <div style={card} onClick={(e) => e.stopPropagation()}>
+        {status === 'done' ? (
+          <div>
+            <h2 style={{ color: '#1e4d2b', fontSize: 20, fontWeight: 700 }}>Thanks! 🌱</h2>
+            <p style={{ marginTop: 8, color: '#555', fontSize: 14 }}>We'll review your suggestion and add it to the catalog — you're helping the plant-based transition!</p>
+            <button onClick={onClose} style={{ ...btn, marginTop: 16 }}>Done</button>
+          </div>
+        ) : (
+          <form onSubmit={submit}>
+            <h2 style={{ color: '#1e4d2b', fontSize: 20, fontWeight: 700 }}>Suggest a dish</h2>
+            <p style={{ marginTop: 6, color: '#777', fontSize: 13 }}>Know a vegan dish at a Seattle restaurant we&rsquo;re missing? Tell us.</p>
+            <label style={label}>Dish <span style={{ color: '#c0392b' }}>*</span><input style={input} value={form.dishName} onChange={set('dishName')} placeholder="Vegan katsu curry" required /></label>
+            <label style={label}>Restaurant / business <span style={{ color: '#c0392b' }}>*</span><input style={input} value={form.restaurantName} onChange={set('restaurantName')} placeholder="Plum Bistro" required /></label>
+            <label style={label}>Neighbourhood<input style={input} value={form.neighbourhood} onChange={set('neighbourhood')} placeholder="Capitol Hill" /></label>
+            <label style={label}>What makes it great?<textarea style={{ ...input, minHeight: 70, resize: 'vertical' }} value={form.description} onChange={set('description')} /></label>
+            <label style={label}>Your email (optional)<input style={input} type="email" value={form.contactEmail} onChange={set('contactEmail')} placeholder="you@example.com" /></label>
+            {status === 'error' ? <p style={{ color: '#c0392b', fontSize: 13, marginTop: 10 }}>Couldn&rsquo;t submit — please try again.</p> : null}
+            <div style={{ display: 'flex', gap: 8, marginTop: 18, justifyContent: 'flex-end' }}>
+              <button type="button" onClick={onClose} style={{ padding: '10px 16px', borderRadius: 999, border: '1px solid #d4d4d4', background: '#fff', cursor: 'pointer', fontWeight: 600 }}>Cancel</button>
+              <button type="submit" disabled={status === 'submitting'} style={{ ...btn, opacity: status === 'submitting' ? 0.6 : 1 }}>{status === 'submitting' ? 'Submitting…' : 'Submit'}</button>
+            </div>
+          </form>
+        )}
+      </div>
+    </div>
+  );
 }
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

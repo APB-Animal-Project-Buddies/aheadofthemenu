@@ -190,6 +190,14 @@ export default async function DishPage({ params, searchParams }) {
 
       {/* Header */}
       <header className="mt-4">
+        {instance && instanceActive ? (
+          <Link
+            href={`/s/${instanceCode}`}
+            className="mb-4 inline-flex items-center gap-2 rounded-full bg-apb px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-apb-light"
+          >
+            🌱 Review this dish
+          </Link>
+        ) : null}
         <h1 className="text-3xl font-bold text-apb">{d.title || row.dish_name || "Untitled dish"}</h1>
         {d.description ? (
           <p className="mt-3 text-lg leading-relaxed text-neutral-700">{d.description}</p>

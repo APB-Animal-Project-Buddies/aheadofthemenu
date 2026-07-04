@@ -347,6 +347,7 @@ a {
 
 .toolbar .filters {
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
   font-family: var(--mono);
   font-size: 12px;
@@ -366,6 +367,48 @@ a {
   background: var(--moss-ink);
   color: var(--cream);
   border-color: var(--moss-ink);
+}
+
+/* ---------- filter condense + clear-all ---------- */
+.filters-bar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 0 20px 4px;
+}
+.filters-toggle { display: none; }   /* desktop: no toggle — filters shown directly */
+.filters-clear {
+  background: none;
+  border: none;
+  color: var(--moss, #1e4d2b);
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 4px 6px;
+}
+@media (max-width: 840px) {
+  .filters-bar { justify-content: space-between; margin-bottom: 8px; }
+  .filters-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: var(--paper);
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--moss-ink);
+    cursor: pointer;
+  }
+  .filters-toggle .caret { transition: transform 0.2s ease; }
+  .filters-toggle[aria-expanded="true"] .caret { transform: rotate(180deg); }
+  .filter-groups { display: none; }
+  .filter-groups.open { display: block; }
 }
 
 /* ---------- dish grid ---------- */

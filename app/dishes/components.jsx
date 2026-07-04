@@ -69,8 +69,34 @@ function SearchBox({ value, onChange, placeholder }) {
 
 // ---------- FilterChips ----------
 function FilterChips({ activeCourse, onCourseChange, activeSourcing, onSourcingChange, activeTags, onTagToggle, activeDiets, onDietToggle }) {
+  const [open, setOpen] = useState(false);
+  const activeCount =
+    (activeCourse && activeCourse !== 'all' ? 1 : 0) +
+    (activeSourcing && activeSourcing !== 'all' ? 1 : 0) +
+    (activeDiets || []).length +
+    (activeTags || []).length;
+
+  function clearAll() {
+    if (activeCourse !== 'all') onCourseChange('all');
+    if (activeSourcing !== 'all') onSourcingChange('all');
+    (activeDiets || []).forEach(d => onDietToggle(d));
+    (activeTags || []).forEach(t => onTagToggle(t));
+  }
+
   return (
     <>
+      {/* Mobile: collapse the filters behind a toggle; Clear all shows on both. */}
+      <div className="filters-bar">
+        <button className="filters-toggle" onClick={() => setOpen(o => !o)} aria-expanded={open}>
+          Filters{activeCount ? ` · ${activeCount}` : ''}
+          <span className="caret" aria-hidden="true">▾</span>
+        </button>
+        {activeCount > 0 && (
+          <button className="filters-clear" onClick={clearAll}>Clear all</button>
+        )}
+      </div>
+
+      <div className={"filter-groups" + (open ? " open" : "")}>
       <div className="group">
         <span className="group-label">Course</span>
         <div className="fchip-group">
@@ -124,6 +150,7 @@ function FilterChips({ activeCourse, onCourseChange, activeSourcing, onSourcingC
             >{d.label}</button>
           ))}
         </div>
+      </div>
       </div>
 
     </>

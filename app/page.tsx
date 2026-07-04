@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { LandingAuth } from "@/components/LandingAuth";
+import { LandingRedirect } from "@/components/LandingRedirect";
 import "./aotm.css";
 
 export const metadata: Metadata = {
@@ -11,6 +12,7 @@ export const metadata: Metadata = {
 export default function AheadOfTheMenu() {
   return (
     <main className="aotm">
+      <LandingRedirect />
       <header className="aotm-top">
         <span className="aotm-brand">
           <svg className="leaf" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
