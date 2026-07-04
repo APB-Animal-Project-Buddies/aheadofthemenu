@@ -110,3 +110,9 @@ export function parseDishTarget(link: { target_type: string; target_id: string }
   const id = Number.parseInt(link.target_id, 10);
   return Number.isInteger(id) && String(id) === link.target_id.trim() ? id : null;
 }
+
+/** Map the untrusted `public` body flag to a review_instance visibility.
+ *  Only a literal `true` publishes; anything else stays private. */
+export function instanceVisibility(flag: unknown): "private" | "public" {
+  return flag === true ? "public" : "private";
+}

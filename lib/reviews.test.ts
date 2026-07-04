@@ -1,4 +1,4 @@
-import { test, expect } from "bun:test";
+import { test, expect, describe } from "bun:test";
 import {
   LIKED_OPTIONS,
   isCommentRequired,
@@ -7,6 +7,7 @@ import {
   generateUniqueShortCode,
   isValidShortCode,
   parseDishTarget,
+  instanceVisibility,
 } from "./reviews";
 
 test("buildReviewData maps a substitution choice to {key, score}", () => {
@@ -109,4 +110,15 @@ test("parseDishTarget only accepts dish_review with int target_id", () => {
 
 test("LIKED_OPTIONS is the fixed allowlist", () => {
   expect(LIKED_OPTIONS).toEqual(["taste", "texture", "seasoning", "appearance", "aroma"]);
+});
+
+describe("instanceVisibility", () => {
+  test("only literal true publishes", () => {
+    expect(instanceVisibility(true)).toBe("public");
+  });
+  test("everything else stays private", () => {
+    for (const v of [false, undefined, null, "true", 1, {}]) {
+      expect(instanceVisibility(v)).toBe("private");
+    }
+  });
 });

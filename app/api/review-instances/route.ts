@@ -23,6 +23,7 @@
 
 import { NextResponse } from "next/server";
 import { graphql } from "@/lib/nhost";
+import { instanceVisibility } from "@/lib/reviews";
 
 export const dynamic = "force-dynamic";
 
@@ -100,6 +101,7 @@ export async function POST(request: Request) {
     const substitutions = substituted && Array.isArray(body?.substitutions)
       ? body.substitutions.slice(0, 50)
       : [];
+    const visibility = instanceVisibility(body?.public);
 
     const baseVars = {
       id: code,
@@ -115,7 +117,7 @@ export async function POST(request: Request) {
     // creator, if any — passed via X-User-Id like the dish-submit flow).
     const activeUntil = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
     const authorId = request.headers.get("x-user-id") || null;
-    const extraVars = { ...baseVars, substituted, allergens, substitutions, activeUntil, authorId };
+    const extraVars = { ...baseVars, substituted, allergens, substitutions, activeUntil, authorId, visibility };
 
     // 1) Save the review instance. Include the extended columns
     //    (substituted/allergens/active_until/author_id) when they exist; fall
@@ -124,11 +126,11 @@ export async function POST(request: Request) {
       graphql<{ insert_review_instance_one: { id: string } }>(
         `mutation (
            $id: bpchar!, $dishId: Int!, $name: String!, $chefType: String!,
-           $eventContext: String, $difficulty: Int!, $notes: String${withExtra ? ", $substituted: Boolean!, $allergens: [String!]!, $substitutions: jsonb!, $activeUntil: timestamptz, $authorId: uuid" : ""}
+           $eventContext: String, $difficulty: Int!, $notes: String${withExtra ? ", $substituted: Boolean!, $allergens: [String!]!, $substitutions: jsonb!, $activeUntil: timestamptz, $authorId: uuid, $visibility: String" : ""}
          ) {
            insert_review_instance_one(object: {
              id: $id, dish_id: $dishId, name: $name, chef_type: $chefType,
-             event_context: $eventContext, difficulty: $difficulty, notes: $notes${withExtra ? ", substituted: $substituted, allergens: $allergens, substitutions: $substitutions, active_until: $activeUntil, author_id: $authorId" : ""}
+             event_context: $eventContext, difficulty: $difficulty, notes: $notes${withExtra ? ", substituted: $substituted, allergens: $allergens, substitutions: $substitutions, active_until: $activeUntil, author_id: $authorId, visibility: $visibility" : ""}
            }) { id }
          }`,
         { useAdminSecret: true, variables: withExtra ? extraVars : baseVars }
