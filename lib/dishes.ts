@@ -6,7 +6,7 @@ export const TRIED_BY = ["just_me","friends","family","strangers","a_lot"] as co
 export const TRIED_BY_LABELS: Record<(typeof TRIED_BY)[number], string> = {
   just_me: "Just me", friends: "Friends", family: "Family", strangers: "Strangers", a_lot: "A lot of people",
 };
-export const TAGS = ["fast","easy","cheap","expensive","fancy","healthy","high-protein","comfort-food","spicy","kid-friendly","bulk-prep","low-effort"] as const;
+export const TAGS = ["fast","easy","cheap","expensive","fancy","healthy","high-protein","comfort-food","spicy","kid-friendly","bulk-prep","low-effort","raw","raw-vegan"] as const;
 
 const MAX_SHORT = 200, MAX_LONG = 4000, MAX_NAME = 120, MAX_EMAIL = 254, MAX_TAGS = 25, MAX_INGREDIENTS = 100, MAX_STEPS = 60;
 const MAX_ALTS_PER_INGREDIENT = 6, MAX_ALT_LINES = 12;
