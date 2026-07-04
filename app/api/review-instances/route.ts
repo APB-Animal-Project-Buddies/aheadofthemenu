@@ -15,7 +15,8 @@
  *   chefType: "beginner" | "homecook" | "professional",
  *   eventContext?: string,
  *   difficulty: number (1-5),
- *   notes?: string
+ *   notes?: string,
+ *   public?: boolean   // literal true publishes the instance on the dish page
  * }
  *
  * Response: { code: string, path: string }   // path = "/s/{code}"
@@ -119,25 +120,42 @@ export async function POST(request: Request) {
     const authorId = request.headers.get("x-user-id") || null;
     const extraVars = { ...baseVars, substituted, allergens, substitutions, activeUntil, authorId, visibility };
 
-    // 1) Save the review instance. Include the extended columns
-    //    (substituted/allergens/active_until/author_id) when they exist; fall
-    //    back to the base insert if the migration hasn't been applied.
-    const doInsert = (withExtra: boolean) =>
+    // 1) Save the review instance. Degrade column-set by column-set so a
+    //    missing migration only costs its own columns, never its siblings:
+    //    full (extended + visibility) → extended (substituted/allergens/
+    //    substitutions/active_until/author_id) → base. Each step is logged —
+    //    a silent fallback is indistinguishable from success in every UI.
+    const doInsert = (withExtra: boolean, withVisibility: boolean) =>
       graphql<{ insert_review_instance_one: { id: string } }>(
         `mutation (
            $id: bpchar!, $dishId: Int!, $name: String!, $chefType: String!,
-           $eventContext: String, $difficulty: Int!, $notes: String${withExtra ? ", $substituted: Boolean!, $allergens: [String!]!, $substitutions: jsonb!, $activeUntil: timestamptz, $authorId: uuid, $visibility: String" : ""}
+           $eventContext: String, $difficulty: Int!, $notes: String${withExtra ? ", $substituted: Boolean!, $allergens: [String!]!, $substitutions: jsonb!, $activeUntil: timestamptz, $authorId: uuid" : ""}${withExtra && withVisibility ? ", $visibility: String" : ""}
          ) {
            insert_review_instance_one(object: {
              id: $id, dish_id: $dishId, name: $name, chef_type: $chefType,
-             event_context: $eventContext, difficulty: $difficulty, notes: $notes${withExtra ? ", substituted: $substituted, allergens: $allergens, substitutions: $substitutions, active_until: $activeUntil, author_id: $authorId, visibility: $visibility" : ""}
+             event_context: $eventContext, difficulty: $difficulty, notes: $notes${withExtra ? ", substituted: $substituted, allergens: $allergens, substitutions: $substitutions, active_until: $activeUntil, author_id: $authorId" : ""}${withExtra && withVisibility ? ", visibility: $visibility" : ""}
            }) { id }
          }`,
+        // Unknown variables in the payload are ignored, so extraVars is safe
+        // for both extended shapes.
         { useAdminSecret: true, variables: withExtra ? extraVars : baseVars }
       );
 
-    let insertInstance = await doInsert(true);
-    if (insertInstance.errors?.length) insertInstance = await doInsert(false);
+    let insertInstance = await doInsert(true, true);
+    if (insertInstance.errors?.length) {
+      console.warn(
+        `review-instance insert: visibility column rejected (migration applied? metadata reloaded?) — retrying without it. Requested visibility=${visibility}.`,
+        insertInstance.errors[0]?.message
+      );
+      insertInstance = await doInsert(true, false);
+    }
+    if (insertInstance.errors?.length) {
+      console.warn(
+        "review-instance insert: extended columns rejected — falling back to base insert (drops substituted/allergens/substitutions/active_until/author_id).",
+        insertInstance.errors[0]?.message
+      );
+      insertInstance = await doInsert(false, false);
+    }
     if (insertInstance.errors?.length) {
       return NextResponse.json(
         { error: insertInstance.errors[0]?.message ?? "Failed to create review instance" },

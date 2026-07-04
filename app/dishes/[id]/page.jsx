@@ -141,13 +141,18 @@ async function getPublicInstances(dishId) {
       review_instance(
         where: { dish_id: { _eq: $dishId }, visibility: { _eq: "public" } }
         order_by: { timestamp: desc }
+        limit: 20
       ) { id name chef_type substitutions allergens difficulty notes timestamp }
     }`;
   try {
     const res = await graphql(query, { useAdminSecret: true, variables: { dishId: Number(dishId) } });
-    if (res.errors?.length) return [];
+    if (res.errors?.length) {
+      console.warn("getPublicInstances: query rejected (visibility migration applied? metadata reloaded?)", res.errors[0]?.message);
+      return [];
+    }
     return res.data?.review_instance ?? [];
-  } catch {
+  } catch (e) {
+    console.warn("getPublicInstances: transport error, rendering without the section", e instanceof Error ? e.message : e);
     return [];
   }
 }
@@ -160,12 +165,15 @@ export default async function DishPage({ params, searchParams }) {
   // cook's version (substitutions + allergens) above the base recipe — but only
   // while the instance is still active.
   const instanceCode = typeof searchParams?.instance === "string" ? searchParams.instance : null;
+  // Kick off the public-instances read alongside the overlay lookup — the two
+  // queries are independent, no reason to pay for them sequentially.
+  const publicInstancesPromise = getPublicInstances(params.id);
   const instance = instanceCode ? await getInstance(instanceCode, params.id) : null;
   const instanceActive = instance?.active_until
     ? new Date(instance.active_until).getTime() > Date.now()
     : false;
   const subs = Array.isArray(instance?.substitutions) ? instance.substitutions : [];
-  const publicInstances = await getPublicInstances(params.id);
+  const publicInstances = await publicInstancesPromise;
 
   const d = row.dish_data || {};
   const v = d.validation || {};
