@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useAuth } from "@/components/AuthProvider";
 import { Avatar } from "@/components/Avatar";
 import { QrShareCard } from "@/components/QrShareCard";
+import { ActiveDishesList } from "@/components/ActiveDishesList";
 import { ROLE_OPTIONS, USER_TYPE_LABELS } from "@/lib/nhost/roles";
 import { normalizeHandle, validateHandle } from "@/lib/handle";
 import { getNhost } from "@/lib/nhost/client";
@@ -229,6 +230,21 @@ export default function ProfilePage() {
           </button>
         </div>
       </div>
+
+      {/* Your dishes — private to your own profile (this page is always the
+          signed-in user; it redirects to /login otherwise). */}
+      {handle && (
+        <>
+          <section className="mt-8">
+            <h2 className="font-serif text-lg font-semibold text-apb">Active dishes</h2>
+            <ActiveDishesList handle={handle} isOwner userId={userId} show="active" />
+          </section>
+          <section className="mt-8">
+            <h2 className="font-serif text-lg font-semibold text-apb">Past meals</h2>
+            <ActiveDishesList handle={handle} isOwner userId={userId} show="past" />
+          </section>
+        </>
+      )}
     </main>
   );
 }

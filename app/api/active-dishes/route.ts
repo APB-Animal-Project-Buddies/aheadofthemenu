@@ -1,12 +1,15 @@
 /**
  * GET  /api/active-dishes?handle=<handle>   → that user's currently-active dish
- *        instances (active_until > now), oldest-first (order of creation).
+ *        instances (public). Past/inactive instances are returned ONLY to the
+ *        owner — the request must carry a valid Bearer access token whose user
+ *        id matches the handle's account.
  * POST /api/active-dishes { code }  (X-User-Id header) → deactivate one you own
  *        (sets active_until = now()).
  */
 import { NextRequest, NextResponse } from "next/server";
 import { graphql } from "@/lib/nhost";
 import { normalizeHandle } from "@/lib/handle";
+import { verifyNhostJwt, bearerToken } from "@/lib/jwt";
 
 export const dynamic = "force-dynamic";
 
@@ -37,17 +40,18 @@ export async function GET(request: NextRequest) {
 
   try {
     const user = await userByHandle(handle);
-    if (!user) return NextResponse.json({ handle, displayName: null, dishes: [] });
+    if (!user) return NextResponse.json({ handle, displayName: null, dishes: [], inactiveDishes: [] });
 
-    const now = new Date().toISOString();
+    // Fetch every instance this user authored, then split active vs. inactive
+    // client-side (active = active_until still in the future).
     const instRes = await graphql<{ review_instance: Instance[] }>(
-      `query ($uid: uuid!, $now: timestamptz!) {
+      `query ($uid: uuid!) {
          review_instance(
-           where: { author_id: { _eq: $uid }, active_until: { _gt: $now } }
-           order_by: { created_at: asc }
-         ) { id dish_id name difficulty active_until created_at }
+           where: { author_id: { _eq: $uid } }
+           order_by: { timestamp: desc }
+         ) { id dish_id name difficulty active_until created_at: timestamp }
        }`,
-      { useAdminSecret: true, variables: { uid: user.id, now } }
+      { useAdminSecret: true, variables: { uid: user.id } }
     );
     if (instRes.errors?.length) throw new Error(instRes.errors[0].message);
     const instances = instRes.data?.review_instance ?? [];
@@ -62,20 +66,60 @@ export async function GET(request: NextRequest) {
       for (const d of dishRes.data?.dishes ?? []) dishById.set(d.id, d);
     }
 
-    const dishes = instances.map((i) => ({
-      code: i.id,
-      reviewPath: `/s/${i.id}`,
-      name: i.name,
-      difficulty: i.difficulty,
-      activeUntil: i.active_until,
-      createdAt: i.created_at,
-      dishId: i.dish_id,
-      dishName: dishById.get(i.dish_id)?.dish_name ?? null,
-    }));
+    const nowMs = Date.now();
+    // "Open for submission" means active_until is set to a future time (creation
+    // sets it to created_at + 24h; deactivating sets it to now). An instance is
+    // inactive once that window passes (>24h old or deactivated) OR if it was
+    // never marked open for submission (active_until is null).
+    const isActive = (i: Instance) =>
+      !!i.active_until && new Date(i.active_until).getTime() > nowMs;
+
+    const dishData = (dishId: number) =>
+      (dishById.get(dishId)?.dish_data as Record<string, unknown> | null | undefined) ?? null;
+    const cleanStr = (v: unknown): string | null =>
+      typeof v === "string" && v.trim() ? v.trim() : null;
+
+    const toDish = (i: Instance) => {
+      const data = dishData(i.dish_id);
+      const desc = cleanStr(data?.description);
+      return {
+        code: i.id,
+        reviewPath: `/s/${i.id}`,
+        name: i.name,
+        difficulty: i.difficulty,
+        activeUntil: i.active_until, // null when never opened for submission
+        createdAt: i.created_at,
+        dishId: i.dish_id,
+        dishName: dishById.get(i.dish_id)?.dish_name ?? null,
+        // Quick description — truncated.
+        description: desc && desc.length > 160 ? `${desc.slice(0, 160).trimEnd()}…` : desc,
+        originalCreator: cleanStr(data?.originalCreator),
+        allergens: Array.isArray(data?.allergens)
+          ? (data.allergens as unknown[]).filter((x): x is string => typeof x === "string")
+          : [],
+      };
+    };
+
+    // Active oldest-first (matches prior behavior); inactive newest-first.
+    const dishes = instances
+      .filter(isActive)
+      .sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime())
+      .map(toDish);
+    const inactiveDishes = instances.filter((i) => !isActive(i)).map(toDish);
+
+    // Past dishes are private: only include them when the caller proves (via a
+    // signature-verified access token) that they own this handle's account.
+    const caller = verifyNhostJwt(bearerToken(request.headers.get("authorization")));
+    const isOwnerRequest = !!caller && caller.userId === user.id;
 
     const displayName =
       (typeof user.metadata?.handle === "string" ? user.metadata.handle : null) ?? handle;
-    return NextResponse.json({ handle, displayName, dishes });
+    return NextResponse.json({
+      handle,
+      displayName,
+      dishes,
+      inactiveDishes: isOwnerRequest ? inactiveDishes : [],
+    });
   } catch {
     return NextResponse.json({ error: "Temporarily unavailable" }, { status: 502 });
   }
