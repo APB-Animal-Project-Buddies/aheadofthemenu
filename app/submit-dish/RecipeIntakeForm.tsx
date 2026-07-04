@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm, FormProvider, Controller } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -18,6 +18,7 @@ import { adminHeaders } from "@/lib/admin-client";
 import { useAuth } from "@/components/AuthProvider";
 import { MediaSection, type StagedMedia } from "./sections/MediaSection";
 import { CoverSection, type CoverImage } from "./sections/CoverSection";
+import { AddCreatorLine } from "./sections/AddCreatorLine";
 
 const numOrNull = (s: string) => (s.trim() === "" ? null : Number(s));
 
@@ -56,8 +57,26 @@ export function RecipeIntakeForm(
   const [cover, setCover] = useState<CoverImage | null>(
     initialValues?.image ? { fileId: null, url: initialValues.image } : null
   );
+
+  // Known creators feed the "Original creator" autocomplete: both the person
+  // ("Nisha Vora") and their brand ("Rainbow Plant Life") match while typing.
+  const [creatorOptions, setCreatorOptions] = useState<string[]>([]);
+  useEffect(() => {
+    fetch("/api/creators")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((j) => {
+        const rows: Array<{ display_name: string; creator_name: string | null }> = j?.creators ?? [];
+        const names = new Set<string>();
+        rows.forEach((c) => {
+          if (c.display_name) names.add(c.display_name);
+          if (c.creator_name) names.add(c.creator_name);
+        });
+        setCreatorOptions(Array.from(names).sort((a, b) => a.localeCompare(b)));
+      })
+      .catch(() => {}); // autocomplete is optional — the field stays free text
+  }, []);
   const methods = useForm<RecipeFormValues>({ defaultValues: initialValues ?? RECIPE_FORM_DEFAULTS });
-  const { register, handleSubmit, control, watch, formState: { errors } } = methods;
+  const { register, handleSubmit, control, watch, setValue, formState: { errors } } = methods;
   const { userId, session } = useAuth();
 
   async function onSubmit(v: RecipeFormValues) {
@@ -202,7 +221,20 @@ export function RecipeIntakeForm(
             <Input className="mt-2" type="url" placeholder="https://www.noracooks.com/vegan-blueberry-muffins/" {...register("resourceLink")} />
           </Field>
           <Field label="Original creator">
-            <Input className="mt-2" placeholder="e.g. Nora Cooks, Vegan Richa" {...register("originalCreator")} />
+            <Input className="mt-2" placeholder="e.g. Nora Cooks, Vegan Richa" list="creator-options" {...register("originalCreator")} />
+            <datalist id="creator-options">
+              {creatorOptions.map((name) => (
+                <option key={name} value={name} />
+              ))}
+            </datalist>
+            <AddCreatorLine
+              onAdded={(fillValue, newOptions) => {
+                setCreatorOptions((prev) =>
+                  Array.from(new Set(prev.concat(newOptions))).sort((a, b) => a.localeCompare(b))
+                );
+                if (fillValue) setValue("originalCreator", fillValue);
+              }}
+            />
           </Field>
         </div>
 
