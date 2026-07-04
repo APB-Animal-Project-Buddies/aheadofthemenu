@@ -68,17 +68,15 @@ function SearchBox({ value, onChange, placeholder }) {
 }
 
 // ---------- FilterChips ----------
-function FilterChips({ activeCourse, onCourseChange, activeSourcing, onSourcingChange, activeTags, onTagToggle, activeDiets, onDietToggle }) {
+function FilterChips({ activeCourse, onCourseChange, activeTags, onTagToggle, activeDiets, onDietToggle }) {
   const [open, setOpen] = useState(false);
   const activeCount =
     (activeCourse && activeCourse !== 'all' ? 1 : 0) +
-    (activeSourcing && activeSourcing !== 'all' ? 1 : 0) +
     (activeDiets || []).length +
     (activeTags || []).length;
 
   function clearAll() {
     if (activeCourse !== 'all') onCourseChange('all');
-    if (activeSourcing !== 'all') onSourcingChange('all');
     (activeDiets || []).forEach(d => onDietToggle(d));
     (activeTags || []).forEach(t => onTagToggle(t));
   }
@@ -116,22 +114,8 @@ function FilterChips({ activeCourse, onCourseChange, activeSourcing, onSourcingC
         </div>
       </div>
 
-      <div className="group">
-        <span className="group-label">Sourcing</span>
-        <div className="fchip-group">
-          {[
-            { id: 'all', name: 'All' },
-            { id: 'in-house', name: '🌿 In-house only' },
-            { id: 'branded', name: '🥩 Branded' },
-          ].map(s => (
-            <button
-              key={s.id}
-              className={"fchip" + (activeSourcing === s.id ? ' on' : '')}
-              onClick={() => onSourcingChange(s.id)}
-            >{s.name}</button>
-          ))}
-        </div>
-      </div>
+      {/* Sourcing filter parked for now — the tier still shows on cards, and
+          sourcingFilter plumbing in page.jsx stays inert at 'all'. */}
 
       <div className="group">
         <span className="group-label">Dietary</span>
@@ -195,10 +179,9 @@ function CuisineBar({ active, onChange, counts }) {
 
 // ---------- Toolbar ----------
 function Toolbar({ count, activeName, sortBy, onSortChange }) {
+  // Curated / Quickest / Lowest cost are parked for now (mobile clutter);
+  // the default order is still the curated one.
   const sorts = [
-    { id: 'curated', name: 'Curated' },
-    { id: 'time', name: 'Quickest' },
-    { id: 'cost', name: 'Lowest cost' },
     { id: 'easy', name: 'Easiest' },
   ];
   return (

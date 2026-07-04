@@ -57,7 +57,9 @@ export default function DishesPage() {
   const [sortBy, setSortBy] = useState('curated');
   const [search, setSearch] = useState('');
   const [courseFilter, setCourseFilter] = useState('all');
-  const [sourcingFilter, setSourcingFilter] = useState('all');
+  // Sourcing filter UI is parked for now; the state stays so the filter logic
+  // below keeps working when the chips come back.
+  const [sourcingFilter] = useState('all');
   const [tagFilters, setTagFilters] = useState([]);
   const [dietFilters, setDietFilters] = useState([]);
   const [savedOnly, setSavedOnly] = useState(false);
@@ -265,8 +267,6 @@ export default function DishesPage() {
             <FilterChips
               activeCourse={courseFilter}
               onCourseChange={setCourseFilter}
-              activeSourcing={sourcingFilter}
-              onSourcingChange={setSourcingFilter}
               activeTags={tagFilters}
               onTagToggle={toggleTag}
               activeDiets={dietFilters}
@@ -308,7 +308,7 @@ export default function DishesPage() {
         ) : visible.length === 0 ? (
           <div className="empty-state">
             <h3>No dishes match those filters.</h3>
-            <p>Try clearing search, course, or sourcing — or pick a different cuisine.</p>
+            <p>Try clearing search or course — or pick a different cuisine.</p>
           </div>
         ) : (
           <main className="dishes">

@@ -155,7 +155,9 @@ export function SiteNav() {
           ) : (
             <>
               <Link href="/login" className="rounded-full px-3 py-1.5 font-medium text-apb-cream/85 transition hover:text-apb-cream">Log in</Link>
-              <Link href="/register" className="rounded-full bg-apb-accent px-4 py-1.5 font-semibold text-[#112619] transition hover:bg-apb-accent-light">Sign up</Link>
+              {/* Mobile folds Sign up into the login page's "Don't have an
+                  account? Create one" link — one auth button up top. */}
+              <Link href="/register" className="hidden rounded-full bg-apb-accent px-4 py-1.5 font-semibold text-[#112619] transition hover:bg-apb-accent-light md:inline-block">Sign up</Link>
             </>
           )}
 
