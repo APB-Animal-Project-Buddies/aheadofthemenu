@@ -11,6 +11,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { graphql } from "@/lib/nhost";
+import { TakeQr } from "@/components/TakeQr";
 
 export const dynamic = "force-dynamic";
 
@@ -78,7 +79,13 @@ function Centered({ title, body, children }: { title: string; body: string; chil
   );
 }
 
-export default async function QrResolvePage({ params }: { params: { code: string } }) {
+export default async function QrResolvePage({
+  params,
+  searchParams,
+}: {
+  params: { code: string };
+  searchParams: { take?: string };
+}) {
   const r = await resolve(decodeURIComponent(params.code));
   if (r.kind === "redirect") redirect(r.to);
   if (r.kind === "error")
@@ -86,18 +93,33 @@ export default async function QrResolvePage({ params }: { params: { code: string
   if (r.kind === "notfound")
     return <Centered title="Unknown code" body="This QR code isn't part of the potluck pool." />;
 
+  // Unclaimed + ?take: claim it right here.
+  if (searchParams?.take !== undefined) {
+    return (
+      <Centered title="Claim this QR 🌱" body="It's unclaimed — pick where it should point and it's yours.">
+        <p className="mt-4 inline-block rounded-lg bg-apb/5 px-4 py-2 font-mono text-lg font-semibold text-apb">
+          {r.code}
+        </p>
+        <TakeQr code={r.code} />
+      </Centered>
+    );
+  }
+
   // Unclaimed: invite them to make it theirs.
   return (
     <Centered
       title="This QR is up for grabs 🌱"
-      body="It hasn't been claimed yet. Sign in, then paste this code into the “Claim a URL” section on your Active Dishes page to point it at your dishes."
+      body="It hasn't been claimed yet. Claim it here, or paste this code into the “Claim a URL” section on your Active Dishes page."
     >
       <p className="mt-4 inline-block rounded-lg bg-apb/5 px-4 py-2 font-mono text-lg font-semibold text-apb">
         {r.code}
       </p>
       <div className="mt-6">
-        <Link href="/login" className="rounded-full bg-apb px-5 py-2.5 text-sm font-medium text-white transition hover:bg-apb-light">
-          Sign in to claim it
+        <Link
+          href={`/q/${r.code}?take`}
+          className="rounded-full bg-apb px-5 py-2.5 text-sm font-medium text-white transition hover:bg-apb-light"
+        >
+          Claim this QR
         </Link>
       </div>
     </Centered>
