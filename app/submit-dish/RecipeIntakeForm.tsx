@@ -11,6 +11,7 @@ import { MultiSelect } from "@/components/form/MultiSelect";
 import { TagCombobox } from "@/components/form/TagCombobox";
 import { CUISINES, DISH_TYPES, ALLERGENS, TRIED_BY, TRIED_BY_LABELS, TAGS } from "@/lib/dishes";
 import { SPECIAL_PRODUCT_OPTIONS } from "@/lib/special-products";
+import { useCreatorsStore } from "@/app/stores/creators";
 import { IngredientsSection } from "./sections/IngredientsSection";
 import { StepsSection } from "./sections/StepsSection";
 import { RECIPE_FORM_DEFAULTS, type RecipeFormValues } from "./types";
@@ -28,7 +29,7 @@ const numOrNull = (s: string) => (s.trim() === "" ? null : Number(s));
 //  - At least 1 ingredient: always required — a recipe needs its ingredient list.
 //  - Steps: fully optional — a resource link (or just the ingredients) can stand
 //    in for the written-out method.
-function validateRecipe(v: RecipeFormValues): string | null {
+function validateRecipe(v: RecipeFormValues, creatorOptions: string[]): string | null {
   const rows = v.ingredientGroups.flatMap((g) => g.items);
   if (!rows.some((r) => r.name.trim())) return "Add at least one ingredient.";
 
@@ -41,6 +42,11 @@ function validateRecipe(v: RecipeFormValues): string | null {
     (r) => isNeg(r.quantity) || r.alternatives.some((a) => a.items.some((x) => isNeg(x.quantity)))
   );
   if (hasNegative) return "Ingredient quantities cannot be negative.";
+
+  // Original creator: if filled, must be in the list
+  if (v.originalCreator.trim() && !creatorOptions.includes(v.originalCreator.trim())) {
+    return "Please select a creator from the list or add a new one.";
+  }
 
   // Steps are fully optional — a recipe can be just a link, or just ingredients.
   return null;
@@ -61,27 +67,18 @@ export function RecipeIntakeForm(
 
   // Known creators feed the "Original creator" autocomplete: both the person
   // ("Nisha Vora") and their brand ("Rainbow Plant Life") match while typing.
-  const [creatorOptions, setCreatorOptions] = useState<string[]>([]);
-  useEffect(() => {
-    fetch("/api/creators")
-      .then((r) => (r.ok ? r.json() : null))
-      .then((j) => {
-        const rows: Array<{ display_name: string; creator_name: string | null }> = j?.creators ?? [];
-        const names = new Set<string>();
-        rows.forEach((c) => {
-          if (c.display_name) names.add(c.display_name);
-          if (c.creator_name) names.add(c.creator_name);
-        });
-        setCreatorOptions(Array.from(names).sort((a, b) => a.localeCompare(b)));
-      })
-      .catch(() => {}); // autocomplete is optional — the field stays free text
-  }, []);
+  // Served from the shared Zustand cache — one fetch per session, shared with
+  // the dish-library creator filter.
+  const creatorOptions = useCreatorsStore((s) => s.names);
+  const loadCreators = useCreatorsStore((s) => s.load);
+  const addCreatorNames = useCreatorsStore((s) => s.addNames);
+  useEffect(() => { loadCreators(); }, [loadCreators]);
   const methods = useForm<RecipeFormValues>({ defaultValues: initialValues ?? RECIPE_FORM_DEFAULTS });
   const { register, handleSubmit, control, watch, setValue, formState: { errors } } = methods;
   const { userId, session } = useAuth();
 
   async function onSubmit(v: RecipeFormValues) {
-    const problem = validateRecipe(v);
+    const problem = validateRecipe(v, creatorOptions);
     if (problem) { setErrorMsg(problem); setStatus("error"); return; }
     setStatus("submitting");
     setErrorMsg(null);
@@ -224,17 +221,16 @@ export function RecipeIntakeForm(
           <Field label="Resource / docs link" hint="paste the original recipe — if you do, the steps below are optional">
             <Input className="mt-2" type="url" placeholder="https://www.noracooks.com/vegan-blueberry-muffins/" {...register("resourceLink")} />
           </Field>
-          <Field label="Original creator">
+          <Field label="Original Creator (if it's not you!)">
             <CreatorCombobox
               value={watch("originalCreator") || ""}
               onChange={(val) => setValue("originalCreator", val)}
               options={creatorOptions}
             />
             <AddCreatorLine
+              existingCreators={creatorOptions}
               onAdded={(fillValue, newOptions) => {
-                setCreatorOptions((prev) =>
-                  Array.from(new Set(prev.concat(newOptions))).sort((a, b) => a.localeCompare(b))
-                );
+                addCreatorNames(newOptions);
                 if (fillValue) setValue("originalCreator", fillValue);
               }}
             />

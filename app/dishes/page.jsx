@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useMemo, useRef } from "react";
 import { useDishes } from "@/app/hooks/useDishes";
+import { useCreatorsStore } from "@/app/stores/creators";
 import './styles.css';
 import {
   SearchBox, FilterChips, CuisineBar, Toolbar,
@@ -57,6 +58,7 @@ export default function DishesPage() {
   const [sortBy, setSortBy] = useState('curated');
   const [search, setSearch] = useState('');
   const [courseFilter, setCourseFilter] = useState('all');
+  const [creatorFilter, setCreatorFilter] = useState('all');
   // Sourcing filter UI is parked for now; the state stays so the filter logic
   // below keeps working when the chips come back.
   const [sourcingFilter] = useState('all');
@@ -86,6 +88,19 @@ export default function DishesPage() {
     });
   }, [saved, menu, menuName, servings]);
 
+  // Warm the shared creators cache (Zustand) — one /api/creators fetch per
+  // session, shared with the recipe form's autocomplete.
+  const loadCreators = useCreatorsStore(s => s.load);
+  useEffect(() => { loadCreators(); }, [loadCreators]);
+
+  // Creator filter chips: only creators that actually have dishes here are
+  // filterable, so derive from the loaded dishes (originalCreator free text).
+  const creatorOptions = useMemo(() => {
+    const names = new Set();
+    for (const r of (dishes || [])) if (r.originalCreator) names.add(r.originalCreator);
+    return Array.from(names).sort((a, b) => a.localeCompare(b));
+  }, [dishes]);
+
   // ---------- Derived: cuisine counts ----------
   const counts = useMemo(() => {
     if (!dishes) return { all: 0 };
@@ -105,6 +120,7 @@ export default function DishesPage() {
     let list = dishes.filter(r => {
       if (activeCuisine !== 'all' && !(r.cuisines || []).includes(activeCuisine)) return false;
       if (courseFilter !== 'all' && !(r.courses || []).includes(courseFilter)) return false;
+      if (creatorFilter !== 'all' && (r.originalCreator || '') !== creatorFilter) return false;
       if (sourcingFilter === 'in-house' && r.sourcingTier !== 'in-house') return false;
       if (sourcingFilter === 'branded' && r.sourcingTier === 'in-house') return false;
       if (tagFilters.length > 0 && !tagFilters.every(t => (r.tags || []).includes(t))) return false;
@@ -132,7 +148,7 @@ export default function DishesPage() {
       });
     }
     return list;
-  }, [dishes, activeCuisine, sortBy, search, courseFilter, sourcingFilter, tagFilters, dietFilters, savedOnly, saved]);
+  }, [dishes, activeCuisine, sortBy, search, courseFilter, creatorFilter, sourcingFilter, tagFilters, dietFilters, savedOnly, saved]);
 
   // ---------- Featured (Pick of the week) ----------
   // ---------- Toasts + actions ----------
@@ -267,6 +283,9 @@ export default function DishesPage() {
             <FilterChips
               activeCourse={courseFilter}
               onCourseChange={setCourseFilter}
+              activeCreator={creatorFilter}
+              onCreatorChange={setCreatorFilter}
+              creatorOptions={creatorOptions}
               activeTags={tagFilters}
               onTagToggle={toggleTag}
               activeDiets={dietFilters}

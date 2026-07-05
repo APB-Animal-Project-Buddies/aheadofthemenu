@@ -68,15 +68,17 @@ function SearchBox({ value, onChange, placeholder }) {
 }
 
 // ---------- FilterChips ----------
-function FilterChips({ activeCourse, onCourseChange, activeTags, onTagToggle, activeDiets, onDietToggle }) {
+function FilterChips({ activeCourse, onCourseChange, activeCreator, onCreatorChange, creatorOptions, activeTags, onTagToggle, activeDiets, onDietToggle }) {
   const [open, setOpen] = useState(false);
   const activeCount =
     (activeCourse && activeCourse !== 'all' ? 1 : 0) +
+    (activeCreator && activeCreator !== 'all' ? 1 : 0) +
     (activeDiets || []).length +
     (activeTags || []).length;
 
   function clearAll() {
     if (activeCourse !== 'all') onCourseChange('all');
+    if (activeCreator !== 'all') onCreatorChange('all');
     (activeDiets || []).forEach(d => onDietToggle(d));
     (activeTags || []).forEach(t => onTagToggle(t));
   }
@@ -116,6 +118,21 @@ function FilterChips({ activeCourse, onCourseChange, activeTags, onTagToggle, ac
 
       {/* Sourcing filter parked for now — the tier still shows on cards, and
           sourcingFilter plumbing in page.jsx stays inert at 'all'. */}
+
+      {(creatorOptions || []).length > 0 ? (
+        <div className="group">
+          <span className="group-label">Creator</span>
+          <div className="fchip-group">
+            {[{ id: 'all', name: 'All' }, ...creatorOptions.map(n => ({ id: n, name: n }))].map(c => (
+              <button
+                key={c.id}
+                className={"fchip" + (activeCreator === c.id ? ' on' : '')}
+                onClick={() => onCreatorChange(c.id)}
+              >{c.name}</button>
+            ))}
+          </div>
+        </div>
+      ) : null}
 
       <div className="group">
         <span className="group-label">Dietary</span>
