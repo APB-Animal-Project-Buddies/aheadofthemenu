@@ -68,6 +68,9 @@ function SearchBox({ value, onChange, placeholder }) {
   );
 }
 
+// Import DISH_TYPES to align with submission options
+import { DISH_TYPES } from '@/lib/dishes';
+
 // ---------- FilterGroup (reusable filter section) ----------
 function FilterGroup({ label, options, activeValue, onChange, isMultiSelect = false }) {
   return (
@@ -98,6 +101,7 @@ function FilterChips({ activeCourse, onCourseChange, activeCreator, onCreatorCha
   const [moreFiltersOpen, setMoreFiltersOpen] = useState(false);
   const [creatorDropdownOpen, setCreatorDropdownOpen] = useState(false);
   const [creatorSearch, setCreatorSearch] = useState('');
+  const [creatorOrder, setCreatorOrder] = useState([]);
   const creatorDropdownRef = useRef(null);
   const moreButtonRef = useRef(null);
 
@@ -106,8 +110,14 @@ function FilterChips({ activeCourse, onCourseChange, activeCreator, onCreatorCha
   };
 
   const handleCreatorSelect = (creator) => {
+    // Update LRU order - move selected creator to front
+    setCreatorOrder(prev => {
+      const filtered = prev.filter(c => c !== creator);
+      return [creator, ...filtered];
+    });
+
     if (typeof activeCreator === 'string') {
-      // Single select - convert to multi-select
+      // Single select
       if (activeCreator === creator) {
         onCreatorChange('all');
       } else {
@@ -123,6 +133,12 @@ function FilterChips({ activeCourse, onCourseChange, activeCreator, onCreatorCha
       }
     }
   };
+
+  // Sort creators by recency (LRU): selected/recent ones first
+  const sortedCreators = creatorOptions ? [
+    ...creatorOrder.filter(c => creatorOptions.includes(c)),
+    ...creatorOptions.filter(c => !creatorOrder.includes(c))
+  ] : [];
 
   useEffect(() => {
     function handleClickOutside(e) {
@@ -174,7 +190,6 @@ function FilterChips({ activeCourse, onCourseChange, activeCreator, onCreatorCha
             { id: 'all', name: 'All' },
             { id: 'starter', name: 'Starter' },
             { id: 'main', name: 'Main' },
-            { id: 'showstopper', name: 'Showstopper' },
             { id: 'dessert', name: 'Dessert' },
           ]}
           activeValue={activeCourse}
@@ -206,48 +221,6 @@ function FilterChips({ activeCourse, onCourseChange, activeCreator, onCreatorCha
                   >
                     More ▾
                   </button>
-                  {creatorDropdownOpen ? (
-                    <div className="fixed inset-0 z-40" onClick={() => setCreatorDropdownOpen(false)}>
-                      <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-96 max-w-[90vw] bg-white border border-neutral-200 rounded-lg shadow-2xl" onClick={(e) => e.stopPropagation()}>
-                        <div className="p-4 border-b border-neutral-200">
-                          <input
-                            type="text"
-                            placeholder="Search creators..."
-                            value={creatorSearch}
-                            onChange={(e) => setCreatorSearch(e.target.value)}
-                            className="w-full px-3 py-2 border border-neutral-200 rounded text-sm focus:outline-none focus:ring-2 focus:ring-apb"
-                            autoFocus
-                          />
-                        </div>
-                        <div className="max-h-96 overflow-y-auto">
-                          {creatorOptions
-                            .filter(c => c.toLowerCase().includes(creatorSearch.toLowerCase()))
-                            .map(c => {
-                              const isSelected = Array.isArray(activeCreator)
-                                ? activeCreator.includes(c)
-                                : activeCreator === c;
-                              return (
-                                <button
-                                  key={c}
-                                  type="button"
-                                  className={"block w-full text-left px-4 py-3 text-sm hover:bg-neutral-50 border-b border-neutral-100 flex items-center gap-3" + (isSelected ? ' font-bold text-apb bg-apb-cream' : '')}
-                                  onClick={() => handleCreatorSelect(c)}
-                                >
-                                  <input
-                                    type="checkbox"
-                                    checked={isSelected}
-                                    onChange={() => {}}
-                                    className="w-4 h-4 rounded"
-                                    onClick={(e) => e.stopPropagation()}
-                                  />
-                                  <span>{c}</span>
-                                </button>
-                              );
-                            })}
-                        </div>
-                      </div>
-                    </div>
-                  ) : null}
                 </>
               ) : null}
             </div>
@@ -289,7 +262,6 @@ function FilterChips({ activeCourse, onCourseChange, activeCreator, onCreatorCha
                     { id: 'all', name: 'All' },
                     { id: 'starter', name: 'Starter' },
                     { id: 'main', name: 'Main' },
-                    { id: 'showstopper', name: 'Showstopper' },
                     { id: 'dessert', name: 'Dessert' },
                   ]}
                   activeValue={activeCourse}
@@ -404,6 +376,51 @@ function FilterChips({ activeCourse, onCourseChange, activeCreator, onCreatorCha
             </div>
           </div>
         </>,
+        document.body
+      )}
+
+      {/* Creator dropdown modal (always accessible on mobile & desktop) */}
+      {creatorDropdownOpen && typeof window !== 'undefined' && createPortal(
+        <div className="fixed inset-0 z-[110]" onClick={() => setCreatorDropdownOpen(false)}>
+          <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[111] w-96 max-w-[90vw] bg-white border border-neutral-200 rounded-lg shadow-2xl" onClick={(e) => e.stopPropagation()}>
+            <div className="p-4 border-b border-neutral-200">
+              <input
+                type="text"
+                placeholder="Search creators..."
+                value={creatorSearch}
+                onChange={(e) => setCreatorSearch(e.target.value)}
+                className="w-full px-3 py-2 border border-neutral-200 rounded text-sm focus:outline-none focus:ring-2 focus:ring-apb"
+                autoFocus
+              />
+            </div>
+            <div className="max-h-96 overflow-y-auto">
+              {creatorOptions
+                .filter(c => c.toLowerCase().includes(creatorSearch.toLowerCase()))
+                .map(c => {
+                  const isSelected = Array.isArray(activeCreator)
+                    ? activeCreator.includes(c)
+                    : activeCreator === c;
+                  return (
+                    <button
+                      key={c}
+                      type="button"
+                      className={"block w-full text-left px-4 py-3 text-sm hover:bg-neutral-50 border-b border-neutral-100 flex items-center gap-3" + (isSelected ? ' font-bold text-apb bg-apb-cream' : '')}
+                      onClick={() => handleCreatorSelect(c)}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={isSelected}
+                        onChange={() => {}}
+                        className="w-4 h-4 rounded"
+                        onClick={(e) => e.stopPropagation()}
+                      />
+                      <span>{c}</span>
+                    </button>
+                  );
+                })}
+            </div>
+          </div>
+        </div>,
         document.body
       )}
     </>
