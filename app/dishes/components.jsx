@@ -68,14 +68,36 @@ function SearchBox({ value, onChange, placeholder }) {
   );
 }
 
+// ---------- FilterGroup (reusable filter section) ----------
+function FilterGroup({ label, options, activeValue, onChange, isMultiSelect = false }) {
+  return (
+    <div className="filter-group">
+      <span className="group-label">{label}</span>
+      <div className="fchip-group">
+        {options.map(opt => {
+          const isActive = isMultiSelect
+            ? (Array.isArray(activeValue) && activeValue.includes(opt.id))
+            : (activeValue === opt.id);
+          return (
+            <button
+              key={opt.id}
+              className={"fchip" + (isActive ? ' on' : '')}
+              style={isActive && !isMultiSelect ? { fontWeight: '700', boxShadow: '0 0 0 2px var(--moss, #1e4d2b)' } : {}}
+              onClick={() => onChange(opt.id)}
+            >{opt.name || opt.label}</button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 // ---------- FilterChips ----------
 function FilterChips({ activeCourse, onCourseChange, activeCreator, onCreatorChange, creatorOptions, activeTags, onTagToggle, activeDiets, onDietToggle }) {
   const [open, setOpen] = useState(false);
+  const [moreFiltersOpen, setMoreFiltersOpen] = useState(false);
   const [creatorDropdownOpen, setCreatorDropdownOpen] = useState(false);
   const [creatorSearch, setCreatorSearch] = useState('');
-  const [showCuisines, setShowCuisines] = useState(false);
-  const [showMoreFilters, setShowMoreFilters] = useState(false);
-  const [dropdownPos, setDropdownPos] = useState({ top: 0, left: 0 });
   const creatorDropdownRef = useRef(null);
   const moreButtonRef = useRef(null);
 
@@ -130,166 +152,260 @@ function FilterChips({ activeCourse, onCourseChange, activeCreator, onCreatorCha
 
   return (
     <>
-      {/* Mobile: collapse the filters behind a toggle; Clear all shows on both. */}
-      <div className="filters-bar">
-        <button className="filters-toggle" onClick={() => setOpen(o => !o)} aria-expanded={open}>
-          Filters{activeCount ? ` · ${activeCount}` : ''}
-          <span className="caret" aria-hidden="true">▾</span>
-        </button>
-        {activeCount > 0 && (
-          <button className="filters-clear" onClick={clearAll}>Clear all</button>
-        )}
-      </div>
+      {/* Mobile filter toggle + desktop filter display */}
+      <button
+        className="filters-toggle-mobile"
+        onClick={() => setOpen(o => !o)}
+        aria-expanded={open}
+      >
+        Filters{activeCount ? ` · ${activeCount}` : ''}
+        <span className="caret" aria-hidden="true">▾</span>
+      </button>
 
-      <div className={"filter-groups" + (open ? " open" : "")}>
-      <div className="group" style={{ paddingBottom: '12px', paddingRight: '48px' }}>
-        <span className="group-label">Course</span>
-        <div className="fchip-group" style={{ paddingTop: '8px' }}>
-          {[
+      {activeCount > 0 && (
+        <button className="filters-clear-mobile" onClick={clearAll}>Clear all</button>
+      )}
+
+      {/* Desktop: filters shown inline. Mobile: portal modal when open. */}
+      <div className="filter-groups-mobile">
+        <FilterGroup
+          label="Course"
+          options={[
             { id: 'all', name: 'All' },
             { id: 'starter', name: 'Starter' },
             { id: 'main', name: 'Main' },
             { id: 'showstopper', name: 'Showstopper' },
             { id: 'dessert', name: 'Dessert' },
-          ].map(c => (
-            <button
-              key={c.id}
-              className={"fchip" + (activeCourse === c.id ? ' on' : '')}
-              onClick={() => onCourseChange(c.id)}
-            >{c.name}</button>
-          ))}
-        </div>
+          ]}
+          activeValue={activeCourse}
+          onChange={onCourseChange}
+        />
+
+        {(creatorOptions || []).length > 0 ? (
+          <div className="filter-group">
+            <span className="group-label">Creator</span>
+            <div className="fchip-group">
+              <button
+                className={"fchip" + (activeCreator === 'all' ? ' on' : '')}
+                onClick={() => { onCreatorChange('all'); setCreatorDropdownOpen(false); }}
+              >All</button>
+              {(creatorOptions || []).slice(0, 3).map(c => (
+                <button
+                  key={c}
+                  className={"fchip" + (activeCreator === c ? ' on' : '')}
+                  style={activeCreator === c ? { fontWeight: '700', boxShadow: '0 0 0 2px var(--moss, #1e4d2b)' } : {}}
+                  onClick={() => { onCreatorChange(c); setCreatorDropdownOpen(false); }}
+                >{c}</button>
+              ))}
+              {(creatorOptions || []).length > 3 ? (
+                <>
+                  <button
+                    ref={moreButtonRef}
+                    className="fchip"
+                    onClick={handleMoreClick}
+                  >
+                    More ▾
+                  </button>
+                  {creatorDropdownOpen ? (
+                    <div className="fixed inset-0 z-40" onClick={() => setCreatorDropdownOpen(false)}>
+                      <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-96 max-w-[90vw] bg-white border border-neutral-200 rounded-lg shadow-2xl" onClick={(e) => e.stopPropagation()}>
+                        <div className="p-4 border-b border-neutral-200">
+                          <input
+                            type="text"
+                            placeholder="Search creators..."
+                            value={creatorSearch}
+                            onChange={(e) => setCreatorSearch(e.target.value)}
+                            className="w-full px-3 py-2 border border-neutral-200 rounded text-sm focus:outline-none focus:ring-2 focus:ring-apb"
+                            autoFocus
+                          />
+                        </div>
+                        <div className="max-h-96 overflow-y-auto">
+                          {creatorOptions
+                            .filter(c => c.toLowerCase().includes(creatorSearch.toLowerCase()))
+                            .map(c => {
+                              const isSelected = Array.isArray(activeCreator)
+                                ? activeCreator.includes(c)
+                                : activeCreator === c;
+                              return (
+                                <button
+                                  key={c}
+                                  type="button"
+                                  className={"block w-full text-left px-4 py-3 text-sm hover:bg-neutral-50 border-b border-neutral-100 flex items-center gap-3" + (isSelected ? ' font-bold text-apb bg-apb-cream' : '')}
+                                  onClick={() => handleCreatorSelect(c)}
+                                >
+                                  <input
+                                    type="checkbox"
+                                    checked={isSelected}
+                                    onChange={() => {}}
+                                    className="w-4 h-4 rounded"
+                                    onClick={(e) => e.stopPropagation()}
+                                  />
+                                  <span>{c}</span>
+                                </button>
+                              );
+                            })}
+                        </div>
+                      </div>
+                    </div>
+                  ) : null}
+                </>
+              ) : null}
+            </div>
+          </div>
+        ) : null}
+
+        {/* More Filters (button only on desktop; modal shows on both) */}
+        <button
+          type="button"
+          onClick={() => setMoreFiltersOpen(true)}
+          className="text-xs font-medium text-apb hover:underline"
+          style={{ marginTop: '8px', marginBottom: '8px', display: 'inline-flex', gap: '6px', alignItems: 'center' }}
+        >
+          ▼ More filters {(activeDiets?.length || 0) + (activeTags?.length || 0) > 0 ? `(${(activeDiets?.length || 0) + (activeTags?.length || 0)})` : ''}
+        </button>
       </div>
 
-      {/* Sourcing filter parked for now — the tier still shows on cards, and
-          sourcingFilter plumbing in page.jsx stays inert at 'all'. */}
-
-      {(creatorOptions || []).length > 0 ? (
-        <div className="group" style={{ paddingTop: '12px', paddingBottom: '12px' }}>
-          <span className="group-label">Creator</span>
-          <div className="fchip-group" style={{ paddingTop: '8px' }}>
-            <button
-              className={"fchip" + (activeCreator === 'all' ? ' on' : '')}
-              onClick={() => { onCreatorChange('all'); setCreatorDropdownOpen(false); }}
-            >All</button>
-            {(creatorOptions || []).slice(0, 3).map(c => (
-              <button
-                key={c}
-                className={"fchip" + (activeCreator === c ? ' on' : '')}
-                style={activeCreator === c ? { fontWeight: '700', boxShadow: '0 0 0 2px var(--moss, #1e4d2b)' } : {}}
-                onClick={() => { onCreatorChange(c); setCreatorDropdownOpen(false); }}
-              >{c}</button>
-            ))}
-            {(creatorOptions || []).length > 3 ? (
-              <>
+      {/* Mobile portal modal for filters */}
+      {open && typeof window !== 'undefined' && createPortal(
+        <>
+          <div
+            className="filter-modal-backdrop"
+            onClick={() => setOpen(false)}
+          />
+          <div className="filter-modal-portal">
+            <div className="filter-modal-inner">
+              <div className="filter-modal-header">
+                <h3 className="filter-modal-title">Filters</h3>
                 <button
-                  ref={moreButtonRef}
-                  className="fchip"
-                  onClick={handleMoreClick}
-                >
-                  More ▾
-                </button>
-                {creatorDropdownOpen ? (
-                  <div className="fixed inset-0 z-40" onClick={() => setCreatorDropdownOpen(false)}>
-                    <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-96 max-w-[90vw] bg-white border border-neutral-200 rounded-lg shadow-2xl" onClick={(e) => e.stopPropagation()}>
-                      <div className="p-4 border-b border-neutral-200">
-                        <input
-                          type="text"
-                          placeholder="Search creators..."
-                          value={creatorSearch}
-                          onChange={(e) => setCreatorSearch(e.target.value)}
-                          className="w-full px-3 py-2 border border-neutral-200 rounded text-sm focus:outline-none focus:ring-2 focus:ring-apb"
-                          autoFocus
-                        />
-                      </div>
-                      <div className="max-h-96 overflow-y-auto">
-                        {creatorOptions
-                          .filter(c => c.toLowerCase().includes(creatorSearch.toLowerCase()))
-                          .map(c => {
-                            const isSelected = Array.isArray(activeCreator)
-                              ? activeCreator.includes(c)
-                              : activeCreator === c;
-                            return (
-                              <button
-                                key={c}
-                                type="button"
-                                className={"block w-full text-left px-4 py-3 text-sm hover:bg-neutral-50 border-b border-neutral-100 flex items-center gap-3" + (isSelected ? ' font-bold text-apb bg-apb-cream' : '')}
-                                onClick={() => handleCreatorSelect(c)}
-                              >
-                                <input
-                                  type="checkbox"
-                                  checked={isSelected}
-                                  onChange={() => {}}
-                                  className="w-4 h-4 rounded"
-                                  onClick={(e) => e.stopPropagation()}
-                                />
-                                <span>{c}</span>
-                              </button>
-                            );
-                          })}
-                      </div>
+                  className="filter-modal-close"
+                  onClick={() => setOpen(false)}
+                  aria-label="Close filters"
+                >✕</button>
+              </div>
+              <div className="filter-modal-content">
+                <FilterGroup
+                  label="Course"
+                  options={[
+                    { id: 'all', name: 'All' },
+                    { id: 'starter', name: 'Starter' },
+                    { id: 'main', name: 'Main' },
+                    { id: 'showstopper', name: 'Showstopper' },
+                    { id: 'dessert', name: 'Dessert' },
+                  ]}
+                  activeValue={activeCourse}
+                  onChange={onCourseChange}
+                />
+
+                {(creatorOptions || []).length > 0 ? (
+                  <div className="filter-group">
+                    <span className="group-label">Creator</span>
+                    <div className="fchip-group">
+                      <button
+                        className={"fchip" + (activeCreator === 'all' ? ' on' : '')}
+                        onClick={() => onCreatorChange('all')}
+                      >All</button>
+                      {(creatorOptions || []).slice(0, 3).map(c => (
+                        <button
+                          key={c}
+                          className={"fchip" + (activeCreator === c ? ' on' : '')}
+                          style={activeCreator === c ? { fontWeight: '700', boxShadow: '0 0 0 2px var(--moss, #1e4d2b)' } : {}}
+                          onClick={() => onCreatorChange(c)}
+                        >{c}</button>
+                      ))}
+                      {(creatorOptions || []).length > 3 ? (
+                        <button
+                          ref={moreButtonRef}
+                          className="fchip"
+                          onClick={handleMoreClick}
+                        >
+                          More ▾
+                        </button>
+                      ) : null}
                     </div>
                   </div>
                 ) : null}
-              </>
-            ) : null}
+
+                <FilterGroup
+                  label="Dietary"
+                  options={[
+                    { id: 'gluten', label: 'Gluten-free' },
+                    { id: 'nuts', label: 'Nut-free' },
+                    { id: 'soy', label: 'Soy-free' },
+                    { id: 'coconut', label: 'Coconut-free' },
+                  ]}
+                  activeValue={activeDiets}
+                  onChange={onDietToggle}
+                  isMultiSelect={true}
+                />
+
+                <FilterGroup
+                  label="Tags"
+                  options={[
+                    { id: 'raw', label: '🥗 Raw' },
+                    { id: 'raw-vegan', label: '🌱 Raw vegan' },
+                    { id: 'bulk-prep', label: '🥘 Bulk-prep' },
+                    { id: 'fast-service', label: '⚡ Fast-service' },
+                  ]}
+                  activeValue={activeTags}
+                  onChange={onTagToggle}
+                  isMultiSelect={true}
+                />
+              </div>
+            </div>
           </div>
-        </div>
-      ) : null}
+        </>,
+        document.body
+      )}
 
-      {/* More Filters (collapsible) */}
-      <div>
-        <button
-          type="button"
-          onClick={() => setShowMoreFilters(!showMoreFilters)}
-          className="text-xs font-medium text-apb hover:underline"
-          style={{ marginTop: '8px', marginBottom: '8px' }}
-        >
-          {showMoreFilters ? '▼' : '▶'} More filters {(activeDiets?.length || 0) + (activeTags?.length || 0) > 0 ? `(${(activeDiets?.length || 0) + (activeTags?.length || 0)})` : ''}
-        </button>
-        {showMoreFilters ? (
-          <>
-            <div className="group" style={{ paddingRight: '40px' }}>
-              <span className="group-label">Dietary</span>
-              <div className="fchip-group">
-                {[
-                  { id: 'gluten', label: 'Gluten-free' },
-                  { id: 'nuts', label: 'Nut-free' },
-                  { id: 'soy', label: 'Soy-free' },
-                  { id: 'coconut', label: 'Coconut-free' },
-                ].map(d => (
-                  <button
-                    key={d.id}
-                    className={"fchip" + ((activeDiets || []).includes(d.id) ? ' on' : '')}
-                    onClick={() => onDietToggle(d.id)}
-                    title={`Hide dishes containing ${d.id}`}
-                  >{d.label}</button>
-                ))}
+      {/* Desktop: More filters modal */}
+      {moreFiltersOpen && typeof window !== 'undefined' && createPortal(
+        <>
+          <div
+            className="filter-modal-backdrop"
+            onClick={() => setMoreFiltersOpen(false)}
+          />
+          <div className="filter-modal-portal filter-modal-portal-desktop">
+            <div className="filter-modal-inner">
+              <div className="filter-modal-header">
+                <h3 className="filter-modal-title">More filters</h3>
+                <button
+                  className="filter-modal-close"
+                  onClick={() => setMoreFiltersOpen(false)}
+                  aria-label="Close filters"
+                >✕</button>
+              </div>
+              <div className="filter-modal-content">
+                <FilterGroup
+                  label="Dietary"
+                  options={[
+                    { id: 'gluten', label: 'Gluten-free' },
+                    { id: 'nuts', label: 'Nut-free' },
+                    { id: 'soy', label: 'Soy-free' },
+                    { id: 'coconut', label: 'Coconut-free' },
+                  ]}
+                  activeValue={activeDiets}
+                  onChange={onDietToggle}
+                  isMultiSelect={true}
+                />
+
+                <FilterGroup
+                  label="Tags"
+                  options={[
+                    { id: 'raw', label: '🥗 Raw' },
+                    { id: 'raw-vegan', label: '🌱 Raw vegan' },
+                    { id: 'bulk-prep', label: '🥘 Bulk-prep' },
+                    { id: 'fast-service', label: '⚡ Fast-service' },
+                  ]}
+                  activeValue={activeTags}
+                  onChange={onTagToggle}
+                  isMultiSelect={true}
+                />
               </div>
             </div>
-
-            <div className="group" style={{ paddingRight: '24px' }}>
-              <span className="group-label">Tags</span>
-              <div className="fchip-group">
-                {[
-                  { id: 'raw', label: '🥗 Raw' },
-                  { id: 'raw-vegan', label: '🌱 Raw vegan' },
-                  { id: 'bulk-prep', label: '🥘 Bulk-prep' },
-                  { id: 'fast-service', label: '⚡ Fast-service' },
-                ].map(t => (
-                  <button
-                    key={t.id}
-                    className={"fchip" + ((activeTags || []).includes(t.id) ? ' on' : '')}
-                    onClick={() => onTagToggle(t.id)}
-                  >{t.label}</button>
-                ))}
-              </div>
-            </div>
-          </>
-        ) : null}
-      </div>
-      </div>
-
+          </div>
+        </>,
+        document.body
+      )}
     </>
   );
 }
@@ -314,11 +430,8 @@ function CuisineBar({ active, onChange, counts }) {
 
 // ---------- Toolbar ----------
 function Toolbar({ count, activeName, sortBy, onSortChange }) {
-  // Curated / Quickest / Lowest cost are parked for now (mobile clutter);
-  // the default order is still the curated one.
-  const sorts = [
-    { id: 'easy', name: 'Easiest' },
-  ];
+  // Curated / Quickest / Lowest cost / Easiest are parked for now
+  const sorts = [];
   return (
     <div className="toolbar">
       <div className="lhs">

@@ -245,12 +245,6 @@ export function RecipeIntakeForm(
           </p>
         ) : null}
 
-        {/* Cover photo (one image, large dropzone), then the gallery strip.
-            Both upload to the dish-media bucket immediately; nothing attaches
-            to the recipe until it's saved. */}
-        <CoverSection cover={cover} onChange={setCover} />
-        {!isPropose && <MediaSection media={media} onChange={setMedia} />}
-
         {/* Basics */}
         <Field label="Recipe name" required error={errors.title?.message}>
           <Input className="mt-2" placeholder="e.g. Vegan Zuppa Toscana" {...register("title", { required: "Recipe name is required" })} />
@@ -353,6 +347,12 @@ export function RecipeIntakeForm(
         <Field label="Notes (verify recipe; what you liked/disliked/messed up)">
           <Textarea className="mt-2" placeholder="e.g. Tried it twice — used 1.5x kale; cashew cream is worth it" {...register("notes")} />
         </Field>
+
+        {/* Cover photo (one image, large dropzone), then the gallery strip.
+            Both upload to the dish-media bucket immediately; nothing attaches
+            to the recipe until it's saved. */}
+        <CoverSection cover={cover} onChange={setCover} />
+        {!isPropose && <MediaSection media={media} onChange={setMedia} />}
 
         {status === "error" ? <p className="text-sm text-red-600">{errorMsg}</p> : null}
         <Button type="submit" disabled={status === "submitting"}>

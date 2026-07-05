@@ -263,29 +263,25 @@ export default function DishesPage() {
           </a>
         </div>
         {/* Sticky filter section */}
-        <div style={{ position: 'sticky', top: 0, zIndex: 20, backgroundColor: '#f5f5f0', paddingTop: '8px', paddingBottom: '8px' }}>
-          <div className="filter-row" style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', flexWrap: 'wrap' }}>
-            <div style={{ flex: '1 1 auto', minWidth: '200px' }}>
-              <SearchBox value={search} onChange={setSearch} placeholder="Search dishes…" />
-            </div>
+        <div className="sticky-filter-header">
+          <div className="filter-row-horizontal">
+            <SearchBox value={search} onChange={setSearch} placeholder="Search dishes…" />
             {FilterChips && (
-              <div style={{ flex: '1 1 auto' }}>
-                <FilterChips
-                  activeCourse={courseFilter}
-                  onCourseChange={setCourseFilter}
-                  activeCreator={creatorFilter}
-                  onCreatorChange={setCreatorFilter}
-                  creatorOptions={creatorOptions}
-                  activeTags={tagFilters}
-                  onTagToggle={toggleTag}
-                  activeDiets={dietFilters}
-                  onDietToggle={toggleDiet}
-                />
-              </div>
+              <FilterChips
+                activeCourse={courseFilter}
+                onCourseChange={setCourseFilter}
+                activeCreator={creatorFilter}
+                onCreatorChange={setCreatorFilter}
+                creatorOptions={creatorOptions}
+                activeTags={tagFilters}
+                onTagToggle={toggleTag}
+                activeDiets={dietFilters}
+                onDietToggle={toggleDiet}
+              />
             )}
           </div>
           {CuisineBar && (
-            <div style={{ marginTop: '8px' }}>
+            <div className="cuisine-row">
               <CuisineBar active={activeCuisine} onChange={setActiveCuisine} counts={counts} />
             </div>
           )}
