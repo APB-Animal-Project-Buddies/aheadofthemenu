@@ -165,7 +165,7 @@ function FilterChips({ activeCourse, onCourseChange, activeCreator, onCreatorCha
           sourcingFilter plumbing in page.jsx stays inert at 'all'. */}
 
       {(creatorOptions || []).length > 0 ? (
-        <div className="group">
+        <div className="group" style={{ marginTop: '16px' }}>
           <span className="group-label">Creator</span>
           <div className="fchip-group">
             <button
@@ -176,6 +176,7 @@ function FilterChips({ activeCourse, onCourseChange, activeCreator, onCreatorCha
               <button
                 key={c}
                 className={"fchip" + (activeCreator === c ? ' on' : '')}
+                style={activeCreator === c ? { fontWeight: '700', boxShadow: '0 0 0 2px var(--moss, #1e4d2b)' } : {}}
                 onClick={() => { onCreatorChange(c); setCreatorDropdownOpen(false); }}
               >{c}</button>
             ))}
