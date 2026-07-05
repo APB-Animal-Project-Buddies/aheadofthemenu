@@ -142,9 +142,9 @@ function FilterChips({ activeCourse, onCourseChange, activeCreator, onCreatorCha
       </div>
 
       <div className={"filter-groups" + (open ? " open" : "")}>
-      <div className="group">
+      <div className="group" style={{ paddingBottom: '12px', paddingRight: '48px' }}>
         <span className="group-label">Course</span>
-        <div className="fchip-group">
+        <div className="fchip-group" style={{ paddingTop: '8px' }}>
           {[
             { id: 'all', name: 'All' },
             { id: 'starter', name: 'Starter' },
@@ -165,9 +165,9 @@ function FilterChips({ activeCourse, onCourseChange, activeCreator, onCreatorCha
           sourcingFilter plumbing in page.jsx stays inert at 'all'. */}
 
       {(creatorOptions || []).length > 0 ? (
-        <div className="group" style={{ marginTop: '16px' }}>
+        <div className="group" style={{ paddingTop: '12px', paddingBottom: '12px' }}>
           <span className="group-label">Creator</span>
-          <div className="fchip-group">
+          <div className="fchip-group" style={{ paddingTop: '8px' }}>
             <button
               className={"fchip" + (activeCreator === 'all' ? ' on' : '')}
               onClick={() => { onCreatorChange('all'); setCreatorDropdownOpen(false); }}
