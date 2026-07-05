@@ -249,7 +249,7 @@ function FilterChips({ activeCourse, onCourseChange, activeCreator, onCreatorCha
         </button>
         {showMoreFilters ? (
           <>
-            <div className="group">
+            <div className="group" style={{ paddingRight: '24px' }}>
               <span className="group-label">Dietary</span>
               <div className="fchip-group">
                 {[
@@ -268,7 +268,7 @@ function FilterChips({ activeCourse, onCourseChange, activeCreator, onCreatorCha
               </div>
             </div>
 
-            <div className="group">
+            <div className="group" style={{ paddingRight: '24px' }}>
               <span className="group-label">Tags</span>
               <div className="fchip-group">
                 {[
