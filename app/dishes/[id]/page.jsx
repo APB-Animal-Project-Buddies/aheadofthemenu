@@ -317,17 +317,19 @@ export default async function DishPage({ params, searchParams }) {
         </Section>
       ) : null}
 
-      {/* Original recipe — prominent, right where a cook finishes reading the
-          method (also linked in the meta strip up top). */}
+      {/* Original recipe — orange button for maximum visibility. */}
       {d.resourceLink ? (
-        <a
-          href={d.resourceLink}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="mt-6 inline-flex items-center gap-2 rounded-full bg-apb px-6 py-3 text-base font-semibold text-white shadow-sm transition hover:bg-apb-light"
-        >
-          View the original recipe{d.originalCreator ? ` by ${d.originalCreator}` : ""} ↗
-        </a>
+        <div className="mt-8 rounded-[16px] border-2 border-orange-300 bg-orange-50 p-6">
+          <p className="mb-4 text-sm font-medium text-neutral-700">To see full recipe:</p>
+          <a
+            href={d.resourceLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 rounded-full bg-orange-500 px-8 py-3 text-lg font-bold text-white shadow-lg transition hover:bg-orange-600 hover:shadow-xl"
+          >
+            View the original recipe{d.originalCreator ? ` by ${d.originalCreator}` : ""} ↗
+          </a>
+        </div>
       ) : null}
 
       {/* Special products / equipment */}

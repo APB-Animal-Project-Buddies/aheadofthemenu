@@ -64,11 +64,9 @@ export default function DishesPage() {
   const [sourcingFilter] = useState('all');
   const [tagFilters, setTagFilters] = useState([]);
   const [dietFilters, setDietFilters] = useState([]);
-  const [savedOnly, setSavedOnly] = useState(false);
 
-  // ---------- Saved + menu state (persisted) ----------
+  // ---------- Menu state (persisted) ----------
   const stored = loadStoredMenu();
-  const [saved, setSaved] = useState(new Set(stored?.saved || []));
   const [menu, setMenu] = useState(stored?.menu || []);
   const [menuName, setMenuName] = useState(stored?.menuName || 'Spring tasting menu');
   const [servings, setServings] = useState(stored?.servings || 40);
@@ -81,12 +79,11 @@ export default function DishesPage() {
   // Persist menu state
   useEffect(() => {
     saveStoredMenu({
-      saved: Array.from(saved),
       menu,
       menuName,
       servings,
     });
-  }, [saved, menu, menuName, servings]);
+  }, [menu, menuName, servings]);
 
   // Warm the shared creators cache (Zustand) — one /api/creators fetch per
   // session, shared with the recipe form's autocomplete.
@@ -125,7 +122,6 @@ export default function DishesPage() {
       if (sourcingFilter === 'branded' && r.sourcingTier === 'in-house') return false;
       if (tagFilters.length > 0 && !tagFilters.every(t => (r.tags || []).includes(t))) return false;
       if (dietFilters.length > 0 && dietFilters.some(d => (r.allergens || []).includes(d))) return false;
-      if (savedOnly && !saved.has(r.id)) return false;
       if (q) {
         const hay = `${r.title || ''} ${(r.cuisines || []).join(' ')} ${r.description || ''}`.toLowerCase();
         if (!hay.includes(q)) return false;
@@ -136,8 +132,6 @@ export default function DishesPage() {
       list = [...list].sort((a, b) => parseTime(a.time) - parseTime(b.time));
     } else if (sortBy === 'cost') {
       list = [...list].sort((a, b) => (a.cost ?? 99) - (b.cost ?? 99));
-    } else if (sortBy === 'easy') {
-      list = [...list].sort((a, b) => (a.difficulty || 1) - (b.difficulty || 1));
     } else {
       // 'curated' — showstoppers first, then mains, then desserts/starters
       const order = { showstopper: 0, main: 1, starter: 2, dessert: 3 };
@@ -148,22 +142,13 @@ export default function DishesPage() {
       });
     }
     return list;
-  }, [dishes, activeCuisine, sortBy, search, courseFilter, creatorFilter, sourcingFilter, tagFilters, dietFilters, savedOnly, saved]);
+  }, [dishes, activeCuisine, sortBy, search, courseFilter, creatorFilter, sourcingFilter, tagFilters, dietFilters]);
 
   // ---------- Featured (Pick of the week) ----------
   // ---------- Toasts + actions ----------
   function showToast(msg) {
     setToast({ msg, show: true });
     setTimeout(() => setToast(t => ({ ...t, show: false })), 1800);
-  }
-
-  function toggleSave(id) {
-    setSaved(prev => {
-      const n = new Set(prev);
-      if (n.has(id)) { n.delete(id); showToast('Removed from saved'); }
-      else { n.add(id); showToast('Saved'); }
-      return n;
-    });
   }
 
   function addToMenu(dish) {
@@ -304,27 +289,7 @@ export default function DishesPage() {
             onSortChange={setSortBy}
           />
         )}
-        <div style={{ display: 'flex', justifyContent: 'flex-end', margin: '4px 0 12px' }}>
-          <button
-            type="button"
-            onClick={() => setSavedOnly(v => !v)}
-            aria-pressed={savedOnly}
-            style={{
-              padding: '6px 14px', borderRadius: 999, fontSize: 13, fontWeight: 600, cursor: 'pointer',
-              border: '1px solid var(--line)',
-              background: savedOnly ? 'var(--moss, #1e4d2b)' : '#fff',
-              color: savedOnly ? '#fff' : 'var(--moss-ink)',
-            }}
-          >
-            {savedOnly ? '★' : '☆'} Saved{saved.size ? ` (${saved.size})` : ''}
-          </button>
-        </div>
-        {visible.length === 0 && savedOnly ? (
-          <div className="empty-state">
-            <h3>No saved dishes yet.</h3>
-            <p>Tap the bookmark on any dish to save it here.</p>
-          </div>
-        ) : visible.length === 0 ? (
+        {visible.length === 0 ? (
           <div className="empty-state">
             <h3>No dishes match those filters.</h3>
             <p>Try clearing search or course — or pick a different cuisine.</p>
@@ -336,9 +301,7 @@ export default function DishesPage() {
                 <DishCard
                   key={r.id}
                   dish={r}
-                  saved={saved.has(r.id)}
                   inMenu={menu.some(it => it.id === r.id)}
-                  onToggleSave={toggleSave}
                   onAddToMenu={addToMenu}
                   onOpen={openDish}
                 />

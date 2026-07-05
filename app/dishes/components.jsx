@@ -4,7 +4,8 @@
 
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
+import { createPortal } from "react-dom";
 import {
   CUISINE_META, DiffDots, UrlStatusBadge,
   fmtCost, pluralize, parseMenuPrice
@@ -70,6 +71,48 @@ function SearchBox({ value, onChange, placeholder }) {
 // ---------- FilterChips ----------
 function FilterChips({ activeCourse, onCourseChange, activeCreator, onCreatorChange, creatorOptions, activeTags, onTagToggle, activeDiets, onDietToggle }) {
   const [open, setOpen] = useState(false);
+  const [creatorDropdownOpen, setCreatorDropdownOpen] = useState(false);
+  const [creatorSearch, setCreatorSearch] = useState('');
+  const [dropdownPos, setDropdownPos] = useState({ top: 0, left: 0 });
+  const creatorDropdownRef = useRef(null);
+  const moreButtonRef = useRef(null);
+
+  const handleMoreClick = () => {
+    setCreatorDropdownOpen(!creatorDropdownOpen);
+  };
+
+  const handleCreatorSelect = (creator) => {
+    if (typeof activeCreator === 'string') {
+      // Single select - convert to multi-select
+      if (activeCreator === creator) {
+        onCreatorChange('all');
+      } else {
+        onCreatorChange(creator);
+      }
+    } else if (Array.isArray(activeCreator)) {
+      // Multi-select
+      if (activeCreator.includes(creator)) {
+        const next = activeCreator.filter(c => c !== creator);
+        onCreatorChange(next.length > 0 ? next : 'all');
+      } else {
+        onCreatorChange([...activeCreator, creator]);
+      }
+    }
+  };
+
+  useEffect(() => {
+    function handleClickOutside(e) {
+      if (creatorDropdownRef.current && !creatorDropdownRef.current.contains(e.target) &&
+          moreButtonRef.current && !moreButtonRef.current.contains(e.target)) {
+        setCreatorDropdownOpen(false);
+      }
+    }
+    if (creatorDropdownOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => document.removeEventListener('mousedown', handleClickOutside);
+    }
+  }, [creatorDropdownOpen]);
+
   const activeCount =
     (activeCourse && activeCourse !== 'all' ? 1 : 0) +
     (activeCreator && activeCreator !== 'all' ? 1 : 0) +
@@ -123,13 +166,70 @@ function FilterChips({ activeCourse, onCourseChange, activeCreator, onCreatorCha
         <div className="group">
           <span className="group-label">Creator</span>
           <div className="fchip-group">
-            {[{ id: 'all', name: 'All' }, ...creatorOptions.map(n => ({ id: n, name: n }))].map(c => (
+            <button
+              className={"fchip" + (activeCreator === 'all' ? ' on' : '')}
+              onClick={() => { onCreatorChange('all'); setCreatorDropdownOpen(false); }}
+            >All</button>
+            {(creatorOptions || []).slice(0, 3).map(c => (
               <button
-                key={c.id}
-                className={"fchip" + (activeCreator === c.id ? ' on' : '')}
-                onClick={() => onCreatorChange(c.id)}
-              >{c.name}</button>
+                key={c}
+                className={"fchip" + (activeCreator === c ? ' on' : '')}
+                onClick={() => { onCreatorChange(c); setCreatorDropdownOpen(false); }}
+              >{c}</button>
             ))}
+            {(creatorOptions || []).length > 3 ? (
+              <>
+                <button
+                  ref={moreButtonRef}
+                  className="fchip"
+                  onClick={handleMoreClick}
+                >
+                  More ▾
+                </button>
+                {creatorDropdownOpen ? (
+                  <div className="fixed inset-0 z-40" onClick={() => setCreatorDropdownOpen(false)}>
+                    <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-96 max-w-[90vw] bg-white border border-neutral-200 rounded-lg shadow-2xl" onClick={(e) => e.stopPropagation()}>
+                      <div className="p-4 border-b border-neutral-200">
+                        <input
+                          type="text"
+                          placeholder="Search creators..."
+                          value={creatorSearch}
+                          onChange={(e) => setCreatorSearch(e.target.value)}
+                          className="w-full px-3 py-2 border border-neutral-200 rounded text-sm focus:outline-none focus:ring-2 focus:ring-apb"
+                          autoFocus
+                        />
+                      </div>
+                      <div className="max-h-96 overflow-y-auto">
+                        {creatorOptions
+                          .filter(c => c.toLowerCase().includes(creatorSearch.toLowerCase()))
+                          .map(c => {
+                            const isSelected = Array.isArray(activeCreator)
+                              ? activeCreator.includes(c)
+                              : activeCreator === c;
+                            return (
+                              <button
+                                key={c}
+                                type="button"
+                                className={"block w-full text-left px-4 py-3 text-sm hover:bg-neutral-50 border-b border-neutral-100 flex items-center gap-3" + (isSelected ? ' font-bold text-apb bg-apb-cream' : '')}
+                                onClick={() => handleCreatorSelect(c)}
+                              >
+                                <input
+                                  type="checkbox"
+                                  checked={isSelected}
+                                  onChange={() => {}}
+                                  className="w-4 h-4 rounded"
+                                  onClick={(e) => e.stopPropagation()}
+                                />
+                                <span>{c}</span>
+                              </button>
+                            );
+                          })}
+                      </div>
+                    </div>
+                  </div>
+                ) : null}
+              </>
+            ) : null}
           </div>
         </div>
       ) : null}
