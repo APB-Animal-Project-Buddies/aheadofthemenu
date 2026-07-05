@@ -249,7 +249,7 @@ function FilterChips({ activeCourse, onCourseChange, activeCreator, onCreatorCha
         </button>
         {showMoreFilters ? (
           <>
-            <div className="group" style={{ paddingRight: '24px' }}>
+            <div className="group" style={{ paddingRight: '40px' }}>
               <span className="group-label">Dietary</span>
               <div className="fchip-group">
                 {[
