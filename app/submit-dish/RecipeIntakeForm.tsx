@@ -19,6 +19,7 @@ import { useAuth } from "@/components/AuthProvider";
 import { MediaSection, type StagedMedia } from "./sections/MediaSection";
 import { CoverSection, type CoverImage } from "./sections/CoverSection";
 import { AddCreatorLine } from "./sections/AddCreatorLine";
+import { CreatorCombobox } from "@/components/form/CreatorCombobox";
 
 const numOrNull = (s: string) => (s.trim() === "" ? null : Number(s));
 
@@ -224,12 +225,11 @@ export function RecipeIntakeForm(
             <Input className="mt-2" type="url" placeholder="https://www.noracooks.com/vegan-blueberry-muffins/" {...register("resourceLink")} />
           </Field>
           <Field label="Original creator">
-            <Input className="mt-2" placeholder="e.g. Nora Cooks, Vegan Richa" list="creator-options" {...register("originalCreator")} />
-            <datalist id="creator-options">
-              {creatorOptions.map((name) => (
-                <option key={name} value={name} />
-              ))}
-            </datalist>
+            <CreatorCombobox
+              value={watch("originalCreator") || ""}
+              onChange={(val) => setValue("originalCreator", val)}
+              options={creatorOptions}
+            />
             <AddCreatorLine
               onAdded={(fillValue, newOptions) => {
                 setCreatorOptions((prev) =>
