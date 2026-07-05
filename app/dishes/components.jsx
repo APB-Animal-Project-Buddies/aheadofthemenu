@@ -73,6 +73,8 @@ function FilterChips({ activeCourse, onCourseChange, activeCreator, onCreatorCha
   const [open, setOpen] = useState(false);
   const [creatorDropdownOpen, setCreatorDropdownOpen] = useState(false);
   const [creatorSearch, setCreatorSearch] = useState('');
+  const [showCuisines, setShowCuisines] = useState(false);
+  const [showMoreFilters, setShowMoreFilters] = useState(false);
   const [dropdownPos, setDropdownPos] = useState({ top: 0, left: 0 });
   const creatorDropdownRef = useRef(null);
   const moreButtonRef = useRef(null);
@@ -234,41 +236,56 @@ function FilterChips({ activeCourse, onCourseChange, activeCreator, onCreatorCha
         </div>
       ) : null}
 
-      <div className="group">
-        <span className="group-label">Dietary</span>
-        <div className="fchip-group">
-          {[
-            { id: 'gluten', label: 'Gluten-free' },
-            { id: 'nuts', label: 'Nut-free' },
-            { id: 'soy', label: 'Soy-free' },
-            { id: 'coconut', label: 'Coconut-free' },
-          ].map(d => (
-            <button
-              key={d.id}
-              className={"fchip" + ((activeDiets || []).includes(d.id) ? ' on' : '')}
-              onClick={() => onDietToggle(d.id)}
-              title={`Hide dishes containing ${d.id}`}
-            >{d.label}</button>
-          ))}
-        </div>
-      </div>
+      {/* More Filters (collapsible) */}
+      <div>
+        <button
+          type="button"
+          onClick={() => setShowMoreFilters(!showMoreFilters)}
+          className="text-xs font-medium text-apb hover:underline"
+          style={{ marginTop: '8px', marginBottom: '8px' }}
+        >
+          {showMoreFilters ? '▼' : '▶'} More filters {(activeDiets?.length || 0) + (activeTags?.length || 0) > 0 ? `(${(activeDiets?.length || 0) + (activeTags?.length || 0)})` : ''}
+        </button>
+        {showMoreFilters ? (
+          <>
+            <div className="group">
+              <span className="group-label">Dietary</span>
+              <div className="fchip-group">
+                {[
+                  { id: 'gluten', label: 'Gluten-free' },
+                  { id: 'nuts', label: 'Nut-free' },
+                  { id: 'soy', label: 'Soy-free' },
+                  { id: 'coconut', label: 'Coconut-free' },
+                ].map(d => (
+                  <button
+                    key={d.id}
+                    className={"fchip" + ((activeDiets || []).includes(d.id) ? ' on' : '')}
+                    onClick={() => onDietToggle(d.id)}
+                    title={`Hide dishes containing ${d.id}`}
+                  >{d.label}</button>
+                ))}
+              </div>
+            </div>
 
-      <div className="group">
-        <span className="group-label">Tags</span>
-        <div className="fchip-group">
-          {[
-            { id: 'raw', label: '🥗 Raw' },
-            { id: 'raw-vegan', label: '🌱 Raw vegan' },
-            { id: 'bulk-prep', label: '🥘 Bulk-prep' },
-            { id: 'fast-service', label: '⚡ Fast-service' },
-          ].map(t => (
-            <button
-              key={t.id}
-              className={"fchip" + ((activeTags || []).includes(t.id) ? ' on' : '')}
-              onClick={() => onTagToggle(t.id)}
-            >{t.label}</button>
-          ))}
-        </div>
+            <div className="group">
+              <span className="group-label">Tags</span>
+              <div className="fchip-group">
+                {[
+                  { id: 'raw', label: '🥗 Raw' },
+                  { id: 'raw-vegan', label: '🌱 Raw vegan' },
+                  { id: 'bulk-prep', label: '🥘 Bulk-prep' },
+                  { id: 'fast-service', label: '⚡ Fast-service' },
+                ].map(t => (
+                  <button
+                    key={t.id}
+                    className={"fchip" + ((activeTags || []).includes(t.id) ? ' on' : '')}
+                    onClick={() => onTagToggle(t.id)}
+                  >{t.label}</button>
+                ))}
+              </div>
+            </div>
+          </>
+        ) : null}
       </div>
       </div>
 
