@@ -81,12 +81,17 @@ Two scores per dish — the Rotten-Tomatoes "critics vs audience" split becomes
   `round(100 × up / (up + down))` over that cohort's votes.
 - **VISITORS SAY** — same math over votes cast as "visiting".
 
-A block shows its percentage only once its cohort reaches the minimum vote
-threshold — **`MIN_VOTES_TO_SCORE = 20`**, an exported constant in
-`lib/reverse-lookup.ts` (one knob, used everywhere a score gates). Below the
-threshold the block shows a **gray neutral face** with "Still tallying the
-votes…" and the current count ("· 7 so far"). Vote counts render next to the
-tier label once scored ("· 24 votes").
+Score confidence gates on a minimum vote threshold —
+**`MIN_VOTES_TO_SCORE = 5`**, an exported constant in `lib/reverse-lookup.ts`
+(one knob, used everywhere a score gates; raise it as traffic grows). A cohort
+block renders in three states:
+
+- **Scored** (cohort votes ≥ threshold): tier-colored percentage, mood face,
+  tier label, vote count ("91% · Top Bite · 24 votes").
+- **Still tallying** (1 to threshold−1 votes): **no percentage** — a neutral
+  gray face with "Still tallying the votes… · 3 so far". Early percentages
+  are deliberately hidden so they can't anchor how the next person votes.
+- **No votes**: gray face, "No votes yet — be the first."
 
 **Cohort capture:** every vote carries the answer to "Are you a local?",
 **defaulted to yes**. The vote widget shows a lightweight toggle —
@@ -147,8 +152,8 @@ current static app.
 │  ┌───────────────────┐ ┌──────────────────────┐  │
 │  │ ☺ LOCALS SAY      │ │ 😐 VISITORS SAY      │  │  ← Yum Meter
 │  │   91% · Top Bite  │ │  Still tallying the  │  │    (mood faces,
-│  │        · 24 votes │ │  votes… · 7 so far   │  │     tier colors;
-│  └───────────────────┘ └──────────────────────┘  │     gray < 20 votes)
+│  │        · 24 votes │ │  votes… · 3 so far   │  │     tier colors;
+│  └───────────────────┘ └──────────────────────┘  │     no % below 5)
 │  Crispy panko tofu over rich curry rice.         │
 │  📍 1429 12th Ave, Seattle    ↗ website          │
 │  Was it good?  [ 👍 ] [ 👎 ]  as 🏠 Local ▾      │
