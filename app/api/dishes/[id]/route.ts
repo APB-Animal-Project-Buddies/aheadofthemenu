@@ -4,6 +4,10 @@ import { buildDishData } from "@/lib/dishes";
 import { adminGuard } from "@/lib/admin";
 
 export const dynamic = "force-dynamic";
+// Nhost can be slow after idle (cold start); the default function timeout killed
+// requests mid-mutation — Hasura had already committed, so the client saw a
+// "network error" yet the write succeeded. 60s lets the function wait it out.
+export const maxDuration = 60;
 const MAX_BODY_BYTES = 32 * 1024;
 
 export async function GET(

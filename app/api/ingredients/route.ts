@@ -3,6 +3,10 @@ import { graphql } from "@/lib/nhost";
 import { normalize, slug, buildSearchText } from "@/lib/ingredients";
 
 export const dynamic = "force-dynamic";
+// Nhost can be slow after idle (cold start); the default function timeout killed
+// requests mid-mutation — Hasura had already committed, so the client saw a
+// "network error" yet the write succeeded. 60s lets the function wait it out.
+export const maxDuration = 60;
 const MAX = 80;
 
 export async function POST(request: Request) {
