@@ -334,3 +334,9 @@ to the production database; no test writes.)
 - Google Maps / Places integration for restaurant data (canonical addresses,
   hours, geo, place IDs) and for inferring voter locality — wanted later; the
   `restaurant_locations` table is the natural attachment point when it comes.
+- Server-side search — v1 ships the whole city catalog and filters client-side.
+  The agreed upgrade path when the catalog outgrows that: (1) `pg_trgm` GIN
+  index for typo-tolerant/fuzzy search and fuzzy duplicate detection, then
+  (2) pgvector + embeddings for semantic craving-style queries, only at a
+  scale (multi-city) where keyword search visibly fails. Both bolt onto
+  `restaurant_dishes` with no schema rework.
