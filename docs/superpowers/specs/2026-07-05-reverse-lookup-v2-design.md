@@ -45,9 +45,10 @@ using the site's Tailwind design system, shared header, and Nhost auth session.
 Cold-start reality: the seed provides ~26 restaurants but only a handful of
 dishes. A dishes-only page would look empty, so the page has **three tabs**:
 
-- **Dishes** — dish@restaurant cards, sorted by score desc, then newest.
-  Same-named dishes at different venues are separate cards; search groups them
-  adjacently by name.
+- **Dishes** — dish@restaurant cards. Sort: dishes at or above the score
+  threshold first (overall score desc), then still-tallying dishes (total
+  votes desc, then newest). Same-named dishes at different venues are separate
+  cards; search groups them adjacently by name.
 - **Restaurants** — directory of all venues (cuisine types, neighborhoods,
   addresses, description). Every restaurant card ends with "Know their menu?
   + Add a dish" — the directory doubles as the contribution funnel.
@@ -76,13 +77,16 @@ a cute SVG face (`CuteFace` component in the sample — port it):
 Two scores per dish — the Rotten-Tomatoes "critics vs audience" split becomes
 **LOCALS vs VISITORS** (is it actually good, or a tourist trap?):
 
-- **LOCALS SAY** — thumbs from voters whose profile says they're Seattle
-  locals: `round(100 × up / (up + down))` over that cohort's votes.
-- **VISITORS SAY** — same math over visiting voters.
+- **LOCALS SAY** — thumbs from votes cast with the "local" toggle:
+  `round(100 × up / (up + down))` over that cohort's votes.
+- **VISITORS SAY** — same math over votes cast as "visiting".
 
-Each block shows its percentage once its cohort has ≥ 3 votes; below that it
-shows "Too new — be an early voter" with the current count. Vote counts render
-next to the tier label ("· 24 votes").
+A block shows its percentage only once its cohort reaches the minimum vote
+threshold — **`MIN_VOTES_TO_SCORE = 20`**, an exported constant in
+`lib/reverse-lookup.ts` (one knob, used everywhere a score gates). Below the
+threshold the block shows a **gray neutral face** with "Still tallying the
+votes…" and the current count ("· 7 so far"). Vote counts render next to the
+tier label once scored ("· 24 votes").
 
 **Cohort capture:** every vote carries the answer to "Are you a local?",
 **defaulted to yes**. The vote widget shows a lightweight toggle —
@@ -101,13 +105,13 @@ the *output*. Voting updates the meter optimistically.
 Based directly on the sample's leaderboard page:
 
 - Category picker (pills) built from the dish tag vocabulary — e.g. pizza,
-  burger, dessert. A category qualifies for the picker when it has ≥ 2 scored
-  dishes.
+  burger, dessert. A category qualifies for the picker when it has ≥ 2
+  rankable dishes.
 - Ranked list: rank number, mood-face thumbnail, dish name, restaurant +
   neighborhood, one-line description, and score blocks (LOCALS / VISITORS —
-  a block renders once its cohort has ≥ 3 votes).
-- Ranking key: overall score across ALL votes, `round(100 × up / (up + down))`,
-  with ≥ 3 total votes required to rank (prevents a single-vote 100% champ).
+  each block gated by `MIN_VOTES_TO_SCORE`, gray "Still tallying…" below it).
+- Ranking key: overall score across ALL votes, `round(100 × up / (up + down))`;
+  a dish needs ≥ `MIN_VOTES_TO_SCORE` total votes to rank at all.
 - #1 gets the "CHAMP" crown treatment (highlighted row).
 - Rankings are computed live from the catalog (no refresh copy like the
   sample's "updated hourly" — ours is instant, client-side).
@@ -122,7 +126,8 @@ Layout (mobile-first, mirrors the sticky filter header pattern on `/dishes`):
 │  ┌────────────────────────────────────────────┐  │
 │  │ 🔍  Try "pad thai", "donut", "Ballard"…    │  │  ← search is the hero
 │  └────────────────────────────────────────────┘  │
-│  [ Dishes (12) ]  [ Restaurants (26) ]   [+ Add] │
+│  [Dishes (12)] [Restaurants (26)] [Leaderboards] │
+│                                          [+ Add] │
 ├──────────────────────────────────────────────────┤
 │  Category: (All) (breakfast) (dessert) (drink)…  │  ← sticky on scroll
 └──────────────────────────────────────────────────┘
@@ -140,10 +145,10 @@ current static app.
 │  from Plum Bistro · Capitol Hill  [verified ✓]   │
 │                                                  │
 │  ┌───────────────────┐ ┌──────────────────────┐  │
-│  │ ☺ LOCALS SAY      │ │ ☺ VISITORS SAY       │  │  ← Yum Meter
-│  │   91% · Top Bite  │ │   84% · Yum          │  │    (mood faces,
-│  │        · 18 votes │ │        · 6 votes     │  │     tier colors)
-│  └───────────────────┘ └──────────────────────┘  │
+│  │ ☺ LOCALS SAY      │ │ 😐 VISITORS SAY      │  │  ← Yum Meter
+│  │   91% · Top Bite  │ │  Still tallying the  │  │    (mood faces,
+│  │        · 24 votes │ │  votes… · 7 so far   │  │     tier colors;
+│  └───────────────────┘ └──────────────────────┘  │     gray < 20 votes)
 │  Crispy panko tofu over rich curry rice.         │
 │  📍 1429 12th Ave, Seattle    ↗ website          │
 │  Was it good?  [ 👍 ] [ 👎 ]  as 🏠 Local ▾      │
