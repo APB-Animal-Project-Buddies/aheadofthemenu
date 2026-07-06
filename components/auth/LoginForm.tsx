@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { useAuth, authErrorMessage, isUnverifiedError } from "@/components/AuthProvider";
 import { getNhost } from "@/lib/nhost/client";
 import { landingPathForUserType, type UserType } from "@/lib/nhost/roles";
@@ -14,6 +15,10 @@ import { authStyles as s } from "./authStyles";
  */
 export function LoginForm() {
   const { signIn, resendVerification } = useAuth();
+  const searchParams = useSearchParams();
+  // Same-origin path only: must start with "/" but not "//" (protocol-relative).
+  const rawNext = searchParams.get("next");
+  const nextPath = rawNext && /^\/(?!\/)/.test(rawNext) ? rawNext : null;
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
   const [error, setError] = useState<string | null>(null);
@@ -49,7 +54,7 @@ export function LoginForm() {
       setStatus("success");
       // Land based on account type: businesses -> /recipes, consumers -> /dishes.
       const userType = getNhost().getUserSession()?.user?.metadata?.user_type;
-      const dest = landingPathForUserType(userType as UserType | null | undefined);
+      const dest = nextPath ?? landingPathForUserType(userType as UserType | null | undefined);
       // Hard-navigate: reliably leaves the intercepting-route modal AND reloads
       // with the fresh session (router.push from inside the modal was stalling).
       setTimeout(() => window.location.assign(dest), 600);
