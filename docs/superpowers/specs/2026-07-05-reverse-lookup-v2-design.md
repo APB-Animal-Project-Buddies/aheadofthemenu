@@ -24,6 +24,11 @@ Decisions made with the user:
   `hidden` status is the killswitch. Anonymous users cannot add or vote.
 - Users **can create restaurants inline** while adding a dish. CSV-seeded
   venues are flagged `verified`; user-created ones are not.
+- Ratings display Rotten-Tomatoes style (per the user's "Yum Lookup" sample):
+  percentage scores split **LOCALS vs VISITORS**, with mood tiers and cute
+  faces. Every vote carries an "Are you a local?" toggle defaulted to yes —
+  no chef/critic scores, no profile locality field.
+- A **Leaderboards** tab ranks dishes per category, styled on the sample.
 
 ## The core loop
 
@@ -38,15 +43,74 @@ The static page retires; a real app-router page replaces it at the same URL,
 using the site's Tailwind design system, shared header, and Nhost auth session.
 
 Cold-start reality: the seed provides ~26 restaurants but only a handful of
-dishes. A dishes-only page would look empty, so the page has **two tabs sharing
-one search box**:
+dishes. A dishes-only page would look empty, so the page has **three tabs**:
 
-- **Dishes** — dish@restaurant cards, sorted by net votes desc, then newest.
+- **Dishes** — dish@restaurant cards, sorted by score desc, then newest.
   Same-named dishes at different venues are separate cards; search groups them
   adjacently by name.
 - **Restaurants** — directory of all venues (cuisine types, neighborhoods,
   addresses, description). Every restaurant card ends with "Know their menu?
   + Add a dish" — the directory doubles as the contribution funnel.
+- **Leaderboards** — category rankings ("Best Pizza in Seattle"), see below.
+
+The search box drives the Dishes and Restaurants tabs; the Leaderboards tab
+swaps it for a category picker.
+
+### Visual language: the Yum Meter (from the user's style sample)
+
+Style reference vendored at `docs/superpowers/specs/assets/yum-lookup-sample/`
+("Yum Lookup" mock — keep the page's existing earthy-green style; ratings and
+leaderboards adopt this sample's design).
+
+Ratings render Rotten-Tomatoes style as percentage scores with a mood tier and
+a cute SVG face (`CuteFace` component in the sample — port it):
+
+| score | tier label | color |
+|---|---|---|
+| ≥ 90 | Top Bite | `#3F8F5A` |
+| ≥ 80 | Yum | `#6BA84A` |
+| ≥ 70 | Tasty | `#CFA017` |
+| ≥ 55 | Meh | `#D17B3A` |
+| < 55 | Skip | `#C95B4F` |
+
+Two scores per dish — the Rotten-Tomatoes "critics vs audience" split becomes
+**LOCALS vs VISITORS** (is it actually good, or a tourist trap?):
+
+- **LOCALS SAY** — thumbs from voters whose profile says they're Seattle
+  locals: `round(100 × up / (up + down))` over that cohort's votes.
+- **VISITORS SAY** — same math over visiting voters.
+
+Each block shows its percentage once its cohort has ≥ 3 votes; below that it
+shows "Too new — be an early voter" with the current count. Vote counts render
+next to the tier label ("· 24 votes").
+
+**Cohort capture:** every vote carries the answer to "Are you a local?",
+**defaulted to yes**. The vote widget shows a lightweight toggle —
+"Voting as: [🏠 Local ✓ | 🧳 Visiting]" — pre-set to Local and remembered
+client-side (localStorage) so regulars never touch it, while visitors flip it
+once. Each vote row snapshots `voter_kind` at vote time, so no profile field
+is needed and historical scores stay stable if someone's situation changes.
+(A future option is inferring locality automatically — e.g. Google Maps /
+location signals — see out-of-scope.)
+
+The thumbs 👍/👎 buttons remain the *input* ("Was it good?"); the Yum Meter is
+the *output*. Voting updates the meter optimistically.
+
+### Leaderboards tab
+
+Based directly on the sample's leaderboard page:
+
+- Category picker (pills) built from the dish tag vocabulary — e.g. pizza,
+  burger, dessert. A category qualifies for the picker when it has ≥ 2 scored
+  dishes.
+- Ranked list: rank number, mood-face thumbnail, dish name, restaurant +
+  neighborhood, one-line description, and score blocks (LOCALS / VISITORS —
+  a block renders once its cohort has ≥ 3 votes).
+- Ranking key: overall score across ALL votes, `round(100 × up / (up + down))`,
+  with ≥ 3 total votes required to rank (prevents a single-vote 100% champ).
+- #1 gets the "CHAMP" crown treatment (highlighted row).
+- Rankings are computed live from the catalog (no refresh copy like the
+  sample's "updated hourly" — ours is instant, client-side).
 
 Layout (mobile-first, mirrors the sticky filter header pattern on `/dishes`):
 
@@ -73,18 +137,24 @@ current static app.
 ```
 ┌──────────────────────────────────────────────────┐
 │  Vegan Katsu Curry              (savoury)        │
-│  at Plum Bistro · Capitol Hill    [verified ✓]   │
+│  from Plum Bistro · Capitol Hill  [verified ✓]   │
+│                                                  │
+│  ┌───────────────────┐ ┌──────────────────────┐  │
+│  │ ☺ LOCALS SAY      │ │ ☺ VISITORS SAY       │  │  ← Yum Meter
+│  │   91% · Top Bite  │ │   84% · Yum          │  │    (mood faces,
+│  │        · 18 votes │ │        · 6 votes     │  │     tier colors)
+│  └───────────────────┘ └──────────────────────┘  │
 │  Crispy panko tofu over rich curry rice.         │
 │  📍 1429 12th Ave, Seattle    ↗ website          │
-│  Was it good?   [ 👍 14 ]  [ 👎 2 ]              │
+│  Was it good?  [ 👍 ] [ 👎 ]  as 🏠 Local ▾      │
 │  added by @handle                                │
 └──────────────────────────────────────────────────┘
 ```
 
 - The vote widget is labeled ("Was it good?") so the affordance is instantly
   legible. The caller's active vote renders filled; tapping it again removes
-  the vote; tapping the other side switches it. Optimistic UI, reconciled on
-  the server response.
+  the vote; tapping the other side switches it. Optimistic UI (meter recomputes
+  locally), reconciled on the server response.
 - Community-added dishes show "added by @handle" attribution.
 
 ### Add-a-dish flow (signed-in) — one modal, two steps
@@ -117,6 +187,7 @@ the stale nested submodule). Postgres DOMAINs, not enums:
 ```sql
 CREATE DOMAIN rl_dish_status AS TEXT CHECK (VALUE IN ('live','hidden'));
 CREATE DOMAIN vote_value     AS SMALLINT CHECK (VALUE IN (-1, 1));
+CREATE DOMAIN voter_kind     AS TEXT CHECK (VALUE IN ('local','visitor'));
 ```
 
 ### `restaurants`
@@ -168,10 +239,12 @@ normalize to one row per location.
 | dish_id | uuid FK → restaurant_dishes ON DELETE CASCADE | PK part |
 | user_id | uuid FK → auth.users ON DELETE CASCADE | PK part |
 | value | vote_value NOT NULL | +1 / −1 |
+| voter_kind | voter_kind NOT NULL default 'local' | snapshot of the per-vote "Are you a local?" toggle |
 | created_at / updated_at | timestamptz | |
 
-PK `(dish_id, user_id)` = one vote per user per dish. Re-vote is an upsert;
-un-vote is a delete — idempotent by construction.
+PK `(dish_id, user_id)` = one vote per user per dish. Re-vote is an upsert
+(may change `value` and/or `voter_kind`); un-vote is a delete — idempotent by
+construction.
 
 ### Read path
 
@@ -194,9 +267,9 @@ existing fail-closed `verifyNhostJwt` Bearer pattern from `lib/jwt.ts` (as in
 
 | Route | Auth | Behavior |
 |---|---|---|
-| `GET /api/reverse-lookup/catalog?city=` | optional Bearer | Catalog (live dishes only) + vote totals; adds `myVote` per dish for valid tokens |
+| `GET /api/reverse-lookup/catalog?city=` | optional Bearer | Catalog (live dishes only) + per-cohort vote totals (`locals: {up,down}`, `visitors: {up,down}`); adds `myVote` per dish for valid tokens |
 | `POST /api/reverse-lookup/dishes` | Bearer required | Add dish. Body: `{restaurantId}` **or** `{newRestaurant:{name,address,neighborhood?,website?}}`, plus `{name, description?, tags?}`. Duplicate dish or restaurant → `200 {ok, existed:true}` with the existing row |
-| `PUT /api/reverse-lookup/dishes/[id]/vote` | Bearer required | `{value: 1 \| -1 \| null}` — upsert vote or delete on null; returns new totals |
+| `PUT /api/reverse-lookup/dishes/[id]/vote` | Bearer required | `{value: 1 \| -1 \| null, isLocal?: boolean}` (`isLocal` defaults true) — upsert vote or delete on null; returns new per-cohort totals |
 | `PATCH /api/reverse-lookup/dishes/[id]` | admin secret (`adminGuard`) | `{status:'hidden'\|'live'}` moderation killswitch |
 
 Every mutation is idempotent so a retry after a dropped response (the cold-start
@@ -235,7 +308,8 @@ to the production database; no test writes.)
 
 - `bun test` units for pure logic extracted to `lib/reverse-lookup.ts`:
   CSV row → restaurant/location normalization, seattle.json → dish mapping,
-  vote-total math, request validation.
+  per-cohort score math (percentage, mood tiers, min-vote thresholds),
+  leaderboard ranking/qualification, request validation.
 - Manual end-to-end pass after deploy: search both tabs, vote toggle/switch/
   remove, add dish (existing + new restaurant), duplicate warning, signed-out
   gates, admin hide.
@@ -247,3 +321,6 @@ to the production database; no test writes.)
 - Dish photos, comments, or star ratings (thumbs only).
 - Restaurant claiming/ownership, hours, menus.
 - Migrating `reverse_lookup_suggestions` pending rows (manual triage later).
+- Google Maps / Places integration for restaurant data (canonical addresses,
+  hours, geo, place IDs) and for inferring voter locality — wanted later; the
+  `restaurant_locations` table is the natural attachment point when it comes.
