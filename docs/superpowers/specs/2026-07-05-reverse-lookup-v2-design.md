@@ -106,6 +106,9 @@ Vote and Add controls are visible but gated: tapping opens a small prompt —
 "Sign in to vote — it takes a minute" → `/login?next=/reverse-lookup`. Actions
 are signposted, never hidden.
 
+Note: `/login` does not currently honor a `next` query param — adding that
+redirect (validated as a same-origin path) is part of this work.
+
 ## Data model
 
 Migrations live in the sibling `backend_migrations` repo (canonical clone, not
@@ -216,6 +219,9 @@ failure mode fixed on 2026-07-05) can never dead-end the user.
 
 1. Parse the SVG Guide CSV (26 Seattle-area restaurants) → `restaurants`
    (`verified=true`, `last_verified` from CSV) + `restaurant_locations`.
+   The CSV is vendored into the repo (`scripts/data/svg-guide-2026-06-29.csv`)
+   rather than fetched from GitHub at seed time, so seeds are reproducible
+   and the user can append restaurants to the file before the seed run.
 2. Port `public/reverse-lookup/data/seattle.json` dishes → `restaurant_dishes`,
    creating venues not present in the CSV (e.g. Three Cats Cafe) as verified
    entries with their known addresses.
