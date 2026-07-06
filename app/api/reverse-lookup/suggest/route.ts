@@ -8,6 +8,10 @@ import { NextRequest, NextResponse } from "next/server";
 import { graphql } from "@/lib/nhost";
 
 export const dynamic = "force-dynamic";
+// Nhost can be slow after idle (cold start); the default function timeout killed
+// requests mid-mutation — Hasura had already committed, so the client saw a
+// "network error" yet the write succeeded. 60s lets the function wait it out.
+export const maxDuration = 60;
 
 export async function POST(request: NextRequest) {
   const body = await request.json().catch(() => ({}));

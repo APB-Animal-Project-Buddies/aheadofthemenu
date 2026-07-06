@@ -3,6 +3,10 @@ import { graphql } from "@/lib/nhost";
 import { adminGuard } from "@/lib/admin";
 
 export const dynamic = "force-dynamic";
+// Nhost can be slow after idle (cold start); the default function timeout killed
+// requests mid-mutation — Hasura had already committed, so the client saw a
+// "network error" yet the write succeeded. 60s lets the function wait it out.
+export const maxDuration = 60;
 
 // PATCH — admin: approve or reject a pending proposal.
 //   { "action": "approve" } → applies proposed_data to the dish, marks approved.
@@ -31,6 +35,12 @@ export async function PATCH(req: NextRequest, { params }: { params: { editId: st
   }
   if (!edit) return NextResponse.json({ error: "Proposal not found" }, { status: 404 });
   if (edit.status !== "pending") {
+    // Retrying the action that already applied is a success, not a conflict —
+    // the first attempt may have committed while its response was lost.
+    const wantedStatus = action === "approve" ? "approved" : "rejected";
+    if (edit.status === wantedStatus) {
+      return NextResponse.json({ ok: true, status: edit.status, alreadyApplied: true });
+    }
     return NextResponse.json({ error: `Proposal already ${edit.status}` }, { status: 409 });
   }
 

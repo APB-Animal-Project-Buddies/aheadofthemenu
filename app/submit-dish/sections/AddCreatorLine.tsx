@@ -9,6 +9,7 @@
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Modal } from "@/components/ui/modal";
+import { useCreatorsStore } from "@/app/stores/creators";
 
 export function AddCreatorLine({
   onAdded,
@@ -48,6 +49,11 @@ export function AddCreatorLine({
 
     setBusy(true);
     setMsg(null);
+
+    // Only the POST decides success/failure. The canonical-list refresh below
+    // is best-effort polish — bundling it into this try/catch used to report
+    // "network error" (and skip onAdded) after the insert had already
+    // committed, leaving the dropdown stale for the whole session.
     try {
       const res = await fetch("/api/creators", {
         method: "POST",
@@ -55,36 +61,27 @@ export function AddCreatorLine({
         body: JSON.stringify({ website, name, creatorName }),
       });
       const j = await res.json().catch(() => ({}));
-      if (!res.ok) {
+      // 409 = the creator already exists (older deploys) — the goal state is
+      // reached either way, so treat it as success too.
+      if (!res.ok && res.status !== 409) {
         setMsg(j?.error ?? "Couldn't add the creator.");
         return;
       }
-
-      // Requery the full creators list to get the canonical, sorted list
-      const listRes = await fetch("/api/creators");
-      if (listRes.ok) {
-        const listData = await listRes.json().catch(() => null);
-        const rows: Array<{ display_name: string; creator_name: string | null }> = listData?.creators ?? [];
-        const names = new Set<string>();
-        rows.forEach((c) => {
-          if (c.display_name) names.add(c.display_name);
-          if (c.creator_name) names.add(c.creator_name);
-        });
-        const allNames = Array.from(names).sort((a, b) => a.localeCompare(b));
-        onAdded(creatorName.trim() || name.trim(), allNames);
-      } else {
-        onAdded(creatorName.trim() || name.trim(), [name.trim(), creatorName.trim()].filter(Boolean));
-      }
-
-      setOpen(false);
-      setWebsite("");
-      setName("");
-      setCreatorName("");
     } catch {
       setMsg("Network error — please try again.");
+      return;
     } finally {
       setBusy(false);
     }
+
+    onAdded(creatorName.trim() || name.trim(), [name.trim(), creatorName.trim()].filter(Boolean));
+    setOpen(false);
+    setWebsite("");
+    setName("");
+    setCreatorName("");
+
+    // Background refresh so the dropdown picks up the canonical server list.
+    void useCreatorsStore.getState().refetch();
   }
 
   return (

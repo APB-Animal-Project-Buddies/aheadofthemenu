@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { graphql } from "@/lib/nhost";
 import { normalizeHandle, validateHandle } from "@/lib/handle";
 
+// Nhost cold starts can outlast the default function timeout; give it room.
+export const maxDuration = 60;
+
 type UsersResult = { users: { id: string }[] };
 
 /** True if no *other* user already has this handle in their metadata. */

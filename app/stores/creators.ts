@@ -18,17 +18,14 @@ type CreatorsState = {
   names: string[];
   status: "idle" | "loading" | "ready" | "error";
   load: () => Promise<void>;
+  /** Force a fresh fetch even when cached — call after a mutation. */
+  refetch: () => Promise<void>;
   /** Merge freshly created creator names into the cache (inline add-creator flow). */
   addNames: (names: string[]) => void;
 };
 
-export const useCreatorsStore = create<CreatorsState>((set, get) => ({
-  creators: [],
-  names: [],
-  status: "idle",
-  load: async () => {
-    const { status } = get();
-    if (status === "loading" || status === "ready") return;
+export const useCreatorsStore = create<CreatorsState>((set, get) => {
+  const fetchList = async () => {
     set({ status: "loading" });
     try {
       const res = await fetch("/api/creators");
@@ -50,10 +47,25 @@ export const useCreatorsStore = create<CreatorsState>((set, get) => ({
       // 'error' (not 'ready') so a later load() can retry.
       set({ status: "error" });
     }
-  },
-  addNames: (names) => {
-    const merged = new Set(get().names);
-    names.filter(Boolean).forEach((n) => merged.add(n));
-    set({ names: Array.from(merged).sort((a, b) => a.localeCompare(b)) });
-  },
-}));
+  };
+
+  return {
+    creators: [],
+    names: [],
+    status: "idle",
+    load: async () => {
+      const { status } = get();
+      if (status === "loading" || status === "ready") return;
+      await fetchList();
+    },
+    refetch: async () => {
+      if (get().status === "loading") return;
+      await fetchList();
+    },
+    addNames: (names) => {
+      const merged = new Set(get().names);
+      names.filter(Boolean).forEach((n) => merged.add(n));
+      set({ names: Array.from(merged).sort((a, b) => a.localeCompare(b)) });
+    },
+  };
+});
