@@ -132,10 +132,14 @@ function buildPlan(csvRestaurants: SeedRestaurant[], dishes: JsonDish[]): Plan {
 
       let isNew = false;
       if (!inCsv && !alreadyPlanned) {
-        // Create a new restaurant plan from the dish JSON data
+        // Create a new restaurant plan from the dish JSON data.
+        // `city` is the CATALOG bucket, not the venue's town: the catalog
+        // queries city='seattle' for the whole metro (the CSV files Bellevue,
+        // Kirkland, Everett... the same way). The venue's actual town goes in
+        // the location's neighborhood, like the CSV's "Eastside".
         const newRestaurant: SeedRestaurant = {
           name: jr.name,
-          city: jr.city ? jr.city.toLowerCase() : "seattle",
+          city: "seattle",
           website: jr.url ?? null,
           instagram: null,
           facebook: null,
@@ -144,7 +148,7 @@ function buildPlan(csvRestaurants: SeedRestaurant[], dishes: JsonDish[]): Plan {
           lastVerified: null,
           verified: true,
           locations: jr.address
-            ? [{ address: jr.address, neighborhood: null, phone: null }]
+            ? [{ address: jr.address, neighborhood: jr.city || null, phone: null }]
             : [],
         };
         newRestaurants.push(newRestaurant);
@@ -165,7 +169,7 @@ function buildPlan(csvRestaurants: SeedRestaurant[], dishes: JsonDish[]): Plan {
         tags: dish.tags ?? [],
         details,
         restaurantName: jr.name,
-        restaurantCity: jr.city ? jr.city.toLowerCase() : "seattle",
+        restaurantCity: "seattle",
         restaurantIsNew: isNew,
       });
     }

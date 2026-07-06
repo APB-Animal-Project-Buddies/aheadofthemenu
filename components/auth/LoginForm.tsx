@@ -16,9 +16,11 @@ import { authStyles as s } from "./authStyles";
 export function LoginForm() {
   const { signIn, resendVerification } = useAuth();
   const searchParams = useSearchParams();
-  // Same-origin path only: must start with "/" but not "//" (protocol-relative).
+  // Same-origin path only: must start with "/" but not "//" (protocol-relative),
+  // and no backslashes — browsers normalize "/\evil.com" to "//evil.com".
   const rawNext = searchParams.get("next");
-  const nextPath = rawNext && /^\/(?!\/)/.test(rawNext) ? rawNext : null;
+  const nextPath =
+    rawNext && /^\/(?!\/)/.test(rawNext) && !rawNext.includes("\\") ? rawNext : null;
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
   const [error, setError] = useState<string | null>(null);
