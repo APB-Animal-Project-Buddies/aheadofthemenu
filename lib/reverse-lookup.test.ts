@@ -2,6 +2,7 @@ import { describe, test, expect } from "bun:test";
 import {
   MIN_VOTES_TO_SCORE, scorePct, meterState, tierFor,
   aggregateVotes, rankLeaderboard, leaderboardCategories, sortDishCards,
+  parseSvgCsv,
 } from "./reverse-lookup";
 
 describe("scorePct", () => {
@@ -98,5 +99,28 @@ describe("sortDishCards", () => {
     const tallyOld = dish({ id: "to", locals: { up: 1, down: 0 }, createdAt: "2026-07-01T00:00:00Z" });
     expect(sortDishCards([tallyOld, tallyNew, tallyBig, scored]).map((d) => d.id))
       .toEqual(["s", "tb", "tn", "to"]);
+  });
+});
+
+describe("parseSvgCsv", () => {
+  const csv = [
+    "name,website,types,address_1,address_2,address_3,address_4,neighborhood_1,neighborhood_2,neighborhood_3,neighborhood_4,phone_1,phone_2,phone_3,phone_4,instagram,facebook,description,last_verified",
+    `Araya's Place,https://www.arayasplace.com,Thai,"5240 University Way NE, Seattle, WA 98105","10246 Main St, Bellevue, WA",,,U-District,Eastside,,,(206) 524-4332,(425) 454-2440,,,https://instagram.com/a,https://facebook.com/b,"Classic Thai — curries, and ""more"".",2026-06-29`,
+    "Box Bar,https://boxbarseattle.com,American | Bar,\"5401 California Ave SW, Seattle, WA\",,,,West Seattle,,,,(206) 432-9554,,,,,,Casual spot.,2026-06-29",
+  ].join("\n");
+
+  test("parses quoted fields, positional locations, pipe-split cuisines", () => {
+    const rows = parseSvgCsv(csv);
+    expect(rows).toHaveLength(2);
+    expect(rows[0].name).toBe("Araya's Place");
+    expect(rows[0].cuisines).toEqual(["Thai"]);
+    expect(rows[0].description).toContain('and "more"');
+    expect(rows[0].locations).toEqual([
+      { address: "5240 University Way NE, Seattle, WA 98105", neighborhood: "U-District", phone: "(206) 524-4332" },
+      { address: "10246 Main St, Bellevue, WA", neighborhood: "Eastside", phone: "(425) 454-2440" },
+    ]);
+    expect(rows[1].cuisines).toEqual(["American", "Bar"]);
+    expect(rows[1].locations[0].phone).toBe("(206) 432-9554");
+    expect(rows[0].lastVerified).toBe("2026-06-29");
   });
 });

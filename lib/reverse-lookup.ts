@@ -106,3 +106,67 @@ export function sortDishCards<T extends ScorableDish>(dishes: T[]): T[] {
     return totalVotes(b) - totalVotes(a) || b.createdAt.localeCompare(a.createdAt);
   });
 }
+
+export type SeedLocation = { address: string; neighborhood: string | null; phone: string | null };
+export type SeedRestaurant = {
+  name: string;
+  website: string | null;
+  instagram: string | null;
+  facebook: string | null;
+  description: string | null;
+  cuisines: string[];
+  lastVerified: string | null;
+  locations: SeedLocation[];
+};
+
+/** Minimal RFC-4180 CSV parser (quoted fields, "" escapes, LF/CRLF rows). */
+function parseCsv(text: string): string[][] {
+  const rows: string[][] = [];
+  let row: string[] = [], field = "", inQuotes = false;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (inQuotes) {
+      if (c === '"' && text[i + 1] === '"') { field += '"'; i++; }
+      else if (c === '"') inQuotes = false;
+      else field += c;
+    } else if (c === '"') inQuotes = true;
+    else if (c === ",") { row.push(field); field = ""; }
+    else if (c === "\n" || c === "\r") {
+      if (c === "\r" && text[i + 1] === "\n") i++;
+      row.push(field); field = "";
+      if (row.some((f) => f !== "")) rows.push(row);
+      row = [];
+    } else field += c;
+  }
+  row.push(field);
+  if (row.some((f) => f !== "")) rows.push(row);
+  return rows;
+}
+
+export function parseSvgCsv(text: string): SeedRestaurant[] {
+  const [header, ...rows] = parseCsv(text);
+  const col = (name: string) => header.indexOf(name);
+  const get = (r: string[], name: string) => (r[col(name)] ?? "").trim();
+  return rows.map((r) => {
+    const locations: SeedLocation[] = [];
+    for (const n of [1, 2, 3, 4]) {
+      const address = get(r, `address_${n}`);
+      if (!address) continue;
+      locations.push({
+        address,
+        neighborhood: get(r, `neighborhood_${n}`) || null,
+        phone: get(r, `phone_${n}`) || null,
+      });
+    }
+    return {
+      name: get(r, "name"),
+      website: get(r, "website") || null,
+      instagram: get(r, "instagram") || null,
+      facebook: get(r, "facebook") || null,
+      description: get(r, "description") || null,
+      cuisines: get(r, "types").split("|").map((s) => s.trim()).filter(Boolean),
+      lastVerified: get(r, "last_verified") || null,
+      locations,
+    };
+  }).filter((r) => r.name);
+}
