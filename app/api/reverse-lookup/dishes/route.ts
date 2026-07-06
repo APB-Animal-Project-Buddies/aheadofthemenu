@@ -7,7 +7,7 @@
  */
 import { NextRequest, NextResponse } from "next/server";
 import { graphql } from "@/lib/nhost";
-import { verifyNhostJwt } from "@/lib/jwt";
+import { bearerToken, verifyNhostJwt } from "@/lib/jwt";
 import { validateAddDish } from "@/lib/reverse-lookup";
 
 export const dynamic = "force-dynamic";
@@ -37,7 +37,7 @@ async function findDish(restaurantId: string, name: string) {
 }
 
 export async function POST(request: NextRequest) {
-  const token = request.headers.get("authorization")?.replace(/^Bearer\s+/i, "");
+  const token = bearerToken(request.headers.get("authorization"));
   const caller = verifyNhostJwt(token);
   if (!caller) return NextResponse.json({ error: "Sign in to add a dish" }, { status: 401 });
 
@@ -89,9 +89,16 @@ export async function POST(request: NextRequest) {
       }
     );
     if (res.errors?.length) {
-      if (!isDuplicate(res.errors[0].message)) throw new Error(res.errors[0].message);
-      const existing = await findDish(restaurantId, input.name);
-      return NextResponse.json({ ok: true, existed: true, dishId: existing?.id ?? null, restaurantId });
+      const msg = res.errors[0].message;
+      if (isDuplicate(msg)) {
+        const existing = await findDish(restaurantId, input.name);
+        return NextResponse.json({ ok: true, existed: true, dishId: existing?.id ?? null, restaurantId });
+      }
+      // Valid-format id that doesn't exist surfaces as an FK violation.
+      if (/foreign key/i.test(msg)) {
+        return NextResponse.json({ error: "Restaurant not found" }, { status: 404 });
+      }
+      throw new Error(msg);
     }
     return NextResponse.json({ ok: true, dishId: res.data?.insert_restaurant_dishes_one?.id, restaurantId });
   } catch {

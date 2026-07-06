@@ -6,14 +6,14 @@
  */
 import { NextRequest, NextResponse } from "next/server";
 import { graphql } from "@/lib/nhost";
-import { verifyNhostJwt } from "@/lib/jwt";
+import { bearerToken, verifyNhostJwt } from "@/lib/jwt";
 import { aggregateVotes, validateVote } from "@/lib/reverse-lookup";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
 
 export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
-  const token = request.headers.get("authorization")?.replace(/^Bearer\s+/i, "");
+  const token = bearerToken(request.headers.get("authorization"));
   const caller = verifyNhostJwt(token);
   if (!caller) return NextResponse.json({ error: "Sign in to vote" }, { status: 401 });
 

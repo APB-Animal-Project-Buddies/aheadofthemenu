@@ -6,7 +6,7 @@
  */
 import { NextRequest, NextResponse } from "next/server";
 import { graphql } from "@/lib/nhost";
-import { verifyNhostJwt } from "@/lib/jwt";
+import { bearerToken, verifyNhostJwt } from "@/lib/jwt";
 import { aggregateVotes } from "@/lib/reverse-lookup";
 
 export const dynamic = "force-dynamic";
@@ -28,7 +28,7 @@ type Row = {
 
 export async function GET(request: NextRequest) {
   const city = (request.nextUrl.searchParams.get("city") ?? "seattle").toLowerCase();
-  const token = request.headers.get("authorization")?.replace(/^Bearer\s+/i, "");
+  const token = bearerToken(request.headers.get("authorization"));
   const caller = verifyNhostJwt(token);
 
   try {
