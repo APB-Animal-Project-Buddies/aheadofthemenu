@@ -61,3 +61,48 @@ export function aggregateVotes(rows: VoteRow[]): CohortTotals {
   }
   return { locals, visitors, total: rows.length };
 }
+
+export type ScorableDish = {
+  id: string;
+  name: string;
+  tags: string[];
+  locals: VoteTotals;
+  visitors: VoteTotals;
+  createdAt: string;
+};
+
+const totalVotes = (d: ScorableDish) =>
+  d.locals.up + d.locals.down + d.visitors.up + d.visitors.down;
+
+export const overallTotals = (d: ScorableDish): VoteTotals => ({
+  up: d.locals.up + d.visitors.up,
+  down: d.locals.down + d.visitors.down,
+});
+
+/** Dishes with ≥ MIN_VOTES_TO_SCORE total votes, tag-filtered, by overall % desc. */
+export function rankLeaderboard<T extends ScorableDish>(dishes: T[], tag: string): T[] {
+  return dishes
+    .filter((d) => d.tags.includes(tag) && totalVotes(d) >= MIN_VOTES_TO_SCORE)
+    .sort((a, b) => scorePct(overallTotals(b)) - scorePct(overallTotals(a)) || totalVotes(b) - totalVotes(a));
+}
+
+/** Tags with at least 2 rankable dishes, alphabetical. */
+export function leaderboardCategories(dishes: ScorableDish[]): string[] {
+  const counts = new Map<string, number>();
+  for (const d of dishes) {
+    if (totalVotes(d) < MIN_VOTES_TO_SCORE) continue;
+    for (const t of d.tags) counts.set(t, (counts.get(t) ?? 0) + 1);
+  }
+  return Array.from(counts.entries()).filter(([, n]) => n >= 2).map(([t]) => t).sort();
+}
+
+/** Dishes tab order: scored (pct desc), then still-tallying (votes desc, newest first). */
+export function sortDishCards<T extends ScorableDish>(dishes: T[]): T[] {
+  return [...dishes].sort((a, b) => {
+    const aScored = totalVotes(a) >= MIN_VOTES_TO_SCORE;
+    const bScored = totalVotes(b) >= MIN_VOTES_TO_SCORE;
+    if (aScored !== bScored) return aScored ? -1 : 1;
+    if (aScored) return scorePct(overallTotals(b)) - scorePct(overallTotals(a));
+    return totalVotes(b) - totalVotes(a) || b.createdAt.localeCompare(a.createdAt);
+  });
+}

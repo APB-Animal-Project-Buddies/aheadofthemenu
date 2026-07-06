@@ -1,7 +1,7 @@
 import { describe, test, expect } from "bun:test";
 import {
   MIN_VOTES_TO_SCORE, scorePct, meterState, tierFor,
-  aggregateVotes,
+  aggregateVotes, rankLeaderboard, leaderboardCategories, sortDishCards,
 } from "./reverse-lookup";
 
 describe("scorePct", () => {
@@ -53,5 +53,50 @@ describe("aggregateVotes", () => {
       visitors: { up: 0, down: 1 },
       total: 3,
     });
+  });
+});
+
+const dish = (over: object) => ({
+  id: "d1", name: "Pie", tags: ["pizza"],
+  locals: { up: 0, down: 0 }, visitors: { up: 0, down: 0 },
+  createdAt: "2026-07-01T00:00:00Z",
+  ...over,
+});
+
+describe("rankLeaderboard", () => {
+  test("requires MIN_VOTES_TO_SCORE total votes to rank", () => {
+    const d1 = dish({ id: "a", locals: { up: 4, down: 0 } });            // 4 votes — out
+    const d2 = dish({ id: "b", locals: { up: 3, down: 2 } });            // 5 votes — in
+    expect(rankLeaderboard([d1, d2], "pizza").map((d) => d.id)).toEqual(["b"]);
+  });
+  test("ranks by overall pct across ALL votes, desc", () => {
+    const low  = dish({ id: "low",  locals: { up: 3, down: 2 } });               // 60%
+    const high = dish({ id: "high", locals: { up: 4, down: 0 }, visitors: { up: 1, down: 0 } }); // 100%
+    expect(rankLeaderboard([low, high], "pizza").map((d) => d.id)).toEqual(["high", "low"]);
+  });
+  test("filters by tag", () => {
+    const pizza = dish({ id: "p", locals: { up: 5, down: 0 } });
+    const burger = dish({ id: "b", tags: ["burger"], locals: { up: 5, down: 0 } });
+    expect(rankLeaderboard([pizza, burger], "burger").map((d) => d.id)).toEqual(["b"]);
+  });
+});
+
+describe("leaderboardCategories", () => {
+  test("a tag qualifies with ≥ 2 rankable dishes", () => {
+    const a = dish({ id: "a", locals: { up: 5, down: 0 } });
+    const b = dish({ id: "b", locals: { up: 5, down: 0 } });
+    const c = dish({ id: "c", tags: ["burger"], locals: { up: 5, down: 0 } });
+    expect(leaderboardCategories([a, b, c])).toEqual(["pizza"]);
+  });
+});
+
+describe("sortDishCards", () => {
+  test("scored dishes first by pct desc, then tallying by votes desc then newest", () => {
+    const scored = dish({ id: "s", locals: { up: 5, down: 0 } });
+    const tallyBig = dish({ id: "tb", locals: { up: 3, down: 0 } });
+    const tallyNew = dish({ id: "tn", locals: { up: 1, down: 0 }, createdAt: "2026-07-04T00:00:00Z" });
+    const tallyOld = dish({ id: "to", locals: { up: 1, down: 0 }, createdAt: "2026-07-01T00:00:00Z" });
+    expect(sortDishCards([tallyOld, tallyNew, tallyBig, scored]).map((d) => d.id))
+      .toEqual(["s", "tb", "tn", "to"]);
   });
 });
