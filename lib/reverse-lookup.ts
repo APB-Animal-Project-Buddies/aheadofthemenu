@@ -107,6 +107,72 @@ export function sortDishCards<T extends ScorableDish>(dishes: T[]): T[] {
   });
 }
 
+export type MyVote = { value: 1 | -1; isLocal: boolean } | null;
+export type VotableDish = { locals: VoteTotals; visitors: VoteTotals; myVote: MyVote };
+
+/** Pure optimistic-vote transition: the caller's previous vote leaves its old
+ * cohort/direction first, then the new vote (null = removal) lands in its
+ * cohort. The server's fresh totals reconcile afterwards. */
+export function applyVote<T extends VotableDish>(dish: T, value: 1 | -1 | null, isLocal: boolean): T {
+  const strip = (t: VoteTotals, v: 1 | -1): VoteTotals =>
+    v > 0 ? { ...t, up: Math.max(0, t.up - 1) } : { ...t, down: Math.max(0, t.down - 1) };
+  const add = (t: VoteTotals, v: 1 | -1): VoteTotals =>
+    v > 0 ? { ...t, up: t.up + 1 } : { ...t, down: t.down + 1 };
+
+  let { locals, visitors } = dish;
+  if (dish.myVote) {
+    if (dish.myVote.isLocal) locals = strip(locals, dish.myVote.value);
+    else visitors = strip(visitors, dish.myVote.value);
+  }
+  if (value !== null) {
+    if (isLocal) locals = add(locals, value);
+    else visitors = add(visitors, value);
+  }
+  return { ...dish, locals, visitors, myVote: value === null ? null : { value, isLocal } };
+}
+
+/** Name-adjacency pass for search results: same-named dishes at different
+ * venues sit together, each group at its highest-sorted member's position. */
+export function groupByName<T extends { name: string }>(sorted: T[]): T[] {
+  const groups = new Map<string, T[]>();
+  for (const d of sorted) {
+    const key = d.name.trim().toLowerCase();
+    const g = groups.get(key);
+    if (g) g.push(d);
+    else groups.set(key, [d]);
+  }
+  return Array.from(groups.values()).flat();
+}
+
+/** Whitespace-split lowercase search tokens. */
+export function tokenize(query: string): string[] {
+  return query.trim().toLowerCase().split(/\s+/).filter(Boolean);
+}
+
+export type SearchableDish = {
+  name: string;
+  description: string | null;
+  tags: string[];
+  details?: { ingredients?: string[] } | null;
+  restaurantName: string;
+  location?: { neighborhood: string | null } | null;
+};
+
+/** Token-AND matching: every token must appear somewhere in the haystack, so
+ * "chocolate milkshake" matches a Milkshake with a chocolate ingredient. */
+export function dishMatchesTokens(d: SearchableDish, tokens: string[]): boolean {
+  if (tokens.length === 0) return true;
+  const haystack = [
+    d.name,
+    d.description ?? "",
+    ...d.tags,
+    ...(d.details?.ingredients ?? []),
+    d.restaurantName,
+    d.location?.neighborhood ?? "",
+  ].join(" ").toLowerCase();
+  return tokens.every((t) => haystack.includes(t));
+}
+
 export type SeedLocation = { address: string; neighborhood: string | null; phone: string | null };
 export type SeedRestaurant = {
   name: string;

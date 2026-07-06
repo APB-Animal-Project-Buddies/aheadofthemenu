@@ -11,7 +11,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 import { useAuth } from "@/components/AuthProvider";
-import { sortDishCards, type VoteTotals } from "@/lib/reverse-lookup";
+import { sortDishCards, applyVote, groupByName, tokenize, dishMatchesTokens } from "@/lib/reverse-lookup";
 import { DishCard, type CatalogDish } from "./components/DishCard";
 import { RestaurantCard, type CatalogRestaurant } from "./components/RestaurantCard";
 import { LeaderboardView } from "./components/LeaderboardView";
@@ -19,37 +19,6 @@ import { AddDishModal } from "./components/AddDishModal";
 
 type Catalog = { city: string; restaurants: CatalogRestaurant[]; dishes: CatalogDish[] };
 type Tab = "dishes" | "restaurants" | "leaderboards";
-
-/** Move the caller's previous vote out of its cohort, then apply the new one. */
-function applyVote(dish: CatalogDish, value: 1 | -1 | null, isLocal: boolean): CatalogDish {
-  const strip = (t: VoteTotals, v: 1 | -1): VoteTotals =>
-    v > 0 ? { ...t, up: Math.max(0, t.up - 1) } : { ...t, down: Math.max(0, t.down - 1) };
-  const add = (t: VoteTotals, v: 1 | -1): VoteTotals =>
-    v > 0 ? { ...t, up: t.up + 1 } : { ...t, down: t.down + 1 };
-
-  let { locals, visitors } = dish;
-  if (dish.myVote) {
-    if (dish.myVote.isLocal) locals = strip(locals, dish.myVote.value);
-    else visitors = strip(visitors, dish.myVote.value);
-  }
-  if (value !== null) {
-    if (isLocal) locals = add(locals, value);
-    else visitors = add(visitors, value);
-  }
-  return { ...dish, locals, visitors, myVote: value === null ? null : { value, isLocal } };
-}
-
-/** Group same-named dishes adjacently, each group at its best member's position. */
-function groupByName(sorted: CatalogDish[]): CatalogDish[] {
-  const groups = new Map<string, CatalogDish[]>();
-  for (const d of sorted) {
-    const key = d.name.trim().toLowerCase();
-    const g = groups.get(key);
-    if (g) g.push(d);
-    else groups.set(key, [d]);
-  }
-  return Array.from(groups.values()).flat();
-}
 
 export default function ReverseLookupPage() {
   const { session, isAuthenticated } = useAuth();
@@ -71,7 +40,14 @@ export default function ReverseLookupPage() {
   const [highlightId, setHighlightId] = useState<string | null>(null);
   const pendingJumpRef = useRef<string | null>(null);
 
+  // The mount fetch (no token) and the post-hydration fetch (with token) can
+  // resolve out of order; only the latest request may set state, or the
+  // tokenless response would overwrite hydrated myVote data.
+  const fetchSeqRef = useRef(0);
+
   const fetchCatalog = useCallback(async () => {
+    const seq = ++fetchSeqRef.current;
+    const isLatest = () => fetchSeqRef.current === seq;
     setLoading(true);
     setLoadError(false);
     try {
@@ -79,11 +55,12 @@ export default function ReverseLookupPage() {
         headers: accessToken ? { Authorization: `Bearer ${accessToken}` } : undefined,
       });
       if (!res.ok) throw new Error();
-      setCatalog(await res.json());
+      const body: Catalog = await res.json();
+      if (isLatest()) setCatalog(body);
     } catch {
-      setLoadError(true);
+      if (isLatest()) setLoadError(true);
     } finally {
-      setLoading(false);
+      if (isLatest()) setLoading(false);
     }
   }, [accessToken]);
 
@@ -100,27 +77,13 @@ export default function ReverseLookupPage() {
     return Array.from(seen).sort();
   }, [dishes]);
 
-  const tokens = useMemo(
-    () => query.trim().toLowerCase().split(/\s+/).filter(Boolean),
-    [query]
-  );
+  const tokens = useMemo(() => tokenize(query), [query]);
 
-  // Token-AND matching: every token must appear somewhere in the haystack,
-  // so "chocolate milkshake" matches a Milkshake with a chocolate ingredient.
+  // Token-AND matching over the dish haystack (lib/reverse-lookup).
   const filteredDishes = useMemo(() => {
-    return dishes.filter((d) => {
-      if (activeTag !== "all" && !d.tags.includes(activeTag)) return false;
-      if (tokens.length === 0) return true;
-      const haystack = [
-        d.name,
-        d.description ?? "",
-        ...d.tags,
-        ...(d.details?.ingredients ?? []),
-        d.restaurantName,
-        d.location?.neighborhood ?? "",
-      ].join(" ").toLowerCase();
-      return tokens.every((t) => haystack.includes(t));
-    });
+    return dishes.filter(
+      (d) => (activeTag === "all" || d.tags.includes(activeTag)) && dishMatchesTokens(d, tokens)
+    );
   }, [dishes, tokens, activeTag]);
 
   const sortedDishes = useMemo(() => {
@@ -172,9 +135,18 @@ export default function ReverseLookupPage() {
     fetchCatalog();
   }, [fetchCatalog]);
 
+  // Rapid successive votes on one dish can resolve out of order; per-dish
+  // sequence numbers make sure only the latest request reconciles (or
+  // reverts) that dish's state.
+  const voteSeqRef = useRef(new Map<string, number>());
+
   const onVote = useCallback(async (dishId: string, value: 1 | -1 | null, isLocal: boolean) => {
     const previous = catalog?.dishes.find((d) => d.id === dishId);
     if (!previous || !catalog) return;
+
+    const seq = (voteSeqRef.current.get(dishId) ?? 0) + 1;
+    voteSeqRef.current.set(dishId, seq);
+    const isLatest = () => voteSeqRef.current.get(dishId) === seq;
 
     const patch = (fn: (d: CatalogDish) => CatalogDish) =>
       setCatalog((c) => c && { ...c, dishes: c.dishes.map((d) => (d.id === dishId ? fn(d) : d)) });
@@ -191,6 +163,7 @@ export default function ReverseLookupPage() {
         },
         body: JSON.stringify({ value, isLocal }),
       });
+      if (!isLatest()) return; // a newer vote owns this dish's state now
       if (res.status === 401) {
         patch(() => previous);
         setSessionExpired(true);
@@ -198,8 +171,10 @@ export default function ReverseLookupPage() {
       }
       if (!res.ok) throw new Error();
       const body = await res.json();
+      if (!isLatest()) return;
       patch((d) => ({ ...d, locals: body.locals, visitors: body.visitors, myVote: body.myVote }));
     } catch {
+      if (!isLatest()) return;
       patch(() => previous);
       toast.error("Couldn't save your vote — try again.");
     }

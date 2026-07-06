@@ -2,6 +2,7 @@ import { describe, test, expect } from "bun:test";
 import {
   MIN_VOTES_TO_SCORE, scorePct, meterState, tierFor,
   aggregateVotes, rankLeaderboard, leaderboardCategories, sortDishCards,
+  applyVote, groupByName, tokenize, dishMatchesTokens,
   parseSvgCsv, validateAddDish, validateVote,
 } from "./reverse-lookup";
 
@@ -99,6 +100,97 @@ describe("sortDishCards", () => {
     const tallyOld = dish({ id: "to", locals: { up: 1, down: 0 }, createdAt: "2026-07-01T00:00:00Z" });
     expect(sortDishCards([tallyOld, tallyNew, tallyBig, scored]).map((d) => d.id))
       .toEqual(["s", "tb", "tn", "to"]);
+  });
+});
+
+describe("applyVote", () => {
+  const votable = (over: object) => ({
+    locals: { up: 2, down: 1 }, visitors: { up: 1, down: 0 }, myVote: null as any,
+    ...over,
+  });
+
+  test("first vote lands in the chosen cohort/direction", () => {
+    const next = applyVote(votable({}), 1, true);
+    expect(next.locals).toEqual({ up: 3, down: 1 });
+    expect(next.visitors).toEqual({ up: 1, down: 0 });
+    expect(next.myVote).toEqual({ value: 1, isLocal: true });
+  });
+
+  test("switching local→visitor moves the vote between cohorts", () => {
+    const prev = votable({ myVote: { value: 1, isLocal: true } });
+    const next = applyVote(prev, 1, false);
+    expect(next.locals).toEqual({ up: 1, down: 1 });   // stripped from locals
+    expect(next.visitors).toEqual({ up: 2, down: 0 }); // added to visitors
+    expect(next.myVote).toEqual({ value: 1, isLocal: false });
+  });
+
+  test("switching direction inside a cohort moves up→down", () => {
+    const prev = votable({ myVote: { value: 1, isLocal: true } });
+    const next = applyVote(prev, -1, true);
+    expect(next.locals).toEqual({ up: 1, down: 2 });
+    expect(next.myVote).toEqual({ value: -1, isLocal: true });
+  });
+
+  test("tap-again removal (value null) strips the vote and clears myVote", () => {
+    const prev = votable({ myVote: { value: -1, isLocal: false }, visitors: { up: 1, down: 1 } });
+    const next = applyVote(prev, null, false);
+    expect(next.visitors).toEqual({ up: 1, down: 0 });
+    expect(next.locals).toEqual({ up: 2, down: 1 });
+    expect(next.myVote).toBeNull();
+  });
+
+  test("never drives a cohort negative", () => {
+    const prev = votable({ locals: { up: 0, down: 0 }, myVote: { value: 1, isLocal: true } });
+    const next = applyVote(prev, null, true);
+    expect(next.locals).toEqual({ up: 0, down: 0 });
+  });
+});
+
+describe("groupByName", () => {
+  test("groups same-named dishes at the highest-sorted member's position", () => {
+    const sorted = [
+      { id: "a", name: "Milkshake" },
+      { id: "b", name: "Burrito" },
+      { id: "c", name: "milkshake " }, // case/whitespace-insensitive key
+      { id: "d", name: "Tart" },
+    ];
+    expect(groupByName(sorted).map((d) => d.id)).toEqual(["a", "c", "b", "d"]);
+  });
+  test("keeps an already-grouped list unchanged", () => {
+    const sorted = [{ id: "a", name: "Pie" }, { id: "b", name: "Cake" }];
+    expect(groupByName(sorted).map((d) => d.id)).toEqual(["a", "b"]);
+  });
+});
+
+describe("tokenize + dishMatchesTokens", () => {
+  const searchable = {
+    name: "Sugar Cookie Milkshake",
+    description: "Thick dairy-free shake.",
+    tags: ["drink"],
+    details: { ingredients: ["dairy-free ice cream", "chocolate"] },
+    restaurantName: "Next Level Burger",
+    location: { neighborhood: "Fremont" },
+  };
+
+  test("tokenize lowercases and splits on whitespace", () => {
+    expect(tokenize("  Chocolate   Milkshake ")).toEqual(["chocolate", "milkshake"]);
+    expect(tokenize("")).toEqual([]);
+  });
+
+  test("multi-token AND: all tokens must match across the haystack", () => {
+    expect(dishMatchesTokens(searchable, ["chocolate", "milkshake"])).toBe(true); // name + ingredient
+    expect(dishMatchesTokens(searchable, ["chocolate", "burrito"])).toBe(false);  // one token misses
+  });
+
+  test("matches restaurant name and neighborhood; empty query matches all", () => {
+    expect(dishMatchesTokens(searchable, ["fremont", "burger"])).toBe(true);
+    expect(dishMatchesTokens(searchable, [])).toBe(true);
+  });
+
+  test("tolerates missing description/details/location", () => {
+    const bare = { name: "Pie", description: null, tags: [], restaurantName: "Spot" };
+    expect(dishMatchesTokens(bare, ["pie"])).toBe(true);
+    expect(dishMatchesTokens(bare, ["fremont"])).toBe(false);
   });
 });
 

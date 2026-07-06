@@ -10,8 +10,9 @@
 import { useState } from "react";
 import { useAuth } from "@/components/AuthProvider";
 import { usePersistentState } from "@/lib/usePersistentState";
+import type { MyVote } from "@/lib/reverse-lookup";
 
-export type MyVote = { value: 1 | -1; isLocal: boolean } | null;
+export type { MyVote };
 
 export function VoteWidget({ myVote, onVote }: {
   myVote: MyVote;
