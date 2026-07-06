@@ -7,7 +7,6 @@ const STATIC_APPS = [
   "menus",
   "top-alternatives",
   "tips-and-tricks",
-  "reverse-lookup",
 ];
 
 export function middleware(request: NextRequest) {
