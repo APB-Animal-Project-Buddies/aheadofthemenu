@@ -144,7 +144,7 @@ describe("validateAddDish", () => {
   });
   test("caps tags at 12 and drops non-strings", () => {
     const uuid = "3e9a2f6c-0000-0000-0000-000000000000";
-    const v = validateAddDish({ restaurantId: uuid, name: "Pie", tags: [...Array(20).keys()].map(String).concat([3 as any]) });
+    const v = validateAddDish({ restaurantId: uuid, name: "Pie", tags: Array.from(Array(20).keys()).map(String).concat([3 as any]) });
     expect("error" in v).toBe(false);
     if ("error" in v) throw new Error("unreachable");
     expect(v.tags).toHaveLength(12);

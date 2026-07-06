@@ -182,6 +182,9 @@ export type AddDishInput = {
 };
 
 export function validateAddDish(body: any): AddDishInput | { error: string } {
+  // The name is the dish's identity (dedup key) — truncating it would silently
+  // change what gets matched, so overflow is rejected. Other fields (description,
+  // tags, addresses) truncate silently: losing their tail is harmless.
   const name = str(body?.name, 120);
   if (!name) return { error: "Dish name is required" };
   if (String(body?.name ?? "").trim().length > 120) return { error: "Dish name is too long" };
