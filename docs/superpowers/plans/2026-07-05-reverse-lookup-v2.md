@@ -633,11 +633,13 @@ describe("validateAddDish", () => {
     const v = validateAddDish({ newRestaurant: { name: "New Spot", address: "1 Main St" }, name: "Pie" });
     expect("error" in v).toBe(false);
   });
-  test("rejects missing dish name / missing venue / oversized fields", () => {
-    expect(validateAddDish({ restaurantId: "x", name: "" })).toHaveProperty("error");
+  test("rejects missing dish name / missing venue / oversized fields / non-UUID id", () => {
+    const uuid = "3e9a2f6c-0000-0000-0000-000000000000";
+    expect(validateAddDish({ restaurantId: uuid, name: "" })).toHaveProperty("error");
     expect(validateAddDish({ name: "Pie" })).toHaveProperty("error");
     expect(validateAddDish({ newRestaurant: { name: "A", address: "" }, name: "Pie" })).toHaveProperty("error");
-    expect(validateAddDish({ restaurantId: "x", name: "a".repeat(121) })).toHaveProperty("error");
+    expect(validateAddDish({ restaurantId: uuid, name: "a".repeat(121) })).toHaveProperty("error");
+    expect(validateAddDish({ restaurantId: "not-a-uuid", name: "Pie" })).toHaveProperty("error");
   });
   test("caps tags at 12 and drops non-strings", () => {
     const v = validateAddDish({ restaurantId: "x", name: "Pie", tags: [...Array(20).keys()].map(String).concat([3 as any]) });
@@ -680,7 +682,9 @@ export function validateAddDish(body: any): AddDishInput | { error: string } {
     ? body.tags.filter((t: unknown) => typeof t === "string").map((t: string) => str(t, 40)).filter(Boolean).slice(0, 12)
     : [];
 
+  const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
   const restaurantId = body?.restaurantId ? String(body.restaurantId) : null;
+  if (restaurantId && !UUID_RE.test(restaurantId)) return { error: "Invalid restaurant id" };
   let newRestaurant: AddDishInput["newRestaurant"] = null;
   if (!restaurantId) {
     const rn = str(body?.newRestaurant?.name, 120);
@@ -1318,10 +1322,10 @@ State + behavior:
 - On mount fetch `/api/reverse-lookup/catalog?city=seattle`, with `Authorization` header when `session?.accessToken` exists (refetch when auth state changes so `myVote` hydrates).
 - Hero: eyebrow "Reverse Lookup · Seattle", title "Tell us what you're craving — we'll tell you *where to find it vegan*.", the search input (token-AND matching over dish name/description/tags/details.ingredients/restaurant name/neighborhood — port the haystack logic from the old `public/reverse-lookup/app.jsx:44-67`), result count.
 - Tabs: `Dishes (n)` / `Restaurants (n)` / `Leaderboards` + `[+ Add]` button. Sticky category-pill row under the header on the Dishes tab (tag vocabulary), mirroring the `/dishes` sticky filter pattern.
-- Dishes tab: `sortDishCards(filtered)` → `DishCard` list; empty state invites adding.
+- Dishes tab: `sortDishCards(filtered)` → `DishCard` list; empty state invites adding. **When a search query is active**, apply a name-adjacency pass after sorting: group cards sharing `lower(name)` adjacently, keeping each group at the position of its highest-sorted member (spec: same-named dishes at different venues appear together in search results).
 - Restaurants tab: search filters by name/neighborhood/cuisine; `RestaurantCard` list.
 - Leaderboards tab: `LeaderboardView dishes={allDishes}`.
-- Optimistic voting: `onVote(dishId, value, isLocal)` updates the dish's cohort totals + `myVote` in state immediately (move the previous vote out of its old cohort/direction first — derive from previous `myVote`), then `PUT /api/reverse-lookup/dishes/{id}/vote`; on success overwrite with server totals; on failure revert and show an inline error toast.
+- Optimistic voting: `onVote(dishId, value, isLocal)` updates the dish's cohort totals + `myVote` in state immediately (move the previous vote out of its old cohort/direction first — derive from previous `myVote`), then `PUT /api/reverse-lookup/dishes/{id}/vote`; on success overwrite with server totals; on **401** revert and show the sign-in prompt (token expired — "Session expired, sign in again" linking `/login?next=/reverse-lookup`); on other failures revert and show an inline error toast. AddDishModal handles 401 the same way.
 - `[+ Add]`: signed-in → AddDishModal; signed-out → popover "Sign in to add a dish — it takes a minute" linking `/login?next=/reverse-lookup`.
 - Error state: full-width error card with a Retry button.
 - Loading state: "Loading the catalog…" (match old page copy).
@@ -1343,14 +1347,14 @@ Flow:
 2. `parseSvgCsv(await Bun.file("scripts/data/svg-guide-2026-06-29.csv").text())` → seed restaurants, `verified: true`, `last_verified` from CSV.
 3. Read `scripts/data/seattle-dishes.json`; for each dish × restaurant entry: ensure the venue exists (match by `lower(name)` against CSV set + already-inserted; else insert with its address/city fields, `verified: true`), then insert the dish with `tags`, and `details` = `{ ingredients, allergens, flavors, locallyMade }` (only defined keys).
 4. All inserts are **idempotent**: check-then-insert against `(city, lower(name))` / `(restaurant_id, lower(name))` — re-running the script must be a no-op (print `created` vs `existed` counts).
-5. `--dry-run` flag (default!): print what WOULD be inserted without writing. Actual writes require `--execute`.
+5. `--dry-run` flag (default!): **purely local** — parse both data files and print the would-be insert plan WITHOUT touching the network. This matters because the tables don't exist until the user applies the migration (Task 16); a dry-run that queried the DB would fail pre-migration. Only `--execute` opens a GraphQL connection (and does its existence checks then).
 
 ```
-Usage: bun scripts/seed-reverse-lookup.ts            # dry-run (prints plan)
-       bun scripts/seed-reverse-lookup.ts --execute  # writes to the DB
+Usage: bun scripts/seed-reverse-lookup.ts            # dry-run: local parse + printed plan, no network
+       bun scripts/seed-reverse-lookup.ts --execute  # writes to the DB (post-migration, user-gated)
 ```
 
-- [ ] **Step 2: Verify the dry-run against prod READ-ONLY** — `bun scripts/seed-reverse-lookup.ts` → prints ~27+ restaurants (26 CSV + seattle.json venues not in CSV, e.g. Three Cats Cafe, Next Level Burger), a handful of dishes, writes nothing.
+- [ ] **Step 2: Verify the dry-run (no network)** — `bun scripts/seed-reverse-lookup.ts` → prints ~27+ restaurants (26 CSV + seattle.json venues not in CSV, e.g. Three Cats Cafe, Next Level Burger), a handful of dishes, writes nothing, opens no connection.
 - [ ] **Step 3: Commit** — `git commit -m "feat(reverse-lookup): idempotent seed script (dry-run by default)"`
 
 **🛑 Do NOT run `--execute`. The user is adding restaurants to the CSV first and gives the explicit go (see memory: reverse-lookup-seed-gate).**
@@ -1360,15 +1364,18 @@ Usage: bun scripts/seed-reverse-lookup.ts            # dry-run (prints plan)
 ### Task 15: Retire the static page
 
 **Files:**
+- Modify: `middleware.ts:5-11` — remove `"reverse-lookup"` from `STATIC_APPS`
 - Delete: `public/reverse-lookup/` (whole directory — app.jsx, index.html, styles.css, data/)
 - Delete: `app/api/reverse-lookup/suggest/route.ts` (superseded by the sign-in add flow; the `reverse_lookup_suggestions` TABLE stays untouched)
+
+- [ ] **Step 0: Remove the middleware rewrite** — `middleware.ts` rewrites `/reverse-lookup` → `/reverse-lookup/index.html` (STATIC_APPS list). Delete the `"reverse-lookup",` entry, or the new app-router page stays shadowed (and 404s once the static dir is gone). The other four slugs stay.
 
 - [ ] **Step 1: Check for internal links first**
 
 ```bash
-grep -rn "reverse-lookup" app components lib --include="*.tsx" --include="*.jsx" --include="*.ts" | grep -v "app/reverse-lookup\|app/api/reverse-lookup\|lib/reverse-lookup"
+grep -rn "reverse-lookup" app components lib middleware.ts --include="*.tsx" --include="*.jsx" --include="*.ts" | grep -v "app/reverse-lookup\|app/api/reverse-lookup\|lib/reverse-lookup"
 ```
-Fix any hits (e.g. nav links pointing at `/reverse-lookup/index.html` → `/reverse-lookup`).
+Fix any hits (e.g. nav links pointing at `/reverse-lookup/index.html` → `/reverse-lookup`). Known keeper: `components/SiteNav.tsx` `KNOWN_SECTIONS` includes `"reverse-lookup"` — leave it; the URL is still a real section.
 
 - [ ] **Step 2: Delete + verify**
 
@@ -1392,9 +1399,11 @@ bun run build 2>&1 | tail -5   # clean build
 ```
 
 - [ ] **Step 2: Read-only browser pass on localhost** (REMEMBER: prod DB — look, don't write)
-- `/reverse-lookup` renders: hero, search, three tabs, empty-catalog states.
+- `/reverse-lookup` serves the NEW app-router page (middleware rewrite removed in Task 15) — not a 404, not the old static page.
+- **Pre-migration expectation:** the tables don't exist yet, so `/api/reverse-lookup/catalog` returns 502 and the page must show its error card + Retry — that IS the pass criterion at this stage. Hero, tabs, search chrome, and the signed-out gates must still render around it.
 - Signed-out: vote buttons show the sign-in prompt; [+ Add] shows the sign-in prompt; `/login?next=/reverse-lookup` round-trips back.
 - Do NOT add dishes or vote from localhost.
+- The full happy-path check (catalog renders, voting, adding) happens on the deployed site AFTER the user applies the migration and seed (Step 3).
 
 - [ ] **Step 3: Hand off to the user — the launch gate.** Everything below is the USER's call, in order:
 1. User extends `scripts/data/svg-guide-2026-06-29.csv` with their extra restaurants.
