@@ -265,6 +265,9 @@ async function gql<T = unknown>(
   return response.json() as Promise<GraphQLResponse<T>>;
 }
 
+// Escape LIKE wildcards so _ilike is an exact case-insensitive match.
+const likeEscape = (s: string) => s.replace(/[\\%_]/g, (m) => `\\${m}`);
+
 async function findRestaurantId(
   url: string,
   secret: string,
@@ -277,7 +280,7 @@ async function findRestaurantId(
     `query ($city: String!, $name: String!) {
        restaurants(where: { city: { _eq: $city }, name: { _ilike: $name } }, limit: 1) { id }
      }`,
-    { city, name }
+    { city, name: likeEscape(name) }
   );
   return res.data?.restaurants?.[0]?.id ?? null;
 }
@@ -345,7 +348,7 @@ async function findDishId(
     `query ($rid: uuid!, $name: String!) {
        restaurant_dishes(where: { restaurant_id: { _eq: $rid }, name: { _ilike: $name } }, limit: 1) { id }
      }`,
-    { rid: restaurantId, name }
+    { rid: restaurantId, name: likeEscape(name) }
   );
   return res.data?.restaurant_dishes?.[0]?.id ?? null;
 }
