@@ -49,6 +49,7 @@ aheadofthemenu/
   app/reverse-lookup/components/AddDishModal.tsx (Task 12)
   app/reverse-lookup/page.tsx                    (Task 13 — shell: tabs, search, fetch)
   scripts/seed-reverse-lookup.ts                 (Task 14 — written, NOT run)
+  middleware.ts                                  (Task 15 — modify: drop "reverse-lookup" from STATIC_APPS)
   public/reverse-lookup/                         (Task 15 — DELETE)
   app/api/reverse-lookup/suggest/route.ts        (Task 15 — DELETE; table stays)
 ```
@@ -642,8 +643,11 @@ describe("validateAddDish", () => {
     expect(validateAddDish({ restaurantId: "not-a-uuid", name: "Pie" })).toHaveProperty("error");
   });
   test("caps tags at 12 and drops non-strings", () => {
-    const v = validateAddDish({ restaurantId: "x", name: "Pie", tags: [...Array(20).keys()].map(String).concat([3 as any]) });
-    if (!("error" in v)) expect(v.tags).toHaveLength(12);
+    const uuid = "3e9a2f6c-0000-0000-0000-000000000000";
+    const v = validateAddDish({ restaurantId: uuid, name: "Pie", tags: [...Array(20).keys()].map(String).concat([3 as any]) });
+    expect("error" in v).toBe(false);
+    if ("error" in v) throw new Error("unreachable");
+    expect(v.tags).toHaveLength(12);
   });
 });
 
@@ -1311,6 +1315,7 @@ Auth gate: if not `isAuthenticated`, the page shouldn't open the modal at all �
 
 **Files:**
 - Create: `app/reverse-lookup/page.tsx`
+- Modify: `app/reverse-lookup/components/AddDishModal.tsx` (401 → sign-in prompt handling)
 
 - [ ] **Step 1: Implement the client page**
 
@@ -1343,7 +1348,7 @@ State + behavior:
 - [ ] **Step 1: Implement** (bun script; Bun auto-loads `.env` / `.env.local`)
 
 Flow:
-1. Read env `NHOST_SUBDOMAIN`, `NHOST_REGION`, `NHOST_GRAPHQL_SECRET`; abort loudly if missing.
+1. Only when `--execute` is passed: read env `NHOST_SUBDOMAIN`, `NHOST_REGION`, `NHOST_GRAPHQL_SECRET` and abort loudly if missing. The dry-run path never reads env or opens a connection.
 2. `parseSvgCsv(await Bun.file("scripts/data/svg-guide-2026-06-29.csv").text())` → seed restaurants, `verified: true`, `last_verified` from CSV.
 3. Read `scripts/data/seattle-dishes.json`; for each dish × restaurant entry: ensure the venue exists (match by `lower(name)` against CSV set + already-inserted; else insert with its address/city fields, `verified: true`), then insert the dish with `tags`, and `details` = `{ ingredients, allergens, flavors, locallyMade }` (only defined keys).
 4. All inserts are **idempotent**: check-then-insert against `(city, lower(name))` / `(restaurant_id, lower(name))` — re-running the script must be a no-op (print `created` vs `existed` counts).
