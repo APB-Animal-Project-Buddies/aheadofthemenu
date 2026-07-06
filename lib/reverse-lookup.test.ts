@@ -2,7 +2,7 @@ import { describe, test, expect } from "bun:test";
 import {
   MIN_VOTES_TO_SCORE, scorePct, meterState, tierFor,
   aggregateVotes, rankLeaderboard, leaderboardCategories, sortDishCards,
-  parseSvgCsv,
+  parseSvgCsv, validateAddDish, validateVote,
 } from "./reverse-lookup";
 
 describe("scorePct", () => {
@@ -122,5 +122,43 @@ describe("parseSvgCsv", () => {
     expect(rows[1].cuisines).toEqual(["American", "Bar"]);
     expect(rows[1].locations[0].phone).toBe("(206) 432-9554");
     expect(rows[0].lastVerified).toBe("2026-06-29");
+  });
+});
+
+describe("validateAddDish", () => {
+  test("accepts an existing-restaurant body", () => {
+    const v = validateAddDish({ restaurantId: "3e9a2f6c-0000-0000-0000-000000000000", name: "Katsu Curry", tags: ["curry"] });
+    expect("error" in v).toBe(false);
+  });
+  test("accepts an inline new restaurant", () => {
+    const v = validateAddDish({ newRestaurant: { name: "New Spot", address: "1 Main St" }, name: "Pie" });
+    expect("error" in v).toBe(false);
+  });
+  test("rejects missing dish name / missing venue / oversized fields / non-UUID id", () => {
+    const uuid = "3e9a2f6c-0000-0000-0000-000000000000";
+    expect(validateAddDish({ restaurantId: uuid, name: "" })).toHaveProperty("error");
+    expect(validateAddDish({ name: "Pie" })).toHaveProperty("error");
+    expect(validateAddDish({ newRestaurant: { name: "A", address: "" }, name: "Pie" })).toHaveProperty("error");
+    expect(validateAddDish({ restaurantId: uuid, name: "a".repeat(121) })).toHaveProperty("error");
+    expect(validateAddDish({ restaurantId: "not-a-uuid", name: "Pie" })).toHaveProperty("error");
+  });
+  test("caps tags at 12 and drops non-strings", () => {
+    const uuid = "3e9a2f6c-0000-0000-0000-000000000000";
+    const v = validateAddDish({ restaurantId: uuid, name: "Pie", tags: [...Array(20).keys()].map(String).concat([3 as any]) });
+    expect("error" in v).toBe(false);
+    if ("error" in v) throw new Error("unreachable");
+    expect(v.tags).toHaveLength(12);
+  });
+});
+
+describe("validateVote", () => {
+  test("accepts 1, -1, null; isLocal defaults true", () => {
+    expect(validateVote({ value: 1 })).toEqual({ value: 1, voterKind: "local" });
+    expect(validateVote({ value: -1, isLocal: false })).toEqual({ value: -1, voterKind: "visitor" });
+    expect(validateVote({ value: null })).toEqual({ value: null, voterKind: "local" });
+  });
+  test("rejects other values", () => {
+    expect(validateVote({ value: 2 })).toHaveProperty("error");
+    expect(validateVote({})).toHaveProperty("error");
   });
 });

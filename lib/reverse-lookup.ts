@@ -170,3 +170,46 @@ export function parseSvgCsv(text: string): SeedRestaurant[] {
     };
   }).filter((r) => r.name);
 }
+
+const str = (v: unknown, max: number) => String(v ?? "").trim().slice(0, max);
+
+export type AddDishInput = {
+  restaurantId: string | null;
+  newRestaurant: { name: string; address: string; neighborhood: string | null; website: string | null } | null;
+  name: string;
+  description: string | null;
+  tags: string[];
+};
+
+export function validateAddDish(body: any): AddDishInput | { error: string } {
+  const name = str(body?.name, 120);
+  if (!name) return { error: "Dish name is required" };
+  if (String(body?.name ?? "").trim().length > 120) return { error: "Dish name is too long" };
+
+  const tags = Array.isArray(body?.tags)
+    ? body.tags.filter((t: unknown) => typeof t === "string").map((t: string) => str(t, 40)).filter(Boolean).slice(0, 12)
+    : [];
+
+  const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+  const restaurantId = body?.restaurantId ? String(body.restaurantId) : null;
+  if (restaurantId && !UUID_RE.test(restaurantId)) return { error: "Invalid restaurant id" };
+  let newRestaurant: AddDishInput["newRestaurant"] = null;
+  if (!restaurantId) {
+    const rn = str(body?.newRestaurant?.name, 120);
+    const addr = str(body?.newRestaurant?.address, 300);
+    if (!rn || !addr) return { error: "Pick a restaurant or give a new one a name and address" };
+    let website = str(body?.newRestaurant?.website, 300) || null;
+    if (website && !/^https?:\/\//i.test(website)) website = `https://${website}`;
+    newRestaurant = { name: rn, address: addr, neighborhood: str(body?.newRestaurant?.neighborhood, 80) || null, website };
+  }
+
+  return { restaurantId, newRestaurant, name, description: str(body?.description, 500) || null, tags };
+}
+
+export type VoteInput = { value: 1 | -1 | null; voterKind: VoterKind };
+
+export function validateVote(body: any): VoteInput | { error: string } {
+  const value = body?.value;
+  if (value !== 1 && value !== -1 && value !== null) return { error: "value must be 1, -1, or null" };
+  return { value, voterKind: body?.isLocal === false ? "visitor" : "local" };
+}
