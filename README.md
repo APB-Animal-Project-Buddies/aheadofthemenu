@@ -59,6 +59,7 @@ submodule (requires Docker):
 ```bash
 cd backend_migrations/
 nhost login
+nhost config pull                # sync config from the linked cloud project (config only — not secrets)
 nhost up                         # boots local Postgres + Hasura; applies migrations/metadata/seeds
 nhost down --volumes             # stop and wipe the local volumes
 ```
