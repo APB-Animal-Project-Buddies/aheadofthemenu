@@ -319,7 +319,7 @@ export default function DishesPage() {
       <footer className="foot">
         Ahead of the Menu · Dishes are free to use, share, and adapt for your kitchen ·
         Source dishes are linked to their authors. Found an issue?{' '}
-        <a href="mailto:hello@aheadofthemenu.com?subject=Dishes feedback" style={{ color: 'var(--moss)' }}>Email us</a>.
+        <a href="mailto:aheadofthemenu@gmail.com?subject=Dishes feedback" style={{ color: 'var(--moss)' }}>Email us</a>.
       </footer>
 
       <MenuDrawer
