@@ -33,15 +33,8 @@ function validateRecipe(v: RecipeFormValues, creatorOptions: string[]): string |
   const rows = v.ingredientGroups.flatMap((g) => g.items);
   if (!rows.some((r) => r.name.trim())) return "Add at least one ingredient.";
 
-  // Check for negative quantities — across rows AND their alternative lines.
-  const isNeg = (qty?: string) => {
-    const q = qty?.trim();
-    return !!q && Number(q) < 0;
-  };
-  const hasNegative = rows.some(
-    (r) => isNeg(r.quantity) || r.alternatives.some((a) => a.items.some((x) => isNeg(x.quantity)))
-  );
-  if (hasNegative) return "Ingredient quantities cannot be negative.";
+  // Quantities are validated per-field in LineFields (RHF `validate` rule), so a bad one
+  // is flagged in place and auto-scrolled to; see onInvalid for the bottom summary.
 
   // Original creator: if filled, must be in the list
   if (v.originalCreator.trim() && !creatorOptions.includes(v.originalCreator.trim())) {
@@ -50,6 +43,23 @@ function validateRecipe(v: RecipeFormValues, creatorOptions: string[]): string |
 
   // Steps are fully optional — a recipe can be just a link, or just ingredients.
   return null;
+}
+
+// True when the RHF error tree holds any bad ingredient/alternative quantity — drives the
+// bottom-of-form summary message that accompanies the per-field highlights.
+function hasQuantityError(errors: any): boolean {
+  const groups = errors?.ingredientGroups;
+  if (!Array.isArray(groups)) return false;
+  return groups.some(
+    (g: any) =>
+      Array.isArray(g?.items) &&
+      g.items.some(
+        (it: any) =>
+          it?.quantity ||
+          (Array.isArray(it?.alternatives) &&
+            it.alternatives.some((a: any) => Array.isArray(a?.items) && a.items.some((l: any) => l?.quantity)))
+      )
+  );
 }
 
 export function RecipeIntakeForm(
@@ -92,6 +102,8 @@ export function RecipeIntakeForm(
       cuisines: v.cuisines,
       dishType: v.dishType,
       tags: v.tags,
+      // Effort (1–3); the API clamps/defaults to 2 (middle) if somehow out of range.
+      difficulty: Number(v.difficulty) || 2,
       // Flatten sections → flat ingredients (each row stamped with its section).
       // Alternatives ride along NESTED on the row — never hoisted to a sibling.
       ingredients: v.ingredientGroups.flatMap((g) =>
@@ -100,7 +112,8 @@ export function RecipeIntakeForm(
           .map((r) => ({
             id: r.id,
             name: r.name,
-            quantity: numOrNull(r.quantity),
+            // Sent as text so fractions ("2/3") survive; the API keeps plain numbers numeric.
+            quantity: r.quantity.trim(),
             unit: r.unit,
             ...(g.section.trim() ? { section: g.section.trim() } : {}),
             ...(r.note?.trim() ? { note: r.note.trim() } : {}),
@@ -112,7 +125,7 @@ export function RecipeIntakeForm(
                       note: a.note.trim() || undefined,
                       items: a.items
                         .filter((x) => x.name.trim())
-                        .map((x) => ({ id: x.id, name: x.name, quantity: numOrNull(x.quantity), unit: x.unit })),
+                        .map((x) => ({ id: x.id, name: x.name, quantity: x.quantity.trim(), unit: x.unit })),
                     }))
                     .filter((a) => a.items.length),
                 }
@@ -182,6 +195,18 @@ export function RecipeIntakeForm(
     }
   }
 
+  // Field-level validation failed (e.g. a bad quantity or the required name). RHF has
+  // already highlighted + scrolled to the first offending field (shouldFocusError); show a
+  // matching summary at the bottom so the reason is clear even before scrolling.
+  function onInvalid(errs: any) {
+    setStatus("error");
+    setErrorMsg(
+      hasQuantityError(errs)
+        ? "Please enter all ingredient quantities as a number or fraction only."
+        : "Please complete the highlighted fields above."
+    );
+  }
+
   if (status === "done")
     return (
       <div className="rounded-[16px] border p-8 text-center">
@@ -203,9 +228,16 @@ export function RecipeIntakeForm(
 
   return (
     <FormProvider {...methods}>
-      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
-        {/* Servings + prep/cook time — at the very top */}
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+      <form onSubmit={handleSubmit(onSubmit, onInvalid)} className="flex flex-col gap-6">
+        {/* Effort + servings + prep/cook time — at the very top */}
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-4">
+          <Field label="Effort" hint="how much work — 1 easy to 3 hard">
+            <Select className="mt-2" {...register("difficulty")}>
+              <option value="1">1 · Easy</option>
+              <option value="2">2 · Medium</option>
+              <option value="3">3 · Hard</option>
+            </Select>
+          </Field>
           <Field label="Servings">
             <Input className="mt-2" type="number" step="1" min="0" placeholder="e.g. 4" {...register("servings")} />
           </Field>

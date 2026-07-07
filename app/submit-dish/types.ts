@@ -28,6 +28,8 @@ export type RecipeFormValues = {
   cuisines: string[];
   dishType: string[];
   tags: string[];
+  /** Effort on a 1–3 scale (kept as a string like the other numeric inputs). Defaults to "2". */
+  difficulty: string;
   ingredientGroups: IngredientGroup[];
   steps: Step[];
   specialProducts: string[];
@@ -55,7 +57,7 @@ export const emptyIngredient = (): Ingredient => ({ name: "", quantity: "", unit
 export const emptyAlternative = (): Alternative => ({ label: "", note: "", items: [emptyLine()] });
 
 export const RECIPE_FORM_DEFAULTS: RecipeFormValues = {
-  title: "", description: "", cuisines: [], dishType: [], tags: [],
+  title: "", description: "", cuisines: [], dishType: [], tags: [], difficulty: "2",
   // One unnamed section with a handful of rows open, so a simple recipe looks
   // exactly like before (no section header shown until a 2nd section is added).
   ingredientGroups: [{ section: "", items: Array.from({ length: 5 }, emptyIngredient) }],

@@ -521,7 +521,7 @@ function DishCard({ dish, saved, inMenu, onToggleSave, onAddToMenu, onOpen }) {
         <div className="meta">
           <div className="m"><div className="v">{dish.time || dish.prep || '—'}</div><div className="l">Prep</div></div>
           <div className="m"><div className="v">{dish.servings ?? '—'}</div><div className="l">Serves</div></div>
-          <div className="m"><div className="v"><DiffDots n={dish.difficulty || 1} /></div><div className="l">Effort</div></div>
+          <div className="m"><div className="v"><DiffDots n={dish.difficulty || 2} /></div><div className="l">Effort</div></div>
           <div className="m"><div className="v">{fmtCost(dish.cost)}</div><div className="l">/ plate</div></div>
         </div>
       </div>
@@ -608,7 +608,7 @@ function DishModal({ dish, open, onClose, onAddToMenu, inMenu }) {
           <div className="meta-row">
             <div className="b"><div className="l">Prep</div><div className="v">{dish.time || dish.prep || '—'}</div></div>
             <div className="b"><div className="l">Serves</div><div className="v">{dish.servings ?? '—'}</div></div>
-            <div className="b"><div className="l">Effort</div><div className="v"><DiffDots n={dish.difficulty || 1} /></div></div>
+            <div className="b"><div className="l">Effort</div><div className="v"><DiffDots n={dish.difficulty || 2} /></div></div>
             <div className="b"><div className="l">/ plate</div><div className="v">{fmtCost(dish.cost)}</div></div>
           </div>
 

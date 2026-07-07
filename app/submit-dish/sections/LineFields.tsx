@@ -3,7 +3,8 @@ import { useFormContext, Controller } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Select, Options } from "@/components/ui/select";
 import { IngredientCombobox } from "@/components/ui/IngredientCombobox";
-import { UNITS } from "@/lib/dishes";
+import { UNITS, isValidQuantity } from "@/lib/dishes";
+import { cn } from "@/lib/utils";
 import type { RecipeFormValues } from "../types";
 
 /**
@@ -25,7 +26,11 @@ export function LineFields({
   // used by top-level rows to auto-add them to the recipe's allergen list.
   onPickAllergens?: (allergens: string[]) => void;
 }) {
-  const { control, register, setValue } = useFormContext<RecipeFormValues>();
+  const { control, register, setValue, getFieldState, formState } = useFormContext<RecipeFormValues>();
+  const qtyName = `${namePrefix}.quantity`;
+  // Field-level error so the offending quantity is flagged in place (and RHF's
+  // shouldFocusError auto-scrolls to it on submit), alongside the form's bottom summary.
+  const qtyError = getFieldState(qtyName as any, formState).error?.message as string | undefined;
   return (
     <>
       <div className="flex-1">
@@ -44,15 +49,21 @@ export function LineFields({
           )}
         />
       </div>
-      <Input
-        className="w-20"
-        type="number"
-        step="any"
-        min="0"
-        placeholder="Qty"
-        aria-label="Quantity"
-        {...register(`${namePrefix}.quantity` as any)}
-      />
+      <div className="w-20">
+        <Input
+          className={cn("w-full", qtyError && "border-red-400 focus:border-red-500")}
+          type="text"
+          inputMode="text"
+          autoComplete="off"
+          placeholder="Qty"
+          aria-label="Quantity"
+          aria-invalid={qtyError ? true : undefined}
+          {...register(qtyName as any, {
+            validate: (v: string) => isValidQuantity(v ?? "") || "Number or fraction only",
+          })}
+        />
+        {qtyError ? <p className="mt-1 text-xs text-red-600">{qtyError}</p> : null}
+      </div>
       <Select className="w-28" aria-label="Unit" {...register(`${namePrefix}.unit` as any)}>
         <Options values={UNITS} placeholder="unit" />
       </Select>

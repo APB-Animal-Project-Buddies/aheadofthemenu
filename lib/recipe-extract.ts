@@ -94,8 +94,9 @@ export const EXTRACT_TOOL = {
       ingredients: {
         type: "array",
         description:
-          "One entry per ingredient line, in document order. Break each line into a clean name, a numeric " +
-          "quantity, and a unit from the allowed list. Empty array if no ingredient list is present.",
+          "One entry per ingredient line, in document order. Break each line into a clean name, a " +
+          "quantity (as written — keep fractions like '2/3' verbatim), and a unit from the allowed list. " +
+          "Empty array if no ingredient list is present.",
         items: {
           type: "object",
           additionalProperties: false,
@@ -109,11 +110,13 @@ export const EXTRACT_TOOL = {
                 "names it — do not infer a brand onto a generic ingredient.",
             },
             quantity: {
-              type: ["number", "null"],
+              type: ["string", "null"],
               description:
-                "Numeric amount. Convert fractions and unicode to decimals (½ => 0.5, '1 1/2' => 1.5). " +
-                "For a range ('2-3') use the lower bound. Null if no amount is given ('salt to taste'). " +
-                "If a metric conversion is in parentheses ('1 lb (450g)'), use the value matching the chosen unit.",
+                "Amount exactly as written, as TEXT. Keep fractions and mixed numbers verbatim ('2/3', '1 1/2') — " +
+                "do NOT convert them to decimals. Write unicode fractions in ascii (½ => '1/2', 1½ => '1 1/2'). " +
+                "Plain numbers stay as text ('2', '1.5'). For a range keep both bounds ('2-3'). Null if no amount is " +
+                "given ('salt to taste'). If a metric conversion is in parentheses ('1 lb (450g)'), use the value " +
+                "matching the chosen unit.",
             },
             unit: {
               enum: [...UNITS, null],
@@ -161,7 +164,7 @@ export const EXTRACT_TOOL = {
                       required: ["name", "quantity", "unit"],
                       properties: {
                         name: { type: "string", description: "Replacement ingredient name, prep words removed." },
-                        quantity: { type: ["number", "null"], description: "Numeric amount, same rules as a normal line. Null if none." },
+                        quantity: { type: ["string", "null"], description: "Amount as TEXT, same rules as a normal line (keep fractions verbatim, e.g. '2/3'). Null if none." },
                         unit: { enum: [...UNITS, null], description: "Best-fit unit from the allowed list, same rules as a normal line." },
                       },
                     },
@@ -255,7 +258,7 @@ export const EXTRACT_TOOL = {
 export const SYSTEM_PROMPT = `You extract structured recipe data from documents that are completely non-standardized — scanned PDFs, blog exports, handwritten cards, restaurant sheets. Layout, ordering, and completeness vary wildly. Your output prefills a recipe submission form, so it must map cleanly onto its fields.
 
 Most fields are faithful TRANSCRIPTION — only record what the document states, never invent a title, ingredient, step, or quantity:
-- Break the ingredient list down: one entry per ingredient, each split into a clean name, a numeric quantity, and a unit from the allowed list (this mirrors the form's name / qty / unit row).
+- Break the ingredient list down: one entry per ingredient, each split into a clean name, a quantity (kept as written — preserve fractions like '2/3' or '1 1/2' as text, never decimalize them), and a unit from the allowed list (this mirrors the form's name / qty / unit row).
 - If the recipe splits its ingredients into labeled parts ("For the batter:", "Sauce:"), set each ingredient's section to that header; leave section null for a single flat list.
 - If the source states a substitution for an ingredient ("or use X", "sub Y + Z", "gluten-free: …"), capture it under that ingredient's alternatives — one alternative per stated swap, each a group of one or more replacement lines (a swap can be several ingredients). Put any qualifier on the swap into the alternative's note. Never invent a substitution; empty array when none is stated.
 - Break the method down into discrete, ordered steps — split run-on instructions into separate actions.

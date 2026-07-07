@@ -79,6 +79,7 @@ export function dishToFormValues(dishData: any): RecipeFormValues {
     cuisines: arr(d.cuisines),
     dishType: arr(d.dishType),
     tags: arr(d.tags),
+    difficulty: d.difficulty != null ? String(d.difficulty) : "2",
     ingredientGroups: normalizeStoredIngredients(d.ingredients),
     steps: arr(d.steps).length ? arr(d.steps).map((t: string) => ({ text: String(t) })) : RECIPE_FORM_DEFAULTS.steps,
     specialProducts: arr(d.specialProducts),
