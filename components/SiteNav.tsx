@@ -15,6 +15,7 @@ type Tab = { href: string; label: string };
 // emerald bar is identical across Next pages and the static apps.
 const CONSUMER_TABS: Tab[] = [
   { href: "/dishes", label: "Dishes" },
+  { href: "/tips-and-tricks", label: "Tips & Tricks" },
   { href: "/top-alternatives", label: "Top Alternatives" },
   { href: "/reverse-lookup", label: "Reverse Lookup" },
 ];
