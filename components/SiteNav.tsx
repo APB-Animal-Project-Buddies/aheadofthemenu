@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/components/AuthProvider";
@@ -19,11 +19,18 @@ const CONSUMER_TABS: Tab[] = [
   { href: "/reverse-lookup", label: "Reverse Lookup" },
 ];
 const BUSINESS_TABS: Tab[] = [
-  { href: "/recipes", label: "Recipes" },
   { href: "/menus", label: "Menus" },
-  { href: "/tips-and-tricks", label: "Tips & Tricks" },
+  { href: "/recipes", label: "Recipes" },
   { href: "/top-alternatives", label: "Top Alternatives" },
+  { href: "/tips-and-tricks", label: "Tips & Tricks" },
+  { href: "/reverse-lookup", label: "Reverse Lookup" },
 ];
+
+// Some sections belong to one mode regardless of login: a signed-out visitor on a
+// business-only page (/recipes, /menus, /tips-and-tricks) still gets the restaurant nav,
+// and /dishes always reads as consumer. Shared sections fall back to the account type.
+const BUSINESS_SECTIONS = new Set(["recipes", "menus", "tips-and-tricks"]);
+const CONSUMER_SECTIONS = new Set(["dishes"]);
 
 // The nav has its own header on the landing + auth screens, and is intentionally
 // hidden on the user's profile and public handle pages.
@@ -73,7 +80,27 @@ export function SiteNav() {
   const { isAuthenticated, email, displayName, avatarUrl, role, userType, signOut } = useAuth();
   const [accountOpen, setAccountOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const tabs = userType === "business" ? BUSINESS_TABS : CONSUMER_TABS;
+  // Nav "mode": signed in → account type wins; else the entry section decides
+  // (business-only pages → business, /dishes → consumer), and on ambivalent pages the
+  // #business/#consumer param carries the mode forward (no param → consumer).
+  const [hash, setHash] = useState("");
+  useEffect(() => {
+    const read = () => setHash(window.location.hash.replace(/^#/, ""));
+    read();
+    window.addEventListener("hashchange", read);
+    return () => window.removeEventListener("hashchange", read);
+  }, [pathname]);
+
+  const seg = pathname.split("/").filter(Boolean)[0] ?? "";
+  const mode: "business" | "consumer" = isAuthenticated
+    ? (userType === "business" ? "business" : "consumer")
+    : BUSINESS_SECTIONS.has(seg) ? "business"
+    : CONSUMER_SECTIONS.has(seg) ? "consumer"
+    : hash === "business" ? "business"
+    : "consumer";
+  const tabs = mode === "business" ? BUSINESS_TABS : CONSUMER_TABS;
+  // Always carry the mode forward on every tab link (no param → consumer).
+  const withMode = (href: string) => `${href}#${mode}`;
 
   if (
     pathname === "/" ||
@@ -102,7 +129,7 @@ export function SiteNav() {
             return (
               <li key={t.href}>
                 <Link
-                  href={t.href}
+                  href={withMode(t.href)}
                   className={`relative flex h-16 items-center text-sm font-medium transition ${
                     active
                       ? "text-white after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 after:bg-apb-accent"
@@ -183,7 +210,7 @@ export function SiteNav() {
             return (
               <li key={t.href}>
                 <Link
-                  href={t.href}
+                  href={withMode(t.href)}
                   onClick={() => setMobileOpen(false)}
                   className={`block py-2.5 text-sm font-medium transition ${active ? "text-apb-accent" : "text-apb-cream/80 hover:text-apb-cream"}`}
                 >
