@@ -1,0 +1,22 @@
+{
+  "_comment": "Manually-added reverse-lookup venues that are NOT from the fully-vegan SVG guide (e.g. vegetarian spots with vegan options). Seeded via scripts/add-restaurant.ts. city is the metro bucket ('seattle'); the venue's town goes in the location neighborhood. verified=false → no 'Fully vegan' badge.",
+  "restaurants": [
+    {
+      "name": "Chay Concept",
+      "city": "seattle",
+      "website": "https://www.chayconceptbellevue.com/",
+      "instagram": "https://instagram.com/chayconceptbellevue",
+      "facebook": "https://www.facebook.com/chayconceptbellevue/",
+      "description": "Vegetarian Vietnamese kitchen & bar — plant-forward pho, banh mi, and Vietnamese classics, with vegan options and cocktails.",
+      "cuisines": ["Vietnamese", "Bar"],
+      "verified": false,
+      "locations": [
+        {
+          "address": "10606 NE 2nd St, Bellevue, WA 98004",
+          "neighborhood": "Eastside",
+          "phone": "(425) 362-6181"
+        }
+      ]
+    }
+  ]
+}
