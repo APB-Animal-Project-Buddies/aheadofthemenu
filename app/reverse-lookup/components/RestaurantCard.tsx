@@ -30,8 +30,11 @@ export function RestaurantCard({ restaurant, onAddDish }: {
           <h2 className="text-lg font-bold leading-snug text-neutral-900">
             {r.name}
             {r.verified && (
-              <span className="ml-2 inline-flex items-center gap-0.5 rounded-full bg-apb/10 px-1.5 py-0.5 text-[10px] font-semibold text-apb align-middle">
-                verified ✓
+              <span
+                title="Fully plant-based menu (Seattle Vegan Guide verified)"
+                className="ml-2 inline-flex items-center gap-0.5 rounded-full bg-apb/10 px-1.5 py-0.5 text-[10px] font-semibold text-apb align-middle"
+              >
+                ⭐ Fully vegan
               </span>
             )}
           </h2>
