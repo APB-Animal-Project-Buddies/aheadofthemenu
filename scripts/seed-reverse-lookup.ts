@@ -399,7 +399,7 @@ async function insertDish(
 // Execute mode runner
 // ---------------------------------------------------------------------------
 
-async function runExecute(plan: Plan): Promise<void> {
+async function runExecute(plan: Plan, restaurantsOnly = false): Promise<void> {
   const subdomain = process.env.NHOST_SUBDOMAIN;
   const region = process.env.NHOST_REGION;
   const secret = process.env.NHOST_GRAPHQL_SECRET;
@@ -444,6 +444,17 @@ async function runExecute(plan: Plan): Promise<void> {
       restaurantsCreated++;
       console.log(`  created: ${r.name} (${result.id})`);
     }
+  }
+
+  // --restaurants-only: seed just the verified CSV venues; skip dish-discovered
+  // restaurants and dishes (dishes come from the community).
+  if (restaurantsOnly) {
+    console.log();
+    console.log("=".repeat(70));
+    console.log("SEED COMPLETE (restaurants-only)");
+    console.log(`  Restaurants: ${restaurantsCreated} created, ${restaurantsExisted} already existed`);
+    console.log("=".repeat(70));
+    return;
   }
 
   // 2. Insert net-new restaurants from dishes.json
@@ -501,16 +512,17 @@ async function runExecute(plan: Plan): Promise<void> {
 
 const args = process.argv.slice(2);
 const executeMode = args.includes("--execute");
+const restaurantsOnly = args.includes("--restaurants-only");
 
 if (executeMode) {
   console.log("=".repeat(70));
-  console.log("REVERSE-LOOKUP SEED — EXECUTE MODE (writing to DB)");
+  console.log(`REVERSE-LOOKUP SEED — EXECUTE MODE (writing to DB)${restaurantsOnly ? " — restaurants only" : ""}`);
   console.log("=".repeat(70));
   console.log();
   const csvRestaurants = await loadCsvRestaurants();
   const dishes = await loadDishes();
   const plan = buildPlan(csvRestaurants, dishes);
-  await runExecute(plan);
+  await runExecute(plan, restaurantsOnly);
 } else {
   // Default: dry-run — purely local, no env reads, no network
   const csvRestaurants = await loadCsvRestaurants();
