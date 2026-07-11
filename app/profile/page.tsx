@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useAuth } from "@/components/AuthProvider";
 import { Avatar } from "@/components/Avatar";
 import { QrShareCard } from "@/components/QrShareCard";
-import { QrScanButton } from "@/components/QrScanButton";
+import { ClaimQrSection } from "@/components/ClaimQrSection";
 import { ActiveDishesList } from "@/components/ActiveDishesList";
 import { ROLE_OPTIONS, USER_TYPE_LABELS } from "@/lib/nhost/roles";
 import { normalizeHandle, validateHandle } from "@/lib/handle";
@@ -130,22 +130,6 @@ export default function ProfilePage() {
         />
       )}
 
-      {/* Scan an open potluck QR to claim it — routes into /q/<code>?take. */}
-      <div className="mb-6 flex items-center justify-between gap-4 rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm">
-        <div className="min-w-0">
-          <div className="font-medium text-neutral-900">Claim a potluck QR</div>
-          <p className="mt-1 text-xs text-neutral-500">
-            Scan an open QR card to take it over and point it at your dishes.
-          </p>
-        </div>
-        <QrScanButton
-          onResult={(text) => {
-            const m = text.match(/\/q\/([^/?#\s]+)/i);
-            const code = (m ? m[1] : text).trim();
-            if (code) router.push(`/q/${encodeURIComponent(code)}?take`);
-          }}
-        />
-      </div>
       <div className="overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-sm">
         {/* Header */}
         <div className="flex items-center gap-4 border-b border-neutral-100 bg-apb-cream px-6 py-6">
@@ -248,6 +232,10 @@ export default function ProfilePage() {
           </button>
         </div>
       </div>
+
+      {/* Claim a URL — signed-in only; this page always is (redirects to
+          /login otherwise). Moved here from the public active-dishes page. */}
+      <ClaimQrSection />
 
       {/* Your dishes — private to your own profile (this page is always the
           signed-in user; it redirects to /login otherwise). */}
