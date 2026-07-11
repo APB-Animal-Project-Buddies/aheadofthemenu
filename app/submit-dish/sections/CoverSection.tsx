@@ -11,6 +11,7 @@ import { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { useAuth } from "@/components/AuthProvider";
 import { getNhost, nhostFileUrl } from "@/lib/nhost/client";
+import { authFetch } from "@/lib/nhost/auth-fetch";
 import { storageErrorMessage } from "@/lib/storage-error";
 
 export type CoverImage = { fileId: string | null; url: string };
@@ -31,9 +32,9 @@ export function CoverSection({
     (fileId: string | null) => {
       // Best-effort cleanup of a staged upload that won't be used.
       if (fileId && accessToken) {
-        fetch("/api/dish-media", {
+        authFetch("/api/dish-media", {
           method: "DELETE",
-          headers: { "Content-Type": "application/json", Authorization: `Bearer ${accessToken}` },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ fileId }),
         }).catch(() => {});
       }

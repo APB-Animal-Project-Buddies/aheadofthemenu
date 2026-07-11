@@ -61,6 +61,9 @@ interface AuthContextValue {
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
+/** Refresh the JWT this many ms before it expires; matches the SDK's default. */
+const REFRESH_MARGIN_MS = 60_000;
+
 /** True when the SDK error is Nhost's "email not verified yet" rejection. */
 export function isUnverifiedError(err: unknown): boolean {
   if (err instanceof FetchError) {
@@ -108,6 +111,31 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     });
     return unsubscribe;
   }, []);
+
+  // Proactively refresh the JWT ~1 min before it expires. The SDK only
+  // auto-refreshes on requests through its own service clients; our manual
+  // fetches to /api/* read the token from state (see lib/nhost/auth-fetch.ts),
+  // so without this the token in state — and `isAuthenticated` — would silently
+  // go stale between renders. Re-armed on every session change via the `exp`
+  // dependency. A failed refresh doesn't change `exp`, so this won't spin;
+  // authFetch refreshes on the next request instead.
+  useEffect(() => {
+    // Note: the SDK stores decodedToken.exp as a millisecond timestamp (it
+    // converts the raw JWT `exp` seconds for us), so compare against Date.now()
+    // directly — no *1000.
+    const exp = session?.decodedToken?.exp;
+    if (!exp) return;
+    const fireInMs = exp - Date.now() - REFRESH_MARGIN_MS;
+    const timer = setTimeout(
+      () => {
+        void getNhost()
+          .refreshSession(0)
+          .catch(() => {});
+      },
+      Math.max(fireInMs, 1000)
+    );
+    return () => clearTimeout(timer);
+  }, [session?.decodedToken?.exp]);
 
   const signIn = useCallback(async (email: string, password: string) => {
     const nhost = getNhost();
