@@ -46,10 +46,16 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
       }
     );
     if (res.errors?.length) {
-      if (/foreign key/i.test(res.errors[0].message)) {
+      const msg = res.errors[0].message;
+      // Race backstop: the rl_dish_comments_user_uniq index enforces one comment
+      // per user per dish even if two posts slip past the check above.
+      if (/unique|duplicate/i.test(msg)) {
+        return NextResponse.json({ error: "You've already commented on this dish." }, { status: 409 });
+      }
+      if (/foreign key/i.test(msg)) {
         return NextResponse.json({ error: "Dish not found" }, { status: 404 });
       }
-      throw new Error(res.errors[0].message);
+      throw new Error(msg);
     }
     const row = res.data?.insert_restaurant_dish_comments_one;
     // Private comments are never echoed publicly; return only the id.

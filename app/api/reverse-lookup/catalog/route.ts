@@ -59,7 +59,9 @@ export async function GET(request: NextRequest) {
     let res = await graphql<{ restaurants: Row[] }>(
       catalogQuery(true), { useAdminSecret: true, variables: { city } }
     );
-    if (res.errors?.length) {
+    // Only fall back for the "comment_likes not applied yet" case — don't let the
+    // fallback mask unrelated errors (which would silently drop likes on a 200).
+    if (res.errors?.length && /likes|not found|unknown|does not exist/i.test(res.errors[0].message)) {
       res = await graphql<{ restaurants: Row[] }>(
         catalogQuery(false), { useAdminSecret: true, variables: { city } }
       );
@@ -91,7 +93,7 @@ export async function GET(request: NextRequest) {
           createdAt: d.created_at,
           addedBy: d.created_by_user?.metadata?.handle ?? d.created_by_user?.displayName ?? null,
           locals, visitors,
-          myVote: mine ? { value: mine.value, isLocal: mine.voter_kind !== "visitor" } : null,
+          myVote: mine ? { value: mine.value > 0 ? 1 : mine.value < 0 ? -1 : 0, isLocal: mine.voter_kind !== "visitor" } : null,
           photos: (d.photos ?? []).map((p) => ({
             id: p.id, url: fileUrl(p.file_id), caption: p.caption, uploaderId: p.uploader_id,
           })),

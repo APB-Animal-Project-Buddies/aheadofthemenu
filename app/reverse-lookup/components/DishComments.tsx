@@ -29,8 +29,11 @@ export function DishComments({ dishId, comments: initial }: { dishId: string; co
   const [privateSent, setPrivateSent] = useState(false);
   const [showGate, setShowGate] = useState(false);
   const [posted, setPosted] = useState(false);
+  // Ids of comments this user authored this session — lets us bubble/delete our
+  // own comment even when the user has no handle to match against `author`.
+  const [myIds, setMyIds] = useState<Set<string>>(() => new Set());
 
-  const isMine = (c: DishComment) => !!handle && c.author === handle;
+  const isMine = (c: DishComment) => myIds.has(c.id) || (!!handle && c.author === handle);
   const alreadyCommented = posted || comments.some(isMine);
 
   // Current user's comment first, then most recent; show only the top 3.
@@ -60,6 +63,7 @@ export function DishComments({ dishId, comments: initial }: { dishId: string; co
       setBody("");
       setPosted(true);
       if (data.visibility === "public" && data.comment) {
+        setMyIds((s) => new Set(s).add(data.comment.id));
         setComments((c) => [...c, { ...data.comment, author: handle ?? null, likeCount: 0, likedByMe: false }]);
       } else {
         setPrivateSent(true);
@@ -172,7 +176,7 @@ export function DishComments({ dishId, comments: initial }: { dishId: string; co
           <div className="mt-2 flex flex-col gap-1.5">
             {alreadyCommented ? (
               <p className="text-xs text-neutral-400">
-                You&rsquo;ve already commented on this dish{privateSent ? "" : " — delete your comment to change it"}.
+                You&rsquo;ve already commented on this dish{comments.some(isMine) ? " — delete your comment to change it" : ""}.
               </p>
             ) : (
               <>
