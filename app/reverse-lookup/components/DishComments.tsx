@@ -23,6 +23,11 @@ export function DishComments({ dishId, comments: initial }: { dishId: string; co
   const [error, setError] = useState<string | null>(null);
   const [privateSent, setPrivateSent] = useState(false);
   const [showGate, setShowGate] = useState(false);
+  const [posted, setPosted] = useState(false);
+
+  // One comment per user per dish. We know we've commented if a public comment
+  // of ours is in the list, or we just posted one (public or private).
+  const alreadyCommented = posted || (!!handle && comments.some((c) => c.author === handle));
 
   const submit = async () => {
     const text = body.trim();
@@ -41,6 +46,7 @@ export function DishComments({ dishId, comments: initial }: { dishId: string; co
       const data = await res.json().catch(() => ({}));
       if (!res.ok) { setError(data?.error ?? "Couldn't post your comment."); return; }
       setBody("");
+      setPosted(true);
       if (data.visibility === "public" && data.comment) {
         setComments((c) => [...c, { ...data.comment, author: handle ?? null }]);
       } else {
@@ -60,7 +66,10 @@ export function DishComments({ dishId, comments: initial }: { dishId: string; co
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id }),
       });
-      if (res.ok) setComments((c) => c.filter((x) => x.id !== id));
+      if (res.ok) {
+        setComments((c) => c.filter((x) => x.id !== id));
+        setPosted(false); // freed up their single slot — allow a new comment
+      }
     } catch {
       /* leave it; a reload re-syncs */
     }
@@ -105,25 +114,33 @@ export function DishComments({ dishId, comments: initial }: { dishId: string; co
       )}
 
       <div className="mt-2 flex flex-col gap-1.5">
-        <input
-          value={body}
-          onChange={(e) => setBody(e.target.value)}
-          onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); submit(); } }}
-          placeholder="Add a comment…"
-          className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm focus:border-apb focus:outline-none"
-        />
-        <div className="flex flex-wrap items-center gap-2">
-          {visBtn("public", "Public")}
-          {visBtn("private_to_restaurant", "Private to restaurant")}
-          <button
-            type="button"
-            onClick={submit}
-            disabled={busy || !body.trim()}
-            className="ml-auto rounded-lg bg-apb px-3 py-1.5 text-xs font-semibold text-white transition disabled:opacity-40"
-          >
-            {busy ? "…" : "Post"}
-          </button>
-        </div>
+        {alreadyCommented ? (
+          <p className="text-xs text-neutral-400">
+            You&rsquo;ve already commented on this dish{privateSent ? "" : " — delete your comment to change it"}.
+          </p>
+        ) : (
+          <>
+            <input
+              value={body}
+              onChange={(e) => setBody(e.target.value)}
+              onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); submit(); } }}
+              placeholder="Add a comment…"
+              className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm focus:border-apb focus:outline-none"
+            />
+            <div className="flex flex-wrap items-center gap-2">
+              {visBtn("public", "Public")}
+              {visBtn("private_to_restaurant", "Private to restaurant")}
+              <button
+                type="button"
+                onClick={submit}
+                disabled={busy || !body.trim()}
+                className="ml-auto rounded-lg bg-apb px-3 py-1.5 text-xs font-semibold text-white transition disabled:opacity-40"
+              >
+                {busy ? "…" : "Post"}
+              </button>
+            </div>
+          </>
+        )}
         {privateSent && <p className="text-xs text-apb">Sent privately to the restaurant.</p>}
         {error && <p className="text-xs text-red-600">{error}</p>}
         {showGate && (

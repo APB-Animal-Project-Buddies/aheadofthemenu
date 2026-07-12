@@ -23,6 +23,19 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
   if ("error" in input) return NextResponse.json({ error: input.error }, { status: 400 });
 
   try {
+    // One comment per user per dish (any visibility). The UI hides the input once
+    // you've commented; this is the authoritative guard.
+    const existing = await graphql<{ restaurant_dish_comments: Array<{ id: string }> }>(
+      `query ($dish: uuid!, $user: uuid!) {
+         restaurant_dish_comments(where: { dish_id: { _eq: $dish }, user_id: { _eq: $user } }, limit: 1) { id }
+       }`,
+      { useAdminSecret: true, variables: { dish: params.id, user: caller.userId } }
+    );
+    if (existing.errors?.length) throw new Error(existing.errors[0].message);
+    if (existing.data?.restaurant_dish_comments?.length) {
+      return NextResponse.json({ error: "You've already commented on this dish." }, { status: 409 });
+    }
+
     const res = await graphql<{ insert_restaurant_dish_comments_one: { id: string; created_at: string } | null }>(
       `mutation ($obj: restaurant_dish_comments_insert_input!) {
          insert_restaurant_dish_comments_one(object: $obj) { id created_at }
