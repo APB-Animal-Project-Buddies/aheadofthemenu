@@ -42,6 +42,7 @@ export function AddDishModal({ open, onClose, restaurants, dishes, initialRestau
 
   const [dishName, setDishName] = useState("");
   const [description, setDescription] = useState("");
+  const [availability, setAvailability] = useState<"permanent" | "seasonal">("permanent");
   const [tags, setTags] = useState<string[]>([]);
   const [tagInput, setTagInput] = useState("");
 
@@ -59,6 +60,7 @@ export function AddDishModal({ open, onClose, restaurants, dishes, initialRestau
     setNewRestaurant(EMPTY_NEW);
     setDishName("");
     setDescription("");
+    setAvailability("permanent");
     setTags([]);
     setTagInput("");
     setSubmitting(false);
@@ -131,6 +133,7 @@ export function AddDishModal({ open, onClose, restaurants, dishes, initialRestau
             : null,
           name: dishName.trim(),
           description: description.trim() || null,
+          availability,
           tags,
         }),
       });
@@ -253,6 +256,26 @@ export function AddDishModal({ open, onClose, restaurants, dishes, initialRestau
           )}
 
           <Input placeholder="One-line description" value={description} onChange={(e) => setDescription(e.target.value)} />
+
+          <div>
+            <div className="mb-1.5 text-[10px] font-bold tracking-wide text-neutral-400">AVAILABILITY</div>
+            <div className="flex gap-2">
+              {(["permanent", "seasonal"] as const).map((v) => (
+                <button
+                  key={v}
+                  type="button"
+                  onClick={() => setAvailability(v)}
+                  className={`rounded-full border px-3 py-1 text-xs font-medium capitalize transition ${
+                    availability === v
+                      ? "border-apb bg-apb text-white"
+                      : "border-neutral-300 bg-white text-neutral-600 hover:bg-neutral-50"
+                  }`}
+                >
+                  {v}
+                </button>
+              ))}
+            </div>
+          </div>
 
           <div>
             <div className="mb-1.5 text-[10px] font-bold tracking-wide text-neutral-400">TAGS</div>

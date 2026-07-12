@@ -3,7 +3,7 @@ import {
   MIN_VOTES_TO_SCORE, scorePct, meterState, tierFor,
   aggregateVotes, rankLeaderboard, leaderboardCategories, sortDishCards,
   applyVote, groupByName, tokenize, dishMatchesTokens,
-  parseSvgCsv, validateAddDish, validateVote,
+  parseSvgCsv, validateAddDish, validateVote, validateReport, validateComment,
 } from "./reverse-lookup";
 
 describe("scorePct", () => {
@@ -51,10 +51,80 @@ describe("aggregateVotes", () => {
       { value: -1, voter_kind: "visitor" },
     ];
     expect(aggregateVotes(rows)).toEqual({
-      locals: { up: 2, down: 0 },
-      visitors: { up: 0, down: 1 },
+      locals: { up: 2, meh: 0, down: 0 },
+      visitors: { up: 0, meh: 0, down: 1 },
       total: 3,
     });
+  });
+  test("buckets a 0 value into meh", () => {
+    const t = aggregateVotes([
+      { value: 1, voter_kind: "local" }, { value: 0, voter_kind: "local" },
+      { value: -1, voter_kind: "visitor" }, { value: 0, voter_kind: "visitor" },
+    ]);
+    expect(t.locals).toEqual({ up: 1, meh: 1, down: 0 });
+    expect(t.visitors).toEqual({ up: 0, meh: 1, down: 1 });
+  });
+});
+
+describe("meh vote", () => {
+  test("scorePct weights meh as half", () => {
+    expect(scorePct({ up: 2, meh: 2, down: 0 })).toBe(75); // (2 + 1)/4
+    expect(scorePct({ up: 0, meh: 4, down: 0 })).toBe(50); // all meh -> middle
+    expect(scorePct({ up: 0, meh: 0, down: 0 })).toBe(0);  // empty
+  });
+  test("meterState counts meh toward the vote total", () => {
+    expect(meterState({ up: 2, meh: 2, down: 1 }).state).toBe("scored"); // 5 votes
+    expect(meterState({ up: 1, meh: 1, down: 0 })).toEqual({ state: "tallying", votes: 2 });
+  });
+  test("applyVote transitions into and out of meh", () => {
+    const d0 = { locals: { up: 0, meh: 0, down: 0 }, visitors: { up: 0, meh: 0, down: 0 }, myVote: null };
+    const d1 = applyVote(d0, 0, true);
+    expect(d1.locals).toEqual({ up: 0, meh: 1, down: 0 });
+    expect(d1.myVote).toEqual({ value: 0, isLocal: true });
+    const d2 = applyVote(d1, 1, true); // switch meh -> up
+    expect(d2.locals).toEqual({ up: 1, meh: 0, down: 0 });
+  });
+  test("validateVote accepts 0", () => {
+    expect(validateVote({ value: 0 })).toEqual({ value: 0, voterKind: "local" });
+    expect("error" in validateVote({ value: 2 })).toBe(true);
+  });
+});
+
+describe("validateAddDish availability", () => {
+  const RID = "11111111-1111-1111-1111-111111111111";
+  test("defaults to permanent and validates the value", () => {
+    const ok = validateAddDish({ restaurantId: RID, name: "Tofu Banh Mi" });
+    expect("error" in ok ? null : ok.availability).toBe("permanent");
+    const seasonal = validateAddDish({ restaurantId: RID, name: "X", availability: "seasonal" });
+    expect("error" in seasonal ? null : seasonal.availability).toBe("seasonal");
+    const junk = validateAddDish({ restaurantId: RID, name: "X", availability: "junk" });
+    expect("error" in junk ? null : junk.availability).toBe("permanent");
+  });
+});
+
+describe("validateReport", () => {
+  test("accepts known reasons, rejects unknown", () => {
+    expect(validateReport({ reason: "not_on_menu" })).toEqual({ reason: "not_on_menu", note: null });
+    expect(validateReport({ reason: "wrong_allergens" })).toEqual({ reason: "wrong_allergens", note: null });
+    expect("error" in validateReport({ reason: "nope" })).toBe(true);
+  });
+  test("requires a note for 'other' and trims notes", () => {
+    expect("error" in validateReport({ reason: "other" })).toBe(true);
+    const ok = validateReport({ reason: "other", note: "  gone  " });
+    expect("error" in ok ? null : ok.note).toBe("gone");
+  });
+});
+
+describe("validateComment", () => {
+  test("rejects empty, trims body, defaults visibility to public", () => {
+    expect("error" in validateComment({ body: "   " })).toBe(true);
+    const ok = validateComment({ body: "  tasty  " });
+    expect("error" in ok ? null : ok.body).toBe("tasty");
+    expect("error" in ok ? null : ok.visibility).toBe("public");
+  });
+  test("accepts private_to_restaurant visibility", () => {
+    const priv = validateComment({ body: "call the kitchen", visibility: "private_to_restaurant" });
+    expect("error" in priv ? null : priv.visibility).toBe("private_to_restaurant");
   });
 });
 

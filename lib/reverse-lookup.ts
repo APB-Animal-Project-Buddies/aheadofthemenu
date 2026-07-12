@@ -11,7 +11,9 @@
 export const MIN_VOTES_TO_SCORE = 5;
 
 export type VoterKind = "local" | "visitor";
-export type VoteTotals = { up: number; down: number };
+/** Vote tallies per cohort. `meh` (the neutral 😐 vote) is optional so existing
+ * two-field call sites stay valid; readers coalesce a missing `meh` to 0. */
+export type VoteTotals = { up: number; meh?: number; down: number };
 
 export type Tier = {
   key: "love" | "yum" | "tasty" | "meh" | "skip";
@@ -31,8 +33,10 @@ export function tierFor(pct: number): Tier {
 }
 
 export function scorePct(t: VoteTotals): number {
-  const total = t.up + t.down;
-  return total === 0 ? 0 : Math.round((100 * t.up) / total);
+  const meh = t.meh ?? 0;
+  const total = t.up + meh + t.down;
+  // A "meh" vote counts as half — it pulls a dish toward the middle band.
+  return total === 0 ? 0 : Math.round((100 * (t.up + 0.5 * meh)) / total);
 }
 
 export type MeterState =
@@ -41,7 +45,7 @@ export type MeterState =
   | { state: "empty" };
 
 export function meterState(t: VoteTotals): MeterState {
-  const votes = t.up + t.down;
+  const votes = t.up + (t.meh ?? 0) + t.down;
   if (votes === 0) return { state: "empty" };
   if (votes < MIN_VOTES_TO_SCORE) return { state: "tallying", votes };
   const pct = scorePct(t);
@@ -52,12 +56,13 @@ export type VoteRow = { value: number; voter_kind: string };
 export type CohortTotals = { locals: VoteTotals; visitors: VoteTotals; total: number };
 
 export function aggregateVotes(rows: VoteRow[]): CohortTotals {
-  const locals = { up: 0, down: 0 };
-  const visitors = { up: 0, down: 0 };
+  const locals = { up: 0, meh: 0, down: 0 };
+  const visitors = { up: 0, meh: 0, down: 0 };
   for (const r of rows) {
     const bucket = r.voter_kind === "visitor" ? visitors : locals;
     if (r.value > 0) bucket.up += 1;
-    else bucket.down += 1;
+    else if (r.value < 0) bucket.down += 1;
+    else bucket.meh += 1;
   }
   return { locals, visitors, total: rows.length };
 }
@@ -72,10 +77,12 @@ export type ScorableDish = {
 };
 
 const totalVotes = (d: ScorableDish) =>
-  d.locals.up + d.locals.down + d.visitors.up + d.visitors.down;
+  d.locals.up + (d.locals.meh ?? 0) + d.locals.down +
+  d.visitors.up + (d.visitors.meh ?? 0) + d.visitors.down;
 
 export const overallTotals = (d: ScorableDish): VoteTotals => ({
   up: d.locals.up + d.visitors.up,
+  meh: (d.locals.meh ?? 0) + (d.visitors.meh ?? 0),
   down: d.locals.down + d.visitors.down,
 });
 
@@ -107,17 +114,21 @@ export function sortDishCards<T extends ScorableDish>(dishes: T[]): T[] {
   });
 }
 
-export type MyVote = { value: 1 | -1; isLocal: boolean } | null;
+export type MyVote = { value: 1 | 0 | -1; isLocal: boolean } | null;
 export type VotableDish = { locals: VoteTotals; visitors: VoteTotals; myVote: MyVote };
 
 /** Pure optimistic-vote transition: the caller's previous vote leaves its old
  * cohort/direction first, then the new vote (null = removal) lands in its
  * cohort. The server's fresh totals reconcile afterwards. */
-export function applyVote<T extends VotableDish>(dish: T, value: 1 | -1 | null, isLocal: boolean): T {
-  const strip = (t: VoteTotals, v: 1 | -1): VoteTotals =>
-    v > 0 ? { ...t, up: Math.max(0, t.up - 1) } : { ...t, down: Math.max(0, t.down - 1) };
-  const add = (t: VoteTotals, v: 1 | -1): VoteTotals =>
-    v > 0 ? { ...t, up: t.up + 1 } : { ...t, down: t.down + 1 };
+export function applyVote<T extends VotableDish>(dish: T, value: 1 | 0 | -1 | null, isLocal: boolean): T {
+  const strip = (t: VoteTotals, v: 1 | 0 | -1): VoteTotals =>
+    v > 0 ? { ...t, up: Math.max(0, t.up - 1) }
+    : v < 0 ? { ...t, down: Math.max(0, t.down - 1) }
+    : { ...t, meh: Math.max(0, (t.meh ?? 0) - 1) };
+  const add = (t: VoteTotals, v: 1 | 0 | -1): VoteTotals =>
+    v > 0 ? { ...t, up: t.up + 1 }
+    : v < 0 ? { ...t, down: t.down + 1 }
+    : { ...t, meh: (t.meh ?? 0) + 1 };
 
   let { locals, visitors } = dish;
   if (dish.myVote) {
@@ -245,6 +256,7 @@ export type AddDishInput = {
   name: string;
   description: string | null;
   tags: string[];
+  availability: DishAvailability;
 };
 
 export function validateAddDish(body: any): AddDishInput | { error: string } {
@@ -272,13 +284,44 @@ export function validateAddDish(body: any): AddDishInput | { error: string } {
     newRestaurant = { name: rn, address: addr, neighborhood: str(body?.newRestaurant?.neighborhood, 80) || null, website };
   }
 
-  return { restaurantId, newRestaurant, name, description: str(body?.description, 500) || null, tags };
+  const availability: DishAvailability = body?.availability === "seasonal" ? "seasonal" : "permanent";
+  return { restaurantId, newRestaurant, name, description: str(body?.description, 500) || null, tags, availability };
 }
 
-export type VoteInput = { value: 1 | -1 | null; voterKind: VoterKind };
+export type VoteInput = { value: 1 | 0 | -1 | null; voterKind: VoterKind };
 
 export function validateVote(body: any): VoteInput | { error: string } {
   const value = body?.value;
-  if (value !== 1 && value !== -1 && value !== null) return { error: "value must be 1, -1, or null" };
+  if (value !== 1 && value !== 0 && value !== -1 && value !== null) {
+    return { error: "value must be 1, 0, -1, or null" };
+  }
   return { value, voterKind: body?.isLocal === false ? "visitor" : "local" };
+}
+
+// --- availability, reports, comments ---------------------------------------
+
+export type DishAvailability = "permanent" | "seasonal";
+
+export type ReportReason = "not_on_menu" | "not_vegan" | "wrong_allergens" | "wrong_info" | "other";
+export type ReportInput = { reason: ReportReason; note: string | null };
+const REPORT_REASONS: ReportReason[] = ["not_on_menu", "not_vegan", "wrong_allergens", "wrong_info", "other"];
+
+export function validateReport(body: any): ReportInput | { error: string } {
+  const reason = body?.reason;
+  if (!REPORT_REASONS.includes(reason)) return { error: "Invalid report reason" };
+  const note = str(body?.note, 1000) || null;
+  // Free-text "other" is meaningless without a note; require one.
+  if (reason === "other" && !note) return { error: "Please describe the problem" };
+  return { reason, note };
+}
+
+export type CommentVisibility = "public" | "private_to_restaurant";
+export type CommentInput = { body: string; visibility: CommentVisibility };
+
+export function validateComment(body: any): CommentInput | { error: string } {
+  const text = str(body?.body, 600);
+  if (!text) return { error: "Comment can't be empty" };
+  const visibility: CommentVisibility =
+    body?.visibility === "private_to_restaurant" ? "private_to_restaurant" : "public";
+  return { body: text, visibility };
 }

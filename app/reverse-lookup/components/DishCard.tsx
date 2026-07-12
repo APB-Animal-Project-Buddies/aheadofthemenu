@@ -7,9 +7,13 @@
  * details jsonb, then address + website footer, the vote widget, and
  * community attribution.
  */
+import { useState } from "react";
 import type { VoteTotals } from "@/lib/reverse-lookup";
 import { YumMeter } from "./YumMeter";
 import { VoteWidget, type MyVote } from "./VoteWidget";
+import { DishPhotos, type DishPhoto } from "./DishPhotos";
+import { DishComments, type DishComment } from "./DishComments";
+import { ReportDishModal } from "./ReportDishModal";
 
 export type CatalogDish = {
   id: string; restaurantId: string; restaurantName: string; verified: boolean;
@@ -17,8 +21,10 @@ export type CatalogDish = {
   location: { address: string; neighborhood: string | null } | null;
   name: string; description: string | null; tags: string[];
   details: { ingredients?: string[]; allergens?: Array<{ name: string; optional?: boolean }>; flavors?: string[] };
+  availability: "permanent" | "seasonal";
   createdAt: string; addedBy: string | null;
   locals: VoteTotals; visitors: VoteTotals; myVote: MyVote;
+  photos: DishPhoto[]; comments: DishComment[];
 };
 
 function DetailRow({ label, children }: { label: string; children: React.ReactNode }) {
@@ -32,9 +38,10 @@ function DetailRow({ label, children }: { label: string; children: React.ReactNo
 
 export function DishCard({ dish, onVote }: {
   dish: CatalogDish;
-  onVote: (dishId: string, value: 1 | -1 | null, isLocal: boolean) => void;
+  onVote: (dishId: string, value: 1 | 0 | -1 | null, isLocal: boolean) => void;
 }) {
   const { details } = dish;
+  const [reportOpen, setReportOpen] = useState(false);
   const flavors = details?.flavors ?? [];
   const ingredients = details?.ingredients ?? [];
   const allergens = details?.allergens ?? [];
@@ -51,6 +58,11 @@ export function DishCard({ dish, onVote }: {
             {dish.verified && (
               <span className="ml-1.5 inline-flex items-center gap-0.5 rounded-full bg-apb/10 px-1.5 py-0.5 text-[10px] font-semibold text-apb align-middle">
                 verified ✓
+              </span>
+            )}
+            {dish.availability === "seasonal" && (
+              <span className="ml-1.5 inline-flex items-center gap-0.5 rounded-full bg-amber-100 px-1.5 py-0.5 text-[10px] font-semibold text-amber-700 align-middle">
+                🍂 Seasonal
               </span>
             )}
           </div>
@@ -115,7 +127,26 @@ export function DishCard({ dish, onVote }: {
 
       <VoteWidget myVote={dish.myVote} onVote={(value, isLocal) => onVote(dish.id, value, isLocal)} />
 
-      {dish.addedBy && <div className="mt-2 text-[11px] text-neutral-400">added by @{dish.addedBy}</div>}
+      <DishPhotos dishId={dish.id} photos={dish.photos} />
+
+      <DishComments dishId={dish.id} comments={dish.comments} />
+
+      <div className="mt-3 flex items-center justify-between gap-3">
+        {dish.addedBy ? (
+          <div className="text-[11px] text-neutral-400">added by @{dish.addedBy}</div>
+        ) : (
+          <span />
+        )}
+        <button
+          type="button"
+          onClick={() => setReportOpen(true)}
+          className="text-[11px] text-neutral-400 underline-offset-2 hover:text-neutral-600 hover:underline"
+        >
+          Is this still on the menu? · Report a problem
+        </button>
+      </div>
+
+      <ReportDishModal dishId={dish.id} open={reportOpen} onClose={() => setReportOpen(false)} />
     </article>
   );
 }

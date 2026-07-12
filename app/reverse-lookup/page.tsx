@@ -140,7 +140,7 @@ export default function ReverseLookupPage() {
   // reverts) that dish's state.
   const voteSeqRef = useRef(new Map<string, number>());
 
-  const onVote = useCallback(async (dishId: string, value: 1 | -1 | null, isLocal: boolean) => {
+  const onVote = useCallback(async (dishId: string, value: 1 | 0 | -1 | null, isLocal: boolean) => {
     const previous = catalog?.dishes.find((d) => d.id === dishId);
     if (!previous || !catalog) return;
 

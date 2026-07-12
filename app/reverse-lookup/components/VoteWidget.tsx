@@ -17,18 +17,18 @@ export type { MyVote };
 export function VoteWidget({ myVote, onVote }: {
   myVote: MyVote;
   /** value null = remove vote. Caller does the optimistic update + API call. */
-  onVote: (value: 1 | -1 | null, isLocal: boolean) => void;
+  onVote: (value: 1 | 0 | -1 | null, isLocal: boolean) => void;
 }) {
   const { isAuthenticated } = useAuth();
   const [isLocal, setIsLocal] = usePersistentState<boolean>("rl-voter-is-local", true);
   const [showGate, setShowGate] = useState(false);
 
-  const cast = (value: 1 | -1) => {
+  const cast = (value: 1 | 0 | -1) => {
     if (!isAuthenticated) { setShowGate(true); return; }
     onVote(myVote?.value === value ? null : value, isLocal);
   };
 
-  const btn = (value: 1 | -1, glyph: string) => (
+  const btn = (value: 1 | 0 | -1, glyph: string) => (
     <button
       type="button"
       onClick={() => cast(value)}
@@ -47,6 +47,7 @@ export function VoteWidget({ myVote, onVote }: {
     <div className="mt-3 flex flex-wrap items-center gap-2">
       <span className="text-xs font-semibold text-neutral-600">Was it good?</span>
       {btn(1, "👍")}
+      {btn(0, "😐")}
       {btn(-1, "👎")}
       <button
         type="button"

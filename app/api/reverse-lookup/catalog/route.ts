@@ -5,9 +5,11 @@
  * also carries the caller's own vote (myVote).
  */
 import { NextRequest, NextResponse } from "next/server";
-import { graphql } from "@/lib/nhost";
+import { graphql, nhost } from "@/lib/nhost";
 import { bearerToken, verifyNhostJwt } from "@/lib/jwt";
 import { aggregateVotes } from "@/lib/reverse-lookup";
+
+const fileUrl = (fileId: string) => `${nhost.storageUrl}/files/${fileId}`;
 
 export const dynamic = "force-dynamic";
 // Nhost cold starts can outlast the default function timeout; give it room.
@@ -20,11 +22,29 @@ type Row = {
   locations: Array<{ id: string; address: string; neighborhood: string | null; phone: string | null }>;
   dishes: Array<{
     id: string; name: string; description: string | null; tags: unknown;
-    details: unknown; created_at: string;
+    details: unknown; availability: string; created_at: string;
     created_by_user: { displayName: string | null; metadata: any } | null;
     votes: Array<{ user_id: string; value: number; voter_kind: string }>;
+    photos: Array<{ id: string; file_id: string; caption: string | null; uploader_id: string | null }>;
+    comments: Array<{ id: string; body: string; created_at: string; author: { displayName: string | null; metadata: any } | null }>;
   }>;
 };
+
+const CATALOG_QUERY = `query ($city: String!) {
+  restaurants(where: { city: { _eq: $city } }, order_by: { name: asc }) {
+    id name website instagram facebook description cuisines verified
+    locations(order_by: { created_at: asc }) { id address neighborhood phone }
+    dishes(where: { status: { _eq: "live" } }) {
+      id name description tags details availability created_at
+      created_by_user { displayName metadata }
+      votes { user_id value voter_kind }
+      photos(order_by: { created_at: asc }) { id file_id caption uploader_id }
+      comments(where: { visibility: { _eq: "public" } }, order_by: { created_at: asc }, limit: 20) {
+        id body created_at author { displayName metadata }
+      }
+    }
+  }
+}`;
 
 export async function GET(request: NextRequest) {
   const city = (request.nextUrl.searchParams.get("city") ?? "seattle").toLowerCase();
@@ -33,18 +53,7 @@ export async function GET(request: NextRequest) {
 
   try {
     const res = await graphql<{ restaurants: Row[] }>(
-      `query ($city: String!) {
-         restaurants(where: { city: { _eq: $city } }, order_by: { name: asc }) {
-           id name website instagram facebook description cuisines verified
-           locations(order_by: { created_at: asc }) { id address neighborhood phone }
-           dishes(where: { status: { _eq: "live" } }) {
-             id name description tags details created_at
-             created_by_user { displayName metadata }
-             votes { user_id value voter_kind }
-           }
-         }
-       }`,
-      { useAdminSecret: true, variables: { city } }
+      CATALOG_QUERY, { useAdminSecret: true, variables: { city } }
     );
     if (res.errors?.length) throw new Error(res.errors[0].message);
 
@@ -69,10 +78,18 @@ export async function GET(request: NextRequest) {
           description: d.description,
           tags: Array.isArray(d.tags) ? d.tags : [],
           details: d.details ?? {},
+          availability: d.availability === "seasonal" ? "seasonal" : "permanent",
           createdAt: d.created_at,
           addedBy: d.created_by_user?.metadata?.handle ?? d.created_by_user?.displayName ?? null,
           locals, visitors,
           myVote: mine ? { value: mine.value, isLocal: mine.voter_kind !== "visitor" } : null,
+          photos: (d.photos ?? []).map((p) => ({
+            id: p.id, url: fileUrl(p.file_id), caption: p.caption, uploaderId: p.uploader_id,
+          })),
+          comments: (d.comments ?? []).map((c) => ({
+            id: c.id, body: c.body, createdAt: c.created_at,
+            author: c.author?.metadata?.handle ?? c.author?.displayName ?? null,
+          })),
         };
       })
     );
