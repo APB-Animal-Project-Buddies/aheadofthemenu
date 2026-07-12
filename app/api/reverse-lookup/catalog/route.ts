@@ -26,11 +26,14 @@ type Row = {
     created_by_user: { displayName: string | null; metadata: any } | null;
     votes: Array<{ user_id: string; value: number; voter_kind: string }>;
     photos: Array<{ id: string; file_id: string; caption: string | null; uploader_id: string | null }>;
-    comments: Array<{ id: string; body: string; created_at: string; author: { displayName: string | null; metadata: any } | null }>;
+    comments: Array<{ id: string; body: string; created_at: string; author: { displayName: string | null; metadata: any } | null; likes?: Array<{ user_id: string }> }>;
   }>;
 };
 
-const CATALOG_QUERY = `query ($city: String!) {
+// `likes` on comments only exists once the comment-likes migration is applied.
+// GET tries with it, then falls back without it, so the catalog never 502s
+// during the migration window (likes just read as 0 until then).
+const catalogQuery = (withLikes: boolean) => `query ($city: String!) {
   restaurants(where: { city: { _eq: $city } }, order_by: { name: asc }) {
     id name website instagram facebook description cuisines verified
     locations(order_by: { created_at: asc }) { id address neighborhood phone }
@@ -39,8 +42,9 @@ const CATALOG_QUERY = `query ($city: String!) {
       created_by_user { displayName metadata }
       votes { user_id value voter_kind }
       photos(order_by: { created_at: asc }) { id file_id caption uploader_id }
-      comments(where: { visibility: { _eq: "public" } }, order_by: { created_at: asc }, limit: 20) {
+      comments(where: { visibility: { _eq: "public" } }, order_by: { created_at: desc }, limit: 20) {
         id body created_at author { displayName metadata }
+        ${withLikes ? "likes { user_id }" : ""}
       }
     }
   }
@@ -52,9 +56,14 @@ export async function GET(request: NextRequest) {
   const caller = verifyNhostJwt(token);
 
   try {
-    const res = await graphql<{ restaurants: Row[] }>(
-      CATALOG_QUERY, { useAdminSecret: true, variables: { city } }
+    let res = await graphql<{ restaurants: Row[] }>(
+      catalogQuery(true), { useAdminSecret: true, variables: { city } }
     );
+    if (res.errors?.length) {
+      res = await graphql<{ restaurants: Row[] }>(
+        catalogQuery(false), { useAdminSecret: true, variables: { city } }
+      );
+    }
     if (res.errors?.length) throw new Error(res.errors[0].message);
 
     const restaurants = (res.data?.restaurants ?? []).map((r) => ({
@@ -89,6 +98,8 @@ export async function GET(request: NextRequest) {
           comments: (d.comments ?? []).map((c) => ({
             id: c.id, body: c.body, createdAt: c.created_at,
             author: c.author?.metadata?.handle ?? c.author?.displayName ?? null,
+            likeCount: (c.likes ?? []).length,
+            likedByMe: caller ? (c.likes ?? []).some((l) => l.user_id === caller.userId) : false,
           })),
         };
       })
