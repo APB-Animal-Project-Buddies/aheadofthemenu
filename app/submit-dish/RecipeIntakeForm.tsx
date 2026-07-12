@@ -14,6 +14,7 @@ import { SPECIAL_PRODUCT_OPTIONS } from "@/lib/special-products";
 import { useCreatorsStore } from "@/app/stores/creators";
 import { IngredientsSection } from "./sections/IngredientsSection";
 import { StepsSection } from "./sections/StepsSection";
+import { VideoEmbedsSection } from "./sections/VideoEmbedsSection";
 import { RECIPE_FORM_DEFAULTS, type RecipeFormValues } from "./types";
 import { adminHeaders } from "@/lib/admin-client";
 import { useAuth } from "@/components/AuthProvider";
@@ -99,6 +100,7 @@ export function RecipeIntakeForm(
       // JSON.stringify, and the propose flow merges the body over the existing
       // recipe — an absent key reads as "unchanged" and resurrects the old photo.
       image: cover ? cover.url : null,
+      videoEmbeds: v.videoEmbeds,
       cuisines: v.cuisines,
       dishType: v.dishType,
       tags: v.tags,
@@ -117,6 +119,7 @@ export function RecipeIntakeForm(
             unit: r.unit,
             ...(g.section.trim() ? { section: g.section.trim() } : {}),
             ...(r.note?.trim() ? { note: r.note.trim() } : {}),
+            ...(r.optional ? { optional: true } : {}),
             ...(r.alternatives.length
               ? {
                   alternatives: r.alternatives
@@ -140,6 +143,7 @@ export function RecipeIntakeForm(
       prepTime: v.prepTime,
       cookTime: v.cookTime,
       allergens: v.allergens,
+      possibleAllergens: v.possibleAllergens,
       resourceLink: v.resourceLink,
       originalCreator: v.originalCreator,
       notes: v.notes,
@@ -302,6 +306,7 @@ export function RecipeIntakeForm(
 
         <IngredientsSection />
         <StepsSection />
+        <VideoEmbedsSection />
 
         {/* Details */}
         <Field
@@ -323,8 +328,16 @@ export function RecipeIntakeForm(
         <Field label="Cost to make (1 person, $)">
           <Input className="mt-2" type="number" step="any" placeholder="e.g. 3.50" {...register("cost")} />
         </Field>
-        <Field label="Allergens">
+        <Field label="Allergens" hint="always present in this recipe">
           <Controller control={control} name="allergens" render={({ field }) => (
+            <ChipGroup value={field.value} onChange={field.onChange} options={ALLERGENS} />
+          )} />
+        </Field>
+        <Field
+          label="Possible allergens"
+          hint="only if you add an optional ingredient, or depending on a brand — shown as “may contain”"
+        >
+          <Controller control={control} name="possibleAllergens" render={({ field }) => (
             <ChipGroup value={field.value} onChange={field.onChange} options={ALLERGENS} />
           )} />
         </Field>

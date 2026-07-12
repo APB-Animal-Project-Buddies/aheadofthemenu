@@ -26,6 +26,11 @@ type Instance = {
   active_until: string;
   created_at: string;
   allergens: string[] | null;
+  chef_type: string | null;
+  event_context: string | null;
+  notes: string | null;
+  substitutions: unknown[] | null;
+  visibility: string | null;
 };
 type Dish = { id: number; dish_name: string; dish_data: Record<string, unknown> | null };
 
@@ -54,7 +59,7 @@ export async function GET(request: NextRequest) {
          review_instance(
            where: { author_id: { _eq: $uid } }
            order_by: { timestamp: desc }
-         ) { id dish_id name difficulty active_until created_at: timestamp allergens }
+         ) { id dish_id name difficulty active_until created_at: timestamp allergens chef_type event_context notes substitutions visibility }
        }`,
       { useAdminSecret: true, variables: { uid: user.id } }
     );
@@ -99,6 +104,12 @@ export async function GET(request: NextRequest) {
         // Quick description — truncated.
         description: desc && desc.length > 160 ? `${desc.slice(0, 160).trimEnd()}…` : desc,
         originalCreator: cleanStr(data?.originalCreator),
+        // Full instance detail — surfaced in the owner's past-meal detail modal.
+        chefType: cleanStr(i.chef_type),
+        eventContext: cleanStr(i.event_context),
+        notes: cleanStr(i.notes),
+        substitutions: Array.isArray(i.substitutions) ? i.substitutions : [],
+        visibility: cleanStr(i.visibility),
         // Prefer the instance's own allergens (the cook's swaps can change
         // them); fall back to the base dish's only when the instance has none.
         allergens: (() => {
@@ -161,5 +172,57 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ ok }, { status: ok ? 200 : 404 });
   } catch {
     return NextResponse.json({ error: "Couldn't deactivate" }, { status: 502 });
+  }
+}
+
+/**
+ * DELETE /api/active-dishes  { code }   (Bearer access token)
+ *
+ * Permanently removes one of the caller's own review instances (a "past meal")
+ * and its shareable /s/{code} link. Unlike the deactivate POST — which trusts an
+ * unverified X-User-Id header — a destructive delete requires a signature-
+ * verified access token, and the mutation is additionally scoped to
+ * author_id = caller so a forged code can't delete someone else's instance.
+ *
+ * Reviews are dish-scoped ({ dish_id, review_data }), not tied to the instance,
+ * so any reviews already left survive on the dish. Deleting only drops this
+ * cook's logged attempt and its review link.
+ */
+export async function DELETE(request: NextRequest) {
+  const caller = verifyNhostJwt(bearerToken(request.headers.get("authorization")));
+  if (!caller) return NextResponse.json({ error: "Not signed in" }, { status: 401 });
+
+  const body = await request.json().catch(() => ({}));
+  const code = String(body?.code ?? "").trim();
+  if (!code) return NextResponse.json({ error: "Missing code" }, { status: 400 });
+
+  try {
+    // Owner-scoped: the where clause requires the row's author_id to match the
+    // verified caller, so ownership is enforced by the query itself.
+    const del = await graphql<{ delete_review_instance: { affected_rows: number } }>(
+      `mutation ($code: bpchar!, $uid: uuid!) {
+         delete_review_instance(where: { id: { _eq: $code }, author_id: { _eq: $uid } }) { affected_rows }
+       }`,
+      { useAdminSecret: true, variables: { code, uid: caller.userId } }
+    );
+    if (del.errors?.length) throw new Error(del.errors[0].message);
+    if ((del.data?.delete_review_instance?.affected_rows ?? 0) === 0) {
+      // Nothing matched: not the owner, or already gone.
+      return NextResponse.json({ error: "Not found" }, { status: 404 });
+    }
+
+    // Best-effort: drop the matching share link so /s/{code} stops resolving.
+    // The instance is already gone; a lingering short_url is harmless, so don't
+    // fail the request if this cleanup errors.
+    await graphql(
+      `mutation ($code: String!) {
+         delete_short_urls(where: { short_code: { _eq: $code }, target_type: { _eq: "dish_review" } }) { affected_rows }
+       }`,
+      { useAdminSecret: true, variables: { code } }
+    ).catch(() => {});
+
+    return NextResponse.json({ ok: true });
+  } catch {
+    return NextResponse.json({ error: "Couldn't delete" }, { status: 502 });
   }
 }

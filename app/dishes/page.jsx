@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useMemo, useRef } from "react";
+import { useRouter } from "next/navigation";
 import { useDishes } from "@/app/hooks/useDishes";
 import { useCreatorsStore } from "@/app/stores/creators";
 import './styles.css';
@@ -171,6 +172,16 @@ export default function DishesPage() {
     setMenu(prev => prev.filter(it => it.id !== id));
   }
 
+  const router = useRouter();
+
+  // Clicking a dish card navigates straight to the full dish page. The DishModal
+  // popup is dropped for now — it stays defined and wired to the #r= deep-link
+  // below, so restoring it is just swapping this back to `openDish`.
+  function goToDish(dish) {
+    if (!dish?._id) return;
+    router.push(`/dishes/${dish._id}`);
+  }
+
   function openDish(dish) {
     setModalDish(dish);
     setModalOpen(true);
@@ -308,7 +319,7 @@ export default function DishesPage() {
                   dish={r}
                   inMenu={menu.some(it => it.id === r.id)}
                   onAddToMenu={addToMenu}
-                  onOpen={openDish}
+                  onOpen={goToDish}
                 />
               )
             ))}

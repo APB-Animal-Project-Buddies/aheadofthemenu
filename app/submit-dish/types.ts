@@ -11,7 +11,7 @@ export type Alternative = { label: string; note: string; items: IngredientLine[]
 
 // A top-level ingredient adds an optional free-text note ("finely diced", "room
 // temperature") and its nested alternatives.
-export type Ingredient = IngredientLine & { note: string; alternatives: Alternative[] };
+export type Ingredient = IngredientLine & { note: string; optional?: boolean; alternatives: Alternative[] };
 
 // The form nests rows under named sections for editing. On submit this flattens
 // to the stored flat `ingredients` array (each row stamped with its section);
@@ -19,6 +19,9 @@ export type Ingredient = IngredientLine & { note: string; alternatives: Alternat
 export type IngredientGroup = { section: string; items: Ingredient[] };
 
 export type Step = { text: string };
+
+// A pasted YouTube/TikTok video link, normalized on entry (see lib/video-embeds).
+export type VideoEmbed = { platform: "youtube" | "tiktok"; id: string; url: string };
 
 export type RecipeFormValues = {
   title: string;
@@ -39,7 +42,11 @@ export type RecipeFormValues = {
   prepTime: string;
   cookTime: string;
   allergens: string[];
+  /** "May contain" allergens — brand/optional-ingredient-dependent, a separate tier. */
+  possibleAllergens: string[];
   resourceLink: string;
+  /** Pasted YouTube/TikTok links, rendered as embeds between ingredients and steps. */
+  videoEmbeds: VideoEmbed[];
   originalCreator: string;
   notes: string;
   name: string;
@@ -53,7 +60,7 @@ export type RecipeFormValues = {
 
 // Factory helpers so empty rows/alternatives are created consistently.
 export const emptyLine = (): IngredientLine => ({ name: "", quantity: "", unit: "" });
-export const emptyIngredient = (): Ingredient => ({ name: "", quantity: "", unit: "", note: "", alternatives: [] });
+export const emptyIngredient = (): Ingredient => ({ name: "", quantity: "", unit: "", note: "", optional: false, alternatives: [] });
 export const emptyAlternative = (): Alternative => ({ label: "", note: "", items: [emptyLine()] });
 
 export const RECIPE_FORM_DEFAULTS: RecipeFormValues = {
@@ -62,7 +69,7 @@ export const RECIPE_FORM_DEFAULTS: RecipeFormValues = {
   // exactly like before (no section header shown until a 2nd section is added).
   ingredientGroups: [{ section: "", items: Array.from({ length: 5 }, emptyIngredient) }],
   steps: Array.from({ length: 3 }, () => ({ text: "" })),
-  specialProducts: [], specialEquipment: "", cost: "", servings: "", prepTime: "", cookTime: "", allergens: [],
-  resourceLink: "", originalCreator: "", notes: "",
+  specialProducts: [], specialEquipment: "", cost: "", servings: "", prepTime: "", cookTime: "", allergens: [], possibleAllergens: [],
+  resourceLink: "", videoEmbeds: [], originalCreator: "", notes: "",
   name: "", email: "", triedBy: [], feedback: "", reviewCount: "", rating: "", ratingScale: "5",
 };

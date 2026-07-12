@@ -49,7 +49,8 @@ export function normalizeStoredIngredients(raw: unknown): IngredientGroup[] {
       ? r.alternatives.map(toAlternative).filter((a: Alternative) => a.items.some((x) => x.name.trim()) || a.label.trim() || a.note.trim())
       : [];
     const note = r && typeof r.note === "string" ? r.note : "";
-    const ingredient: Ingredient = { ...line, note, alternatives };
+    const optional = r?.optional === true;
+    const ingredient: Ingredient = { ...line, note, optional, alternatives };
 
     let g = bySection.get(section);
     if (!g) {
@@ -89,7 +90,9 @@ export function dishToFormValues(dishData: any): RecipeFormValues {
     prepTime: d.prepTime ?? "",
     cookTime: d.cookTime ?? "",
     allergens: arr(d.allergens),
+    possibleAllergens: arr(d.possibleAllergens),
     resourceLink: d.resourceLink ?? "",
+    videoEmbeds: Array.isArray(d.videoEmbeds) ? d.videoEmbeds : [],
     originalCreator: d.originalCreator ?? "",
     notes: d.notes ?? "",
     name: d.submittedBy?.name ?? "",

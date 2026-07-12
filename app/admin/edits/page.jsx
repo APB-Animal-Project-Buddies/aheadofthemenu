@@ -2,34 +2,7 @@
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { getAdminSecret, setAdminSecret, clearAdminSecret, adminHeaders } from "@/lib/admin-client";
-
-// Top-level dish_data fields shown in the diff, in display order.
-const FIELDS = [
-  ["title", "Title"], ["description", "Description"], ["cuisines", "Cuisines"],
-  ["dishType", "Dish type"], ["tags", "Tags"], ["ingredients", "Ingredients"],
-  ["steps", "Steps"], ["specialProducts", "Special products"], ["specialEquipment", "Special equipment"],
-  ["cost", "Cost"], ["servings", "Servings"], ["prepTime", "Prep time"], ["cookTime", "Cook time"], ["allergens", "Allergens"],
-  ["resourceLink", "Resource link"], ["originalCreator", "Original creator"], ["notes", "Notes"], ["image", "Cover image"],
-];
-
-const changed = (a, b) => JSON.stringify(a ?? null) !== JSON.stringify(b ?? null);
-
-function fmt(key, val) {
-  if (val === undefined || val === null || val === "") return "—";
-  if (key === "ingredients") {
-    return (val || [])
-      .map((i) => {
-        const line = [i.quantity, (i.unit || "").replace(/_/g, " "), i.name].filter(Boolean).join(" ");
-        const sec = i.section ? `[${i.section}] ` : "";
-        const alts = (i.alternatives || []).length ? ` (+${i.alternatives.length} alt)` : "";
-        return sec + line + alts;
-      })
-      .join("\n");
-  }
-  if (key === "steps") return (val || []).map((s, n) => `${n + 1}. ${s}`).join("\n");
-  if (Array.isArray(val)) return val.join(", ");
-  return String(val);
-}
+import { diffDishFields, formatDishField } from "@/lib/dish-edit-diff";
 
 export default function AdminEditsPage() {
   const [secret, setSecret] = useState("");
@@ -120,7 +93,7 @@ export default function AdminEditsPage() {
         {edits.map((e) => {
           const cur = e.dish?.dish_data || {};
           const prop = e.proposed_data || {};
-          const changes = FIELDS.filter(([k]) => changed(cur[k], prop[k]));
+          const changes = diffDishFields(cur, prop);
           return (
             <div key={e.id} className="rounded-[16px] border border-neutral-200 p-5">
               <div className="flex items-start justify-between gap-3">
@@ -162,11 +135,11 @@ export default function AdminEditsPage() {
                         <div className="text-xs font-semibold uppercase tracking-wide text-neutral-500">{label}</div>
                         <div className="rounded-md bg-red-50 p-2 text-xs text-neutral-700">
                           <div className="mb-1 font-medium text-red-700">before</div>
-                          <div className="whitespace-pre-line">{fmt(k, cur[k])}</div>
+                          <div className="whitespace-pre-line">{formatDishField(k,cur[k])}</div>
                         </div>
                         <div className="rounded-md bg-green-50 p-2 text-xs text-neutral-700">
                           <div className="mb-1 font-medium text-green-700">after</div>
-                          <div className="whitespace-pre-line">{fmt(k, prop[k])}</div>
+                          <div className="whitespace-pre-line">{formatDishField(k,prop[k])}</div>
                         </div>
                       </div>
                     ))}

@@ -9,6 +9,8 @@ import { graphql } from "@/lib/nhost";
 import { TRIED_BY_LABELS } from "@/lib/dishes";
 import { DishActions } from "./DishActions";
 import { DishGallery } from "@/components/DishGallery";
+import { VideoEmbeds } from "@/components/VideoEmbeds";
+import { tikTokOEmbed } from "@/lib/video-embeds";
 
 export const dynamic = "force-dynamic";
 
@@ -87,6 +89,7 @@ function Ingredients({ ingredients }) {
             {g.items.map((ing, ii) => (
               <li key={ii}>
                 <span className="text-sm text-neutral-800">{lineText(ing)}</span>
+                {ing.optional ? <span className="ml-1.5 text-xs font-medium text-amber-600">(optional)</span> : null}
                 {ing.note ? <span className="ml-2 text-xs italic text-neutral-500">— {ing.note}</span> : null}
                 {Array.isArray(ing.alternatives) && ing.alternatives.length > 0 ? (
                   <ul className="mt-1.5 flex flex-col gap-1">
@@ -157,6 +160,29 @@ async function getPublicInstances(dishId) {
   }
 }
 
+// Resolve display data for the recipe's video embeds. YouTube posters are
+// deterministic (built client-side); TikTok needs a best-effort oEmbed fetch for
+// a real thumbnail — cached a day, and a failure just falls back to a branded
+// card (thumbnail: null) so a slow/blocked oEmbed never breaks the page.
+async function resolveVideoEmbeds(embeds) {
+  if (!Array.isArray(embeds) || embeds.length === 0) return [];
+  return Promise.all(
+    embeds.map(async (e) => {
+      if (e?.platform !== "tiktok") return { ...e, thumbnail: null };
+      try {
+        const res = await fetch(tikTokOEmbed(e.url), { next: { revalidate: 86400 } });
+        if (res.ok) {
+          const j = await res.json();
+          return { ...e, thumbnail: typeof j?.thumbnail_url === "string" ? j.thumbnail_url : null };
+        }
+      } catch {
+        /* fall back to the branded card */
+      }
+      return { ...e, thumbnail: null };
+    })
+  );
+}
+
 export default async function DishPage({ params, searchParams }) {
   const row = await getDish(params.id);
   if (!row) notFound();
@@ -179,6 +205,7 @@ export default async function DishPage({ params, searchParams }) {
   const v = d.validation || {};
   const created = row.created_at ? new Date(row.created_at).toLocaleDateString() : null;
   const has = (a) => Array.isArray(a) && a.length > 0;
+  const videoEmbeds = await resolveVideoEmbeds(d.videoEmbeds);
 
   return (
     <main className="mx-auto max-w-3xl px-4 pb-36 pt-10">
@@ -264,6 +291,24 @@ export default async function DishPage({ params, searchParams }) {
         </div>
       ) : null}
 
+      {/* Possible allergens — the "may contain" tier: brand- or optional-ingredient-
+          dependent (e.g. nuts only if you add the optional almonds). */}
+      {has(d.possibleAllergens) ? (
+        <div className="mt-4 rounded-[16px] border-2 border-dashed border-amber-300 bg-amber-50 p-5">
+          <p className="text-sm font-bold uppercase tracking-wide text-amber-700">
+            Possible allergen{d.possibleAllergens.length > 1 ? "s" : ""} — may contain
+          </p>
+          <p className="mt-1 text-xs text-amber-700/80">Depends on optional ingredients or the brands you use.</p>
+          <div className="mt-3 flex flex-wrap gap-2.5">
+            {d.possibleAllergens.map((a) => (
+              <span key={`pal-${a}`} className="inline-flex items-center rounded-full border border-amber-400 bg-amber-100 px-4 py-1.5 text-sm font-semibold uppercase tracking-wide text-amber-800">
+                {a}
+              </span>
+            ))}
+          </div>
+        </div>
+      ) : null}
+
       {/* Meta strip */}
       {(d.servings != null || d.prepTime || d.cookTime || d.cost != null || d.originalCreator || d.resourceLink) ? (
         <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2 rounded-[16px] border border-neutral-200 bg-white/60 px-5 py-4 text-sm">
@@ -300,6 +345,14 @@ export default async function DishPage({ params, searchParams }) {
       {has(d.ingredients) ? (
         <Section title="Ingredients">
           <Ingredients ingredients={d.ingredients} />
+        </Section>
+      ) : null}
+
+      {/* Watch — user-added YouTube/TikTok videos, sitting between the
+          ingredients you gather and the method you follow. */}
+      {videoEmbeds.length ? (
+        <Section title="Watch">
+          <VideoEmbeds embeds={videoEmbeds} />
         </Section>
       ) : null}
 

@@ -1,3 +1,5 @@
+import { sanitizeVideoEmbeds } from "./video-embeds";
+
 export const CUISINES = ["american","italian","mexican","indian","chinese","thai","japanese","korean","vietnamese","mediterranean","middle-eastern","french","ethiopian","other"] as const;
 export const DISH_TYPES = ["main","side","appetizer","breakfast","soup","salad","dessert","snack","drink","sauce","other"] as const;
 export const ALLERGENS = ["gluten","nuts","peanuts","soy","dairy","eggs","sesame","shellfish","fish","coconut"] as const;
@@ -135,6 +137,11 @@ export function buildDishData(input: any): DishData {
       const ingNote = str(r?.note, MAX_SHORT);
       if (ingNote) row.note = ingNote;
 
+      // Optional-ingredient flag — marks a skippable ingredient (a garnish, an
+      // add-in, "to taste"). Drives the recipe's "possible allergens" tier and
+      // renders as "(optional)" on the dish page. Omitted when false (back-compat).
+      if (r?.optional === true) row.optional = true;
+
       // Optional `alternatives` — substitutions for THIS ingredient. Each alternative
       // is a group of one-or-more lines (a swap can be several ingredients, e.g.
       // 1 egg => 1 tbsp flax + 3 tbsp water) with an optional label + free-text note.
@@ -172,8 +179,21 @@ export function buildDishData(input: any): DishData {
 
   const allergens = strArray(input?.allergens, 30, MAX_SHORT); if (allergens.length) d.allergens = allergens;
 
+  // "May contain" allergens — a second tier for brand/optional-ingredient-dependent
+  // allergens (e.g. nuts only if you add the optional almonds). Enum-filtered and
+  // deduped against the definite list (definite wins). Rides in dish_data (no migration).
+  const possibleAllergens = strArray(input?.possibleAllergens, 30, MAX_SHORT)
+    .filter((a) => (ALLERGENS as readonly string[]).includes(a))
+    .filter((a) => !allergens.includes(a));
+  if (possibleAllergens.length) d.possibleAllergens = possibleAllergens;
+
   const resourceLink = str(input?.resourceLink, MAX_SHORT);
   if (resourceLink) { if (!URL_RE.test(resourceLink)) throw new Error("Resource link must be a valid URL"); d.resourceLink = resourceLink; }
+
+  // Embedded YouTube/TikTok links — re-parsed to a canonical { platform, id, url }
+  // so stored data can never reference an arbitrary embed source.
+  const videoEmbeds = sanitizeVideoEmbeds(input?.videoEmbeds);
+  if (videoEmbeds.length) d.videoEmbeds = videoEmbeds;
 
   // Cover image URL (uploaded to storage by the form; rendered by dish cards).
   const image = str(input?.image, MAX_SHORT);

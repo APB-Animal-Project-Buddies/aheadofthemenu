@@ -95,6 +95,9 @@ function CreateReviewLinkForm({ dish }: { dish: DishReview }) {
     const dishTitle = dish.dish_data?.title || dish.dish_name || "this dish";
 
     const dishAllergens = (dish.dish_data?.allergens ?? []) as string[];
+    // "May contain" allergens the recipe flagged — the cook must explicitly confirm
+    // or deny each ("did you add the optional almonds?") before generating the link.
+    const possibleAllergens = (dish.dish_data?.possibleAllergens ?? []) as string[];
 
     // The dish's existing per-ingredient alternatives, flattened into pickable swap
     // "groups" (a swap can be several ingredients, e.g. seitan = gluten + broth).
@@ -134,6 +137,10 @@ function CreateReviewLinkForm({ dish }: { dish: DishReview }) {
     const [reviewCode, setReviewCode] = useState<string | null>(null);
     const [reviewInline, setReviewInline] = useState(true); // review your own dish inline; on by default
     const [copied, setCopied] = useState(false);
+    // allergen -> true (contains) / false (does not). Every possible allergen must be
+    // resolved before submit — no silent default (safety-first).
+    const [confirmedPossible, setConfirmedPossible] = useState<Record<string, boolean>>({});
+    const allPossibleResolved = possibleAllergens.every((a) => a in confirmedPossible);
 
     const update = (patch: Partial<typeof formData>) => setFormData(prev => ({ ...prev, ...patch }));
 
@@ -155,6 +162,11 @@ function CreateReviewLinkForm({ dish }: { dish: DishReview }) {
     // Generating a link also sets the dish "active" for 24h — confirm first.
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+        if (possibleAllergens.length > 0 && !allPossibleResolved) {
+            setError("Please confirm each possible allergen (contains / doesn't) before generating the link.");
+            setStatus("error");
+            return;
+        }
         setShowConfirm(true);
     };
 
@@ -162,6 +174,13 @@ function CreateReviewLinkForm({ dish }: { dish: DishReview }) {
         setShowConfirm(false);
         setStatus("submitting");
         setError(null);
+        // The instance's resolved allergen profile: definite + confirmed "possible"
+        // allergens (+ substitution edits when substituted). Deduped.
+        const confirmedPossibleList = possibleAllergens.filter((a) => confirmedPossible[a] === true);
+        const instanceAllergens = Array.from(new Set([
+            ...(formData.substituted ? formData.allergens : (possibleAllergens.length ? dishAllergens : [])),
+            ...confirmedPossibleList,
+        ]));
         try {
             const res = await fetch("/api/review-instances", {
                 method: "POST",
@@ -175,7 +194,7 @@ function CreateReviewLinkForm({ dish }: { dish: DishReview }) {
                     notes: formData.notes.trim() || null,
                     substituted: formData.substituted,
                     public: formData.publishPublic,
-                    allergens: formData.substituted ? formData.allergens : [],
+                    allergens: instanceAllergens,
                     substitutions: formData.substituted
                         ? [
                               ...allAlts
@@ -347,6 +366,50 @@ function CreateReviewLinkForm({ dish }: { dish: DishReview }) {
                 />
             </div>
 
+            {possibleAllergens.length > 0 ? (
+                <div className="rounded-[16px] border-2 border-amber-300 bg-amber-50 p-4">
+                    <p className="text-sm font-bold text-amber-800">
+                        Confirm possible allergens <span className="text-red-600">*</span>
+                    </p>
+                    <p className="mt-1 text-xs text-amber-700/80">
+                        This recipe <em>may</em> contain these depending on optional ingredients. Tell us what
+                        <strong> your</strong> version actually has — required for each.
+                    </p>
+                    <div className="mt-3 flex flex-col gap-2">
+                        {possibleAllergens.map((a) => {
+                            const v = confirmedPossible[a];
+                            return (
+                                <div key={a} className="flex items-center justify-between gap-3 rounded-lg bg-white px-3 py-2">
+                                    <span className="text-sm font-medium capitalize text-neutral-800">{a}</span>
+                                    <div className="flex gap-2">
+                                        <button
+                                            type="button"
+                                            onClick={() => setConfirmedPossible((p) => ({ ...p, [a]: true }))}
+                                            className={cn(
+                                                "rounded-full px-3 py-1 text-xs font-semibold transition",
+                                                v === true ? "bg-red-600 text-white" : "border border-neutral-300 text-neutral-600 hover:border-red-300"
+                                            )}
+                                        >
+                                            Contains
+                                        </button>
+                                        <button
+                                            type="button"
+                                            onClick={() => setConfirmedPossible((p) => ({ ...p, [a]: false }))}
+                                            className={cn(
+                                                "rounded-full px-3 py-1 text-xs font-semibold transition",
+                                                v === false ? "bg-apb text-white" : "border border-neutral-300 text-neutral-600 hover:border-apb/40"
+                                            )}
+                                        >
+                                            No {a}
+                                        </button>
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+                </div>
+            ) : null}
+
             <div>
                 <button
                     type="button"
@@ -472,7 +535,10 @@ function CreateReviewLinkForm({ dish }: { dish: DishReview }) {
                 <p className="text-sm text-red-600">{error}</p>
             ) : null}
 
-            <Button type="submit" disabled={status === "submitting" || !formData.name.trim()}>
+            <Button
+                type="submit"
+                disabled={status === "submitting" || !formData.name.trim() || (possibleAllergens.length > 0 && !allPossibleResolved)}
+            >
                 {status === "submitting" ? "Creating…" : "Generate review link"}
             </Button>
 

@@ -100,7 +100,10 @@ export async function POST(request: Request) {
     // Substitutions can change the allergen profile — capture whether the cook
     // substituted and the allergens of their version (reprompted in the UI).
     const substituted = body?.substituted === true;
-    const allergens: string[] = substituted && Array.isArray(body?.allergens)
+    // Per-instance allergen profile — sent when the cook substituted OR when they
+    // resolved the recipe's "possible" allergens (explicit contains/doesn't). Accept
+    // whenever provided, not only on substitution.
+    const allergens: string[] = Array.isArray(body?.allergens)
       ? body.allergens.filter((a: unknown) => typeof a === "string").map((a: string) => a.trim()).filter(Boolean).slice(0, 30)
       : [];
     const substitutions = substituted && Array.isArray(body?.substitutions)

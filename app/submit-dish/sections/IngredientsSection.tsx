@@ -29,6 +29,22 @@ function IngredientNote({ namePrefix }: { namePrefix: string }) {
   );
 }
 
+// Marks a skippable ingredient (garnish, add-in). Optional ingredients are why a
+// recipe may carry a "possible allergen" — e.g. nuts only if you add the almonds.
+function OptionalToggle({ namePrefix }: { namePrefix: string }) {
+  const { register } = useFormContext<RecipeFormValues>();
+  return (
+    <label className="mt-1 ml-2 inline-flex cursor-pointer items-center gap-1.5 text-xs text-neutral-500">
+      <input
+        type="checkbox"
+        className="h-3.5 w-3.5 rounded border-neutral-300 accent-apb"
+        {...register(`${namePrefix}.optional` as any)}
+      />
+      optional
+    </label>
+  );
+}
+
 export function IngredientsSection() {
   const { control } = useFormContext<RecipeFormValues>();
   const { fields, append, remove } = useFieldArray({ control, name: "ingredientGroups" });
@@ -119,7 +135,10 @@ function SectionGroup({
                 ×
               </button>
             </div>
-            <IngredientNote namePrefix={`ingredientGroups.${groupIndex}.items.${i}`} />
+            <span className="flex flex-wrap items-center">
+              <IngredientNote namePrefix={`ingredientGroups.${groupIndex}.items.${i}`} />
+              <OptionalToggle namePrefix={`ingredientGroups.${groupIndex}.items.${i}`} />
+            </span>
             <AlternativesEditor namePrefix={`ingredientGroups.${groupIndex}.items.${i}`} />
           </div>
         ))}

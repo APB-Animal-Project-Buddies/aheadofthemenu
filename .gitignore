@@ -68,3 +68,6 @@ docs/superpowers/
 
 # Git worktrees
 .worktrees/
+
+# Local scratch notes (not for the repo)
+notes/

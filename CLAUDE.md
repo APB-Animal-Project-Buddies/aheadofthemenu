@@ -9,6 +9,24 @@ Default to using Bun instead of Node.js.
 - Use `bunx <package> <command>` instead of `npx <package> <command>`
 - Bun automatically loads .env, so don't use dotenv.
 
+## Dishes — edit-detection invariant
+
+Recipes are stored as a `dish_data` JSONB blob built by `buildDishData` (`lib/dishes.ts`).
+
+**Whenever you add a new field to a dish or an ingredient (e.g. `videoEmbeds`,
+`possibleAllergens`, an ingredient `optional` flag), you MUST also add it to the
+edit-detection algorithm — `DISH_EDIT_FIELDS` in `lib/dish-edit-diff.ts`.** This is part
+of "adding a field," not an afterthought. If you skip it, a suggested edit (propose →
+admin review) that changes ONLY that field diffs as *"No field differences from the current
+recipe"* and silently looks like a no-op.
+
+Full checklist when adding a dish/ingredient field:
+1. `buildDishData` — validate + persist it (`lib/dishes.ts`)
+2. **`DISH_EDIT_FIELDS` — `lib/dish-edit-diff.ts`** ← the easy-to-forget one
+3. Form: type + default (`app/submit-dish/types.ts`), input control, and the submit body (`RecipeIntakeForm.tsx`)
+4. Edit-mode prefill — `app/submit-dish/ingredient-format.ts`
+5. Dish-page render — `app/dishes/[id]/page.jsx`
+
 ## APIs
 
 - `Bun.serve()` supports WebSockets, HTTPS, and routes. Don't use `express`.
