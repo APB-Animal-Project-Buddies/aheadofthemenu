@@ -16,14 +16,14 @@ type Tab = { href: string; label: string };
 const CONSUMER_TABS: Tab[] = [
   { href: "/dishes", label: "Dishes" },
   { href: "/top-alternatives", label: "Top Alternatives" },
-  { href: "/reverse-lookup", label: "Reverse Lookup" },
+  { href: "/eat-this", label: "Eat This!" },
 ];
 const BUSINESS_TABS: Tab[] = [
   { href: "/menus", label: "Menus" },
   { href: "/recipes", label: "Recipes" },
   { href: "/top-alternatives", label: "Top Alternatives" },
   { href: "/tips-and-tricks", label: "Tips & Tricks" },
-  { href: "/reverse-lookup", label: "Reverse Lookup" },
+  { href: "/eat-this", label: "Eat This!" },
 ];
 
 // Some sections belong to one mode regardless of login: a signed-out visitor on a
@@ -52,7 +52,7 @@ const KNOWN_SECTIONS = new Set([
   "dishes",
   "top-alternatives",
   "tips-and-tricks",
-  "reverse-lookup",
+  "eat-this",
   "reviews",
   "submit-dish",
   "admin",

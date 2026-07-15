@@ -59,7 +59,7 @@ export function VoteWidget({ myVote, onVote }: {
       </button>
       {showGate && (
         <span className="text-xs text-neutral-600">
-          <a className="font-semibold text-apb underline" href="/login?next=/reverse-lookup">Sign in</a> to vote — it takes a minute.
+          <a className="font-semibold text-apb underline" href="/login?next=/eat-this">Sign in</a> to vote — it takes a minute.
         </span>
       )}
     </div>

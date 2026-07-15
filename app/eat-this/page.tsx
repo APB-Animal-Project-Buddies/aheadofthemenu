@@ -207,7 +207,7 @@ export default function ReverseLookupPage() {
       <header className="pt-8">
         <div className="text-[11px] font-bold tracking-wide text-apb">
           <span className="mr-1.5 inline-block h-1.5 w-1.5 rounded-full bg-apb-accent align-middle" />
-          Reverse Lookup · Seattle
+          Eat This! · Seattle
         </div>
         <h1 className="mt-1.5 text-2xl font-bold leading-snug text-neutral-900 sm:text-3xl">
           Tell us what you&rsquo;re craving — we&rsquo;ll tell you{" "}
@@ -251,7 +251,7 @@ export default function ReverseLookupPage() {
           {showAddGate && (
             <div className="absolute right-0 top-full z-40 mt-2 w-60 rounded-xl border border-neutral-200 bg-white p-3 text-xs text-neutral-600 shadow-lg">
               Sign in to add a dish — it takes a minute.{" "}
-              <a className="font-semibold text-apb underline" href="/login?next=/reverse-lookup">Sign in</a>
+              <a className="font-semibold text-apb underline" href="/login?next=/eat-this">Sign in</a>
               <button
                 type="button"
                 onClick={() => setShowAddGate(false)}
@@ -268,7 +268,7 @@ export default function ReverseLookupPage() {
       {sessionExpired && (
         <div className="mt-3 rounded-xl bg-amber-50 px-4 py-2.5 text-sm text-amber-800">
           Session expired, sign in again —{" "}
-          <a className="font-semibold underline" href="/login?next=/reverse-lookup">sign in</a> to keep voting.
+          <a className="font-semibold underline" href="/login?next=/eat-this">sign in</a> to keep voting.
         </div>
       )}
 

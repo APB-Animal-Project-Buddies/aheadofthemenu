@@ -205,7 +205,7 @@ export function DishComments({ dishId, comments: initial }: { dishId: string; co
             {error && <p className="text-xs text-red-600">{error}</p>}
             {showGate && (
               <p className="text-xs text-neutral-600">
-                <a className="font-semibold text-apb underline" href="/login?next=/reverse-lookup">Sign in</a> to join the conversation.
+                <a className="font-semibold text-apb underline" href="/login?next=/eat-this">Sign in</a> to join the conversation.
               </p>
             )}
           </div>

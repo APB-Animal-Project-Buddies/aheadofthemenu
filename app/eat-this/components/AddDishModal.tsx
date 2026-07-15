@@ -318,7 +318,7 @@ export function AddDishModal({ open, onClose, restaurants, dishes, initialRestau
           {sessionExpired && (
             <div className="rounded-lg bg-amber-50 px-3 py-2 text-xs text-amber-800">
               Session expired —{" "}
-              <a className="font-semibold underline" href="/login?next=/reverse-lookup">sign in again</a> to add your dish.
+              <a className="font-semibold underline" href="/login?next=/eat-this">sign in again</a> to add your dish.
             </div>
           )}
           {error && <div className="rounded-lg bg-red-50 px-3 py-2 text-xs text-red-700">{error}</div>}
