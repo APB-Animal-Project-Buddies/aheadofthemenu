@@ -52,7 +52,7 @@ export function meterState(t: VoteTotals): MeterState {
   return { state: "scored", pct, votes, tier: tierFor(pct) };
 }
 
-export type VoteRow = { value: number; voter_kind: string; customization?: string | null };
+export type VoteRow = { value: number; voter_kind: string; customizations?: string[] | null };
 export type CohortTotals = { locals: VoteTotals; visitors: VoteTotals; total: number };
 
 function tally(bucket: VoteTotals, value: number) {
@@ -74,10 +74,12 @@ export type CustomizationTotals = Record<string, { locals: VoteTotals; visitors:
 export function aggregateByCustomization(rows: VoteRow[]): CustomizationTotals {
   const out: CustomizationTotals = {};
   for (const r of rows) {
-    const c = r.customization;
-    if (!c) continue; // unspecified votes count toward overall only
-    const entry = out[c] ?? (out[c] = { locals: { up: 0, meh: 0, down: 0 }, visitors: { up: 0, meh: 0, down: 0 } });
-    tally(r.voter_kind === "visitor" ? entry.visitors : entry.locals, r.value);
+    // A vote can be tagged with several customizations; it counts toward each.
+    for (const c of r.customizations ?? []) {
+      if (!c) continue;
+      const entry = out[c] ?? (out[c] = { locals: { up: 0, meh: 0, down: 0 }, visitors: { up: 0, meh: 0, down: 0 } });
+      tally(r.voter_kind === "visitor" ? entry.visitors : entry.locals, r.value);
+    }
   }
   return out;
 }
@@ -129,7 +131,7 @@ export function sortDishCards<T extends ScorableDish>(dishes: T[]): T[] {
   });
 }
 
-export type MyVote = { value: 1 | 0 | -1; isLocal: boolean; customization?: string | null } | null;
+export type MyVote = { value: 1 | 0 | -1; isLocal: boolean; customizations?: string[] } | null;
 export type VotableDish = { locals: VoteTotals; visitors: VoteTotals; myVote: MyVote };
 
 /** Pure optimistic-vote transition: the caller's previous vote leaves its old
@@ -313,16 +315,18 @@ export function validateAddDish(body: any): AddDishInput | { error: string } {
   return { restaurantId, newRestaurant, name, description: str(body?.description, 500) || null, tags, availability, customizations };
 }
 
-export type VoteInput = { value: 1 | 0 | -1 | null; voterKind: VoterKind; customization: string | null };
+export type VoteInput = { value: 1 | 0 | -1 | null; voterKind: VoterKind; customizations: string[] };
 
 export function validateVote(body: any): VoteInput | { error: string } {
   const value = body?.value;
   if (value !== 1 && value !== 0 && value !== -1 && value !== null) {
     return { error: "value must be 1, 0, -1, or null" };
   }
-  const raw = typeof body?.customization === "string" ? body.customization.trim() : "";
-  const customization = raw ? raw.slice(0, 60) : null;
-  return { value, voterKind: body?.isLocal === false ? "visitor" : "local", customization };
+  return {
+    value,
+    voterKind: body?.isLocal === false ? "visitor" : "local",
+    customizations: strList(body?.customizations, 60, 20),
+  };
 }
 
 // --- availability, reports, comments ---------------------------------------

@@ -35,7 +35,7 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
         `mutation ($obj: restaurant_dish_votes_insert_input!) {
            insert_restaurant_dish_votes_one(
              object: $obj,
-             on_conflict: { constraint: restaurant_dish_votes_pkey, update_columns: [value, voter_kind, customization, updated_at] }
+             on_conflict: { constraint: restaurant_dish_votes_pkey, update_columns: [value, voter_kind, customizations, updated_at] }
            ) { dish_id }
          }`,
         {
@@ -43,7 +43,7 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
           variables: {
             obj: {
               dish_id: params.id, user_id: caller.userId, value: input.value,
-              voter_kind: input.voterKind, customization: input.customization, updated_at: new Date().toISOString(),
+              voter_kind: input.voterKind, customizations: input.customizations, updated_at: new Date().toISOString(),
             },
           },
         }
@@ -57,9 +57,9 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
       }
     }
 
-    const totals = await graphql<{ restaurant_dish_votes: Array<{ value: number; voter_kind: string; customization: string | null }> }>(
+    const totals = await graphql<{ restaurant_dish_votes: Array<{ value: number; voter_kind: string; customizations: string[] | null }> }>(
       `query ($dish: uuid!) {
-         restaurant_dish_votes(where: { dish_id: { _eq: $dish } }) { value voter_kind customization }
+         restaurant_dish_votes(where: { dish_id: { _eq: $dish } }) { value voter_kind customizations }
        }`,
       { useAdminSecret: true, variables: { dish: params.id } }
     );
@@ -68,7 +68,7 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
     return NextResponse.json({
       ok: true, locals, visitors,
       byCustomization: aggregateByCustomization(rows),
-      myVote: input.value === null ? null : { value: input.value, isLocal: input.voterKind !== "visitor", customization: input.customization },
+      myVote: input.value === null ? null : { value: input.value, isLocal: input.voterKind !== "visitor", customizations: input.customizations },
     });
   } catch {
     return NextResponse.json({ error: "Couldn't save your vote right now" }, { status: 502 });

@@ -43,7 +43,7 @@ function DetailRow({ label, children }: { label: string; children: React.ReactNo
 
 export function DishCard({ dish, onVote, onChanged }: {
   dish: CatalogDish;
-  onVote: (dishId: string, value: 1 | 0 | -1 | null, isLocal: boolean, customization: string | null) => void;
+  onVote: (dishId: string, value: 1 | 0 | -1 | null, isLocal: boolean, customizations: string[]) => void;
   /** Called after an admin edits or hides this dish, so the page can refetch. */
   onChanged?: () => void;
 }) {
@@ -172,7 +172,7 @@ export function DishCard({ dish, onVote, onChanged }: {
       <VoteWidget
         myVote={dish.myVote}
         customizations={dish.customizations}
-        onVote={(value, isLocal, customization) => onVote(dish.id, value, isLocal, customization)}
+        onVote={(value, isLocal, customizations) => onVote(dish.id, value, isLocal, customizations)}
       />
 
       <DishPhotos dishId={dish.id} photos={dish.photos} />
