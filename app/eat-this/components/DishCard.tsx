@@ -8,7 +8,7 @@
  * community attribution.
  */
 import { useEffect, useState } from "react";
-import type { VoteTotals } from "@/lib/reverse-lookup";
+import type { VoteTotals, CustomizationTotals } from "@/lib/reverse-lookup";
 import { hasAdminSecret, adminHeaders } from "@/lib/admin-client";
 import { YumMeter } from "./YumMeter";
 import { VoteWidget, type MyVote } from "./VoteWidget";
@@ -26,8 +26,11 @@ export type CatalogDish = {
   availability: "permanent" | "seasonal";
   createdAt: string; addedBy: string | null;
   locals: VoteTotals; visitors: VoteTotals; myVote: MyVote;
+  customizations: string[]; byCustomization: CustomizationTotals;
   photos: DishPhoto[]; comments: DishComment[];
 };
+
+const EMPTY: VoteTotals = { up: 0, meh: 0, down: 0 };
 
 function DetailRow({ label, children }: { label: string; children: React.ReactNode }) {
   return (
@@ -40,12 +43,13 @@ function DetailRow({ label, children }: { label: string; children: React.ReactNo
 
 export function DishCard({ dish, onVote, onChanged }: {
   dish: CatalogDish;
-  onVote: (dishId: string, value: 1 | 0 | -1 | null, isLocal: boolean) => void;
+  onVote: (dishId: string, value: 1 | 0 | -1 | null, isLocal: boolean, customization: string | null) => void;
   /** Called after an admin edits or hides this dish, so the page can refetch. */
   onChanged?: () => void;
 }) {
   const { details } = dish;
   const [reportOpen, setReportOpen] = useState(false);
+  const [breakdown, setBreakdown] = useState("");
   const [editOpen, setEditOpen] = useState(false);
   const [admin, setAdmin] = useState(false);
   const [hiding, setHiding] = useState(false);
@@ -99,7 +103,23 @@ export function DishCard({ dish, onVote, onChanged }: {
       </header>
 
       <div className="mt-3">
-        <YumMeter locals={dish.locals} visitors={dish.visitors} />
+        {dish.customizations.length > 0 && Object.keys(dish.byCustomization).length > 0 && (
+          <div className="mb-2 flex items-center gap-2">
+            <span className="text-[10px] font-bold tracking-wide text-neutral-400">RATING FOR</span>
+            <select
+              value={breakdown}
+              onChange={(e) => setBreakdown(e.target.value)}
+              className="rounded-full border border-neutral-300 px-2.5 py-1 text-[11px] font-medium text-neutral-700 hover:bg-neutral-50"
+            >
+              <option value="">All ratings</option>
+              {Object.keys(dish.byCustomization).map((c) => <option key={c} value={c}>{c}</option>)}
+            </select>
+          </div>
+        )}
+        <YumMeter
+          locals={breakdown ? dish.byCustomization[breakdown]?.locals ?? EMPTY : dish.locals}
+          visitors={breakdown ? dish.byCustomization[breakdown]?.visitors ?? EMPTY : dish.visitors}
+        />
       </div>
 
       {dish.description && <p className="mt-3 text-sm leading-relaxed text-neutral-700">{dish.description}</p>}
@@ -149,7 +169,11 @@ export function DishCard({ dish, onVote, onChanged }: {
         </div>
       )}
 
-      <VoteWidget myVote={dish.myVote} onVote={(value, isLocal) => onVote(dish.id, value, isLocal)} />
+      <VoteWidget
+        myVote={dish.myVote}
+        customizations={dish.customizations}
+        onVote={(value, isLocal, customization) => onVote(dish.id, value, isLocal, customization)}
+      />
 
       <DishPhotos dishId={dish.id} photos={dish.photos} />
 
@@ -191,7 +215,7 @@ export function DishCard({ dish, onVote, onChanged }: {
 
       <ReportDishModal dishId={dish.id} open={reportOpen} onClose={() => setReportOpen(false)} />
       <SuggestEditModal
-        dish={{ id: dish.id, name: dish.name, description: dish.description, tags: dish.tags, availability: dish.availability }}
+        dish={{ id: dish.id, name: dish.name, description: dish.description, tags: dish.tags, availability: dish.availability, customizations: dish.customizations }}
         open={editOpen}
         onClose={() => setEditOpen(false)}
         onApplied={() => { setEditOpen(false); onChanged?.(); }}

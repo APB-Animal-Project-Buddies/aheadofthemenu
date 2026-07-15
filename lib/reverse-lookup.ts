@@ -52,19 +52,34 @@ export function meterState(t: VoteTotals): MeterState {
   return { state: "scored", pct, votes, tier: tierFor(pct) };
 }
 
-export type VoteRow = { value: number; voter_kind: string };
+export type VoteRow = { value: number; voter_kind: string; customization?: string | null };
 export type CohortTotals = { locals: VoteTotals; visitors: VoteTotals; total: number };
 
+function tally(bucket: VoteTotals, value: number) {
+  if (value > 0) bucket.up += 1;
+  else if (value < 0) bucket.down += 1;
+  else bucket.meh = (bucket.meh ?? 0) + 1;
+}
+
 export function aggregateVotes(rows: VoteRow[]): CohortTotals {
-  const locals = { up: 0, meh: 0, down: 0 };
-  const visitors = { up: 0, meh: 0, down: 0 };
-  for (const r of rows) {
-    const bucket = r.voter_kind === "visitor" ? visitors : locals;
-    if (r.value > 0) bucket.up += 1;
-    else if (r.value < 0) bucket.down += 1;
-    else bucket.meh += 1;
-  }
+  const locals: VoteTotals = { up: 0, meh: 0, down: 0 };
+  const visitors: VoteTotals = { up: 0, meh: 0, down: 0 };
+  for (const r of rows) tally(r.voter_kind === "visitor" ? visitors : locals, r.value);
   return { locals, visitors, total: rows.length };
+}
+
+/** Per-customization cohort totals — the input for rating breakdowns by customization. */
+export type CustomizationTotals = Record<string, { locals: VoteTotals; visitors: VoteTotals }>;
+
+export function aggregateByCustomization(rows: VoteRow[]): CustomizationTotals {
+  const out: CustomizationTotals = {};
+  for (const r of rows) {
+    const c = r.customization;
+    if (!c) continue; // unspecified votes count toward overall only
+    const entry = out[c] ?? (out[c] = { locals: { up: 0, meh: 0, down: 0 }, visitors: { up: 0, meh: 0, down: 0 } });
+    tally(r.voter_kind === "visitor" ? entry.visitors : entry.locals, r.value);
+  }
+  return out;
 }
 
 export type ScorableDish = {
@@ -114,7 +129,7 @@ export function sortDishCards<T extends ScorableDish>(dishes: T[]): T[] {
   });
 }
 
-export type MyVote = { value: 1 | 0 | -1; isLocal: boolean } | null;
+export type MyVote = { value: 1 | 0 | -1; isLocal: boolean; customization?: string | null } | null;
 export type VotableDish = { locals: VoteTotals; visitors: VoteTotals; myVote: MyVote };
 
 /** Pure optimistic-vote transition: the caller's previous vote leaves its old
@@ -257,7 +272,16 @@ export type AddDishInput = {
   description: string | null;
   tags: string[];
   availability: DishAvailability;
+  customizations: string[];
 };
+
+/** Parse a free-form string list (tags, customizations): strings only, trimmed,
+ * length-capped, de-blanked, and truncated to `max` entries. */
+export function strList(v: unknown, itemMax: number, max: number): string[] {
+  return Array.isArray(v)
+    ? v.filter((t): t is string => typeof t === "string").map((t) => str(t, itemMax)).filter(Boolean).slice(0, max)
+    : [];
+}
 
 export function validateAddDish(body: any): AddDishInput | { error: string } {
   // The name is the dish's identity (dedup key) — truncating it would silently
@@ -285,17 +309,20 @@ export function validateAddDish(body: any): AddDishInput | { error: string } {
   }
 
   const availability: DishAvailability = body?.availability === "seasonal" ? "seasonal" : "permanent";
-  return { restaurantId, newRestaurant, name, description: str(body?.description, 500) || null, tags, availability };
+  const customizations = strList(body?.customizations, 60, 20);
+  return { restaurantId, newRestaurant, name, description: str(body?.description, 500) || null, tags, availability, customizations };
 }
 
-export type VoteInput = { value: 1 | 0 | -1 | null; voterKind: VoterKind };
+export type VoteInput = { value: 1 | 0 | -1 | null; voterKind: VoterKind; customization: string | null };
 
 export function validateVote(body: any): VoteInput | { error: string } {
   const value = body?.value;
   if (value !== 1 && value !== 0 && value !== -1 && value !== null) {
     return { error: "value must be 1, 0, -1, or null" };
   }
-  return { value, voterKind: body?.isLocal === false ? "visitor" : "local" };
+  const raw = typeof body?.customization === "string" ? body.customization.trim() : "";
+  const customization = raw ? raw.slice(0, 60) : null;
+  return { value, voterKind: body?.isLocal === false ? "visitor" : "local", customization };
 }
 
 // --- availability, reports, comments ---------------------------------------
@@ -332,6 +359,7 @@ export type DishEditProposed = {
   description?: string | null;
   tags?: string[];
   availability?: DishAvailability;
+  customizations?: string[];
 };
 export type DishEditInput = { proposed: DishEditProposed; note: string | null };
 
@@ -361,6 +389,10 @@ export function validateDishEdit(body: any): DishEditInput | { error: string } {
   }
   if (body?.availability !== undefined) {
     proposed.availability = body.availability === "seasonal" ? "seasonal" : "permanent";
+  }
+  if (body?.customizations !== undefined) {
+    if (!Array.isArray(body.customizations)) return { error: "Customizations must be a list" };
+    proposed.customizations = strList(body.customizations, 60, 20);
   }
 
   if (Object.keys(proposed).length === 0) return { error: "Nothing to change" };

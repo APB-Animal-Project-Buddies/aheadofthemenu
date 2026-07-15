@@ -13,6 +13,7 @@ export const RL_EDIT_FIELDS: Array<[key: string, label: string]> = [
   ["description", "Description"],
   ["tags", "Tags"],
   ["availability", "Availability"],
+  ["customizations", "Customizations"],
 ];
 
 /** True when two field values differ (null-normalized, order-sensitive). */

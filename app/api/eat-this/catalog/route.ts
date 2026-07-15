@@ -7,7 +7,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { graphql, nhost } from "@/lib/nhost";
 import { bearerToken, verifyNhostJwt } from "@/lib/jwt";
-import { aggregateVotes } from "@/lib/reverse-lookup";
+import { aggregateVotes, aggregateByCustomization } from "@/lib/reverse-lookup";
 
 const fileUrl = (fileId: string) => `${nhost.storageUrl}/files/${fileId}`;
 
@@ -22,9 +22,9 @@ type Row = {
   locations: Array<{ id: string; address: string; neighborhood: string | null; phone: string | null }>;
   dishes: Array<{
     id: string; name: string; description: string | null; tags: unknown;
-    details: unknown; availability: string; created_at: string;
+    details: unknown; availability: string; customizations: unknown; created_at: string;
     created_by_user: { displayName: string | null; metadata: any } | null;
-    votes: Array<{ user_id: string; value: number; voter_kind: string }>;
+    votes: Array<{ user_id: string; value: number; voter_kind: string; customization: string | null }>;
     photos: Array<{ id: string; file_id: string; caption: string | null; uploader_id: string | null }>;
     comments: Array<{ id: string; body: string; created_at: string; author: { displayName: string | null; metadata: any } | null; likes?: Array<{ user_id: string }> }>;
   }>;
@@ -38,9 +38,9 @@ const catalogQuery = (withLikes: boolean) => `query ($city: String!) {
     id name website instagram facebook description cuisines verified
     locations(order_by: { created_at: asc }) { id address neighborhood phone }
     dishes(where: { status: { _eq: "live" } }) {
-      id name description tags details availability created_at
+      id name description tags details availability customizations created_at
       created_by_user { displayName metadata }
-      votes { user_id value voter_kind }
+      votes { user_id value voter_kind customization }
       photos(order_by: { created_at: asc }) { id file_id caption uploader_id }
       comments(where: { visibility: { _eq: "public" } }, order_by: { created_at: desc }, limit: 20) {
         id body created_at author { displayName metadata }
@@ -90,10 +90,12 @@ export async function GET(request: NextRequest) {
           tags: Array.isArray(d.tags) ? d.tags : [],
           details: d.details ?? {},
           availability: d.availability === "seasonal" ? "seasonal" : "permanent",
+          customizations: Array.isArray(d.customizations) ? d.customizations : [],
           createdAt: d.created_at,
           addedBy: d.created_by_user?.metadata?.handle ?? d.created_by_user?.displayName ?? null,
           locals, visitors,
-          myVote: mine ? { value: mine.value > 0 ? 1 : mine.value < 0 ? -1 : 0, isLocal: mine.voter_kind !== "visitor" } : null,
+          byCustomization: aggregateByCustomization(d.votes),
+          myVote: mine ? { value: mine.value > 0 ? 1 : mine.value < 0 ? -1 : 0, isLocal: mine.voter_kind !== "visitor", customization: mine.customization } : null,
           photos: (d.photos ?? []).map((p) => ({
             id: p.id, url: fileUrl(p.file_id), caption: p.caption, uploaderId: p.uploader_id,
           })),

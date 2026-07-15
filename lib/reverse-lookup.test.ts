@@ -1,7 +1,7 @@
 import { describe, test, expect } from "bun:test";
 import {
   MIN_VOTES_TO_SCORE, scorePct, meterState, tierFor,
-  aggregateVotes, rankLeaderboard, leaderboardCategories, sortDishCards,
+  aggregateVotes, aggregateByCustomization, rankLeaderboard, leaderboardCategories, sortDishCards,
   applyVote, groupByName, tokenize, dishMatchesTokens,
   parseSvgCsv, validateAddDish, validateVote, validateReport, validateComment, validateDishEdit,
 } from "./reverse-lookup";
@@ -66,6 +66,20 @@ describe("aggregateVotes", () => {
   });
 });
 
+describe("aggregateByCustomization", () => {
+  test("groups votes per customization, skipping unspecified", () => {
+    const out = aggregateByCustomization([
+      { value: 1, voter_kind: "local", customization: "tofu" },
+      { value: 1, voter_kind: "local", customization: "tofu" },
+      { value: -1, voter_kind: "visitor", customization: "seitan" },
+      { value: 1, voter_kind: "local", customization: null },
+    ]);
+    expect(out.tofu.locals).toEqual({ up: 2, meh: 0, down: 0 });
+    expect(out.seitan.visitors).toEqual({ up: 0, meh: 0, down: 1 });
+    expect(Object.keys(out).sort()).toEqual(["seitan", "tofu"]);
+  });
+});
+
 describe("meh vote", () => {
   test("scorePct weights meh as half", () => {
     expect(scorePct({ up: 2, meh: 2, down: 0 })).toBe(75); // (2 + 1)/4
@@ -85,8 +99,11 @@ describe("meh vote", () => {
     expect(d2.locals).toEqual({ up: 1, meh: 0, down: 0 });
   });
   test("validateVote accepts 0", () => {
-    expect(validateVote({ value: 0 })).toEqual({ value: 0, voterKind: "local" });
+    expect(validateVote({ value: 0 })).toEqual({ value: 0, voterKind: "local", customization: null });
     expect("error" in validateVote({ value: 2 })).toBe(true);
+  });
+  test("validateVote captures a trimmed customization", () => {
+    expect(validateVote({ value: 1, customization: "  tofu  " })).toEqual({ value: 1, voterKind: "local", customization: "tofu" });
   });
 });
 
@@ -330,9 +347,9 @@ describe("validateAddDish", () => {
 
 describe("validateVote", () => {
   test("accepts 1, -1, null; isLocal defaults true", () => {
-    expect(validateVote({ value: 1 })).toEqual({ value: 1, voterKind: "local" });
-    expect(validateVote({ value: -1, isLocal: false })).toEqual({ value: -1, voterKind: "visitor" });
-    expect(validateVote({ value: null })).toEqual({ value: null, voterKind: "local" });
+    expect(validateVote({ value: 1 })).toEqual({ value: 1, voterKind: "local", customization: null });
+    expect(validateVote({ value: -1, isLocal: false })).toEqual({ value: -1, voterKind: "visitor", customization: null });
+    expect(validateVote({ value: null })).toEqual({ value: null, voterKind: "local", customization: null });
   });
   test("rejects other values", () => {
     expect(validateVote({ value: 2 })).toHaveProperty("error");

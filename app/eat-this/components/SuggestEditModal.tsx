@@ -17,6 +17,7 @@ export type EditableDish = {
   description: string | null;
   tags: string[];
   availability: "permanent" | "seasonal";
+  customizations: string[];
 };
 
 export function SuggestEditModal({ dish, open, onClose, onApplied }: {
@@ -31,6 +32,7 @@ export function SuggestEditModal({ dish, open, onClose, onApplied }: {
   const [name, setName] = useState(dish.name);
   const [description, setDescription] = useState(dish.description ?? "");
   const [tags, setTags] = useState((dish.tags || []).join(", "));
+  const [customizations, setCustomizations] = useState((dish.customizations || []).join(", "));
   const [availability, setAvailability] = useState<"permanent" | "seasonal">(dish.availability);
   const [note, setNote] = useState("");
   const [busy, setBusy] = useState(false);
@@ -44,6 +46,7 @@ export function SuggestEditModal({ dish, open, onClose, onApplied }: {
     setName(dish.name);
     setDescription(dish.description ?? "");
     setTags((dish.tags || []).join(", "));
+    setCustomizations((dish.customizations || []).join(", "));
     setAvailability(dish.availability);
     setNote("");
     setBusy(false);
@@ -60,6 +63,7 @@ export function SuggestEditModal({ dish, open, onClose, onApplied }: {
       name: name.trim(),
       description: description.trim() || null,
       tags: tags.split(",").map((t) => t.trim()).filter(Boolean),
+      customizations: customizations.split(",").map((t) => t.trim()).filter(Boolean),
       availability,
       note: note.trim() || undefined,
     };
@@ -108,6 +112,7 @@ export function SuggestEditModal({ dish, open, onClose, onApplied }: {
           {field("Name", name, setName)}
           {field("Description", description, setDescription)}
           {field("Tags (comma-separated)", tags, setTags, "e.g. entree, spicy")}
+          {field("Customizations (comma-separated)", customizations, setCustomizations, "e.g. tofu, seitan")}
           <div>
             <div className="text-xs font-semibold text-neutral-500">Availability</div>
             <div className="mt-1 flex gap-2">

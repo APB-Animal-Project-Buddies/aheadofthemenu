@@ -140,7 +140,7 @@ export default function ReverseLookupPage() {
   // reverts) that dish's state.
   const voteSeqRef = useRef(new Map<string, number>());
 
-  const onVote = useCallback(async (dishId: string, value: 1 | 0 | -1 | null, isLocal: boolean) => {
+  const onVote = useCallback(async (dishId: string, value: 1 | 0 | -1 | null, isLocal: boolean, customization: string | null) => {
     const previous = catalog?.dishes.find((d) => d.id === dishId);
     if (!previous || !catalog) return;
 
@@ -161,7 +161,7 @@ export default function ReverseLookupPage() {
           "Content-Type": "application/json",
           Authorization: `Bearer ${accessToken ?? ""}`,
         },
-        body: JSON.stringify({ value, isLocal }),
+        body: JSON.stringify({ value, isLocal, customization }),
       });
       if (!isLatest()) return; // a newer vote owns this dish's state now
       if (res.status === 401) {
@@ -172,7 +172,7 @@ export default function ReverseLookupPage() {
       if (!res.ok) throw new Error();
       const body = await res.json();
       if (!isLatest()) return;
-      patch((d) => ({ ...d, locals: body.locals, visitors: body.visitors, myVote: body.myVote }));
+      patch((d) => ({ ...d, locals: body.locals, visitors: body.visitors, byCustomization: body.byCustomization ?? d.byCustomization, myVote: body.myVote }));
     } catch {
       if (!isLatest()) return;
       patch(() => previous);

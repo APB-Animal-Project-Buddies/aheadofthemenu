@@ -45,6 +45,8 @@ export function AddDishModal({ open, onClose, restaurants, dishes, initialRestau
   const [availability, setAvailability] = useState<"permanent" | "seasonal">("permanent");
   const [tags, setTags] = useState<string[]>([]);
   const [tagInput, setTagInput] = useState("");
+  const [customizations, setCustomizations] = useState<string[]>([]);
+  const [customizationInput, setCustomizationInput] = useState("");
 
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -63,6 +65,8 @@ export function AddDishModal({ open, onClose, restaurants, dishes, initialRestau
     setAvailability("permanent");
     setTags([]);
     setTagInput("");
+    setCustomizations([]);
+    setCustomizationInput("");
     setSubmitting(false);
     setError(null);
     setSessionExpired(false);
@@ -109,6 +113,23 @@ export function AddDishModal({ open, onClose, restaurants, dishes, initialRestau
     setTagInput("");
   };
 
+  /** Existing customization vocabulary across the loaded catalog (tofu, seitan…). */
+  const customizationVocabulary = useMemo(() => {
+    const seen = new Set<string>();
+    for (const d of dishes) for (const c of d.customizations ?? []) seen.add(c);
+    for (const c of customizations) seen.add(c);
+    return Array.from(seen).sort();
+  }, [dishes, customizations]);
+
+  const toggleCustomization = (c: string) =>
+    setCustomizations((prev) => (prev.includes(c) ? prev.filter((x) => x !== c) : [...prev, c]));
+
+  const addFreeCustomization = () => {
+    const c = customizationInput.trim().toLowerCase();
+    if (c && !customizations.includes(c)) setCustomizations((prev) => [...prev, c]);
+    setCustomizationInput("");
+  };
+
   const submit = async () => {
     if (!canSubmit) return;
     setSubmitting(true);
@@ -135,6 +156,7 @@ export function AddDishModal({ open, onClose, restaurants, dishes, initialRestau
           description: description.trim() || null,
           availability,
           tags,
+          customizations,
         }),
       });
       if (res.status === 401) {
@@ -308,6 +330,43 @@ export function AddDishModal({ open, onClose, restaurants, dishes, initialRestau
                 type="button"
                 onClick={addFreeTag}
                 disabled={!tagInput.trim()}
+                className="shrink-0 rounded-lg border border-neutral-300 px-3 text-sm font-semibold text-neutral-600 transition hover:bg-neutral-50 disabled:opacity-40"
+              >
+                Add
+              </button>
+            </div>
+          </div>
+
+          <div>
+            <div className="mb-1 text-[10px] font-bold tracking-wide text-neutral-400">CUSTOMIZATIONS (OPTIONAL)</div>
+            <p className="mb-1.5 text-[11px] text-neutral-400">Options diners can pick when they rate — e.g. tofu, seitan, cabbage.</p>
+            <div className="flex flex-wrap gap-1.5">
+              {customizationVocabulary.map((c) => (
+                <button
+                  key={c}
+                  type="button"
+                  onClick={() => toggleCustomization(c)}
+                  className={`rounded-full border px-2.5 py-1 text-xs font-medium capitalize transition ${
+                    customizations.includes(c)
+                      ? "border-apb bg-apb text-white"
+                      : "border-neutral-300 bg-white text-neutral-600 hover:bg-neutral-50"
+                  }`}
+                >
+                  {c}
+                </button>
+              ))}
+            </div>
+            <div className="mt-2 flex gap-2">
+              <Input
+                placeholder="Add a customization…"
+                value={customizationInput}
+                onChange={(e) => setCustomizationInput(e.target.value)}
+                onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addFreeCustomization(); } }}
+              />
+              <button
+                type="button"
+                onClick={addFreeCustomization}
+                disabled={!customizationInput.trim()}
                 className="shrink-0 rounded-lg border border-neutral-300 px-3 text-sm font-semibold text-neutral-600 transition hover:bg-neutral-50 disabled:opacity-40"
               >
                 Add

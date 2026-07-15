@@ -83,7 +83,8 @@ export async function POST(request: NextRequest) {
         variables: {
           obj: {
             restaurant_id: restaurantId, name: input.name, description: input.description,
-            tags: input.tags, availability: input.availability, created_by: caller.userId,
+            tags: input.tags, availability: input.availability, customizations: input.customizations,
+            created_by: caller.userId,
           },
         },
       }

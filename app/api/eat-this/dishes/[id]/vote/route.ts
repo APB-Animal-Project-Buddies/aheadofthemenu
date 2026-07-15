@@ -7,7 +7,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { graphql } from "@/lib/nhost";
 import { bearerToken, verifyNhostJwt } from "@/lib/jwt";
-import { aggregateVotes, validateVote } from "@/lib/reverse-lookup";
+import { aggregateVotes, aggregateByCustomization, validateVote } from "@/lib/reverse-lookup";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
@@ -35,7 +35,7 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
         `mutation ($obj: restaurant_dish_votes_insert_input!) {
            insert_restaurant_dish_votes_one(
              object: $obj,
-             on_conflict: { constraint: restaurant_dish_votes_pkey, update_columns: [value, voter_kind, updated_at] }
+             on_conflict: { constraint: restaurant_dish_votes_pkey, update_columns: [value, voter_kind, customization, updated_at] }
            ) { dish_id }
          }`,
         {
@@ -43,7 +43,7 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
           variables: {
             obj: {
               dish_id: params.id, user_id: caller.userId, value: input.value,
-              voter_kind: input.voterKind, updated_at: new Date().toISOString(),
+              voter_kind: input.voterKind, customization: input.customization, updated_at: new Date().toISOString(),
             },
           },
         }
@@ -57,16 +57,18 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
       }
     }
 
-    const totals = await graphql<{ restaurant_dish_votes: Array<{ value: number; voter_kind: string }> }>(
+    const totals = await graphql<{ restaurant_dish_votes: Array<{ value: number; voter_kind: string; customization: string | null }> }>(
       `query ($dish: uuid!) {
-         restaurant_dish_votes(where: { dish_id: { _eq: $dish } }) { value voter_kind }
+         restaurant_dish_votes(where: { dish_id: { _eq: $dish } }) { value voter_kind customization }
        }`,
       { useAdminSecret: true, variables: { dish: params.id } }
     );
-    const { locals, visitors } = aggregateVotes(totals.data?.restaurant_dish_votes ?? []);
+    const rows = totals.data?.restaurant_dish_votes ?? [];
+    const { locals, visitors } = aggregateVotes(rows);
     return NextResponse.json({
       ok: true, locals, visitors,
-      myVote: input.value === null ? null : { value: input.value, isLocal: input.voterKind !== "visitor" },
+      byCustomization: aggregateByCustomization(rows),
+      myVote: input.value === null ? null : { value: input.value, isLocal: input.voterKind !== "visitor", customization: input.customization },
     });
   } catch {
     return NextResponse.json({ error: "Couldn't save your vote right now" }, { status: 502 });
