@@ -35,7 +35,7 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
         `mutation ($obj: restaurant_dish_votes_insert_input!) {
            insert_restaurant_dish_votes_one(
              object: $obj,
-             on_conflict: { constraint: restaurant_dish_votes_pkey, update_columns: [value, voter_kind, customizations, updated_at] }
+             on_conflict: { constraint: restaurant_dish_votes_pkey, update_columns: [value, voter_kind, customizations, order_type, updated_at] }
            ) { dish_id }
          }`,
         {
@@ -43,7 +43,8 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
           variables: {
             obj: {
               dish_id: params.id, user_id: caller.userId, value: input.value,
-              voter_kind: input.voterKind, customizations: input.customizations, updated_at: new Date().toISOString(),
+              voter_kind: input.voterKind, customizations: input.customizations,
+              order_type: input.orderType, updated_at: new Date().toISOString(),
             },
           },
         }
@@ -68,7 +69,7 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
     return NextResponse.json({
       ok: true, locals, visitors,
       byCustomization: aggregateByCustomization(rows),
-      myVote: input.value === null ? null : { value: input.value, isLocal: input.voterKind !== "visitor", customizations: input.customizations },
+      myVote: input.value === null ? null : { value: input.value, isLocal: input.voterKind !== "visitor", customizations: input.customizations, orderType: input.orderType },
     });
   } catch {
     return NextResponse.json({ error: "Couldn't save your vote right now" }, { status: 502 });

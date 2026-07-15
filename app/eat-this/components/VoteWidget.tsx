@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "@/components/AuthProvider";
 import { usePersistentState } from "@/lib/usePersistentState";
 import { MultiSelect } from "@/components/form/MultiSelect";
-import type { MyVote } from "@/lib/reverse-lookup";
+import type { MyVote, OrderType } from "@/lib/reverse-lookup";
 
 export type { MyVote };
 
@@ -19,27 +19,50 @@ export function VoteWidget({ myVote, customizations, onVote }: {
   myVote: MyVote;
   customizations: string[];
   /** value null = remove vote. Caller does the optimistic update + API call. */
-  onVote: (value: 1 | 0 | -1 | null, isLocal: boolean, customizations: string[]) => void;
+  onVote: (value: 1 | 0 | -1 | null, isLocal: boolean, customizations: string[], orderType: OrderType) => void;
 }) {
   const { isAuthenticated } = useAuth();
   const [isLocal, setIsLocal] = usePersistentState<boolean>("rl-voter-is-local", true);
   const [showGate, setShowGate] = useState(false);
   const [selected, setSelected] = useState<string[]>(myVote?.customizations ?? []);
+  const [order, setOrder] = useState<OrderType>(myVote?.orderType ?? null);
 
-  // Re-sync the picks when the server reconciles our vote (e.g. after a refetch).
+  // Re-sync when the server reconciles our vote (e.g. after a refetch).
   useEffect(() => { setSelected(myVote?.customizations ?? []); }, [myVote?.customizations]);
+  useEffect(() => { setOrder(myVote?.orderType ?? null); }, [myVote?.orderType]);
 
   const cast = (value: 1 | 0 | -1) => {
     if (!isAuthenticated) { setShowGate(true); return; }
-    onVote(myVote?.value === value ? null : value, isLocal, selected);
+    onVote(myVote?.value === value ? null : value, isLocal, selected, order);
   };
 
   const changeCustomizations = (next: string[]) => {
     if (!isAuthenticated) { setShowGate(true); return; }
     setSelected(next);
-    // If they've already voted, retag their existing vote with the new set.
-    if (myVote) onVote(myVote.value, isLocal, next);
+    if (myVote) onVote(myVote.value, isLocal, next, order); // retag existing vote
   };
+
+  const changeOrder = (t: OrderType) => {
+    if (!isAuthenticated) { setShowGate(true); return; }
+    const next = order === t ? null : t; // click the active one to clear
+    setOrder(next);
+    if (myVote) onVote(myVote.value, isLocal, selected, next);
+  };
+
+  const orderBtn = (t: "in_person" | "takeout", label: string) => (
+    <button
+      type="button"
+      onClick={() => changeOrder(t)}
+      aria-pressed={order === t}
+      className={`rounded-full border px-2.5 py-1 text-[11px] font-medium transition ${
+        order === t
+          ? "border-apb bg-apb text-white"
+          : "border-dashed border-neutral-300 bg-white text-neutral-600 hover:bg-neutral-50"
+      }`}
+    >
+      {label}
+    </button>
+  );
 
   const btn = (value: 1 | 0 | -1, glyph: string) => (
     <button
@@ -71,6 +94,8 @@ export function VoteWidget({ myVote, customizations, onVote }: {
         >
           as {isLocal ? "🏠 Local" : "🧳 Visiting"} ▾
         </button>
+        {orderBtn("in_person", "🍽️ In-person")}
+        {orderBtn("takeout", "🥡 Take-out")}
         {showGate && (
           <span className="text-xs text-neutral-600">
             <a className="font-semibold text-apb underline" href="/login?next=/eat-this">Sign in</a> to vote — it takes a minute.

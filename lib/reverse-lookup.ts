@@ -131,7 +131,7 @@ export function sortDishCards<T extends ScorableDish>(dishes: T[]): T[] {
   });
 }
 
-export type MyVote = { value: 1 | 0 | -1; isLocal: boolean; customizations?: string[] } | null;
+export type MyVote = { value: 1 | 0 | -1; isLocal: boolean; customizations?: string[]; orderType?: OrderType } | null;
 export type VotableDish = { locals: VoteTotals; visitors: VoteTotals; myVote: MyVote };
 
 /** Pure optimistic-vote transition: the caller's previous vote leaves its old
@@ -315,17 +315,20 @@ export function validateAddDish(body: any): AddDishInput | { error: string } {
   return { restaurantId, newRestaurant, name, description: str(body?.description, 500) || null, tags, availability, customizations };
 }
 
-export type VoteInput = { value: 1 | 0 | -1 | null; voterKind: VoterKind; customizations: string[] };
+export type OrderType = "in_person" | "takeout" | null;
+export type VoteInput = { value: 1 | 0 | -1 | null; voterKind: VoterKind; customizations: string[]; orderType: OrderType };
 
 export function validateVote(body: any): VoteInput | { error: string } {
   const value = body?.value;
   if (value !== 1 && value !== 0 && value !== -1 && value !== null) {
     return { error: "value must be 1, 0, -1, or null" };
   }
+  const orderType: OrderType = body?.orderType === "in_person" || body?.orderType === "takeout" ? body.orderType : null;
   return {
     value,
     voterKind: body?.isLocal === false ? "visitor" : "local",
     customizations: strList(body?.customizations, 60, 20),
+    orderType,
   };
 }
 

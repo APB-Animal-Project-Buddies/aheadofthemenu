@@ -8,7 +8,7 @@
  * community attribution.
  */
 import { useEffect, useState } from "react";
-import type { VoteTotals, CustomizationTotals } from "@/lib/reverse-lookup";
+import type { VoteTotals, CustomizationTotals, OrderType } from "@/lib/reverse-lookup";
 import { hasAdminSecret, adminHeaders } from "@/lib/admin-client";
 import { YumMeter } from "./YumMeter";
 import { VoteWidget, type MyVote } from "./VoteWidget";
@@ -16,6 +16,7 @@ import { DishPhotos, type DishPhoto } from "./DishPhotos";
 import { DishComments, type DishComment } from "./DishComments";
 import { ReportDishModal } from "./ReportDishModal";
 import { SuggestEditModal } from "./SuggestEditModal";
+import { AddCustomizationsModal } from "./AddCustomizationsModal";
 
 export type CatalogDish = {
   id: string; restaurantId: string; restaurantName: string; verified: boolean;
@@ -43,7 +44,7 @@ function DetailRow({ label, children }: { label: string; children: React.ReactNo
 
 export function DishCard({ dish, onVote, onChanged }: {
   dish: CatalogDish;
-  onVote: (dishId: string, value: 1 | 0 | -1 | null, isLocal: boolean, customizations: string[]) => void;
+  onVote: (dishId: string, value: 1 | 0 | -1 | null, isLocal: boolean, customizations: string[], orderType: OrderType) => void;
   /** Called after an admin edits or hides this dish, so the page can refetch. */
   onChanged?: () => void;
 }) {
@@ -51,6 +52,7 @@ export function DishCard({ dish, onVote, onChanged }: {
   const [reportOpen, setReportOpen] = useState(false);
   const [breakdown, setBreakdown] = useState("");
   const [editOpen, setEditOpen] = useState(false);
+  const [addCustomOpen, setAddCustomOpen] = useState(false);
   const [admin, setAdmin] = useState(false);
   const [hiding, setHiding] = useState(false);
   useEffect(() => setAdmin(hasAdminSecret()), []);
@@ -172,8 +174,16 @@ export function DishCard({ dish, onVote, onChanged }: {
       <VoteWidget
         myVote={dish.myVote}
         customizations={dish.customizations}
-        onVote={(value, isLocal, customizations) => onVote(dish.id, value, isLocal, customizations)}
+        onVote={(value, isLocal, customizations, orderType) => onVote(dish.id, value, isLocal, customizations, orderType)}
       />
+
+      <button
+        type="button"
+        onClick={() => setAddCustomOpen(true)}
+        className="mt-1.5 text-[11px] font-medium text-apb hover:underline"
+      >
+        ＋ Add customizations
+      </button>
 
       <DishPhotos dishId={dish.id} photos={dish.photos} />
 
@@ -219,6 +229,12 @@ export function DishCard({ dish, onVote, onChanged }: {
         open={editOpen}
         onClose={() => setEditOpen(false)}
         onApplied={() => { setEditOpen(false); onChanged?.(); }}
+      />
+      <AddCustomizationsModal
+        dishId={dish.id}
+        open={addCustomOpen}
+        onClose={() => setAddCustomOpen(false)}
+        onAdded={() => onChanged?.()}
       />
     </article>
   );

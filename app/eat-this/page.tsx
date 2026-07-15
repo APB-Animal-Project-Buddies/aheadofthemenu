@@ -11,7 +11,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 import { useAuth } from "@/components/AuthProvider";
-import { sortDishCards, applyVote, groupByName, tokenize, dishMatchesTokens } from "@/lib/reverse-lookup";
+import { sortDishCards, applyVote, groupByName, tokenize, dishMatchesTokens, type OrderType } from "@/lib/reverse-lookup";
 import { DishCard, type CatalogDish } from "./components/DishCard";
 import { RestaurantCard, type CatalogRestaurant } from "./components/RestaurantCard";
 import { LeaderboardView } from "./components/LeaderboardView";
@@ -140,7 +140,7 @@ export default function ReverseLookupPage() {
   // reverts) that dish's state.
   const voteSeqRef = useRef(new Map<string, number>());
 
-  const onVote = useCallback(async (dishId: string, value: 1 | 0 | -1 | null, isLocal: boolean, customizations: string[]) => {
+  const onVote = useCallback(async (dishId: string, value: 1 | 0 | -1 | null, isLocal: boolean, customizations: string[], orderType: OrderType) => {
     const previous = catalog?.dishes.find((d) => d.id === dishId);
     if (!previous || !catalog) return;
 
@@ -161,7 +161,7 @@ export default function ReverseLookupPage() {
           "Content-Type": "application/json",
           Authorization: `Bearer ${accessToken ?? ""}`,
         },
-        body: JSON.stringify({ value, isLocal, customizations }),
+        body: JSON.stringify({ value, isLocal, customizations, orderType }),
       });
       if (!isLatest()) return; // a newer vote owns this dish's state now
       if (res.status === 401) {

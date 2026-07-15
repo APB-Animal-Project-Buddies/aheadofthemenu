@@ -24,7 +24,7 @@ type Row = {
     id: string; name: string; description: string | null; tags: unknown;
     details: unknown; availability: string; customizations: unknown; created_at: string;
     created_by_user: { displayName: string | null; metadata: any } | null;
-    votes: Array<{ user_id: string; value: number; voter_kind: string; customizations: string[] | null }>;
+    votes: Array<{ user_id: string; value: number; voter_kind: string; customizations: string[] | null; order_type: string | null }>;
     photos: Array<{ id: string; file_id: string; caption: string | null; uploader_id: string | null }>;
     comments: Array<{ id: string; body: string; created_at: string; author: { displayName: string | null; metadata: any } | null; likes?: Array<{ user_id: string }> }>;
   }>;
@@ -40,7 +40,7 @@ const catalogQuery = (withLikes: boolean) => `query ($city: String!) {
     dishes(where: { status: { _eq: "live" } }) {
       id name description tags details availability customizations created_at
       created_by_user { displayName metadata }
-      votes { user_id value voter_kind customizations }
+      votes { user_id value voter_kind customizations order_type }
       photos(order_by: { created_at: asc }) { id file_id caption uploader_id }
       comments(where: { visibility: { _eq: "public" } }, order_by: { created_at: desc }, limit: 20) {
         id body created_at author { displayName metadata }
@@ -95,7 +95,7 @@ export async function GET(request: NextRequest) {
           addedBy: d.created_by_user?.metadata?.handle ?? d.created_by_user?.displayName ?? null,
           locals, visitors,
           byCustomization: aggregateByCustomization(d.votes),
-          myVote: mine ? { value: mine.value > 0 ? 1 : mine.value < 0 ? -1 : 0, isLocal: mine.voter_kind !== "visitor", customizations: mine.customizations ?? [] } : null,
+          myVote: mine ? { value: mine.value > 0 ? 1 : mine.value < 0 ? -1 : 0, isLocal: mine.voter_kind !== "visitor", customizations: mine.customizations ?? [], orderType: mine.order_type === "in_person" || mine.order_type === "takeout" ? mine.order_type : null } : null,
           photos: (d.photos ?? []).map((p) => ({
             id: p.id, url: fileUrl(p.file_id), caption: p.caption, uploaderId: p.uploader_id,
           })),

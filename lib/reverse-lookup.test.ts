@@ -100,11 +100,14 @@ describe("meh vote", () => {
     expect(d2.locals).toEqual({ up: 1, meh: 0, down: 0 });
   });
   test("validateVote accepts 0", () => {
-    expect(validateVote({ value: 0 })).toEqual({ value: 0, voterKind: "local", customizations: [] });
+    expect(validateVote({ value: 0 })).toEqual({ value: 0, voterKind: "local", customizations: [], orderType: null });
     expect("error" in validateVote({ value: 2 })).toBe(true);
   });
-  test("validateVote captures trimmed customizations", () => {
-    expect(validateVote({ value: 1, customizations: ["  tofu  ", "seitan"] })).toEqual({ value: 1, voterKind: "local", customizations: ["tofu", "seitan"] });
+  test("validateVote captures trimmed customizations + order type", () => {
+    expect(validateVote({ value: 1, customizations: ["  tofu  ", "seitan"], orderType: "takeout" }))
+      .toEqual({ value: 1, voterKind: "local", customizations: ["tofu", "seitan"], orderType: "takeout" });
+    // unknown order types are dropped to null
+    expect((validateVote({ value: 1, orderType: "delivery" }) as any).orderType).toBe(null);
   });
 });
 
@@ -348,9 +351,9 @@ describe("validateAddDish", () => {
 
 describe("validateVote", () => {
   test("accepts 1, -1, null; isLocal defaults true", () => {
-    expect(validateVote({ value: 1 })).toEqual({ value: 1, voterKind: "local", customizations: [] });
-    expect(validateVote({ value: -1, isLocal: false })).toEqual({ value: -1, voterKind: "visitor", customizations: [] });
-    expect(validateVote({ value: null })).toEqual({ value: null, voterKind: "local", customizations: [] });
+    expect(validateVote({ value: 1 })).toEqual({ value: 1, voterKind: "local", customizations: [], orderType: null });
+    expect(validateVote({ value: -1, isLocal: false })).toEqual({ value: -1, voterKind: "visitor", customizations: [], orderType: null });
+    expect(validateVote({ value: null })).toEqual({ value: null, voterKind: "local", customizations: [], orderType: null });
   });
   test("rejects other values", () => {
     expect(validateVote({ value: 2 })).toHaveProperty("error");
