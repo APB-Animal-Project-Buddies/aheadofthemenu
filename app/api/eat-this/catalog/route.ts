@@ -1,5 +1,5 @@
 /**
- * GET /api/reverse-lookup/catalog?city=seattle
+ * GET /api/eat-this/catalog?city=seattle
  * The whole city catalog in one query: restaurants (+locations) and live
  * dishes with per-cohort vote totals. With a valid Bearer token, each dish
  * also carries the caller's own vote (myVote).

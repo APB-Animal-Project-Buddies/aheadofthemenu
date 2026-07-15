@@ -1,6 +1,6 @@
 /**
- * POST   /api/reverse-lookup/dishes/[id]/comments  (Bearer) { body, visibility }
- * DELETE /api/reverse-lookup/dishes/[id]/comments  (Bearer) { id }  (author only)
+ * POST   /api/eat-this/dishes/[id]/comments  (Bearer) { body, visibility }
+ * DELETE /api/eat-this/dishes/[id]/comments  (Bearer) { id }  (author only)
  *
  * A flat comment on a dish. `visibility` is 'public' (shown on the card by the
  * catalog GET) or 'private_to_restaurant' (a private message — stored, never

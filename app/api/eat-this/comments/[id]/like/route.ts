@@ -1,6 +1,6 @@
 /**
- * PUT    /api/reverse-lookup/comments/[id]/like  (Bearer)  — like a comment
- * DELETE /api/reverse-lookup/comments/[id]/like  (Bearer)  — remove your like
+ * PUT    /api/eat-this/comments/[id]/like  (Bearer)  — like a comment
+ * DELETE /api/eat-this/comments/[id]/like  (Bearer)  — remove your like
  * One like per user per comment (PK on comment_id,user_id → idempotent).
  * Returns the fresh like count for optimistic-UI reconciliation.
  */

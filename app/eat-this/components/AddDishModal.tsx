@@ -7,7 +7,7 @@
  *  What?  — dish name*, one-line description, tag chips (existing vocabulary
  *           + free text). A live duplicate check against the loaded catalog
  *           steers people to vote instead of re-adding.
- * Submits POST /api/reverse-lookup/dishes with the caller's Bearer token;
+ * Submits POST /api/eat-this/dishes with the caller's Bearer token;
  * an idempotent `existed: true` response counts as success and jumps to the
  * existing card. A 401 (expired session) shows a sign-in prompt.
  */
@@ -115,7 +115,7 @@ export function AddDishModal({ open, onClose, restaurants, dishes, initialRestau
     setError(null);
     setSessionExpired(false);
     try {
-      const res = await fetch("/api/reverse-lookup/dishes", {
+      const res = await fetch("/api/eat-this/dishes", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

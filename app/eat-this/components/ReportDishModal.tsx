@@ -45,7 +45,7 @@ export function ReportDishModal({ dishId, open, onClose }: {
     setBusy(true);
     setError(null);
     try {
-      const res = await authFetch(`/api/reverse-lookup/dishes/${dishId}/report`, {
+      const res = await authFetch(`/api/eat-this/dishes/${dishId}/report`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ reason, note: note.trim() || null }),

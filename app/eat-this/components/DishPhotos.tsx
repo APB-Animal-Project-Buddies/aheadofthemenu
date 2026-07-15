@@ -35,7 +35,7 @@ export function DishPhotos({ dishId, photos: initial }: { dishId: string; photos
       const up = await getNhost().storage.uploadFiles({ "bucket-id": "dish-media", "file[]": [file] });
       const fileId = up.body?.processedFiles?.[0]?.id;
       if (!fileId) throw new Error("The upload didn't return a file id — please try again.");
-      const res = await authFetch(`/api/reverse-lookup/dishes/${dishId}/photos`, {
+      const res = await authFetch(`/api/eat-this/dishes/${dishId}/photos`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ fileId }),
@@ -52,7 +52,7 @@ export function DishPhotos({ dishId, photos: initial }: { dishId: string; photos
 
   async function remove(id: string) {
     try {
-      const res = await authFetch(`/api/reverse-lookup/dishes/${dishId}/photos`, {
+      const res = await authFetch(`/api/eat-this/dishes/${dishId}/photos`, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id }),

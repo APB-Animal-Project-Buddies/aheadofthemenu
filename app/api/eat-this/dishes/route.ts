@@ -1,5 +1,5 @@
 /**
- * POST /api/reverse-lookup/dishes  (Bearer auth required)
+ * POST /api/eat-this/dishes  (Bearer auth required)
  * Adds a live dish, optionally creating its restaurant inline.
  * IDEMPOTENT: a duplicate dish (or duplicate new restaurant) returns 200 with
  * { existed: true } and the existing row — never a dead-end 409. See the

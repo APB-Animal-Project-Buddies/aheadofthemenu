@@ -1,6 +1,6 @@
 /**
- * POST   /api/reverse-lookup/dishes/[id]/photos  (Bearer) { fileId, caption? }
- * DELETE /api/reverse-lookup/dishes/[id]/photos  (Bearer) { id }  (uploader only)
+ * POST   /api/eat-this/dishes/[id]/photos  (Bearer) { fileId, caption? }
+ * DELETE /api/eat-this/dishes/[id]/photos  (Bearer) { id }  (uploader only)
  *
  * The browser uploads the image itself to Nhost storage (bucket 'dish-media',
  * user-role permission), then POSTs here to register it against a reverse-lookup

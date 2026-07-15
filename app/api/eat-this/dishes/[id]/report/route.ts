@@ -1,5 +1,5 @@
 /**
- * POST /api/reverse-lookup/dishes/[id]/report  (Bearer auth required)
+ * POST /api/eat-this/dishes/[id]/report  (Bearer auth required)
  * Body { reason, note? }. Files a problem report against a dish; queued for
  * admin review (no auto-hide). Idempotent: a duplicate open report from the
  * same user for the same reason returns ok (the partial-unique index blocks it).

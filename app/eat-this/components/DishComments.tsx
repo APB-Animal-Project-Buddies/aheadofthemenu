@@ -52,7 +52,7 @@ export function DishComments({ dishId, comments: initial }: { dishId: string; co
     setError(null);
     setPrivateSent(false);
     try {
-      const res = await authFetch(`/api/reverse-lookup/dishes/${dishId}/comments`, {
+      const res = await authFetch(`/api/eat-this/dishes/${dishId}/comments`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ body: text, visibility }),
@@ -77,7 +77,7 @@ export function DishComments({ dishId, comments: initial }: { dishId: string; co
 
   async function remove(id: string) {
     try {
-      const res = await authFetch(`/api/reverse-lookup/dishes/${dishId}/comments`, {
+      const res = await authFetch(`/api/eat-this/dishes/${dishId}/comments`, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id }),
@@ -98,7 +98,7 @@ export function DishComments({ dishId, comments: initial }: { dishId: string; co
       setComments((list) => list.map((x) => (x.id === c.id ? { ...x, likedByMe: liked, likeCount: count } : x)));
     patch(nextLiked, c.likeCount + (nextLiked ? 1 : -1)); // optimistic
     try {
-      const res = await authFetch(`/api/reverse-lookup/comments/${c.id}/like`, {
+      const res = await authFetch(`/api/eat-this/comments/${c.id}/like`, {
         method: nextLiked ? "PUT" : "DELETE",
       });
       const data = await res.json().catch(() => ({}));

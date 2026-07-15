@@ -7,13 +7,15 @@
  * details jsonb, then address + website footer, the vote widget, and
  * community attribution.
  */
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { VoteTotals } from "@/lib/reverse-lookup";
+import { hasAdminSecret, adminHeaders } from "@/lib/admin-client";
 import { YumMeter } from "./YumMeter";
 import { VoteWidget, type MyVote } from "./VoteWidget";
 import { DishPhotos, type DishPhoto } from "./DishPhotos";
 import { DishComments, type DishComment } from "./DishComments";
 import { ReportDishModal } from "./ReportDishModal";
+import { SuggestEditModal } from "./SuggestEditModal";
 
 export type CatalogDish = {
   id: string; restaurantId: string; restaurantName: string; verified: boolean;
@@ -36,12 +38,34 @@ function DetailRow({ label, children }: { label: string; children: React.ReactNo
   );
 }
 
-export function DishCard({ dish, onVote }: {
+export function DishCard({ dish, onVote, onChanged }: {
   dish: CatalogDish;
   onVote: (dishId: string, value: 1 | 0 | -1 | null, isLocal: boolean) => void;
+  /** Called after an admin edits or hides this dish, so the page can refetch. */
+  onChanged?: () => void;
 }) {
   const { details } = dish;
   const [reportOpen, setReportOpen] = useState(false);
+  const [editOpen, setEditOpen] = useState(false);
+  const [admin, setAdmin] = useState(false);
+  const [hiding, setHiding] = useState(false);
+  useEffect(() => setAdmin(hasAdminSecret()), []);
+
+  async function hide() {
+    if (!window.confirm("Hide this dish from the catalog?")) return;
+    setHiding(true);
+    try {
+      const res = await fetch(`/api/eat-this/dishes/${dish.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json", ...adminHeaders() },
+        body: JSON.stringify({ status: "hidden" }),
+      });
+      if (res.ok) onChanged?.();
+    } finally {
+      setHiding(false);
+    }
+  }
+
   const flavors = details?.flavors ?? [];
   const ingredients = details?.ingredients ?? [];
   const allergens = details?.allergens ?? [];
@@ -131,22 +155,47 @@ export function DishCard({ dish, onVote }: {
 
       <DishComments dishId={dish.id} comments={dish.comments} />
 
-      <div className="mt-3 flex items-center justify-between gap-3">
+      <div className="mt-3 flex flex-wrap items-center justify-between gap-x-3 gap-y-1">
         {dish.addedBy ? (
           <div className="text-[11px] text-neutral-400">added by @{dish.addedBy}</div>
         ) : (
           <span />
         )}
-        <button
-          type="button"
-          onClick={() => setReportOpen(true)}
-          className="text-[11px] text-neutral-400 underline-offset-2 hover:text-neutral-600 hover:underline"
-        >
-          Is this still on the menu? · Report a problem
-        </button>
+        <div className="flex flex-wrap items-center gap-3 text-[11px] text-neutral-400">
+          <button
+            type="button"
+            onClick={() => setEditOpen(true)}
+            className="underline-offset-2 hover:text-neutral-600 hover:underline"
+          >
+            Suggest an edit
+          </button>
+          <button
+            type="button"
+            onClick={() => setReportOpen(true)}
+            className="underline-offset-2 hover:text-neutral-600 hover:underline"
+          >
+            Report a problem
+          </button>
+          {admin && (
+            <button
+              type="button"
+              onClick={hide}
+              disabled={hiding}
+              className="text-red-400 underline-offset-2 hover:text-red-600 hover:underline disabled:opacity-50"
+            >
+              {hiding ? "Hiding…" : "Hide (admin)"}
+            </button>
+          )}
+        </div>
       </div>
 
       <ReportDishModal dishId={dish.id} open={reportOpen} onClose={() => setReportOpen(false)} />
+      <SuggestEditModal
+        dish={{ id: dish.id, name: dish.name, description: dish.description, tags: dish.tags, availability: dish.availability }}
+        open={editOpen}
+        onClose={() => setEditOpen(false)}
+        onApplied={() => { setEditOpen(false); onChanged?.(); }}
+      />
     </article>
   );
 }

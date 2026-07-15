@@ -3,7 +3,7 @@ import {
   MIN_VOTES_TO_SCORE, scorePct, meterState, tierFor,
   aggregateVotes, rankLeaderboard, leaderboardCategories, sortDishCards,
   applyVote, groupByName, tokenize, dishMatchesTokens,
-  parseSvgCsv, validateAddDish, validateVote, validateReport, validateComment,
+  parseSvgCsv, validateAddDish, validateVote, validateReport, validateComment, validateDishEdit,
 } from "./reverse-lookup";
 
 describe("scorePct", () => {
@@ -112,6 +112,21 @@ describe("validateReport", () => {
     expect("error" in validateReport({ reason: "other" })).toBe(true);
     const ok = validateReport({ reason: "other", note: "  gone  " });
     expect("error" in ok ? null : ok.note).toBe("gone");
+  });
+});
+
+describe("validateDishEdit", () => {
+  test("partial patch — only provided fields, at least one required", () => {
+    expect("error" in validateDishEdit({})).toBe(true);
+    const ok = validateDishEdit({ name: "  New Name  " });
+    expect("error" in ok ? null : ok.proposed).toEqual({ name: "New Name" });
+    const avail = validateDishEdit({ availability: "seasonal" });
+    expect("error" in avail ? null : avail.proposed.availability).toBe("seasonal");
+    const tags = validateDishEdit({ tags: ["a", "", "b"] });
+    expect("error" in tags ? null : tags.proposed.tags).toEqual(["a", "b"]);
+  });
+  test("empty name is rejected when the field is present", () => {
+    expect("error" in validateDishEdit({ name: "   " })).toBe(true);
   });
 });
 

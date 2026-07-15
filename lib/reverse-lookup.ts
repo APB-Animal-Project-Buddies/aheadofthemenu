@@ -325,3 +325,45 @@ export function validateComment(body: any): CommentInput | { error: string } {
     body?.visibility === "private_to_restaurant" ? "private_to_restaurant" : "public";
   return { body: text, visibility };
 }
+
+/** Fields a user may suggest editing on a dish (v1). */
+export type DishEditProposed = {
+  name?: string;
+  description?: string | null;
+  tags?: string[];
+  availability?: DishAvailability;
+};
+export type DishEditInput = { proposed: DishEditProposed; note: string | null };
+
+/**
+ * Validates a proposed dish edit — only the fields actually present are included,
+ * so a proposal can touch just one field. At least one editable field is required.
+ */
+export function validateDishEdit(body: any): DishEditInput | { error: string } {
+  const proposed: DishEditProposed = {};
+
+  if (body?.name !== undefined) {
+    const name = str(body.name, 120);
+    if (!name) return { error: "Dish name can't be empty" };
+    if (String(body.name).trim().length > 120) return { error: "Dish name is too long" };
+    proposed.name = name;
+  }
+  if (body?.description !== undefined) {
+    proposed.description = str(body.description, 500) || null;
+  }
+  if (body?.tags !== undefined) {
+    if (!Array.isArray(body.tags)) return { error: "Tags must be a list" };
+    proposed.tags = body.tags
+      .filter((t: unknown) => typeof t === "string")
+      .map((t: string) => str(t, 40))
+      .filter(Boolean)
+      .slice(0, 12);
+  }
+  if (body?.availability !== undefined) {
+    proposed.availability = body.availability === "seasonal" ? "seasonal" : "permanent";
+  }
+
+  if (Object.keys(proposed).length === 0) return { error: "Nothing to change" };
+  const note = str(body?.note, 1000) || null;
+  return { proposed, note };
+}

@@ -1,5 +1,5 @@
 /**
- * PATCH /api/reverse-lookup/dishes/[id]  (x-admin-secret header)
+ * PATCH /api/eat-this/dishes/[id]  (x-admin-secret header)
  * { status: "hidden" | "live" } — moderation killswitch for community dishes.
  */
 import { NextRequest, NextResponse } from "next/server";

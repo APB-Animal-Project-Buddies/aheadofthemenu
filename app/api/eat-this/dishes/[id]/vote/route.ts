@@ -1,5 +1,5 @@
 /**
- * PUT /api/reverse-lookup/dishes/[id]/vote  (Bearer auth required)
+ * PUT /api/eat-this/dishes/[id]/vote  (Bearer auth required)
  * Body { value: 1 | -1 | null, isLocal?: boolean } — isLocal defaults true.
  * Upserts on (dish_id, user_id); null deletes. Idempotent by construction.
  * Returns fresh per-cohort totals for optimistic-UI reconciliation.

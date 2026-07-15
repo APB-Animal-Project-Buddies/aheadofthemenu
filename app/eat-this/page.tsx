@@ -51,7 +51,7 @@ export default function ReverseLookupPage() {
     setLoading(true);
     setLoadError(false);
     try {
-      const res = await fetch("/api/reverse-lookup/catalog?city=seattle", {
+      const res = await fetch("/api/eat-this/catalog?city=seattle", {
         headers: accessToken ? { Authorization: `Bearer ${accessToken}` } : undefined,
       });
       if (!res.ok) throw new Error();
@@ -155,7 +155,7 @@ export default function ReverseLookupPage() {
     patch((d) => applyVote(d, value, isLocal));
 
     try {
-      const res = await fetch(`/api/reverse-lookup/dishes/${dishId}/vote`, {
+      const res = await fetch(`/api/eat-this/dishes/${dishId}/vote`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -211,7 +211,7 @@ export default function ReverseLookupPage() {
         </div>
         <h1 className="mt-1.5 text-2xl font-bold leading-snug text-neutral-900 sm:text-3xl">
           Tell us what you&rsquo;re craving — we&rsquo;ll tell you{" "}
-          <em className="text-apb">where to find it vegan</em>.
+          <em className="text-apb">where to find it 100% plant-based</em>.
         </h1>
         {/* Search drives the Dishes and Restaurants tabs; Leaderboards swaps it for the category picker. */}
         {tab !== "leaderboards" && (
@@ -318,7 +318,7 @@ export default function ReverseLookupPage() {
                 id={`dish-${dish.id}`}
                 className={highlightId === dish.id ? "rounded-2xl ring-2 ring-apb-accent transition" : undefined}
               >
-                <DishCard dish={dish} onVote={onVote} />
+                <DishCard dish={dish} onVote={onVote} onChanged={fetchCatalog} />
               </div>
             ))}
             {sortedDishes.length === 0 && (
