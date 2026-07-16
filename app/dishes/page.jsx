@@ -29,7 +29,10 @@ function saveStoredMenu(state) {
 
 export default function DishesPage() {
   // ---------- Data from API ----------
-  const { dishes: dishRows, loading, error } = useDishes() || { dishes: [], loading: false, error: null };
+  // Fetch the whole library (API caps at 1000). Search/filter/sort all run
+  // client-side over this full set, so nothing else needs to change. Revisit
+  // with server-side pagination + search once the catalog approaches ~1000.
+  const { dishes: dishRows, loading, error } = useDishes({ limit: 1000 }) || { dishes: [], loading: false, error: null };
 
   // Extract dish_data from API response (API returns { id, dish_name, dish_data, created_at })
   // and normalize the field names the sort/filter code reads: dish_data stores
