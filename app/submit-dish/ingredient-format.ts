@@ -22,6 +22,9 @@ function toLine(r: any): IngredientLine | null {
   if (!name.trim()) return null;
   const line: IngredientLine = { name, quantity: qstr(r.quantity), unit: typeof r.unit === "string" ? r.unit : "" };
   if (typeof r.id === "string" && r.id) line.id = r.id;
+  // Carry the nested-recipe link through edit-mode prefill; without this, editing a
+  // dish would drop the link and silently unlink the nested recipe on save.
+  if (r.nestedDishId != null && r.nestedDishId !== "") line.nestedDishId = r.nestedDishId;
   return line;
 }
 
