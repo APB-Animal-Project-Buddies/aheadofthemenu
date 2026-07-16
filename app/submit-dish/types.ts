@@ -2,7 +2,14 @@
 // (react-hook-form keeps numbers as strings in inputs; the API coerces them.)
 
 // One ingredient line — shared by top-level rows and alternative lines.
-export type IngredientLine = { id?: string; name: string; quantity: string; unit: string };
+// Can either be a traditional ingredient (name/qty/unit) or a nested recipe (nestedDishId).
+export type IngredientLine = {
+  id?: string;
+  name: string;
+  quantity: string;
+  unit: string;
+  nestedDishId?: number | string; // ID of a linked dish/recipe
+};
 
 // An alternative is a GROUP of one-or-more lines (a swap can be several
 // ingredients, e.g. 1 egg => 1 tbsp flax + 3 tbsp water) with an optional label

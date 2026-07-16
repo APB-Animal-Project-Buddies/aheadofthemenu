@@ -36,8 +36,9 @@ export function formatDishField(key: string, val: unknown): string {
       .map((i) => {
         const line = [i.quantity, (i.unit || "").replace(/_/g, " "), i.name].filter(Boolean).join(" ");
         const sec = i.section ? `[${i.section}] ` : "";
+        const nested = i.nestedDishId ? ` (→ dish #${i.nestedDishId})` : "";
         const alts = (i.alternatives || []).length ? ` (+${i.alternatives.length} alt)` : "";
-        return sec + line + alts;
+        return sec + line + nested + alts;
       })
       .join("\n");
   }

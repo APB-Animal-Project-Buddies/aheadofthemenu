@@ -117,6 +117,7 @@ export function RecipeIntakeForm(
             // Sent as text so fractions ("2/3") survive; the API keeps plain numbers numeric.
             quantity: r.quantity.trim(),
             unit: r.unit,
+            nestedDishId: r.nestedDishId,
             ...(g.section.trim() ? { section: g.section.trim() } : {}),
             ...(r.note?.trim() ? { note: r.note.trim() } : {}),
             ...(r.optional ? { optional: true } : {}),
