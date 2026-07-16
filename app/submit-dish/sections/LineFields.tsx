@@ -16,6 +16,13 @@ interface LineFieldsProps {
 interface DishOption {
   id: number;
   dish_name: string;
+  creator?: string | null;
+}
+
+// Who to credit for a dish in the picker: the "Original creator" field, else the
+// account name of whoever submitted it (no per-dish handle is exposed here).
+function dishCreator(d: any): string | null {
+  return d?.dish_data?.originalCreator || d?.dish_data?.submittedBy?.name || null;
 }
 
 // One ingredient row. Renders flex CELLS (name / qty / unit / actions) — the parent
@@ -54,7 +61,13 @@ export function LineFields({ namePrefix, onPickAllergens }: LineFieldsProps) {
       if (searchTerm.trim()) params.append("search", searchTerm);
       const res = await fetch(`/api/dishes?${params.toString()}`);
       const data = await res.json();
-      setDishes(data.dishes || []);
+      setDishes(
+        (data.dishes || []).map((d: any) => ({
+          id: d.id,
+          dish_name: d.dish_name,
+          creator: dishCreator(d),
+        }))
+      );
     } catch (error) {
       console.error("Failed to fetch dishes:", error);
     }
@@ -118,10 +131,10 @@ export function LineFields({ namePrefix, onPickAllergens }: LineFieldsProps) {
         <button
           type="button"
           aria-label="Unlink recipe"
-          className="px-2 py-2 text-neutral-400 hover:text-red-600"
+          className="whitespace-nowrap px-2 py-2 text-xs font-medium text-neutral-500 hover:text-red-600"
           onClick={handleUnlink}
         >
-          ✕
+          unlink recipe
         </button>
       </>
     );
@@ -186,9 +199,12 @@ export function LineFields({ namePrefix, onPickAllergens }: LineFieldsProps) {
                     key={dish.id}
                     type="button"
                     onClick={() => handleSelectRecipe(dish.id, dish.dish_name)}
-                    className="cursor-pointer border-b border-neutral-100 bg-white px-4 py-3 text-left text-sm text-neutral-900 hover:bg-neutral-50"
+                    className="cursor-pointer border-b border-neutral-100 bg-white px-4 py-3 text-left hover:bg-neutral-50"
                   >
-                    {dish.dish_name}
+                    <div className="text-sm text-neutral-900">{dish.dish_name}</div>
+                    {dish.creator ? (
+                      <div className="text-xs text-neutral-500">by {dish.creator}</div>
+                    ) : null}
                   </button>
                 ))}
               </div>
