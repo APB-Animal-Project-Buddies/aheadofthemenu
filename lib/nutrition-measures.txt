@@ -1,0 +1,29 @@
+# Vague ingredient measures -> rough numeric estimates, for NUTRITION only.
+# Recipe text stays faithful ("a few sprigs", "generously"); these values are used
+# to derive an estimate at calc time. Edit freely — one place changes every dish.
+#
+# Format:   <phrase>[@qualifier] :: <quantity> <unit>
+#   - <phrase> is matched (whole-word) in an ingredient's note/unit.
+#   - order matters: earlier lines win, so put more specific / qualified lines first.
+#   - @herb            -> use this value when the ingredient is a fresh herb.
+#   - @salt / @pepper  -> "to taste" defaults, only used when opted in (low impact).
+#   - quantity may be a fraction (e.g. 1/16).
+#
+# --- herbs / greens -------------------------------------------------------------
+few sprigs   :: 3 g
+sprig        :: 1 g
+small bunch  :: 15 g
+bunch        :: 30 g
+handful@herb :: 10 g
+handful      :: 30 g
+# --- tiny seasonings ------------------------------------------------------------
+pinch        :: 1/16 tsp
+dash         :: 1/8 tsp
+# --- liquids / oils -------------------------------------------------------------
+splash       :: 1 tbsp
+drizzle      :: 2 tsp
+generously   :: 3 tbsp
+greasing     :: 1 tsp
+# --- "to taste" (opt-in only) ---------------------------------------------------
+to taste@pepper :: 1/4 tsp
+to taste@salt   :: 1/2 tsp

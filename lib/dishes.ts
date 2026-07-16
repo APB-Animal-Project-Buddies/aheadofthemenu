@@ -176,6 +176,22 @@ export function buildDishData(input: any): DishData {
     .slice(0, MAX_INGREDIENTS);
   if (ingredients.length) d.ingredients = ingredients;
 
+  // Hidden ingredients — nutrition-only rows that NEVER render in the recipe (the dish
+  // page maps only `ingredients`). Used for amounts that are real for nutrition but
+  // shouldn't clutter the recipe, e.g. absorbed frying oil. Same shape as an ingredient
+  // line (name/quantity/unit) plus an optional note. Omitted when empty (back-compat).
+  const rawHidden = Array.isArray(input?.hidden_ingredients) ? input.hidden_ingredients : [];
+  const hiddenIngredients = rawHidden
+    .map((r: any) => {
+      const row: any = ingredientLine(r);
+      if (!row) return null;
+      const hNote = str(r?.note, MAX_SHORT); if (hNote) row.note = hNote;
+      return row;
+    })
+    .filter(Boolean)
+    .slice(0, MAX_INGREDIENTS);
+  if (hiddenIngredients.length) d.hidden_ingredients = hiddenIngredients;
+
   const steps = strArray(input?.steps, MAX_STEPS, MAX_LONG); if (steps.length) d.steps = steps;
 
   const specialProducts = strArray(input?.specialProducts, 50, MAX_SHORT); if (specialProducts.length) d.specialProducts = specialProducts;

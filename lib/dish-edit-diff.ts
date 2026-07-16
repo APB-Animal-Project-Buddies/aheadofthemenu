@@ -11,6 +11,7 @@
 export const DISH_EDIT_FIELDS: Array<[key: string, label: string]> = [
   ["title", "Title"], ["description", "Description"], ["cuisines", "Cuisines"],
   ["dishType", "Dish type"], ["tags", "Tags"], ["ingredients", "Ingredients"],
+  ["hidden_ingredients", "Hidden ingredients (nutrition)"],
   ["steps", "Steps"], ["specialProducts", "Special products"], ["specialEquipment", "Special equipment"],
   ["cost", "Cost"], ["servings", "Servings"], ["prepTime", "Prep time"], ["cookTime", "Cook time"],
   ["allergens", "Allergens"], ["possibleAllergens", "Possible allergens"],
@@ -31,7 +32,7 @@ export function diffDishFields(current: any, proposed: any): Array<[string, stri
 /** Human-readable rendering of one dish_data field value for the diff view. */
 export function formatDishField(key: string, val: unknown): string {
   if (val === undefined || val === null || val === "") return "—";
-  if (key === "ingredients") {
+  if (key === "ingredients" || key === "hidden_ingredients") {
     return ((val as any[]) || [])
       .map((i) => {
         const line = [i.quantity, (i.unit || "").replace(/_/g, " "), i.name].filter(Boolean).join(" ");
