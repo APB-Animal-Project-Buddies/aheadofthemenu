@@ -11,6 +11,7 @@ import { DishActions } from "./DishActions";
 import { DishGallery } from "@/components/DishGallery";
 import { VideoEmbeds } from "@/components/VideoEmbeds";
 import { tikTokOEmbed } from "@/lib/video-embeds";
+import { NotesMarkdown } from "@/lib/notes-markdown";
 
 export const dynamic = "force-dynamic";
 
@@ -45,6 +46,28 @@ async function getNestedDish(id) {
   const res = await graphql(query, { useAdminSecret: true, variables: { id: n } });
   if (res.errors) return null;
   return res.data?.dishes?.[0] ?? null;
+}
+
+// Fetch the products referenced by ingredient.productId. Products are branded
+// ingredients (is_branded_product) with buy links in metadata. Returns a flat
+// { id, product_name, purchase_link } shape; [] on any error.
+async function getProductsByIds(ids) {
+  if (!Array.isArray(ids) || ids.length === 0) return [];
+  const query = `
+    query GetProducts($ids: [String!]!) {
+      ingredients(where: { id: { _in: $ids }, is_branded_product: { _eq: true } }) {
+        id
+        name
+        metadata
+      }
+    }`;
+  const res = await graphql(query, { useAdminSecret: true, variables: { ids } });
+  if (res.errors) return [];
+  return (res.data?.ingredients ?? []).map((r) => ({
+    id: r.id,
+    product_name: r.name,
+    purchase_link: r?.metadata?.purchase_link ?? "",
+  }));
 }
 
 // ── small presentational helpers ───────────────────────────────────────────
@@ -176,7 +199,7 @@ function NestedIngredientsLinks({ ingredients }) {
 }
 
 // ── ingredients (sections + nested alternatives) ────────────────────────────
-function Ingredients({ ingredients, nestedDishes = {} }) {
+function Ingredients({ ingredients, nestedDishes = {}, products = {} }) {
   const groups = groupBySection(ingredients);
   return (
     <div className="flex flex-col gap-6">
@@ -201,6 +224,16 @@ function Ingredients({ ingredients, nestedDishes = {} }) {
                     <span className="text-sm text-neutral-800">{lineText(ing)}</span>
                   )}
                   {ing.optional ? <span className="ml-1.5 text-xs font-medium text-amber-600">(optional)</span> : null}
+                  {ing.productId && products[ing.productId] ? (
+                    <a
+                      href={products[ing.productId].purchase_link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="ml-2 text-xs font-medium text-emerald-700 hover:underline"
+                    >
+                      🛒 {products[ing.productId].product_name} ↗
+                    </a>
+                  ) : null}
                   {ing.note ? <span className="ml-2 text-xs italic text-neutral-500">— {ing.note}</span> : null}
                   {Array.isArray(ing.alternatives) && ing.alternatives.length > 0 ? (
                     <ul className="mt-1.5 flex flex-col gap-1">
@@ -334,6 +367,14 @@ export default async function DishPage({ params, searchParams }) {
     fetchedNestedDishes.forEach((dish) => {
       if (dish) nestedDishes[dish.id] = dish;
     });
+  }
+
+  // Fetch the purchasable products referenced by ingredients (productId).
+  const products = {};
+  if (Array.isArray(d.ingredients)) {
+    const productIds = [...new Set(d.ingredients.map((ing) => ing.productId).filter(Boolean))];
+    const rows = await getProductsByIds(productIds);
+    rows.forEach((p) => { products[p.id] = p; });
   }
 
   return (
@@ -473,7 +514,7 @@ export default async function DishPage({ params, searchParams }) {
       {/* Ingredients */}
       {has(d.ingredients) ? (
         <Section title="Ingredients">
-          <Ingredients ingredients={d.ingredients} nestedDishes={nestedDishes} />
+          <Ingredients ingredients={d.ingredients} nestedDishes={nestedDishes} products={products} />
         </Section>
       ) : null}
 
@@ -548,10 +589,10 @@ export default async function DishPage({ params, searchParams }) {
         </Section>
       ) : null}
 
-      {/* Notes */}
+      {/* Notes (sanitized markdown — links, bold, italic, line breaks) */}
       {d.notes ? (
         <Section title="Notes">
-          <p className="whitespace-pre-line text-sm leading-relaxed text-neutral-700">{d.notes}</p>
+          <NotesMarkdown text={d.notes} />
         </Section>
       ) : null}
 

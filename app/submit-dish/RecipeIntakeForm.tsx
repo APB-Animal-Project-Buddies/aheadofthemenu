@@ -118,6 +118,7 @@ export function RecipeIntakeForm(
             quantity: r.quantity.trim(),
             unit: r.unit,
             nestedDishId: r.nestedDishId,
+            productId: r.productId,
             ...(g.section.trim() ? { section: g.section.trim() } : {}),
             ...(r.note?.trim() ? { note: r.note.trim() } : {}),
             ...(r.optional ? { optional: true } : {}),

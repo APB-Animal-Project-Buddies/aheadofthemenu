@@ -9,6 +9,7 @@ export type IngredientLine = {
   quantity: string;
   unit: string;
   nestedDishId?: number | string; // ID of a linked dish/recipe
+  productId?: string; // ID of a linked purchasable product (products table)
 };
 
 // An alternative is a GROUP of one-or-more lines (a swap can be several

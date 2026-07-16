@@ -25,6 +25,8 @@ function toLine(r: any): IngredientLine | null {
   // Carry the nested-recipe link through edit-mode prefill; without this, editing a
   // dish would drop the link and silently unlink the nested recipe on save.
   if (r.nestedDishId != null && r.nestedDishId !== "") line.nestedDishId = r.nestedDishId;
+  // Same for the product link — keep it through edit-mode prefill.
+  if (typeof r.productId === "string" && r.productId) line.productId = r.productId;
   return line;
 }
 

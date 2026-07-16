@@ -96,7 +96,7 @@ function strArray(v: unknown, max: number, cap: number): string[] {
 // One sanitized ingredient line: { id?, name, quantity, unit }. Shared by top-level
 // ingredient rows AND alternative lines, so both get identical name/quantity/unit/id
 // coercion. Returns null for a nameless row (the caller drops it).
-type IngredientLine = { id?: string; name: string; quantity: number | string | null; unit: string; nestedDishId?: number | string };
+type IngredientLine = { id?: string; name: string; quantity: number | string | null; unit: string; nestedDishId?: number | string; productId?: string };
 function ingredientLine(r: any): IngredientLine | null {
   const name = str(r?.name, MAX_NAME);
   if (!name) return null;
@@ -105,6 +105,9 @@ function ingredientLine(r: any): IngredientLine | null {
   // Optional link to another dish used as an ingredient ("nested recipe"). Kept only
   // when present so a plain ingredient serializes byte-identically to the legacy shape.
   if (r?.nestedDishId != null && r.nestedDishId !== "") row.nestedDishId = r.nestedDishId;
+  // Optional link to a purchasable product for this ingredient (resolved to
+  // product_name + purchase_link at render). Also kept only when present.
+  const productId = str(r?.productId, MAX_NAME); if (productId) row.productId = productId;
   return row;
 }
 

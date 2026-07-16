@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Select, Options } from "@/components/ui/select";
 import { IngredientCombobox } from "@/components/ui/IngredientCombobox";
 import { AddButton } from "./AddButton";
+import { ProductLink } from "./ProductLink";
 import { UNITS, isValidQuantity } from "@/lib/dishes";
 import { cn } from "@/lib/utils";
 import type { RecipeFormValues } from "../types";
@@ -218,6 +219,8 @@ export function LineFields({ namePrefix, onPickAllergens }: LineFieldsProps) {
       <AddButton variant="subtle" onClick={() => setShowRecipePicker(true)}>
         link recipe
       </AddButton>
+
+      <ProductLink namePrefix={namePrefix} />
     </>
   );
 }
