@@ -61,19 +61,24 @@ export async function GET(req: NextRequest) {
     const url = new URL(req.url);
     const limit = Math.min(parseInt(url.searchParams.get("limit") || "100"), 1000);
     const offset = parseInt(url.searchParams.get("offset") || "0");
+    const search = url.searchParams.get("search") || "";
 
-    // Fetch dishes with pagination using GraphQL
-    // Pass variables in the options object, matching your POST example
+    // Fetch dishes with pagination and optional search using GraphQL
     const result = await graphql<DishesQueryResult>(
       `
-        query GetDishes($limit: Int!, $offset: Int!) {
-          dishes(limit: $limit, offset: $offset, order_by: { created_at: desc }) {
+        query GetDishes($limit: Int!, $offset: Int!, $searchTerm: String) {
+          dishes(
+            limit: $limit
+            offset: $offset
+            where: { dish_name: { _ilike: $searchTerm } }
+            order_by: { created_at: desc }
+          ) {
             id
             dish_name
             dish_data
             created_at
           }
-          dishes_aggregate {
+          dishes_aggregate(where: { dish_name: { _ilike: $searchTerm } }) {
             aggregate {
               count
             }
@@ -82,7 +87,11 @@ export async function GET(req: NextRequest) {
       `,
       {
         useAdminSecret: true,
-        variables: { limit, offset }
+        variables: {
+          limit,
+          offset,
+          searchTerm: search.trim() ? `%${search}%` : "%"
+        }
       }
     );
 

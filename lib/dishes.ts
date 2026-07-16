@@ -8,7 +8,7 @@ export const TRIED_BY = ["just_me","friends","family","strangers","a_lot"] as co
 export const TRIED_BY_LABELS: Record<(typeof TRIED_BY)[number], string> = {
   just_me: "Just me", friends: "Friends", family: "Family", strangers: "Strangers", a_lot: "A lot of people",
 };
-export const TAGS = ["fast","easy","cheap","expensive","fancy","healthy","high-protein","comfort-food","spicy","kid-friendly","bulk-prep","low-effort","raw","raw-vegan"] as const;
+export const TAGS = ["fast", "easy", "cheap", "expensive", "fancy", "healthy", "high-protein", "comfort-food", "spicy", "kid-friendly", "bulk-prep", "low-effort", "raw", "raw-vegan"] as const;
 
 const MAX_SHORT = 200, MAX_LONG = 4000, MAX_NAME = 120, MAX_EMAIL = 254, MAX_TAGS = 25, MAX_INGREDIENTS = 100, MAX_STEPS = 60;
 const MAX_ALTS_PER_INGREDIENT = 6, MAX_ALT_LINES = 12;
@@ -96,12 +96,15 @@ function strArray(v: unknown, max: number, cap: number): string[] {
 // One sanitized ingredient line: { id?, name, quantity, unit }. Shared by top-level
 // ingredient rows AND alternative lines, so both get identical name/quantity/unit/id
 // coercion. Returns null for a nameless row (the caller drops it).
-type IngredientLine = { id?: string; name: string; quantity: number | string | null; unit: string };
+type IngredientLine = { id?: string; name: string; quantity: number | string | null; unit: string; nestedDishId?: number | string };
 function ingredientLine(r: any): IngredientLine | null {
   const name = str(r?.name, MAX_NAME);
   if (!name) return null;
   const row: IngredientLine = { name, quantity: qtyValue(r?.quantity), unit: str(r?.unit, 40) ?? "" };
   const id = str(r?.id, MAX_NAME); if (id) row.id = id;
+  // Optional link to another dish used as an ingredient ("nested recipe"). Kept only
+  // when present so a plain ingredient serializes byte-identically to the legacy shape.
+  if (r?.nestedDishId != null && r.nestedDishId !== "") row.nestedDishId = r.nestedDishId;
   return row;
 }
 

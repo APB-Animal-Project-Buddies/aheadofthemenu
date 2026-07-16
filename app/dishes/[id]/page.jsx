@@ -2,7 +2,7 @@
 // dish. Reached from the "View full dish" action on /dishes. Renders the dish_data
 // shape produced by the submit form (lib/dishes.ts buildDishData), including the
 // two ingredient formats: legacy flat rows AND rows with sections + nested
-// alternatives.
+// alternatives. Now includes collapsible displays for nested dishes.
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { graphql } from "@/lib/nhost";
@@ -31,9 +31,29 @@ async function getDish(id) {
   return res.data?.dishes?.[0] ?? null;
 }
 
+async function getNestedDish(id) {
+  const n = Number(id);
+  if (!Number.isInteger(n) || n <= 0) return null;
+  const query = `
+    query GetNestedDish($id: Int!) {
+      dishes(where: { id: { _eq: $id } }) {
+        id
+        dish_name
+        dish_data
+      }
+    }`;
+  const res = await graphql(query, { useAdminSecret: true, variables: { id: n } });
+  if (res.errors) return null;
+  return res.data?.dishes?.[0] ?? null;
+}
+
 // ── small presentational helpers ───────────────────────────────────────────
 const fmtUnit = (u) => (u ? String(u).replace(/_/g, " ") : "");
 const fmtQty = (q) => (q === null || q === undefined || q === "" ? "" : String(q));
+const hasNestedDishId = (ing) => {
+  const id = ing?.nestedDishId;
+  return id !== null && id !== undefined && id !== "" && id !== 0;
+};
 
 function lineText(line) {
   // "0.75 cup white basmati rice" — omit empty qty/unit gracefully.
@@ -75,8 +95,88 @@ function Section({ title, children }) {
   );
 }
 
+// ── nested dish (collapsible) ──────────────────────────────────────────────
+function NestedDish({ dish, ing }) {
+  if (!dish) return null;
+
+  const d = dish.dish_data || {};
+  const qty = fmtQty(ing.quantity);
+  const unit = fmtUnit(ing.unit);
+  const serving = d.servings ? ` (${d.servings} servings)` : "";
+
+  return (
+    <details className="group mt-4 rounded-[12px] border border-apb/25 bg-apb-light/5">
+      <summary className="flex cursor-pointer items-center gap-2 p-4 font-medium text-apb hover:bg-apb-light/10">
+        <span className="inline-block transition-transform group-open:rotate-90">▸</span>
+        <span>
+          {qty && unit ? `${qty} ${unit} ` : qty ? `${qty} ` : ""}
+          <strong>{dish.dish_name}</strong>
+          <span className="ml-1 text-xs font-normal text-neutral-500">{serving}</span>
+        </span>
+      </summary>
+      <div className="border-t border-apb/20 px-4 pb-4 pt-3">
+        {d.ingredients && d.ingredients.length > 0 ? (
+          <div className="mb-4">
+            <h4 className="mb-2 text-xs font-semibold uppercase tracking-wide text-apb/70">Ingredients</h4>
+            <NestedIngredientsLinks ingredients={d.ingredients} />
+          </div>
+        ) : null}
+        {d.steps && d.steps.length > 0 ? (
+          <div>
+            <h4 className="mb-2 text-xs font-semibold uppercase tracking-wide text-apb/70">Instructions</h4>
+            <ol className="flex flex-col gap-2">
+              {d.steps.map((s, i) => (
+                <li key={i} className="flex gap-2 text-sm leading-relaxed text-neutral-800">
+                  <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-apb/20 text-xs font-bold text-apb">{i + 1}</span>
+                  <span>{s}</span>
+                </li>
+              ))}
+            </ol>
+          </div>
+        ) : null}
+        {!d.ingredients && !d.steps ? (
+          <p className="text-xs text-neutral-500">No details available for this nested dish.</p>
+        ) : null}
+      </div>
+    </details>
+  );
+}
+
+// ── nested ingredients as links (grandchildren shown as links, not collapsibles) ────
+function NestedIngredientsLinks({ ingredients }) {
+  const groups = groupBySection(ingredients);
+  return (
+    <div className="flex flex-col gap-4">
+      {groups.map((g, gi) => (
+        <div key={gi}>
+          {g.section ? (
+            <h4 className="mb-2 text-xs font-semibold text-apb">{g.section}</h4>
+          ) : null}
+          <ul className="flex flex-col gap-2">
+            {g.items.map((ing, ii) => {
+              const hasNested = hasNestedDishId(ing);
+              return (
+                <li key={ii} className="text-sm text-neutral-700">
+                  {hasNested ? (
+                    <Link href={`/dishes/${ing.nestedDishId}`} className="font-medium text-apb hover:underline">
+                      {lineText(ing)} ↗
+                    </Link>
+                  ) : (
+                    <span>{lineText(ing)}</span>
+                  )}
+                  {ing.note ? <span className="ml-2 text-xs italic text-neutral-500">— {ing.note}</span> : null}
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 // ── ingredients (sections + nested alternatives) ────────────────────────────
-function Ingredients({ ingredients }) {
+function Ingredients({ ingredients, nestedDishes = {} }) {
   const groups = groupBySection(ingredients);
   return (
     <div className="flex flex-col gap-6">
@@ -86,25 +186,37 @@ function Ingredients({ ingredients }) {
             <h3 className="mb-2 text-lg font-semibold text-apb">{g.section}</h3>
           ) : null}
           <ul className="flex flex-col gap-3">
-            {g.items.map((ing, ii) => (
-              <li key={ii}>
-                <span className="text-sm text-neutral-800">{lineText(ing)}</span>
-                {ing.optional ? <span className="ml-1.5 text-xs font-medium text-amber-600">(optional)</span> : null}
-                {ing.note ? <span className="ml-2 text-xs italic text-neutral-500">— {ing.note}</span> : null}
-                {Array.isArray(ing.alternatives) && ing.alternatives.length > 0 ? (
-                  <ul className="mt-1.5 flex flex-col gap-1">
-                    {ing.alternatives.map((alt, ai) => (
-                      <li key={ai} className="text-xs text-neutral-600">
-                        <span className="font-medium text-apb">Alternative {ai + 1}:</span>{" "}
-                        {alt.label ? <span className="font-medium">{alt.label} — </span> : null}
-                        {(alt.items ?? []).map((x) => lineText(x)).filter(Boolean).join(" + ")}
-                        {alt.note ? <span className="block italic text-neutral-500">{alt.note}</span> : null}
-                      </li>
-                    ))}
-                  </ul>
-                ) : null}
-              </li>
-            ))}
+            {g.items.map((ing, ii) => {
+              const hasNested = hasNestedDishId(ing);
+              const nestedDish = hasNested ? nestedDishes[ing.nestedDishId] : null;
+              return (
+                <li key={ii}>
+                  {nestedDish ? (
+                    <NestedDish dish={nestedDish} ing={ing} />
+                  ) : hasNested ? (
+                    <Link href={`/dishes/${ing.nestedDishId}`} className="text-sm font-medium text-apb hover:underline">
+                      {lineText(ing)} ↗
+                    </Link>
+                  ) : (
+                    <span className="text-sm text-neutral-800">{lineText(ing)}</span>
+                  )}
+                  {ing.optional ? <span className="ml-1.5 text-xs font-medium text-amber-600">(optional)</span> : null}
+                  {ing.note ? <span className="ml-2 text-xs italic text-neutral-500">— {ing.note}</span> : null}
+                  {Array.isArray(ing.alternatives) && ing.alternatives.length > 0 ? (
+                    <ul className="mt-1.5 flex flex-col gap-1">
+                      {ing.alternatives.map((alt, ai) => (
+                        <li key={ai} className="text-xs text-neutral-600">
+                          <span className="font-medium text-apb">Alternative {ai + 1}:</span>{" "}
+                          {alt.label ? <span className="font-medium">{alt.label} — </span> : null}
+                          {(alt.items ?? []).map((x) => lineText(x)).filter(Boolean).join(" + ")}
+                          {alt.note ? <span className="block italic text-neutral-500">{alt.note}</span> : null}
+                        </li>
+                      ))}
+                    </ul>
+                  ) : null}
+                </li>
+              );
+            })}
           </ul>
         </div>
       ))}
@@ -206,6 +318,23 @@ export default async function DishPage({ params, searchParams }) {
   const created = row.created_at ? new Date(row.created_at).toLocaleDateString() : null;
   const has = (a) => Array.isArray(a) && a.length > 0;
   const videoEmbeds = await resolveVideoEmbeds(d.videoEmbeds);
+
+  // Fetch all nested dishes referenced in ingredients
+  const nestedDishes = {};
+  if (Array.isArray(d.ingredients)) {
+    const nestedIds = d.ingredients
+      .filter((ing) => hasNestedDishId(ing))
+      .map((ing) => ing.nestedDishId);
+
+    // Fetch each nested dish in parallel
+    const nestedDishPromises = [...new Set(nestedIds)].map((id) => getNestedDish(id));
+    const fetchedNestedDishes = await Promise.all(nestedDishPromises);
+
+    // Map by ID for easy lookup
+    fetchedNestedDishes.forEach((dish) => {
+      if (dish) nestedDishes[dish.id] = dish;
+    });
+  }
 
   return (
     <main className="mx-auto max-w-3xl px-4 pb-36 pt-10">
@@ -344,7 +473,7 @@ export default async function DishPage({ params, searchParams }) {
       {/* Ingredients */}
       {has(d.ingredients) ? (
         <Section title="Ingredients">
-          <Ingredients ingredients={d.ingredients} />
+          <Ingredients ingredients={d.ingredients} nestedDishes={nestedDishes} />
         </Section>
       ) : null}
 
