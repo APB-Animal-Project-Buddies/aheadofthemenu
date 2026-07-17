@@ -4,6 +4,31 @@ import React, { useState, useEffect, useRef } from 'react';
 import { ChevronDown, ChevronLeft, ChevronRight } from 'lucide-react';
 import { SLIDES, type SlideCard } from '@/components/ProteinGuideSlides';
 
+// Crossfading background slideshow. Cycles through images on a timer, but only
+// while `active` (i.e. while its section is the one on screen), so off-screen
+// sections don't animate.
+const ShuffleBackground: React.FC<{ images: string[]; active: boolean; intervalMs?: number }> = ({ images, active, intervalMs = 3500 }) => {
+    const [idx, setIdx] = useState(0);
+    useEffect(() => {
+        if (!active || images.length < 2) return;
+        const timer = setInterval(() => setIdx((i) => (i + 1) % images.length), intervalMs);
+        return () => clearInterval(timer);
+    }, [active, images.length, intervalMs]);
+    return (
+        <div className="absolute inset-0 overflow-hidden">
+            {images.map((src, i) => (
+                <img
+                    key={src}
+                    src={src}
+                    alt=""
+                    aria-hidden
+                    className={`absolute inset-0 w-full h-full object-cover blur-sm scale-105 transition-opacity duration-1000 ${i === idx ? 'opacity-30' : 'opacity-0'}`}
+                />
+            ))}
+        </div>
+    );
+};
+
 // Circular carousel of image cards — the active card is always centered, and
 // prev/next (and the dots) wrap around from the last card to the first and back.
 // Lives inside a vertical scroll-snap section: page scrolls vertically, cards
@@ -120,7 +145,10 @@ const ProteinGuide: React.FC = () => {
                     style={{ backgroundColor: s.backgroundColor }}
                 >
                     {/* Background media */}
-                    {(s.mediaType === 'image' || s.mediaType === 'carousel') && s.mediaUrl && (
+                    {s.mediaType === 'carousel' && s.backgroundShuffle && (
+                        <ShuffleBackground images={s.backgroundShuffle} active />
+                    )}
+                    {s.mediaType === 'image' && s.mediaUrl && (
                         <div className="absolute inset-0 overflow-hidden">
                             <img src={s.mediaUrl} alt="" className="w-full h-full object-cover opacity-30" />
                         </div>

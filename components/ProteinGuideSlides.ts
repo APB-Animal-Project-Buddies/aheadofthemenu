@@ -15,6 +15,8 @@ export interface Slide {
     textColor: string;
     layout: 'left' | 'right' | 'center';
     cards?: SlideCard[];
+    // Photographic images cycled (crossfade) behind a carousel slide.
+    backgroundShuffle?: string[];
 }
 
 // Emphasis: whole, unprocessed plant proteins first. Cell-cultivated is a single
@@ -39,11 +41,16 @@ export const SLIDES: Slide[] = [
         subtitle: 'Minimally-processed soy, endlessly versatile — from crispy nuggets to silky chocolate mousse.',
         cta: 'Learn more with Wendy',
         ctaLink: 'https://www.instagram.com/wendythefoodscientist/',
-        backgroundColor: '#0a4d2e',
+        backgroundColor: '#1a1a1a',
         mediaType: 'carousel',
         mediaUrl: '/protein-guide/tofu/tofu_aubergine.webp',
         textColor: '#fff',
         layout: 'center',
+        backgroundShuffle: [
+            '/protein-guide/tofu/tofu_aubergine.webp',
+            '/protein-guide/tofu/kinkifromhokaido.jpg',
+            '/protein-guide/tofu/tofu_milk.jpg'
+        ],
         cards: [
             { src: '/protein-guide/tofu/thaw.png', alt: 'Freeze + thaw tofu, ripped into jagged pieces for crispy "chicken" nuggets' },
             { src: '/protein-guide/tofu/boil.png', alt: 'Boiling and pressing tofu for firm, flavorful lemongrass tofu' },
@@ -83,7 +90,7 @@ export const SLIDES: Slide[] = [
         ctaLink: '#',
         backgroundColor: '#f5f5f5',
         mediaType: 'image',
-        mediaUrl: 'https://images.unsplash.com/photo-1508747703725-719777637510?w=1200&q=80',
+        mediaUrl: '/protein-guide/nuts-edamame.jpeg',
         textColor: '#000',
         layout: 'center'
     },
