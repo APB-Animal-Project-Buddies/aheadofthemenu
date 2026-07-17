@@ -25,14 +25,14 @@ export function fieldChanged(a: unknown, b: unknown): boolean {
  * The [key, label] pairs whose PROPOSED value differs from the current dish.
  * Only keys present in `proposed` are considered (a proposal is a partial patch).
  */
-export function diffRlDishFields(current: any, proposed: any): Array<[string, string]> {
+export function diffEatThisDishFields(current: any, proposed: any): Array<[string, string]> {
   return RL_EDIT_FIELDS.filter(
     ([k]) => proposed?.[k] !== undefined && fieldChanged(current?.[k], proposed?.[k])
   );
 }
 
 /** Human-readable rendering of one field value for the diff view. */
-export function formatRlField(_key: string, val: unknown): string {
+export function formatEatThisField(_key: string, val: unknown): string {
   if (val === undefined || val === null || val === "") return "—";
   if (Array.isArray(val)) return val.join(", ");
   return String(val);

@@ -1,5 +1,5 @@
 /**
- * lib/reverse-lookup.ts
+ * lib/eat-this.ts
  *
  * Pure logic for the reverse-lookup catalog: Yum-Meter score math, mood
  * tiers, leaderboard ranking, seed-CSV parsing, and API request validation.

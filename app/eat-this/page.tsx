@@ -6,12 +6,12 @@
  * Search is token-AND across dish name, description, tags, ingredients,
  * restaurant name, and neighborhood. Voting is optimistic and reconciled
  * against the server's fresh cohort totals; all score math lives in
- * lib/reverse-lookup.
+ * lib/eat-this.
  */
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 import { useAuth } from "@/components/AuthProvider";
-import { sortDishCards, applyVote, groupByName, tokenize, dishMatchesTokens, type OrderType } from "@/lib/reverse-lookup";
+import { sortDishCards, applyVote, groupByName, tokenize, dishMatchesTokens, type OrderType } from "@/lib/eat-this";
 import { DishCard, type CatalogDish } from "./components/DishCard";
 import { RestaurantCard, type CatalogRestaurant } from "./components/RestaurantCard";
 import { LeaderboardView } from "./components/LeaderboardView";
@@ -20,7 +20,7 @@ import { AddDishModal } from "./components/AddDishModal";
 type Catalog = { city: string; restaurants: CatalogRestaurant[]; dishes: CatalogDish[] };
 type Tab = "dishes" | "restaurants" | "leaderboards";
 
-export default function ReverseLookupPage() {
+export default function EatThisPage() {
   const { session, isAuthenticated } = useAuth();
   const accessToken = session?.accessToken ?? null;
 
@@ -79,7 +79,7 @@ export default function ReverseLookupPage() {
 
   const tokens = useMemo(() => tokenize(query), [query]);
 
-  // Token-AND matching over the dish haystack (lib/reverse-lookup).
+  // Token-AND matching over the dish haystack (lib/eat-this).
   const filteredDishes = useMemo(() => {
     return dishes.filter(
       (d) => (activeTag === "all" || d.tags.includes(activeTag)) && dishMatchesTokens(d, tokens)

@@ -118,7 +118,7 @@ export async function PATCH(
         );
         if (res.errors?.length) {
             console.error("update dish failed:", res.errors);
-            return NextResponse.json({ error: "Could not update recipe" }, { status: 500 });
+            return NextResponse.json({ error: "Could not update dish" }, { status: 500 });
         }
         if (!res.data?.update_dishes?.affected_rows) {
             return NextResponse.json({ error: "Dish not found" }, { status: 404 });

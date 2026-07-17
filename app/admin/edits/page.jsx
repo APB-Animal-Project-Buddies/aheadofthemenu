@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { getAdminSecret, setAdminSecret, clearAdminSecret, adminHeaders } from "@/lib/admin-client";
 import { diffDishFields, formatDishField } from "@/lib/dish-edit-diff";
-import { diffRlDishFields, formatRlField } from "@/lib/rl-dish-edit-diff";
+import { diffEatThisDishFields, formatEatThisField } from "@/lib/eat-this-dish-edit-diff";
 
 const TABS = [
   { key: "dishes", label: "Dishes", list: "/api/admin/edits", act: (id) => `/api/admin/edits/${id}` },
@@ -194,7 +194,7 @@ function DishEditCard({ e, act, busy }) {
 function RlEditCard({ e, act, busy }) {
   const cur = e.dish || {};
   const prop = e.proposed || {};
-  const changes = diffRlDishFields(cur, prop);
+  const changes = diffEatThisDishFields(cur, prop);
   const who = e.proposer?.metadata?.handle || e.proposer?.displayName || "anonymous";
   return (
     <div className="rounded-[16px] border border-neutral-200 p-5">
@@ -210,7 +210,7 @@ function RlEditCard({ e, act, busy }) {
         </div>
         <ReviewActions e={e} act={act} busy={busy} />
       </div>
-      <div className="mt-4"><DiffRows changes={changes} cur={cur} prop={prop} format={formatRlField} /></div>
+      <div className="mt-4"><DiffRows changes={changes} cur={cur} prop={prop} format={formatEatThisField} /></div>
     </div>
   );
 }

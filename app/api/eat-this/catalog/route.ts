@@ -7,7 +7,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { graphql, nhost } from "@/lib/nhost";
 import { bearerToken, verifyNhostJwt } from "@/lib/jwt";
-import { aggregateVotes, aggregateByCustomization } from "@/lib/reverse-lookup";
+import { aggregateVotes, aggregateByCustomization } from "@/lib/eat-this";
 
 const fileUrl = (fileId: string) => `${nhost.storageUrl}/files/${fileId}`;
 

@@ -4,7 +4,7 @@ import {
   aggregateVotes, aggregateByCustomization, rankLeaderboard, leaderboardCategories, sortDishCards,
   applyVote, groupByName, tokenize, dishMatchesTokens,
   parseSvgCsv, validateAddDish, validateVote, validateReport, validateComment, validateDishEdit,
-} from "./reverse-lookup";
+} from "./eat-this";
 
 describe("scorePct", () => {
   test("rounds up/(up+down) to a whole percent", () => {

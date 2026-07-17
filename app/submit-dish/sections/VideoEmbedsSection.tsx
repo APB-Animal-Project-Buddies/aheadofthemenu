@@ -12,10 +12,10 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Field } from "@/components/form/Field";
 import { parseVideoUrl, MAX_VIDEO_EMBEDS, type VideoEmbed } from "@/lib/video-embeds";
-import type { RecipeFormValues } from "../types";
+import type { DishFormValues } from "../types";
 
 export function VideoEmbedsSection() {
-  const { control } = useFormContext<RecipeFormValues>();
+  const { control } = useFormContext<DishFormValues>();
   const [draft, setDraft] = useState("");
   const [error, setError] = useState<string | null>(null);
 

@@ -1,8 +1,8 @@
 /**
  * Seed script: reverse-lookup catalog (restaurants + dishes)
  *
- * Usage: bun scripts/seed-reverse-lookup.ts            # dry-run: local parse + printed plan, no network
- *        bun scripts/seed-reverse-lookup.ts --execute  # writes to the DB (post-migration, user-gated)
+ * Usage: bun scripts/seed-eat-this.ts            # dry-run: local parse + printed plan, no network
+ *        bun scripts/seed-eat-this.ts --execute  # writes to the DB (post-migration, user-gated)
  *
  * Dry-run is the default and is PURELY LOCAL — no env vars read, no network
  * connection opened. Only --execute reads env and talks GraphQL.
@@ -17,7 +17,7 @@
  *   Re-running is a no-op; prints `created` vs `existed` counts.
  */
 
-import { parseSvgCsv } from "../lib/reverse-lookup";
+import { parseSvgCsv } from "../lib/eat-this";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -239,7 +239,7 @@ function printDryRunPlan(plan: Plan): void {
   );
   console.log();
   console.log(
-    "To write to the DB (post-migration): bun scripts/seed-reverse-lookup.ts --execute"
+    "To write to the DB (post-migration): bun scripts/seed-eat-this.ts --execute"
   );
   console.log("=".repeat(70));
 }

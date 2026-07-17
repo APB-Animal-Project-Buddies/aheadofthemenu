@@ -6,11 +6,11 @@ import { Label } from "@/components/ui/label";
 import { LineFields } from "./LineFields";
 import { AlternativesEditor } from "./AlternativesEditor";
 import { AddButton } from "./AddButton";
-import { emptyIngredient, type RecipeFormValues } from "../types";
+import { emptyIngredient, type DishFormValues } from "../types";
 
 // Optional free-text note for one ingredient — revealed by a "+ note" button.
 function IngredientNote({ namePrefix }: { namePrefix: string }) {
-  const { register, getValues } = useFormContext<RecipeFormValues>();
+  const { register, getValues } = useFormContext<DishFormValues>();
   const [show, setShow] = useState(() => !!getValues(`${namePrefix}.note` as any));
   if (!show) {
     return (
@@ -32,7 +32,7 @@ function IngredientNote({ namePrefix }: { namePrefix: string }) {
 // Marks a skippable ingredient (garnish, add-in). Optional ingredients are why a
 // recipe may carry a "possible allergen" — e.g. nuts only if you add the almonds.
 function OptionalToggle({ namePrefix }: { namePrefix: string }) {
-  const { register } = useFormContext<RecipeFormValues>();
+  const { register } = useFormContext<DishFormValues>();
   return (
     <label className="mt-1 ml-2 inline-flex cursor-pointer items-center gap-1.5 text-xs text-neutral-500">
       <input
@@ -46,7 +46,7 @@ function OptionalToggle({ namePrefix }: { namePrefix: string }) {
 }
 
 export function IngredientsSection() {
-  const { control } = useFormContext<RecipeFormValues>();
+  const { control } = useFormContext<DishFormValues>();
   const { fields, append, remove } = useFieldArray({ control, name: "ingredientGroups" });
 
   // Section headers only appear once there's more than one group — a single
@@ -85,7 +85,7 @@ function SectionGroup({
   showSection: boolean;
   onRemoveGroup: () => void;
 }) {
-  const { control, register, getValues, setValue } = useFormContext<RecipeFormValues>();
+  const { control, register, getValues, setValue } = useFormContext<DishFormValues>();
   const { fields, append, remove } = useFieldArray({
     control,
     name: `ingredientGroups.${groupIndex}.items`,

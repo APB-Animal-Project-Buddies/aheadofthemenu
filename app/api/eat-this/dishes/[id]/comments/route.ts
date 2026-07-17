@@ -9,7 +9,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { graphql } from "@/lib/nhost";
 import { bearerToken, verifyNhostJwt } from "@/lib/jwt";
-import { validateComment } from "@/lib/reverse-lookup";
+import { validateComment } from "@/lib/eat-this";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;

@@ -5,13 +5,13 @@
 // Tolerant of nulls/garbage: bad rows are skipped, quantities are coerced to the
 // strings the form inputs expect.
 import {
-  RECIPE_FORM_DEFAULTS,
+  DISH_FORM_DEFAULTS,
   emptyIngredient,
   type IngredientGroup,
   type Ingredient,
   type Alternative,
   type IngredientLine,
-  type RecipeFormValues,
+  type DishFormValues,
 } from "./types";
 
 const qstr = (q: unknown) => (q === null || q === undefined ? "" : String(q));
@@ -72,13 +72,13 @@ export function normalizeStoredIngredients(raw: unknown): IngredientGroup[] {
 }
 
 /** Full stored dish_data → form values, for prefilling the form in edit mode. */
-export function dishToFormValues(dishData: any): RecipeFormValues {
+export function dishToFormValues(dishData: any): DishFormValues {
   const d = dishData || {};
   const v = d.validation || {};
   const arr = (x: unknown) => (Array.isArray(x) ? x : []);
   const num = (x: unknown) => (x === null || x === undefined || x === "" ? "" : String(x));
   return {
-    ...RECIPE_FORM_DEFAULTS,
+    ...DISH_FORM_DEFAULTS,
     title: d.title ?? "",
     description: d.description ?? "",
     image: typeof d.image === "string" ? d.image : undefined,
@@ -87,7 +87,7 @@ export function dishToFormValues(dishData: any): RecipeFormValues {
     tags: arr(d.tags),
     difficulty: d.difficulty != null ? String(d.difficulty) : "2",
     ingredientGroups: normalizeStoredIngredients(d.ingredients),
-    steps: arr(d.steps).length ? arr(d.steps).map((t: string) => ({ text: String(t) })) : RECIPE_FORM_DEFAULTS.steps,
+    steps: arr(d.steps).length ? arr(d.steps).map((t: string) => ({ text: String(t) })) : DISH_FORM_DEFAULTS.steps,
     specialProducts: arr(d.specialProducts),
     specialEquipment: d.specialEquipment ?? "",
     cost: num(d.cost),

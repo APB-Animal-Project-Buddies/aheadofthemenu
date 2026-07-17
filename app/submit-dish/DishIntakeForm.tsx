@@ -15,7 +15,7 @@ import { useCreatorsStore } from "@/app/stores/creators";
 import { IngredientsSection } from "./sections/IngredientsSection";
 import { StepsSection } from "./sections/StepsSection";
 import { VideoEmbedsSection } from "./sections/VideoEmbedsSection";
-import { RECIPE_FORM_DEFAULTS, type RecipeFormValues } from "./types";
+import { DISH_FORM_DEFAULTS, type DishFormValues } from "./types";
 import { adminHeaders } from "@/lib/admin-client";
 import { useAuth } from "@/components/AuthProvider";
 import { MediaSection, type StagedMedia } from "./sections/MediaSection";
@@ -30,7 +30,7 @@ const numOrNull = (s: string) => (s.trim() === "" ? null : Number(s));
 //  - At least 1 ingredient: always required — a recipe needs its ingredient list.
 //  - Steps: fully optional — a resource link (or just the ingredients) can stand
 //    in for the written-out method.
-function validateRecipe(v: RecipeFormValues, creatorOptions: string[]): string | null {
+function validateDish(v: DishFormValues, creatorOptions: string[]): string | null {
   const rows = v.ingredientGroups.flatMap((g) => g.items);
   if (!rows.some((r) => r.name.trim())) return "Add at least one ingredient.";
 
@@ -63,8 +63,8 @@ function hasQuantityError(errors: any): boolean {
   );
 }
 
-export function RecipeIntakeForm(
-  { dishId, initialValues, mode }: { dishId?: number; initialValues?: RecipeFormValues; mode?: "edit" | "propose" } = {}
+export function DishIntakeForm(
+  { dishId, initialValues, mode }: { dishId?: number; initialValues?: DishFormValues; mode?: "edit" | "propose" } = {}
 ) {
   const isPropose = mode === "propose" && dishId != null;
   const isEdit = dishId != null && !isPropose;
@@ -84,12 +84,12 @@ export function RecipeIntakeForm(
   const loadCreators = useCreatorsStore((s) => s.load);
   const addCreatorNames = useCreatorsStore((s) => s.addNames);
   useEffect(() => { loadCreators(); }, [loadCreators]);
-  const methods = useForm<RecipeFormValues>({ defaultValues: initialValues ?? RECIPE_FORM_DEFAULTS });
+  const methods = useForm<DishFormValues>({ defaultValues: initialValues ?? DISH_FORM_DEFAULTS });
   const { register, handleSubmit, control, watch, setValue, formState: { errors } } = methods;
   const { userId, session } = useAuth();
 
-  async function onSubmit(v: RecipeFormValues) {
-    const problem = validateRecipe(v, creatorOptions);
+  async function onSubmit(v: DishFormValues) {
+    const problem = validateDish(v, creatorOptions);
     if (problem) { setErrorMsg(problem); setStatus("error"); return; }
     setStatus("submitting");
     setErrorMsg(null);
@@ -224,7 +224,7 @@ export function RecipeIntakeForm(
             ? "Your suggested edit was submitted for review. An admin will take a look soon."
             : isEdit
               ? "Your changes were saved."
-              : "Your recipe was submitted."}
+              : "Your dish was submitted."}
         </p>
         <a href={dishId != null ? `/dishes/${dishId}` : "/dishes"} className="mt-5 inline-block">
           <Button type="button">{dishId != null ? "Back to dish" : "Back to dishes"}</Button>
@@ -284,8 +284,8 @@ export function RecipeIntakeForm(
         ) : null}
 
         {/* Basics */}
-        <Field label="Recipe name" required error={errors.title?.message}>
-          <Input className="mt-2" placeholder="e.g. Vegan Zuppa Toscana" {...register("title", { required: "Recipe name is required" })} />
+        <Field label="Dish name" required error={errors.title?.message}>
+          <Input className="mt-2" placeholder="e.g. Vegan Zuppa Toscana" {...register("title", { required: "Dish name is required" })} />
         </Field>
         <Field label="Description">
           <Textarea className="mt-2" placeholder="A short blurb — what the dish is and what makes it great" {...register("description")} />
@@ -330,7 +330,7 @@ export function RecipeIntakeForm(
         <Field label="Cost to make (1 person, $)">
           <Input className="mt-2" type="number" step="any" placeholder="e.g. 3.50" {...register("cost")} />
         </Field>
-        <Field label="Allergens" hint="always present in this recipe">
+        <Field label="Allergens" hint="always present in this dish">
           <Controller control={control} name="allergens" render={({ field }) => (
             <ChipGroup value={field.value} onChange={field.onChange} options={ALLERGENS} />
           )} />
@@ -391,13 +391,13 @@ export function RecipeIntakeForm(
           <Field label="Your name / initials"><Input className="mt-2" placeholder="e.g. VA" {...register("name")} /></Field>
           <Field label="Email"><Input className="mt-2" type="email" placeholder="you@example.com" {...register("email")} /></Field>
         </div>
-        <Field label="Notes (verify recipe; what you liked/disliked/messed up)">
+        <Field label="Notes (verify dish; what you liked/disliked/messed up)">
           <Textarea className="mt-2" placeholder="e.g. Tried it twice — used 1.5x kale; cashew cream is worth it" {...register("notes")} />
         </Field>
 
         {/* Cover photo (one image, large dropzone), then the gallery strip.
             Both upload to the dish-media bucket immediately; nothing attaches
-            to the recipe until it's saved. */}
+            to the dish until it's saved. */}
         <CoverSection cover={cover} onChange={setCover} />
         {!isPropose && <MediaSection media={media} onChange={setMedia} />}
 
@@ -405,7 +405,7 @@ export function RecipeIntakeForm(
         <Button type="submit" disabled={status === "submitting"}>
           {status === "submitting"
             ? (isPropose ? "Submitting…" : isEdit ? "Saving…" : "Submitting…")
-            : (isPropose ? "Suggest edit" : isEdit ? "Save changes" : "Submit recipe")}
+            : (isPropose ? "Suggest edit" : isEdit ? "Save changes" : "Submit dish")}
         </Button>
       </form>
     </FormProvider>

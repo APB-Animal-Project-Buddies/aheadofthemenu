@@ -8,7 +8,7 @@
 import { useEffect, useState } from "react";
 import { Modal } from "@/components/ui/modal";
 import { authFetch } from "@/lib/nhost/auth-fetch";
-import type { ReportReason } from "@/lib/reverse-lookup";
+import type { ReportReason } from "@/lib/eat-this";
 
 const REASONS: { value: ReportReason; label: string }[] = [
   { value: "not_on_menu", label: "No longer on the menu" },

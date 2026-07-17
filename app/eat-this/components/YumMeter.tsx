@@ -2,14 +2,14 @@
 
 /**
  * Yum Meter — the LOCALS vs VISITORS score output. Each cohort block renders
- * one of three states, all decided by meterState() in lib/reverse-lookup:
+ * one of three states, all decided by meterState() in lib/eat-this:
  *  - scored:   tier-colored percentage + mood face + vote count
  *  - tallying: gray neutral face, NO percentage (early numbers would anchor voters)
  *  - empty:    gray face, "No votes yet — be the first."
  * ScoreBlock is exported for reuse in the leaderboard rows.
  */
 import { CuteFace } from "./CuteFace";
-import { meterState, type VoteTotals } from "@/lib/reverse-lookup";
+import { meterState, type VoteTotals } from "@/lib/eat-this";
 
 /** Tier key → face fill, from the style sample's palette. */
 export const FACE_FILLS: Record<string, string> = {

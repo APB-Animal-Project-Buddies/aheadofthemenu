@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "@/components/AuthProvider";
 import { usePersistentState } from "@/lib/usePersistentState";
 import { MultiSelect } from "@/components/form/MultiSelect";
-import type { MyVote, OrderType } from "@/lib/reverse-lookup";
+import type { MyVote, OrderType } from "@/lib/eat-this";
 
 export type { MyVote };
 

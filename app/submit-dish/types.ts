@@ -31,7 +31,7 @@ export type Step = { text: string };
 // A pasted YouTube/TikTok video link, normalized on entry (see lib/video-embeds).
 export type VideoEmbed = { platform: "youtube" | "tiktok"; id: string; url: string };
 
-export type RecipeFormValues = {
+export type DishFormValues = {
   title: string;
   description: string;
   /** Cover image URL (uploaded to storage; shown on dish cards). */
@@ -71,7 +71,7 @@ export const emptyLine = (): IngredientLine => ({ name: "", quantity: "", unit: 
 export const emptyIngredient = (): Ingredient => ({ name: "", quantity: "", unit: "", note: "", optional: false, alternatives: [] });
 export const emptyAlternative = (): Alternative => ({ label: "", note: "", items: [emptyLine()] });
 
-export const RECIPE_FORM_DEFAULTS: RecipeFormValues = {
+export const DISH_FORM_DEFAULTS: DishFormValues = {
   title: "", description: "", cuisines: [], dishType: [], tags: [], difficulty: "2",
   // One unnamed section with a handful of rows open, so a simple recipe looks
   // exactly like before (no section header shown until a 2nd section is added).

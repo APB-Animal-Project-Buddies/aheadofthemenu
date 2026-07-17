@@ -9,7 +9,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { CuteFace } from "./CuteFace";
 import { ScoreBlock, FACE_FILLS } from "./YumMeter";
-import { leaderboardCategories, rankLeaderboard, overallTotals, scorePct, tierFor } from "@/lib/reverse-lookup";
+import { leaderboardCategories, rankLeaderboard, overallTotals, scorePct, tierFor } from "@/lib/eat-this";
 import type { CatalogDish } from "./DishCard";
 
 export function LeaderboardView({ dishes }: { dishes: CatalogDish[] }) {

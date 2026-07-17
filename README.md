@@ -2,7 +2,7 @@
 
 Plant-based recipe, dish, and menu-building app for Animal Project Buddies — a Next.js
 front end backed by Nhost (PostgreSQL + Hasura GraphQL). Includes dish submission, a
-community dish library, reverse-lookup, reviews, and an admin surface.
+community dish library, Eat This! (dish reverse-lookup), reviews, and an admin surface.
 
 - **Runtime:** Next.js (App Router) · TypeScript · **Bun** (preferred package manager/runner)
 - **Backend:** Nhost — PostgreSQL, Hasura GraphQL, Auth, Storage. Schema lives in the
@@ -156,7 +156,7 @@ pattern (writes hit **production** — see the warning above).
 ```bash
 bun scripts/translate-recipes-to-dishes.ts            # dry-run: /recipes content → dishes (local JSON)
 bun scripts/translate-recipes-to-dishes.ts --execute  # insert into the dishes table (prod)
-bun scripts/seed-reverse-lookup.ts [--execute]         # reverse-lookup catalog seed
+bun scripts/seed-eat-this.ts [--execute]               # Eat This! catalog seed
 bun scripts/seed-ingredients.ts                        # ingredient pool seed
 bun scripts/apply-nhost-migrations.ts                  # apply migrations via the Hasura endpoint
 ```
@@ -173,8 +173,8 @@ Other helpers: `build-ingredients-seed.ts`, `assign-ingredient-allergens.ts`,
 aheadofthemenu/
 ├── app/                    # Next.js App Router
 │   ├── dishes/             # dish library + detail
-│   ├── submit-dish/        # recipe/dish intake form
-│   ├── reverse-lookup/     # reverse-lookup feature
+│   ├── submit-dish/        # dish intake form
+│   ├── eat-this/           # Eat This! (dish reverse-lookup)
 │   ├── reviews/            # review flows
 │   ├── admin/              # admin surface
 │   └── api/                # route handlers (dishes, reviews, ingredients, …)

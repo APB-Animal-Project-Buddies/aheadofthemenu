@@ -48,7 +48,7 @@ export async function POST(request: NextRequest) {
     );
     if (res.errors?.length) {
       console.error("insert dish failed:", res.errors);
-      return NextResponse.json({ error: "Could not save recipe" }, { status: 500 });
+      return NextResponse.json({ error: "Could not save dish" }, { status: 500 });
     }
     return NextResponse.json({ ok: true, id: res.data?.insert_dishes_one?.id });
   } catch {

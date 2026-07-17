@@ -28,7 +28,7 @@ export { PLANT_BASED_BRANDS, RARE_EXPENSIVE_INGREDIENTS };
 
 // ---------------------------------------------------------------------------
 // The tool call (strict structured output). One tool, forced via tool_choice.
-// Every top-level key maps to a RecipeFormValues field; ingredients[].raw /
+// Every top-level key maps to a DishFormValues field; ingredients[].raw /
 // .preparation are audit aids (the form binds name + quantity + unit).
 // ---------------------------------------------------------------------------
 export const EXTRACT_TOOL = {

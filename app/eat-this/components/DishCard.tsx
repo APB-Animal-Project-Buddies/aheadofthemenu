@@ -8,7 +8,7 @@
  * community attribution.
  */
 import { useEffect, useState } from "react";
-import type { VoteTotals, CustomizationTotals, OrderType } from "@/lib/reverse-lookup";
+import type { VoteTotals, CustomizationTotals, OrderType } from "@/lib/eat-this";
 import { hasAdminSecret, adminHeaders } from "@/lib/admin-client";
 import { YumMeter } from "./YumMeter";
 import { VoteWidget, type MyVote } from "./VoteWidget";

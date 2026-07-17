@@ -2,10 +2,10 @@
 import { useFieldArray, useFormContext } from "react-hook-form";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import type { RecipeFormValues } from "../types";
+import type { DishFormValues } from "../types";
 
 export function StepsSection() {
-  const { control, register, watch } = useFormContext<RecipeFormValues>();
+  const { control, register, watch } = useFormContext<DishFormValues>();
   const { fields, append, remove } = useFieldArray({ control, name: "steps" });
   const hasLink = (watch("resourceLink") ?? "").trim().length > 0;
 

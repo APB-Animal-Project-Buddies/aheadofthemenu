@@ -5,7 +5,7 @@ import { IngredientCombobox } from "@/components/ui/IngredientCombobox";
 import { ProductLink } from "./ProductLink";
 import { UNITS, isValidQuantity } from "@/lib/dishes";
 import { cn } from "@/lib/utils";
-import type { RecipeFormValues } from "../types";
+import type { DishFormValues } from "../types";
 
 interface LineFieldsProps {
   namePrefix: string; // form path, e.g. "ingredientGroups.0.items.0"
@@ -19,7 +19,7 @@ interface LineFieldsProps {
 // nested-recipe link; we keep showing/unlinking those, but no longer create new ones.
 export function LineFields({ namePrefix, onPickAllergens }: LineFieldsProps) {
   const { control, register, setValue, watch, getFieldState, formState } =
-    useFormContext<RecipeFormValues>();
+    useFormContext<DishFormValues>();
 
   const nestedDishId = watch(`${namePrefix}.nestedDishId` as any);
   const ingredientName = watch(`${namePrefix}.name` as any);
