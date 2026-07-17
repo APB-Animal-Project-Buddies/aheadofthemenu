@@ -17,6 +17,7 @@ const CONSUMER_TABS: Tab[] = [
   { href: "/dishes", label: "Dishes" },
   { href: "/top-alternatives", label: "Top Alternatives" },
   { href: "/eat-this", label: "Eat This!" },
+  { href: "/protein-guide", label: "Protein Guide" }
 ];
 const BUSINESS_TABS: Tab[] = [
   { href: "/menus", label: "Menus" },
@@ -24,6 +25,7 @@ const BUSINESS_TABS: Tab[] = [
   { href: "/top-alternatives", label: "Top Alternatives" },
   { href: "/tips-and-tricks", label: "Tips & Tricks" },
   { href: "/eat-this", label: "Eat This!" },
+  { href: "/protein-guide", label: "Protein Guide" }
 ];
 
 // Some sections belong to one mode regardless of login: a signed-out visitor on a
@@ -55,6 +57,7 @@ const KNOWN_SECTIONS = new Set([
   "eat-this",
   "reviews",
   "submit-dish",
+  "protein-guide",
   "admin",
   "s",
   "hooks",
@@ -95,9 +98,9 @@ export function SiteNav() {
   const mode: "business" | "consumer" = isAuthenticated
     ? (userType === "business" ? "business" : "consumer")
     : BUSINESS_SECTIONS.has(seg) ? "business"
-    : CONSUMER_SECTIONS.has(seg) ? "consumer"
-    : hash === "business" ? "business"
-    : "consumer";
+      : CONSUMER_SECTIONS.has(seg) ? "consumer"
+        : hash === "business" ? "business"
+          : "consumer";
   const tabs = mode === "business" ? BUSINESS_TABS : CONSUMER_TABS;
   // Always carry the mode forward on every tab link (no param → consumer).
   const withMode = (href: string) => `${href}#${mode}`;
@@ -130,11 +133,10 @@ export function SiteNav() {
               <li key={t.href}>
                 <Link
                   href={withMode(t.href)}
-                  className={`relative flex h-16 items-center text-sm font-medium transition ${
-                    active
-                      ? "text-white after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 after:bg-apb-accent"
-                      : "text-apb-cream/65 hover:text-apb-cream"
-                  }`}
+                  className={`relative flex h-16 items-center text-sm font-medium transition ${active
+                    ? "text-white after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 after:bg-apb-accent"
+                    : "text-apb-cream/65 hover:text-apb-cream"
+                    }`}
                 >
                   {t.label}
                 </Link>
