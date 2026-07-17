@@ -37,8 +37,8 @@ export const SLIDES: Slide[] = [
     },
     {
         id: 'tofu',
-        title: 'This is all TOFU',
-        subtitle: 'Minimally-processed soy, endlessly versatile — from crispy nuggets to silky chocolate mousse.',
+        title: 'This is all TOFU!',
+        subtitle: 'Delicious, minimally-processed, endlessly versatile — big thinkers use tofu for chocolate mousse all the way to crispy "chicken" nuggets.',
         cta: 'Learn more with Wendy',
         ctaLink: 'https://www.instagram.com/wendythefoodscientist/',
         backgroundColor: '#1a1a1a',
@@ -49,7 +49,7 @@ export const SLIDES: Slide[] = [
         backgroundShuffle: [
             '/protein-guide/tofu/tofu_aubergine.webp',
             '/protein-guide/tofu/kinkifromhokaido.jpg',
-            '/protein-guide/tofu/tofu_milk.jpg'
+            '/protein-guide/tofu/tofu_mousse.jpeg'
         ],
         cards: [
             { src: '/protein-guide/tofu/thaw.png', alt: 'Freeze + thaw tofu, ripped into jagged pieces for crispy "chicken" nuggets' },

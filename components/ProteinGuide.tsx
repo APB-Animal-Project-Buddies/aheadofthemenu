@@ -22,7 +22,7 @@ const ShuffleBackground: React.FC<{ images: string[]; active: boolean; intervalM
                     src={src}
                     alt=""
                     aria-hidden
-                    className={`absolute inset-0 w-full h-full object-cover blur-sm scale-105 transition-opacity duration-1000 ${i === idx ? 'opacity-30' : 'opacity-0'}`}
+                    className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${i === idx ? 'opacity-100' : 'opacity-0'}`}
                 />
             ))}
         </div>
@@ -136,7 +136,9 @@ const ProteinGuide: React.FC = () => {
             onKeyDown={handleKeyDown}
             className="h-[calc(100vh-4rem)] w-full overflow-y-scroll snap-y snap-mandatory outline-none"
         >
-            {slides.map((s, idx) => (
+            {slides.map((s, idx) => {
+                const active = idx === currentSlide;
+                return (
                 <section
                     key={s.id}
                     ref={(el) => { slideRefs.current[idx] = el; }}
@@ -146,7 +148,12 @@ const ProteinGuide: React.FC = () => {
                 >
                     {/* Background media */}
                     {s.mediaType === 'carousel' && s.backgroundShuffle && (
-                        <ShuffleBackground images={s.backgroundShuffle} active />
+                        <ShuffleBackground images={s.backgroundShuffle} active={active} />
+                    )}
+                    {/* Tint fades in shortly after the dish is shown, so the photo
+                       reads clearly first, then dims for foreground contrast. */}
+                    {s.mediaType === 'carousel' && (
+                        <div className={`absolute inset-0 bg-black transition-opacity duration-700 ${active ? 'opacity-30 delay-[400ms]' : 'opacity-0 delay-0'}`} />
                     )}
                     {s.mediaType === 'image' && s.mediaUrl && (
                         <div className="absolute inset-0 overflow-hidden">
@@ -160,9 +167,10 @@ const ProteinGuide: React.FC = () => {
                     )}
 
                     {s.mediaType === 'carousel' ? (
-                        /* Carousel layout — title up top, cards, then CTA */
+                        /* Carousel layout — background shows first, then the carousel
+                           pops in, then the text (staggered via transition delays). */
                         <div className="relative z-10 h-full flex flex-col items-center justify-center gap-6 px-4 py-10">
-                            <div className="text-center max-w-3xl">
+                            <div className={`text-center max-w-3xl transition-all duration-500 ${active ? 'opacity-100 translate-y-0 delay-[1500ms]' : 'opacity-0 translate-y-3 delay-0'}`}>
                                 <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-4 leading-tight" style={{ color: s.textColor }}>
                                     {s.title}
                                 </h1>
@@ -170,12 +178,16 @@ const ProteinGuide: React.FC = () => {
                                     {s.subtitle}
                                 </p>
                             </div>
-                            {s.cards && <CardCarousel cards={s.cards} />}
+                            {s.cards && (
+                                <div className={`w-full flex justify-center transition-all duration-500 ${active ? 'opacity-100 scale-100 delay-[1000ms]' : 'opacity-0 scale-90 delay-0'}`}>
+                                    <CardCarousel cards={s.cards} />
+                                </div>
+                            )}
                             <a
                                 href={s.ctaLink}
                                 target="_blank"
                                 rel="noreferrer"
-                                className="inline-block px-8 py-3 rounded-lg font-semibold bg-white text-black transition-all hover:scale-105"
+                                className={`inline-block px-8 py-3 rounded-lg font-semibold bg-white text-black transition-all duration-500 hover:scale-105 ${active ? 'opacity-100 delay-[1500ms]' : 'opacity-0 delay-0'}`}
                             >
                                 {s.cta}
                             </a>
@@ -224,11 +236,11 @@ const ProteinGuide: React.FC = () => {
                         </div>
                     )}
 
-                    {/* Scroll hint on the first slide — click to advance */}
-                    {idx === 0 && (
+                    {/* Scroll hint on every section except the last — click to advance */}
+                    {idx < slides.length - 1 && (
                         <button
                             type="button"
-                            onClick={() => scrollToSlide(1)}
+                            onClick={() => scrollToSlide(idx + 1)}
                             aria-label="Scroll to next section"
                             className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 animate-bounce cursor-pointer"
                         >
@@ -236,7 +248,8 @@ const ProteinGuide: React.FC = () => {
                         </button>
                     )}
                 </section>
-            ))}
+                );
+            })}
 
             {/* Slide indicators — mix-blend keeps them visible on light and dark slides */}
             <div className="fixed bottom-8 right-8 z-30 flex flex-col gap-2 mix-blend-difference">
