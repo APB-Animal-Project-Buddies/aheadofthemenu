@@ -83,9 +83,9 @@ export const SLIDES: Slide[] = [
         layout: 'left'
     },
     {
-        id: 'nuts-edamame',
-        title: 'Nuts & edamame',
-        subtitle: 'Snackable whole-food protein — a handful of almonds or a bowl of edamame goes a long way.',
+        id: 'nuts-coconut',
+        title: 'Nuts & Coconut',
+        subtitle: 'Snackable whole-food protein that has wild applications of creams, cheeses, and even ice cream.',
         cta: 'Learn more',
         ctaLink: '#',
         backgroundColor: '#f5f5f5',
