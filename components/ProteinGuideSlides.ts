@@ -59,7 +59,7 @@ export const SLIDES: Slide[] = [
         ctaLink: '#',
         backgroundColor: '#f5f5f5',
         mediaType: 'image',
-        mediaUrl: 'https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?w=1200&q=80',
+        mediaUrl: '/protein-guide/beans_lentils.webp',
         textColor: '#000',
         layout: 'right'
     },
@@ -71,7 +71,7 @@ export const SLIDES: Slide[] = [
         ctaLink: '#',
         backgroundColor: '#ffffff',
         mediaType: 'image',
-        mediaUrl: 'https://images.unsplash.com/photo-1586985289688-cacf313cc330?w=1200&q=80',
+        mediaUrl: '/protein-guide/wholegrainsandseeds.jpg',
         textColor: '#000',
         layout: 'left'
     },
