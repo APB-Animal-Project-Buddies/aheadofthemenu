@@ -4,32 +4,35 @@ import React, { useState, useEffect, useRef } from 'react';
 import { ChevronDown, ChevronLeft, ChevronRight } from 'lucide-react';
 import { SLIDES, type SlideCard } from '@/components/ProteinGuideSlides';
 
-// Horizontal, snap-scrolling carousel of image cards. Lives inside a vertical
-// scroll-snap section, so the page scrolls vertically and the cards slide
-// horizontally (native scroll/trackpad + prev/next buttons).
+// Circular carousel of image cards — the active card is always centered, and
+// prev/next (and the dots) wrap around from the last card to the first and back.
+// Lives inside a vertical scroll-snap section: page scrolls vertically, cards
+// cycle horizontally.
 const CardCarousel: React.FC<{ cards: SlideCard[] }> = ({ cards }) => {
-    const ref = useRef<HTMLDivElement>(null);
-    const scrollByCard = (dir: number) => {
-        const el = ref.current;
-        if (!el) return;
-        el.scrollBy({ left: dir * el.clientWidth * 0.85, behavior: 'smooth' });
-    };
+    const [active, setActive] = useState(0);
+    const n = cards.length;
+    const go = (dir: number) => setActive((prev) => (prev + dir + n) % n);
     return (
-        <div className="relative w-full max-w-4xl">
-            <div
-                ref={ref}
-                className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-2 scroll-smooth"
-                style={{ scrollbarWidth: 'none' }}
-            >
-                {cards.map((c) => (
-                    <div key={c.src} className="snap-center shrink-0 w-[88%] sm:w-[70%] md:w-[600px]">
-                        <img src={c.src} alt={c.alt} loading="lazy" className="w-full h-auto rounded-2xl shadow-2xl" />
-                    </div>
-                ))}
+        <div className="relative w-full max-w-3xl">
+            <div className="overflow-hidden rounded-2xl">
+                <div
+                    className="flex transition-transform duration-500 ease-out"
+                    style={{ transform: `translateX(-${active * 100}%)` }}
+                >
+                    {cards.map((c) => (
+                        <img
+                            key={c.src}
+                            src={c.src}
+                            alt={c.alt}
+                            loading="lazy"
+                            className="w-full shrink-0 rounded-2xl shadow-2xl"
+                        />
+                    ))}
+                </div>
             </div>
             <button
                 type="button"
-                onClick={() => scrollByCard(-1)}
+                onClick={() => go(-1)}
                 aria-label="Previous card"
                 className="absolute -left-3 top-1/2 -translate-y-1/2 grid h-10 w-10 place-items-center rounded-full bg-white/90 text-black shadow-lg transition hover:bg-white"
             >
@@ -37,12 +40,23 @@ const CardCarousel: React.FC<{ cards: SlideCard[] }> = ({ cards }) => {
             </button>
             <button
                 type="button"
-                onClick={() => scrollByCard(1)}
+                onClick={() => go(1)}
                 aria-label="Next card"
                 className="absolute -right-3 top-1/2 -translate-y-1/2 grid h-10 w-10 place-items-center rounded-full bg-white/90 text-black shadow-lg transition hover:bg-white"
             >
                 <ChevronRight size={22} />
             </button>
+            <div className="mt-4 flex justify-center gap-2">
+                {cards.map((c, i) => (
+                    <button
+                        key={c.src}
+                        type="button"
+                        onClick={() => setActive(i)}
+                        aria-label={`Show card ${i + 1}`}
+                        className={`h-2 rounded-full bg-white transition-all ${i === active ? 'w-6' : 'w-2 opacity-50'}`}
+                    />
+                ))}
+            </div>
         </div>
     );
 };
