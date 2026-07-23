@@ -15,6 +15,7 @@ type Tab = { href: string; label: string };
 // emerald bar is identical across Next pages and the static apps.
 const CONSUMER_TABS: Tab[] = [
   { href: "/dishes", label: "Dishes" },
+  { href: "/creators", label: "Creators" },
   { href: "/top-alternatives", label: "Top Alternatives" },
   { href: "/eat-this", label: "Eat This!" },
   { href: "/protein-guide", label: "Protein Guide" }
@@ -32,7 +33,7 @@ const BUSINESS_TABS: Tab[] = [
 // business-only page (/recipes, /menus, /tips-and-tricks) still gets the restaurant nav,
 // and /dishes always reads as consumer. Shared sections fall back to the account type.
 const BUSINESS_SECTIONS = new Set(["recipes", "menus", "tips-and-tricks"]);
-const CONSUMER_SECTIONS = new Set(["dishes"]);
+const CONSUMER_SECTIONS = new Set(["dishes", "creators"]);
 
 // The nav has its own header on the landing + auth screens, and is intentionally
 // hidden on the user's profile and public handle pages.
@@ -52,6 +53,7 @@ const KNOWN_SECTIONS = new Set([
   "recipes",
   "menus",
   "dishes",
+  "creators",
   "top-alternatives",
   "tips-and-tricks",
   "eat-this",

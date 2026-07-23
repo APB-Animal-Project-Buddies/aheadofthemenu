@@ -6,6 +6,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { graphql } from "@/lib/nhost";
+import { findCreatorByName } from "@/lib/creators";
 import { TRIED_BY_LABELS } from "@/lib/dishes";
 import { DishActions } from "./DishActions";
 import { DishGallery } from "@/components/DishGallery";
@@ -352,6 +353,18 @@ export default async function DishPage({ params, searchParams }) {
   const has = (a) => Array.isArray(a) && a.length > 0;
   const videoEmbeds = await resolveVideoEmbeds(d.videoEmbeds);
 
+  // Resolve the free-text creator to a profile slug so the "By:" line can link
+  // to /creators/[slug]. Defensive: if the profile columns aren't migrated yet
+  // (the slug column may not exist), fall back to plain-text attribution.
+  let creatorSlug = null;
+  if (d.originalCreator) {
+    try {
+      creatorSlug = (await findCreatorByName(d.originalCreator))?.slug ?? null;
+    } catch {
+      creatorSlug = null;
+    }
+  }
+
   // Fetch all nested dishes referenced in ingredients
   const nestedDishes = {};
   if (Array.isArray(d.ingredients)) {
@@ -495,7 +508,16 @@ export default async function DishPage({ params, searchParams }) {
             <span className="text-neutral-700"><span className="text-neutral-400">Cost / serving:</span> <strong className="text-apb">${Number(d.cost).toFixed(2)}</strong></span>
           ) : null}
           {d.originalCreator ? (
-            <span className="text-neutral-700"><span className="text-neutral-400">By:</span> {d.originalCreator}</span>
+            <span className="text-neutral-700">
+              <span className="text-neutral-400">By:</span>{" "}
+              {creatorSlug ? (
+                <Link href={`/creators/${creatorSlug}`} className="font-medium text-apb hover:underline">
+                  {d.originalCreator}
+                </Link>
+              ) : (
+                d.originalCreator
+              )}
+            </span>
           ) : null}
           {d.resourceLink ? (
             <a href={d.resourceLink} target="_blank" rel="noopener noreferrer" className="font-medium text-apb hover:underline">
