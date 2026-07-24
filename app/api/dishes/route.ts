@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { graphql } from "@/lib/nhost";
 import { buildDishData } from "@/lib/dishes";
+import { resolveOrCreateCreator } from "@/lib/creators";
 
 interface DishesQueryResult {
   dishes: Array<{
@@ -39,12 +40,30 @@ export async function POST(request: NextRequest) {
     dishData.user_id = userId;
   }
 
+  // Every recipe must be attributed to a creator (structural FK, not just the
+  // free-text originalCreator). Resolve the entered name to an existing creator
+  // or create one, and reject the submission if no creator was given.
+  const creatorName = typeof dishData.originalCreator === "string" ? dishData.originalCreator.trim() : "";
+  if (!creatorName) {
+    return NextResponse.json({ error: "A recipe creator is required." }, { status: 400 });
+  }
+  let creatorId: string | null = null;
+  try {
+    creatorId = (await resolveOrCreateCreator(creatorName))?.id ?? null;
+  } catch (e) {
+    console.error("creator resolve failed:", e);
+    return NextResponse.json({ error: "Could not attach the recipe creator. Please try again." }, { status: 502 });
+  }
+  if (!creatorId) {
+    return NextResponse.json({ error: "A recipe creator is required." }, { status: 400 });
+  }
+
   try {
     const res = await graphql<{ insert_dishes_one: { id: number } }>(
-      `mutation AddDish($name: String!, $data: jsonb!) {
-         insert_dishes_one(object: { dish_name: $name, dish_data: $data }) { id }
+      `mutation AddDish($name: String!, $data: jsonb!, $creatorId: uuid!) {
+         insert_dishes_one(object: { dish_name: $name, dish_data: $data, creator_id: $creatorId }) { id }
        }`,
-      { useAdminSecret: true, variables: { name: dishData.title as string, data: dishData } }
+      { useAdminSecret: true, variables: { name: dishData.title as string, data: dishData, creatorId } }
     );
     if (res.errors?.length) {
       console.error("insert dish failed:", res.errors);

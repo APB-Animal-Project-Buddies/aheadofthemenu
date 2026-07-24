@@ -13,20 +13,20 @@ type Tab = { href: string; label: string };
 // both share Top Alternatives. Signed-out visitors see the consumer set.
 // Keep these lists in sync with the static prototype's `site-nav.js` so the
 // emerald bar is identical across Next pages and the static apps.
+// Protein Guide is temporarily hidden from the nav (page still exists at
+// /protein-guide, just unlinked) while the Creators launch goes first.
 const CONSUMER_TABS: Tab[] = [
   { href: "/dishes", label: "Dishes" },
   { href: "/creators", label: "Creators" },
   { href: "/top-alternatives", label: "Top Alternatives" },
-  { href: "/eat-this", label: "Eat This!" },
-  { href: "/protein-guide", label: "Protein Guide" }
+  { href: "/eat-this", label: "Eat This!" }
 ];
 const BUSINESS_TABS: Tab[] = [
   { href: "/menus", label: "Menus" },
   { href: "/recipes", label: "Recipes" },
   { href: "/top-alternatives", label: "Top Alternatives" },
   { href: "/tips-and-tricks", label: "Tips & Tricks" },
-  { href: "/eat-this", label: "Eat This!" },
-  { href: "/protein-guide", label: "Protein Guide" }
+  { href: "/eat-this", label: "Eat This!" }
 ];
 
 // Some sections belong to one mode regardless of login: a signed-out visitor on a

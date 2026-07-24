@@ -10,6 +10,7 @@ import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Modal } from "@/components/ui/modal";
 import { useCreatorsStore } from "@/app/stores/creators";
+import { closestMatch } from "@/lib/fuzzy";
 
 export function AddCreatorLine({
   onAdded,
@@ -25,6 +26,21 @@ export function AddCreatorLine({
   const [creatorName, setCreatorName] = useState("");
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState<string | null>(null);
+
+  // Near-duplicate steering: if what they're typing closely matches an existing
+  // creator (typo / brand vs person), suggest picking that one instead of
+  // creating a new near-dup row.
+  const typed = creatorName.trim() || name.trim();
+  const suggestion = typed ? closestMatch(typed, existingCreators) : null;
+
+  function useSuggestion(pick: string) {
+    onAdded(pick, []);
+    setOpen(false);
+    setMsg(null);
+    setWebsite("");
+    setName("");
+    setCreatorName("");
+  }
 
   async function add() {
     if (!website.trim()) {
@@ -126,6 +142,18 @@ export function AddCreatorLine({
               disabled={busy}
             />
           </div>
+          {suggestion && !busy ? (
+            <div className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-800">
+              Did you mean <strong>{suggestion}</strong>? It&rsquo;s already in the list.{" "}
+              <button
+                type="button"
+                onClick={() => useSuggestion(suggestion)}
+                className="font-semibold text-apb underline"
+              >
+                Use &ldquo;{suggestion}&rdquo;
+              </button>
+            </div>
+          ) : null}
           {msg && <p className="text-xs text-red-600">{msg}</p>}
           <div className="flex gap-2 pt-2">
             <button
