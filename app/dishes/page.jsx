@@ -127,7 +127,14 @@ export default function DishesPage() {
       if (tagFilters.length > 0 && !tagFilters.every(t => (r.tags || []).includes(t))) return false;
       if (dietFilters.length > 0 && dietFilters.some(d => (r.allergens || []).includes(d))) return false;
       if (q) {
-        const hay = `${r.title || ''} ${(r.cuisines || []).join(' ')} ${r.description || ''}`.toLowerCase();
+        // Search across the recipe's title, cuisines, description, ingredient
+        // names, creator, and tags so "chickpea", "Nora Cooks", or a tag all
+        // find matching recipes — not just the title.
+        const ingredientNames = (r.ingredients || []).map(i => i?.name || '').join(' ');
+        const hay = [
+          r.title, (r.cuisines || []).join(' '), r.description,
+          ingredientNames, r.originalCreator, (r.tags || []).join(' '),
+        ].filter(Boolean).join(' ').toLowerCase();
         if (!hay.includes(q)) return false;
       }
       return true;
@@ -279,7 +286,7 @@ export default function DishesPage() {
         {/* Sticky filter section */}
         <div className="sticky-filter-header">
           <div className="filter-row-horizontal">
-            <SearchBox value={search} onChange={setSearch} placeholder="Search dishes…" />
+            <SearchBox value={search} onChange={setSearch} placeholder="Search by name, ingredient, creator…" />
             {FilterChips && (
               <FilterChips
                 activeCourse={courseFilter}
