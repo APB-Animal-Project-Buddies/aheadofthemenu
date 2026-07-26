@@ -21,6 +21,7 @@ export default async function CreatorsPage() {
       <p className="mt-1 text-neutral-500">
         Browse the vegan recipe creators behind the dishes — search by name or filter by cuisine.
       </p>
+      <p className="text-sm mt-1 text-neutral-500 italic">Not all creators are officially on the platform — some are user-submitted profile details and recipes</p>
       <div className="mt-6">
         {creators.length ? (
           <CreatorsGallery creators={creators} />
