@@ -4,6 +4,24 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import type { GalleryCreator } from "@/lib/creators";
 
+/**
+ * Card naming: the brand is what people recognise, so it leads, with the person
+ * behind it in parentheses underneath — "Cooking for Peanuts" / "(Nisha Melvani)".
+ *
+ * The columns run the other way round (display_name is the person, creator_name
+ * is the brand), so these two helpers do the swap in one place. A creator with
+ * no brand — or whose brand is their own name — shows a single line.
+ */
+type Named = { display_name: string; creator_name: string | null };
+
+const primaryLabel = (c: Named) => c.creator_name?.trim() || c.display_name;
+
+const secondaryLabel = (c: Named) => {
+  const brand = c.creator_name?.trim();
+  if (!brand || brand === c.display_name) return null;
+  return c.display_name;
+};
+
 export function CreatorsGallery({ creators }: { creators: GalleryCreator[] }) {
   const [query, setQuery] = useState("");
   const [cuisine, setCuisine] = useState<string | null>(null);
@@ -86,19 +104,21 @@ export function CreatorsGallery({ creators }: { creators: GalleryCreator[] }) {
               // eslint-disable-next-line @next/next/no-img-element
               <img
                 src={c.image_url}
-                alt={c.display_name}
+                alt={primaryLabel(c)}
                 className="h-20 w-20 rounded-full border border-neutral-200 object-cover"
               />
             ) : (
               <div className="flex h-20 w-20 items-center justify-center rounded-full border border-neutral-200 bg-apb/10 text-2xl font-bold text-apb">
-                {c.display_name.slice(0, 1).toUpperCase()}
+                {primaryLabel(c).slice(0, 1).toUpperCase()}
               </div>
             )}
+            {/* Brand leads, person follows in parentheses — "Cooking for Peanuts"
+                over "(Nisha Melvani)". People recognise the brand first. */}
             <div className="mt-3 line-clamp-2 text-sm font-semibold text-neutral-800 group-hover:text-apb">
-              {c.display_name}
+              {primaryLabel(c)}
             </div>
-            {c.creator_name && c.creator_name !== c.display_name ? (
-              <div className="mt-0.5 line-clamp-1 text-xs text-neutral-500">{c.creator_name}</div>
+            {secondaryLabel(c) ? (
+              <div className="mt-0.5 line-clamp-1 text-xs text-neutral-500">({secondaryLabel(c)})</div>
             ) : null}
             {c.dishCount ? (
               <div className="mt-0.5 text-xs text-neutral-400">
