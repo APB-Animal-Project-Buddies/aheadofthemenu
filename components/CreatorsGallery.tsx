@@ -97,6 +97,9 @@ export function CreatorsGallery({ creators }: { creators: GalleryCreator[] }) {
             <div className="mt-3 line-clamp-2 text-sm font-semibold text-neutral-800 group-hover:text-apb">
               {c.display_name}
             </div>
+            {c.creator_name && c.creator_name !== c.display_name ? (
+              <div className="mt-0.5 line-clamp-1 text-xs text-neutral-500">{c.creator_name}</div>
+            ) : null}
             {c.dishCount ? (
               <div className="mt-0.5 text-xs text-neutral-400">
                 {c.dishCount} recipe{c.dishCount === 1 ? "" : "s"}
