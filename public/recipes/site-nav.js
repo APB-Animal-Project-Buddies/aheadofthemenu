@@ -16,6 +16,7 @@
 (function () {
   const CONSUMER_TABS = [
     { id: 'dishes',   href: '/dishes',           label: 'Dishes' },
+    { id: 'creators', href: '/creators',         label: 'Creators' },
     { id: 'dairy',    href: '/top-alternatives', label: 'Top Alternatives' },
     { id: 'eatthis',  href: '/eat-this',         label: 'Eat This!' },
   ];
@@ -51,7 +52,7 @@
     // pages → business, /dishes → consumer); on ambivalent pages the #business/#consumer
     // param carries it forward (no param → consumer).
     const BUSINESS_SECTIONS = ['recipes', 'menus', 'tips'];
-    const CONSUMER_SECTIONS = ['dishes'];
+    const CONSUMER_SECTIONS = ['dishes', 'creators'];
     const mode = session
       ? (userType === 'business' ? 'business' : 'consumer')
       : BUSINESS_SECTIONS.indexOf(active) !== -1 ? 'business'

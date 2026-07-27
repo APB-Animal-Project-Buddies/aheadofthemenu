@@ -27,6 +27,35 @@ Full checklist when adding a dish/ingredient field:
 4. Edit-mode prefill — `app/submit-dish/ingredient-format.ts`
 5. Dish-page render — `app/dishes/[id]/page.jsx`
 
+## Site nav — two implementations that must stay in sync
+
+The emerald nav bar exists **twice**, and changing one without the other silently
+drops tabs on half the site:
+
+| File | Serves |
+|---|---|
+| `components/SiteNav.tsx` | every Next route (`/dishes`, `/creators`, `/eat-this`, …) |
+| `public/recipes/site-nav.js` | the static SPAs in `public/` — `/top-alternatives`, `/menus`, `/tips-and-tricks` (see `STATIC_APPS` in `middleware.ts`) |
+
+The static apps are plain HTML served by a middleware rewrite, so **`SiteNav.tsx`
+never renders on them** — they build their nav from `site-nav.js` instead.
+
+**Whenever you add, remove, or reorder a nav tab, you MUST change BOTH files.**
+Four lists have to agree:
+
+1. `CONSUMER_TABS` — both files
+2. `BUSINESS_TABS` — both files
+3. `CONSUMER_SECTIONS` / `BUSINESS_SECTIONS` — both files (these decide which tab
+   set a signed-out visitor sees; `SiteNav.tsx` keys them off the URL segment,
+   `site-nav.js` off `document.body.dataset.activeNav`)
+4. The static file's entries also need an `id` matching the page's
+   `data-active-nav` attribute, or that tab never highlights as active
+
+This has already bitten once: the Creators launch added the tab to `SiteNav.tsx`
+only, so `/top-alternatives` showed a nav with no Creators tab. The symptom is
+subtle — the nav looks fine, it's just missing an entry, and only on the static
+pages.
+
 ## APIs
 
 - `Bun.serve()` supports WebSockets, HTTPS, and routes. Don't use `express`.
