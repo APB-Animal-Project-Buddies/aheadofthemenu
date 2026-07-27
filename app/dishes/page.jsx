@@ -62,7 +62,12 @@ export default function DishesPage() {
   const [sortBy, setSortBy] = useState('curated');
   const [search, setSearch] = useState('');
   const [courseFilter, setCourseFilter] = useState('all');
-  const [creatorFilter, setCreatorFilter] = useState('all');
+  // An ARRAY, not a string. FilterChips has always contained multi-select logic
+  // (and renders checkboxes in the creator dropdown), but its
+  // `Array.isArray(activeCreator)` branch was unreachable while this was the
+  // string 'all' — so picking a second creator silently replaced the first.
+  // Empty array means "no creator filter".
+  const [creatorFilter, setCreatorFilter] = useState([]);
   // Sourcing filter UI is parked for now; the state stays so the filter logic
   // below keeps working when the chips come back.
   const [sourcingFilter] = useState('all');
@@ -121,7 +126,8 @@ export default function DishesPage() {
     let list = dishes.filter(r => {
       if (activeCuisine !== 'all' && !(r.cuisines || []).includes(activeCuisine)) return false;
       if (courseFilter !== 'all' && !(r.courses || []).includes(courseFilter)) return false;
-      if (creatorFilter !== 'all' && (r.originalCreator || '') !== creatorFilter) return false;
+      // OR across selected creators — several creators widen the results.
+      if (creatorFilter.length > 0 && !creatorFilter.includes(r.originalCreator || '')) return false;
       if (sourcingFilter === 'in-house' && r.sourcingTier !== 'in-house') return false;
       if (sourcingFilter === 'branded' && r.sourcingTier === 'in-house') return false;
       if (tagFilters.length > 0 && !tagFilters.every(t => (r.tags || []).includes(t))) return false;

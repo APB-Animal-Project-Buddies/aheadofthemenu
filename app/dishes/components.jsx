@@ -109,35 +109,36 @@ function FilterChips({ activeCourse, onCourseChange, activeCreator, onCreatorCha
     setCreatorDropdownOpen(!creatorDropdownOpen);
   };
 
-  const handleCreatorSelect = (creator) => {
-    // Update LRU order - move selected creator to front
-    setCreatorOrder(prev => {
-      const filtered = prev.filter(c => c !== creator);
-      return [creator, ...filtered];
-    });
+  // `activeCreator` is an array of selected creators; [] means no filter. The
+  // legacy 'all' string is tolerated so any stale caller still behaves.
+  const selectedCreators =
+    Array.isArray(activeCreator) ? activeCreator
+    : activeCreator && activeCreator !== 'all' ? [activeCreator]
+    : [];
 
-    if (typeof activeCreator === 'string') {
-      // Single select
-      if (activeCreator === creator) {
-        onCreatorChange('all');
-      } else {
-        onCreatorChange(creator);
-      }
-    } else if (Array.isArray(activeCreator)) {
-      // Multi-select
-      if (activeCreator.includes(creator)) {
-        const next = activeCreator.filter(c => c !== creator);
-        onCreatorChange(next.length > 0 ? next : 'all');
-      } else {
-        onCreatorChange([...activeCreator, creator]);
-      }
-    }
+  const handleCreatorSelect = (creator) => {
+    // LRU: the most recently picked creator moves to the front, which is what
+    // makes the visible chips reorder around what you actually use.
+    setCreatorOrder(prev => [creator, ...prev.filter(c => c !== creator)]);
+
+    onCreatorChange(
+      selectedCreators.includes(creator)
+        ? selectedCreators.filter(c => c !== creator)
+        : [...selectedCreators, creator]
+    );
   };
 
-  // Sort creators by recency (LRU): selected/recent ones first
+  /**
+   * Chip order: currently-selected creators first, then most-recently-used,
+   * then the rest. Only the first few chips are visible, so without this a
+   * creator you just picked from the "More" dropdown would vanish back into it
+   * the moment the dropdown closed — which is what "the tabs don't reorganize"
+   * described.
+   */
   const sortedCreators = creatorOptions ? [
-    ...creatorOrder.filter(c => creatorOptions.includes(c)),
-    ...creatorOptions.filter(c => !creatorOrder.includes(c))
+    ...creatorOptions.filter(c => selectedCreators.includes(c)),
+    ...creatorOrder.filter(c => creatorOptions.includes(c) && !selectedCreators.includes(c)),
+    ...creatorOptions.filter(c => !creatorOrder.includes(c) && !selectedCreators.includes(c)),
   ] : [];
 
   useEffect(() => {
@@ -155,13 +156,14 @@ function FilterChips({ activeCourse, onCourseChange, activeCreator, onCreatorCha
 
   const activeCount =
     (activeCourse && activeCourse !== 'all' ? 1 : 0) +
-    (activeCreator && activeCreator !== 'all' ? 1 : 0) +
+    // Each selected creator counts, so the badge matches what's actually on.
+    selectedCreators.length +
     (activeDiets || []).length +
     (activeTags || []).length;
 
   function clearAll() {
     if (activeCourse !== 'all') onCourseChange('all');
-    if (activeCreator !== 'all') onCreatorChange('all');
+    if (selectedCreators.length) onCreatorChange([]);
     (activeDiets || []).forEach(d => onDietToggle(d));
     (activeTags || []).forEach(t => onTagToggle(t));
   }
@@ -201,17 +203,23 @@ function FilterChips({ activeCourse, onCourseChange, activeCreator, onCreatorCha
             <span className="group-label">Creator</span>
             <div className="fchip-group">
               <button
-                className={"fchip" + (activeCreator === 'all' ? ' on' : '')}
-                onClick={() => { onCreatorChange('all'); setCreatorDropdownOpen(false); }}
+                className={"fchip" + (selectedCreators.length === 0 ? ' on' : '')}
+                onClick={() => { onCreatorChange([]); setCreatorDropdownOpen(false); }}
               >All</button>
-              {(creatorOptions || []).slice(0, 3).map(c => (
-                <button
-                  key={c}
-                  className={"fchip" + (activeCreator === c ? ' on' : '')}
-                  style={activeCreator === c ? { fontWeight: '700', boxShadow: '0 0 0 2px var(--moss, #1e4d2b)' } : {}}
-                  onClick={() => { onCreatorChange(c); setCreatorDropdownOpen(false); }}
-                >{c}</button>
-              ))}
+              {/* sortedCreators, not creatorOptions — selected creators stay
+                  visible instead of being pushed out of the first three. */}
+              {sortedCreators.slice(0, 3).map(c => {
+                const on = selectedCreators.includes(c);
+                return (
+                  <button
+                    key={c}
+                    className={"fchip" + (on ? ' on' : '')}
+                    aria-pressed={on}
+                    style={on ? { fontWeight: '700', boxShadow: '0 0 0 2px var(--moss, #1e4d2b)' } : {}}
+                    onClick={() => handleCreatorSelect(c)}
+                  >{c}</button>
+                );
+              })}
               {(creatorOptions || []).length > 3 ? (
                 <>
                   <button
@@ -273,17 +281,21 @@ function FilterChips({ activeCourse, onCourseChange, activeCreator, onCreatorCha
                     <span className="group-label">Creator</span>
                     <div className="fchip-group">
                       <button
-                        className={"fchip" + (activeCreator === 'all' ? ' on' : '')}
-                        onClick={() => onCreatorChange('all')}
+                        className={"fchip" + (selectedCreators.length === 0 ? ' on' : '')}
+                        onClick={() => onCreatorChange([])}
                       >All</button>
-                      {(creatorOptions || []).slice(0, 3).map(c => (
-                        <button
-                          key={c}
-                          className={"fchip" + (activeCreator === c ? ' on' : '')}
-                          style={activeCreator === c ? { fontWeight: '700', boxShadow: '0 0 0 2px var(--moss, #1e4d2b)' } : {}}
-                          onClick={() => onCreatorChange(c)}
-                        >{c}</button>
-                      ))}
+                      {sortedCreators.slice(0, 3).map(c => {
+                        const on = selectedCreators.includes(c);
+                        return (
+                          <button
+                            key={c}
+                            className={"fchip" + (on ? ' on' : '')}
+                            aria-pressed={on}
+                            style={on ? { fontWeight: '700', boxShadow: '0 0 0 2px var(--moss, #1e4d2b)' } : {}}
+                            onClick={() => handleCreatorSelect(c)}
+                          >{c}</button>
+                        );
+                      })}
                       {(creatorOptions || []).length > 3 ? (
                         <button
                           ref={moreButtonRef}
@@ -397,9 +409,7 @@ function FilterChips({ activeCourse, onCourseChange, activeCreator, onCreatorCha
               {creatorOptions
                 .filter(c => c.toLowerCase().includes(creatorSearch.toLowerCase()))
                 .map(c => {
-                  const isSelected = Array.isArray(activeCreator)
-                    ? activeCreator.includes(c)
-                    : activeCreator === c;
+                  const isSelected = selectedCreators.includes(c);
                   return (
                     <button
                       key={c}

@@ -3423,3 +3423,52 @@ body.no-why .card .why {
 .cuisine-row {
   margin-top: 8px;
 }
+
+/* ---------- Filter row alignment + mobile fit ----------
+   NOTE: these rules live at the END of the file deliberately. The
+   "Sticky filter header" block above is unconditional and was appended after
+   every @media block, so it overrides any mobile rule written earlier — the
+   .sticky-filter-header / .filter-row-horizontal overrides inside the
+   `max-width: 720px` block near line 2128 are dead for exactly that reason.
+   Anything responsive for this row must go below those rules. */
+
+/* .dishes-topbar sets `padding: 28px 32px 0`, but .sticky-filter-header set no
+   horizontal padding at all, so the search row ran edge-to-edge while the
+   header above it was inset — the misalignment, and the reason the Filters
+   button sat flush against the right edge looking cut off. */
+.sticky-filter-header {
+  padding-left: 32px;
+  padding-right: 32px;
+}
+
+@media (max-width: 720px) {
+  .dishes-topbar {
+    padding: 20px 18px 0;
+    gap: 12px;
+  }
+
+  .sticky-filter-header {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+
+  .filter-row-horizontal {
+    gap: 8px;
+  }
+
+  /* The search box must be able to shrink. `.search-box` sets min-width: 240px
+     and `.filter-row-horizontal > div:first-child` sets min-width: 200px — the
+     latter is more specific, so it wins over the mobile `min-width: 0` set
+     earlier and keeps the row from fitting on narrow phones. */
+  .filter-row-horizontal > div:first-child,
+  .filter-row-horizontal > .search-box {
+    flex: 1 1 auto;
+    min-width: 0;
+    max-width: none;
+  }
+
+  /* Never let the toggle be the thing that overflows. */
+  .filters-toggle-mobile {
+    flex-shrink: 0;
+  }
+}
