@@ -91,7 +91,13 @@ test("toTagList returns [] for non-arrays", () => {
 
 test("toSearchResult carries a citable url", () => {
   expect(toSearchResult(dish()).url).toBe(dishUrl("d1"));
-  expect(toSearchResult(dish()).url).toContain("https://www.aheadofthemenu.com/eat-this/");
+  expect(toSearchResult(dish()).url).toBe("https://www.aheadofthemenu.com/eat-this/d1");
+});
+
+test("dishUrl deep-links to the per-dish page, not the catalogue", () => {
+  // These URLs are published in agent output, /llms.txt and the OpenAPI doc, so
+  // they must match a real route — app/eat-this/[id]/page.tsx.
+  expect(dishUrl("abc-123")).toBe("https://www.aheadofthemenu.com/eat-this/abc-123");
 });
 
 test("toSearchResult exposes both ids so a vote can be made without a second lookup", () => {

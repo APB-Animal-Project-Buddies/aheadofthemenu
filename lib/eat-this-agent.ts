@@ -40,6 +40,12 @@ export function agentScore(rows: VoteRow[]): AgentScore {
   return { state: "empty" };
 }
 
+/**
+ * Citable URL for a dish — the server-rendered detail page at
+ * `app/eat-this/[id]/page.tsx`. Keep this pointing only at routes that actually
+ * exist: these URLs are published in agent output, /llms.txt and the OpenAPI
+ * document, so a wrong path here becomes 404s in someone's chat transcript.
+ */
 export const dishUrl = (dishId: string) => `${SITE_URL}/eat-this/${dishId}`;
 
 export type SearchableDish = {
