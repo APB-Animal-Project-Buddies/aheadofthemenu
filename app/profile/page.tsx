@@ -8,6 +8,7 @@ import { Avatar } from "@/components/Avatar";
 import { QrShareCard } from "@/components/QrShareCard";
 import { ClaimQrSection } from "@/components/ClaimQrSection";
 import { ActiveDishesList } from "@/components/ActiveDishesList";
+import { AgentKeysSection } from "@/components/AgentKeysSection";
 import { ROLE_OPTIONS, USER_TYPE_LABELS } from "@/lib/nhost/roles";
 import { normalizeHandle, validateHandle } from "@/lib/handle";
 import { getNhost } from "@/lib/nhost/client";
@@ -251,6 +252,10 @@ export default function ProfilePage() {
           </section>
         </>
       )}
+
+      {/* Agent API keys — not gated on `handle`, since an agent acts as the
+          user account rather than through their public profile URL. */}
+      <AgentKeysSection />
     </main>
   );
 }
