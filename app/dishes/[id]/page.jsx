@@ -3,9 +3,12 @@
 // shape produced by the submit form (lib/dishes.ts buildDishData), including the
 // two ingredient formats: legacy flat rows AND rows with sections + nested
 // alternatives. Now includes collapsible displays for nested dishes.
+import { cache } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { graphql } from "@/lib/nhost";
+import { absoluteUrl } from "@/lib/site-url";
+import { truncateAtWord } from "@/lib/meta-text";
 import { findCreatorByName } from "@/lib/creators";
 import { TRIED_BY_LABELS } from "@/lib/dishes";
 import { DishActions } from "./DishActions";
@@ -16,7 +19,10 @@ import { NotesMarkdown } from "@/lib/notes-markdown";
 
 export const dynamic = "force-dynamic";
 
-async function getDish(id) {
+// Wrapped in React's cache() so generateMetadata and the page component share a
+// single query per render rather than each issuing their own — lib/nhost's
+// graphql sets cache: "no-store", so nothing dedupes it otherwise.
+const getDish = cache(async (id) => {
   const n = Number(id);
   if (!Number.isInteger(n)) return null;
   const query = `
@@ -31,6 +37,55 @@ async function getDish(id) {
   const res = await graphql(query, { useAdminSecret: true, variables: { id: n } });
   if (res.errors) return null;
   return res.data?.dishes?.[0] ?? null;
+});
+
+/**
+ * Dish pages were already server-rendered — name, description and ingredients
+ * are all in the server HTML — but carried no <title>, description or OG tags,
+ * so a crawler or a link unfurl saw the site-wide defaults. This supplies them
+ * from the same dish_data the body renders.
+ */
+export async function generateMetadata({ params }) {
+  const row = await getDish(params.id);
+  if (!row) return { title: "Dish not found" };
+
+  const d = row.dish_data || {};
+  const title = d.title || row.dish_name || "Untitled dish";
+  const creator = typeof d.originalCreator === "string" ? d.originalCreator.trim() : "";
+
+  // Prefer the author's own description; otherwise build one from the
+  // ingredients the page already lists, which is what the dish is actually
+  // about. Search engines truncate around 160 characters.
+  const ingredientNames = Array.isArray(d.ingredients)
+    ? d.ingredients
+        .map((i) => (typeof i?.name === "string" ? i.name.trim() : ""))
+        .filter(Boolean)
+    : [];
+  const fallback = ingredientNames.length
+    ? `A plant-based recipe made with ${ingredientNames.slice(0, 6).join(", ")}.`
+    : "A plant-based recipe on Ahead of the Menu.";
+  const description = truncateAtWord(d.description || fallback);
+
+  const canonical = absoluteUrl(`/dishes/${row.id}`);
+  const image = typeof d.image === "string" && d.image ? d.image : null;
+
+  return {
+    title: creator ? `${title} — ${creator}` : title,
+    description,
+    alternates: { canonical },
+    openGraph: {
+      title,
+      description,
+      url: canonical,
+      type: "article",
+      ...(image ? { images: [{ url: image }] } : {}),
+    },
+    twitter: {
+      card: image ? "summary_large_image" : "summary",
+      title,
+      description,
+    },
+  };
 }
 
 async function getNestedDish(id) {

@@ -4,7 +4,9 @@ import { LandingRedirect } from "@/components/LandingRedirect";
 import "./aotm.css";
 
 export const metadata: Metadata = {
-  title: "Ahead of the Menu — plant-based food for everyone",
+  // `absolute` opts out of the root layout's "%s — Ahead of the Menu" template,
+  // which would otherwise append the brand a second time.
+  title: { absolute: "Ahead of the Menu — plant-based food for everyone" },
   description:
     "Let's make food where everyone eats. Inclusive, creative, sustainable, and ethical food choices for a better future.",
 };
