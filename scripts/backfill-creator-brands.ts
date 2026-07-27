@@ -53,6 +53,34 @@ const PERSON_BY_SLUG: Record<string, string> = {
   "healthier-steps": "Michelle Blackwood",
   "plantbased-on-a-budget": "Toni Okamoto",
   "gretchen-s-vegan-bakery": "Gretchen Price",
+
+  // --- second pass: each verified against the creator's own About page ---
+  "sweet-potato-soul": "Jenné Claiborne",
+  "the-korean-vegan": "Joanne Lee Molinaro",
+  "the-mediterranean-dish": "Suzy Karadsheh",
+  "lazy-cat-kitchen": "Ania Marcinowska",
+  "the-viet-vegan": "Lisa Le",
+  "veggiekins": "Remy Morimoto Park",
+  "spain-on-a-fork": "Albert Bevia",
+  "the-foreign-fork": "Alexandria Drzazgowski Ulmer",
+  "urban-farmie": "Shruthi Baskaran-Makanju",
+  "pies-and-tacos": "Camila Hurst",
+  "mexican-made-meatless": "Nancy Lopez",
+  "karissa-s-vegan-kitchen": "Karissa Besaw",
+  "addicted-to-dates": "Christina Leopold",
+  "brazilian-kitchen-abroad": "Aline Shaw",
+  "the-fiery-vegetarian": "Deirdre Gilna",
+
+  // Multiple people. Format follows the existing SO VEGAN row
+  // ("Roxy Pope + Ben Pook") rather than inventing a second convention.
+  "the-woks-of-life": "Bill, Judy, Sarah + Kaitlin Leung",
+  "broke-bank-vegan": "Justine Drosdovech + Mitch Chapman",
+  "simple-vegan-blog": "Iosune Robles + Alberto Aragón",
+
+  // Partners exist but only one full name is published, so only that one is
+  // recorded — a half-name is worse than a single name.
+  "six-hungry-feet": "Laura Arteaga",
+  "make-it-dairy-free": "Larisha Bernard",
 };
 
 /**
