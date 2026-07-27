@@ -120,3 +120,36 @@ test.each([":)", ":(", ":-)", ":D", ";)", ":P", ":o"])(
 test("still removes a space before real punctuation", () => {
   expect(cleanDescription("carrots , daikon and radish .")).toBe("carrots, daikon and radish.");
 });
+
+// --- multi-word corrections + diacritics ------------------------------------
+
+test("fixSuspects corrects 'ban minh' to 'bánh mì' with no leftover words", () => {
+  // Regression: the old first-word-only replacement produced "bánh mì minh".
+  expect(fixSuspects("Delicious ban minh filled with seitan")).toBe(
+    "Delicious bánh mì filled with seitan"
+  );
+});
+
+test("fixSuspects adds diacritics to an otherwise correct 'banh mi'", () => {
+  expect(fixSuspects("a classic banh mi")).toBe("a classic bánh mì");
+});
+
+test("fixSuspects leaves an already-correct 'bánh mì' alone", () => {
+  const s = "a classic bánh mì";
+  expect(fixSuspects(s)).toBe(s);
+});
+
+test("banh mi correction is idempotent", () => {
+  const once = fixSuspects("ban minh");
+  expect(fixSuspects(once)).toBe(once);
+  expect(once).toBe("bánh mì");
+});
+
+test("fixSuspects preserves capitalisation on a multi-word correction", () => {
+  expect(fixSuspects("Ban minh is great")).toBe("Bánh mì is great");
+});
+
+test("the picked lookahead still spares unrelated uses", () => {
+  expect(fixSuspects("hand picked mushrooms")).toBe("hand picked mushrooms");
+  expect(fixSuspects("picked carrots")).toBe("pickled carrots");
+});
