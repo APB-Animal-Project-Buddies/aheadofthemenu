@@ -152,11 +152,16 @@ function FilterChips({ activeCourse, onCourseChange, activeCreator, onCreatorCha
    * and only removable from inside the nested picker. Unselected creators then
    * fill whatever slots remain up to CHIP_SLOTS.
    */
-  const CHIP_SLOTS = 3;
+  const CHIP_SLOTS = 3; // row length when nothing is selected
+  const MAX_VISIBLE_SELECTED = 5; // hard cap, so the row can't grow unbounded
+
+  const selectedInOrder = sortedCreators.filter(c => selectedCreators.includes(c));
+  const shownSelected = selectedInOrder.slice(0, MAX_VISIBLE_SELECTED);
+  const hiddenSelectedCount = selectedInOrder.length - shownSelected.length;
   const unselected = sortedCreators.filter(c => !selectedCreators.includes(c));
   const visibleCreators = [
-    ...sortedCreators.filter(c => selectedCreators.includes(c)),
-    ...unselected.slice(0, Math.max(0, CHIP_SLOTS - selectedCreators.length)),
+    ...shownSelected,
+    ...unselected.slice(0, Math.max(0, CHIP_SLOTS - shownSelected.length)),
   ];
 
   /**
@@ -239,7 +244,7 @@ function FilterChips({ activeCourse, onCourseChange, activeCreator, onCreatorCha
         {(creatorOptions || []).length > 0 ? (
           <div className="filter-group">
             <span className="group-label">Creator</span>
-            <div className="fchip-group">
+            <div className="fchip-group creator-chips">
               <button
                 className={"fchip" + (selectedCreators.length === 0 ? ' on' : '')}
                 onClick={() => { onCreatorChange([]); setCreatorDropdownOpen(false); }}
@@ -258,6 +263,14 @@ function FilterChips({ activeCourse, onCourseChange, activeCreator, onCreatorCha
                   >{c}</button>
                 );
               })}
+              {hiddenSelectedCount > 0 ? (
+                <button
+                  className="fchip on fchip-overflow"
+                  onClick={handleMoreClick}
+                  title={`${hiddenSelectedCount} more selected creator${hiddenSelectedCount === 1 ? '' : 's'}`}
+                  aria-label={`${hiddenSelectedCount} more selected creator${hiddenSelectedCount === 1 ? '' : 's'} — open picker`}
+                >(…)</button>
+              ) : null}
               {(creatorOptions || []).length > 3 ? (
                 <>
                   <button
@@ -316,7 +329,7 @@ function FilterChips({ activeCourse, onCourseChange, activeCreator, onCreatorCha
                 {(creatorOptions || []).length > 0 ? (
                   <div className="filter-group">
                     <span className="group-label">Creator</span>
-                    <div className="fchip-group">
+                    <div className="fchip-group creator-chips">
                       <button
                         className={"fchip" + (selectedCreators.length === 0 ? ' on' : '')}
                         onClick={() => onCreatorChange([])}
@@ -333,6 +346,14 @@ function FilterChips({ activeCourse, onCourseChange, activeCreator, onCreatorCha
                           >{c}</button>
                         );
                       })}
+                      {hiddenSelectedCount > 0 ? (
+                        <button
+                          className="fchip on fchip-overflow"
+                          onClick={handleMoreClick}
+                          title={`${hiddenSelectedCount} more selected creator${hiddenSelectedCount === 1 ? '' : 's'}`}
+                          aria-label={`${hiddenSelectedCount} more selected creator${hiddenSelectedCount === 1 ? '' : 's'} — open picker`}
+                        >(…)</button>
+                      ) : null}
                       {(creatorOptions || []).length > 3 ? (
                         <button
                                 className="fchip"
@@ -444,6 +465,13 @@ function FilterChips({ activeCourse, onCourseChange, activeCreator, onCreatorCha
             <div className="max-h-96 overflow-y-auto">
               {creatorOptions
                 .filter(c => c.toLowerCase().includes(creatorSearch.toLowerCase()))
+                // Selected bubble to the top, so what you've picked is never
+                // buried further down a 100-entry alphabetical list.
+                .sort((a, b) => {
+                  const sa = selectedCreators.includes(a) ? 0 : 1;
+                  const sb = selectedCreators.includes(b) ? 0 : 1;
+                  return sa - sb || a.localeCompare(b);
+                })
                 .map(c => {
                   const isSelected = selectedCreators.includes(c);
                   return (

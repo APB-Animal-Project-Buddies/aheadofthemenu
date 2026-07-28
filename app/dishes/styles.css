@@ -3472,3 +3472,75 @@ body.no-why .card .why {
     flex-shrink: 0;
   }
 }
+
+/* ---------- Creator chips: fixed-height row ----------
+   .fchip-group is flex-wrap: wrap, so every extra selected creator wrapped onto
+   a new line and pushed the whole grid down — a layout shift on each click.
+   The creator row scrolls sideways instead, so its height never changes no
+   matter how many are selected. */
+.fchip-group.creator-chips {
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  max-width: 100%;
+  scrollbar-width: thin;
+  -webkit-overflow-scrolling: touch;
+}
+
+.fchip-group.creator-chips .fchip {
+  flex-shrink: 0;
+}
+
+/* Overflow indicator: selections beyond the visible cap. Opens the picker. */
+.fchip-overflow {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.05em;
+}
+
+/* ---------- Dish grid skeleton ----------
+   Replaces the old full-screen branded loading screen, which was held for a
+   minimum of 2s even when the library was already loaded. */
+.dish-skeleton {
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 12px;
+  background: var(--paper);
+}
+
+.dish-skeleton-img {
+  aspect-ratio: 4 / 3;
+  border-radius: 12px;
+  margin-bottom: 12px;
+}
+
+.dish-skeleton-line {
+  height: 12px;
+  border-radius: 6px;
+  margin-bottom: 8px;
+}
+
+.dish-skeleton-line.short {
+  width: 55%;
+}
+
+.dish-skeleton-img,
+.dish-skeleton-line {
+  background: linear-gradient(90deg,
+    oklch(0.92 0.01 145) 25%,
+    oklch(0.96 0.01 145) 37%,
+    oklch(0.92 0.01 145) 63%);
+  background-size: 400% 100%;
+  animation: dish-skeleton-shimmer 1.4s ease-in-out infinite;
+}
+
+@keyframes dish-skeleton-shimmer {
+  0% { background-position: 100% 50%; }
+  100% { background-position: 0 50%; }
+}
+
+/* Respect reduced-motion: keep the placeholder, drop the shimmer. */
+@media (prefers-reduced-motion: reduce) {
+  .dish-skeleton-img,
+  .dish-skeleton-line {
+    animation: none;
+  }
+}

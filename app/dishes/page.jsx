@@ -10,7 +10,9 @@ import {
   DishCard, DishModal, MenuDrawer, Toast,
 } from './components';
 import { CUISINE_META } from './helpers';
-import { LoadingFacts, PLANT_FACTS, pickWeighted, TipCard } from './LoadingFacts';
+// LoadingFacts (the full-screen branded screen) is no longer rendered here —
+// the page shows a skeleton grid instead. The tip toast still uses the facts.
+import { PLANT_FACTS, pickWeighted, TipCard } from './LoadingFacts';
 import { toast as sonnerToast } from 'sonner';
 
 const STORAGE_KEY = 'apb-dishes-menu-v1';
@@ -216,19 +218,16 @@ export default function DishesPage() {
     setDietFilters(prev => prev.includes(d) ? prev.filter(x => x !== d) : [...prev, d]);
   }
 
-  // Keep the loading screen up for at least 2s so the branded screen doesn't
-  // flash, even when dishes load instantly.
-  const [minTimePassed, setMinTimePassed] = useState(false);
-  useEffect(() => {
-    const t = setTimeout(() => setMinTimePassed(true), 2000);
-    return () => clearTimeout(t);
-  }, []);
+  // There used to be a 2s minimum on the branded loading screen so it wouldn't
+  // "flash" — which meant waiting a full two seconds even when the library was
+  // already in hand. The page now renders immediately and shows a skeleton in
+  // the grid, so there is no full-screen takeover to protect from flashing.
 
   // Single rotating tip toast (sonner, root <Toaster/>): a random tip is picked
   // on mount, shown during loading, kept — updated in place, so it never re-pops —
   // into the loaded page, then dismissed 5s after load.
   const tipIdx = useRef(null);
-  const tipActive = loading || !minTimePassed;
+  const tipActive = loading;
   useEffect(() => {
     const id = "aotm-tip";
     if (tipIdx.current === null) tipIdx.current = pickWeighted();
@@ -251,10 +250,6 @@ export default function DishesPage() {
   }, [tipActive]);
 
   // ---------- Render gating ----------
-  if (loading || !minTimePassed) {
-    return <LoadingFacts />;
-  }
-
   if (error) {
     return (
       <div className="empty-state">
@@ -264,7 +259,9 @@ export default function DishesPage() {
     );
   }
 
-  if (!dishes || dishes.length === 0) {
+  // Only a genuine miss — an empty library AFTER loading finished — is an error.
+  // While loading, fall through and render the page with a skeleton grid.
+  if (!loading && (!dishes || dishes.length === 0)) {
     return (
       <div className="empty-state">
         <h3>Dish data missing</h3>
@@ -321,7 +318,20 @@ export default function DishesPage() {
             onSortChange={setSortBy}
           />
         )}
-        {visible.length === 0 ? (
+        {loading ? (
+          // Skeleton in place of the old full-screen branded screen: the page
+          // chrome (search, filters, cuisines) is usable immediately, and only
+          // the grid is pending. Nothing here shifts when the real cards land.
+          <main className="dishes" aria-busy="true" aria-label="Loading dishes">
+            {Array.from({ length: 8 }, (_, i) => (
+              <div key={i} className="dish-skeleton" aria-hidden="true">
+                <div className="dish-skeleton-img" />
+                <div className="dish-skeleton-line" />
+                <div className="dish-skeleton-line short" />
+              </div>
+            ))}
+          </main>
+        ) : visible.length === 0 ? (
           <div className="empty-state">
             <h3>No dishes match those filters.</h3>
             <p>Try clearing search or course — or pick a different cuisine.</p>
