@@ -325,9 +325,9 @@ export default function DishesPage() {
           <main className="dishes" aria-busy="true" aria-label="Loading dishes">
             {Array.from({ length: 8 }, (_, i) => (
               <div key={i} className="dish-skeleton" aria-hidden="true">
-                <div className="dish-skeleton-img" />
-                <div className="dish-skeleton-line" />
-                <div className="dish-skeleton-line short" />
+                <div className="dish-skeleton-img skeleton-shimmer" />
+                <div className="dish-skeleton-line skeleton-shimmer" />
+                <div className="dish-skeleton-line short skeleton-shimmer" />
               </div>
             ))}
           </main>

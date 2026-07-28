@@ -3522,25 +3522,5 @@ body.no-why .card .why {
   width: 55%;
 }
 
-.dish-skeleton-img,
-.dish-skeleton-line {
-  background: linear-gradient(90deg,
-    oklch(0.92 0.01 145) 25%,
-    oklch(0.96 0.01 145) 37%,
-    oklch(0.92 0.01 145) 63%);
-  background-size: 400% 100%;
-  animation: dish-skeleton-shimmer 1.4s ease-in-out infinite;
-}
-
-@keyframes dish-skeleton-shimmer {
-  0% { background-position: 100% 50%; }
-  100% { background-position: 0 50%; }
-}
-
-/* Respect reduced-motion: keep the placeholder, drop the shimmer. */
-@media (prefers-reduced-motion: reduce) {
-  .dish-skeleton-img,
-  .dish-skeleton-line {
-    animation: none;
-  }
-}
+/* The shimmer itself is .skeleton-shimmer in globals.css, shared with the
+   /creators skeleton. These rules only set size and shape. */
