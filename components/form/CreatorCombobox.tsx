@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
+import { fuzzyMatches } from "@/lib/fuzzy";
 
 export function CreatorCombobox({
   value,
@@ -17,10 +18,9 @@ export function CreatorCombobox({
   const [open, setOpen] = useState(false);
 
   const query = q.trim();
-  const lower = query.toLowerCase();
-  const matches = options
-    .filter((o) => lower === "" || o.toLowerCase().includes(lower))
-    .slice(0, 8);
+  // Typo-tolerant ranking so "nora cook" / "veganricha" still surface the
+  // canonical creator, steering submitters away from creating near-duplicates.
+  const matches = fuzzyMatches(query, options, 8);
 
   const select = (item: string) => {
     onChange(item);

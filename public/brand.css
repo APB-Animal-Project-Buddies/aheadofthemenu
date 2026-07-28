@@ -153,7 +153,7 @@
 /* ---- canonical nav structure ----
  * Matches components/SiteNav.tsx (64px bar, centered 14px/500 DM Sans tabs,
  * full-height links with a 2px accent underline). Self-sufficient on purpose:
- * pages that don't load recipes/styles.css (e.g. /reverse-lookup) still get
+ * pages that don't load recipes/styles.css (e.g. /eat-this) still get
  * the identical bar from brand.css alone.
  */
 .recipes-nav {

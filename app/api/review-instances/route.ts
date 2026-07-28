@@ -27,6 +27,10 @@ import { graphql } from "@/lib/nhost";
 import { instanceVisibility } from "@/lib/reviews";
 
 export const dynamic = "force-dynamic";
+// Nhost can be slow after idle (cold start); the default function timeout killed
+// requests mid-mutation — Hasura had already committed, so the client saw a
+// "network error" yet the write succeeded. 60s lets the function wait it out.
+export const maxDuration = 60;
 
 const ALPHABET = "abcdefghijklmnopqrstuvwxyz0123456789";
 const CODE_LEN = 6;
@@ -96,7 +100,10 @@ export async function POST(request: Request) {
     // Substitutions can change the allergen profile — capture whether the cook
     // substituted and the allergens of their version (reprompted in the UI).
     const substituted = body?.substituted === true;
-    const allergens: string[] = substituted && Array.isArray(body?.allergens)
+    // Per-instance allergen profile — sent when the cook substituted OR when they
+    // resolved the recipe's "possible" allergens (explicit contains/doesn't). Accept
+    // whenever provided, not only on substitution.
+    const allergens: string[] = Array.isArray(body?.allergens)
       ? body.allergens.filter((a: unknown) => typeof a === "string").map((a: string) => a.trim()).filter(Boolean).slice(0, 30)
       : [];
     const substitutions = substituted && Array.isArray(body?.substitutions)

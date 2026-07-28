@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { LineFields } from "./LineFields";
 import { AddButton } from "./AddButton";
-import { emptyAlternative, emptyLine, type RecipeFormValues } from "../types";
+import { emptyAlternative, emptyLine, type DishFormValues } from "../types";
 
 /**
  * Edits one ingredient row's `alternatives`. Kept visually secondary (indented,
@@ -14,7 +14,7 @@ import { emptyAlternative, emptyLine, type RecipeFormValues } from "../types";
  * `namePrefix` is the path to the parent ingredient, e.g. "ingredientGroups.0.items.2".
  */
 export function AlternativesEditor({ namePrefix }: { namePrefix: string }) {
-  const { control } = useFormContext<RecipeFormValues>();
+  const { control } = useFormContext<DishFormValues>();
   const { fields, append, remove } = useFieldArray({ control, name: `${namePrefix}.alternatives` as any });
 
   return (
@@ -35,7 +35,7 @@ export function AlternativesEditor({ namePrefix }: { namePrefix: string }) {
 
 /** One alternative: label, its replacement lines, and a note. */
 function AlternativeBlock({ namePrefix, onRemove }: { namePrefix: string; onRemove: () => void }) {
-  const { control, register } = useFormContext<RecipeFormValues>();
+  const { control, register } = useFormContext<DishFormValues>();
   const { fields, append, remove } = useFieldArray({ control, name: `${namePrefix}.items` as any });
 
   return (

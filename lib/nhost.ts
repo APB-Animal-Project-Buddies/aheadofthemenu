@@ -25,13 +25,24 @@ type GraphQLOptions = {
   variables?: Record<string, unknown>;
   headers?: Record<string, string>;
   useAdminSecret?: boolean;
+  /**
+   * Seconds to cache this response in Next's Data Cache. OMIT for anything
+   * user-facing and mutable — the default no-store is what stops a stale
+   * mutation result being served back.
+   *
+   * Set it only for crawler-facing or otherwise tolerant reads (sitemap, ISR
+   * detail pages). Without it those routes are forced fully dynamic, because a
+   * no-store fetch opts the whole route out of caching — so every crawler hit
+   * would reach Nhost.
+   */
+  revalidate?: number;
 };
 
 export async function graphql<T = unknown>(
   query: string,
   options: GraphQLOptions = {}
 ): Promise<GraphQLResponse<T>> {
-  const { variables, headers = {}, useAdminSecret = false } = options;
+  const { variables, headers = {}, useAdminSecret = false, revalidate } = options;
 
   if (useAdminSecret && nhost.adminSecret) {
     headers["x-hasura-admin-secret"] = nhost.adminSecret;
@@ -44,9 +55,12 @@ export async function graphql<T = unknown>(
       ...headers,
     },
     body: JSON.stringify({ query, variables }),
-    // Never let Next's Data Cache persist GraphQL responses — it would otherwise
-    // serve a stale result (e.g. a "table not found" error cached before a migration).
-    cache: "no-store",
+    // Default: never let Next's Data Cache persist GraphQL responses — it would
+    // otherwise serve a stale result (e.g. a "table not found" error cached
+    // before a migration). Callers opt in explicitly via `revalidate`.
+    ...(typeof revalidate === "number"
+      ? { next: { revalidate } }
+      : { cache: "no-store" as const }),
   });
 
   return response.json() as Promise<GraphQLResponse<T>>;

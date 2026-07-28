@@ -3,6 +3,10 @@ import { graphql } from "@/lib/nhost";
 import { adminGuard } from "@/lib/admin";
 
 export const dynamic = "force-dynamic";
+// Nhost can be slow after idle (cold start); the default function timeout killed
+// requests mid-mutation — Hasura had already committed, so the client saw a
+// "network error" yet the write succeeded. 60s lets the function wait it out.
+export const maxDuration = 60;
 
 // GET — admin: list edit proposals (default: pending) across all dishes, with the
 // current dish_data alongside the proposed_data so the UI can show a diff.

@@ -1,5 +1,8 @@
 import { NextResponse } from "next/server";
 
+// Nhost cold starts can outlast the default function timeout; give it room.
+export const maxDuration = 60;
+
 const subdomain = process.env.NHOST_SUBDOMAIN;
 const region = process.env.NHOST_REGION;
 const adminSecret = process.env.NHOST_GRAPHQL_SECRET;

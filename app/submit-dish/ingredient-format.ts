@@ -5,13 +5,13 @@
 // Tolerant of nulls/garbage: bad rows are skipped, quantities are coerced to the
 // strings the form inputs expect.
 import {
-  RECIPE_FORM_DEFAULTS,
+  DISH_FORM_DEFAULTS,
   emptyIngredient,
   type IngredientGroup,
   type Ingredient,
   type Alternative,
   type IngredientLine,
-  type RecipeFormValues,
+  type DishFormValues,
 } from "./types";
 
 const qstr = (q: unknown) => (q === null || q === undefined ? "" : String(q));
@@ -22,6 +22,11 @@ function toLine(r: any): IngredientLine | null {
   if (!name.trim()) return null;
   const line: IngredientLine = { name, quantity: qstr(r.quantity), unit: typeof r.unit === "string" ? r.unit : "" };
   if (typeof r.id === "string" && r.id) line.id = r.id;
+  // Carry the nested-recipe link through edit-mode prefill; without this, editing a
+  // dish would drop the link and silently unlink the nested recipe on save.
+  if (r.nestedDishId != null && r.nestedDishId !== "") line.nestedDishId = r.nestedDishId;
+  // Same for the product link — keep it through edit-mode prefill.
+  if (typeof r.productId === "string" && r.productId) line.productId = r.productId;
   return line;
 }
 
@@ -49,7 +54,8 @@ export function normalizeStoredIngredients(raw: unknown): IngredientGroup[] {
       ? r.alternatives.map(toAlternative).filter((a: Alternative) => a.items.some((x) => x.name.trim()) || a.label.trim() || a.note.trim())
       : [];
     const note = r && typeof r.note === "string" ? r.note : "";
-    const ingredient: Ingredient = { ...line, note, alternatives };
+    const optional = r?.optional === true;
+    const ingredient: Ingredient = { ...line, note, optional, alternatives };
 
     let g = bySection.get(section);
     if (!g) {
@@ -66,21 +72,22 @@ export function normalizeStoredIngredients(raw: unknown): IngredientGroup[] {
 }
 
 /** Full stored dish_data → form values, for prefilling the form in edit mode. */
-export function dishToFormValues(dishData: any): RecipeFormValues {
+export function dishToFormValues(dishData: any): DishFormValues {
   const d = dishData || {};
   const v = d.validation || {};
   const arr = (x: unknown) => (Array.isArray(x) ? x : []);
   const num = (x: unknown) => (x === null || x === undefined || x === "" ? "" : String(x));
   return {
-    ...RECIPE_FORM_DEFAULTS,
+    ...DISH_FORM_DEFAULTS,
     title: d.title ?? "",
     description: d.description ?? "",
     image: typeof d.image === "string" ? d.image : undefined,
     cuisines: arr(d.cuisines),
     dishType: arr(d.dishType),
     tags: arr(d.tags),
+    difficulty: d.difficulty != null ? String(d.difficulty) : "2",
     ingredientGroups: normalizeStoredIngredients(d.ingredients),
-    steps: arr(d.steps).length ? arr(d.steps).map((t: string) => ({ text: String(t) })) : RECIPE_FORM_DEFAULTS.steps,
+    steps: arr(d.steps).length ? arr(d.steps).map((t: string) => ({ text: String(t) })) : DISH_FORM_DEFAULTS.steps,
     specialProducts: arr(d.specialProducts),
     specialEquipment: d.specialEquipment ?? "",
     cost: num(d.cost),
@@ -88,7 +95,9 @@ export function dishToFormValues(dishData: any): RecipeFormValues {
     prepTime: d.prepTime ?? "",
     cookTime: d.cookTime ?? "",
     allergens: arr(d.allergens),
+    possibleAllergens: arr(d.possibleAllergens),
     resourceLink: d.resourceLink ?? "",
+    videoEmbeds: Array.isArray(d.videoEmbeds) ? d.videoEmbeds : [],
     originalCreator: d.originalCreator ?? "",
     notes: d.notes ?? "",
     name: d.submittedBy?.name ?? "",

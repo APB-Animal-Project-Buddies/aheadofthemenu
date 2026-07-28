@@ -11,6 +11,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useAuth } from "@/components/AuthProvider";
 import { getNhost } from "@/lib/nhost/client";
+import { authFetch } from "@/lib/nhost/auth-fetch";
 import { storageErrorMessage } from "@/lib/storage-error";
 
 type MediaItem = {
@@ -60,9 +61,9 @@ export function DishGallery({ dishId }: { dishId: number }) {
       if (!fileId) throw new Error("The upload didn't return a file id — please try again.");
 
       // 2) Register it in this dish's gallery.
-      const res = await fetch("/api/dish-media", {
+      const res = await authFetch("/api/dish-media", {
         method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${accessToken}` },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ dishId, fileId }),
       });
       const data = await res.json().catch(() => ({}));
@@ -78,9 +79,9 @@ export function DishGallery({ dishId }: { dishId: number }) {
   async function remove(id: string) {
     if (!accessToken) return;
     try {
-      const res = await fetch("/api/dish-media", {
+      const res = await authFetch("/api/dish-media", {
         method: "DELETE",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${accessToken}` },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id }),
       });
       if (res.ok) setItems((prev) => prev.filter((m) => m.id !== id));

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useMemo, useRef } from "react";
+import { useRouter } from "next/navigation";
 import { useDishes } from "@/app/hooks/useDishes";
 import { useCreatorsStore } from "@/app/stores/creators";
 import './styles.css';
@@ -9,7 +10,9 @@ import {
   DishCard, DishModal, MenuDrawer, Toast,
 } from './components';
 import { CUISINE_META } from './helpers';
-import { LoadingFacts, PLANT_FACTS, pickWeighted, TipCard } from './LoadingFacts';
+// LoadingFacts (the full-screen branded screen) is no longer rendered here —
+// the page shows a skeleton grid instead. The tip toast still uses the facts.
+import { PLANT_FACTS, pickWeighted, TipCard } from './LoadingFacts';
 import { toast as sonnerToast } from 'sonner';
 
 const STORAGE_KEY = 'apb-dishes-menu-v1';
@@ -28,7 +31,10 @@ function saveStoredMenu(state) {
 
 export default function DishesPage() {
   // ---------- Data from API ----------
-  const { dishes: dishRows, loading, error } = useDishes() || { dishes: [], loading: false, error: null };
+  // Fetch the whole library (API caps at 1000). Search/filter/sort all run
+  // client-side over this full set, so nothing else needs to change. Revisit
+  // with server-side pagination + search once the catalog approaches ~1000.
+  const { dishes: dishRows, loading, error } = useDishes({ limit: 1000 }) || { dishes: [], loading: false, error: null };
 
   // Extract dish_data from API response (API returns { id, dish_name, dish_data, created_at })
   // and normalize the field names the sort/filter code reads: dish_data stores
@@ -58,7 +64,12 @@ export default function DishesPage() {
   const [sortBy, setSortBy] = useState('curated');
   const [search, setSearch] = useState('');
   const [courseFilter, setCourseFilter] = useState('all');
-  const [creatorFilter, setCreatorFilter] = useState('all');
+  // An ARRAY, not a string. FilterChips has always contained multi-select logic
+  // (and renders checkboxes in the creator dropdown), but its
+  // `Array.isArray(activeCreator)` branch was unreachable while this was the
+  // string 'all' — so picking a second creator silently replaced the first.
+  // Empty array means "no creator filter".
+  const [creatorFilter, setCreatorFilter] = useState([]);
   // Sourcing filter UI is parked for now; the state stays so the filter logic
   // below keeps working when the chips come back.
   const [sourcingFilter] = useState('all');
@@ -117,13 +128,21 @@ export default function DishesPage() {
     let list = dishes.filter(r => {
       if (activeCuisine !== 'all' && !(r.cuisines || []).includes(activeCuisine)) return false;
       if (courseFilter !== 'all' && !(r.courses || []).includes(courseFilter)) return false;
-      if (creatorFilter !== 'all' && (r.originalCreator || '') !== creatorFilter) return false;
+      // OR across selected creators — several creators widen the results.
+      if (creatorFilter.length > 0 && !creatorFilter.includes(r.originalCreator || '')) return false;
       if (sourcingFilter === 'in-house' && r.sourcingTier !== 'in-house') return false;
       if (sourcingFilter === 'branded' && r.sourcingTier === 'in-house') return false;
       if (tagFilters.length > 0 && !tagFilters.every(t => (r.tags || []).includes(t))) return false;
       if (dietFilters.length > 0 && dietFilters.some(d => (r.allergens || []).includes(d))) return false;
       if (q) {
-        const hay = `${r.title || ''} ${(r.cuisines || []).join(' ')} ${r.description || ''}`.toLowerCase();
+        // Search across the recipe's title, cuisines, description, ingredient
+        // names, creator, and tags so "chickpea", "Nora Cooks", or a tag all
+        // find matching recipes — not just the title.
+        const ingredientNames = (r.ingredients || []).map(i => i?.name || '').join(' ');
+        const hay = [
+          r.title, (r.cuisines || []).join(' '), r.description,
+          ingredientNames, r.originalCreator, (r.tags || []).join(' '),
+        ].filter(Boolean).join(' ').toLowerCase();
         if (!hay.includes(q)) return false;
       }
       return true;
@@ -171,6 +190,16 @@ export default function DishesPage() {
     setMenu(prev => prev.filter(it => it.id !== id));
   }
 
+  const router = useRouter();
+
+  // Clicking a dish card navigates straight to the full dish page. The DishModal
+  // popup is dropped for now — it stays defined and wired to the #r= deep-link
+  // below, so restoring it is just swapping this back to `openDish`.
+  function goToDish(dish) {
+    if (!dish?._id) return;
+    router.push(`/dishes/${dish._id}`);
+  }
+
   function openDish(dish) {
     setModalDish(dish);
     setModalOpen(true);
@@ -189,19 +218,16 @@ export default function DishesPage() {
     setDietFilters(prev => prev.includes(d) ? prev.filter(x => x !== d) : [...prev, d]);
   }
 
-  // Keep the loading screen up for at least 2s so the branded screen doesn't
-  // flash, even when dishes load instantly.
-  const [minTimePassed, setMinTimePassed] = useState(false);
-  useEffect(() => {
-    const t = setTimeout(() => setMinTimePassed(true), 2000);
-    return () => clearTimeout(t);
-  }, []);
+  // There used to be a 2s minimum on the branded loading screen so it wouldn't
+  // "flash" — which meant waiting a full two seconds even when the library was
+  // already in hand. The page now renders immediately and shows a skeleton in
+  // the grid, so there is no full-screen takeover to protect from flashing.
 
   // Single rotating tip toast (sonner, root <Toaster/>): a random tip is picked
   // on mount, shown during loading, kept — updated in place, so it never re-pops —
   // into the loaded page, then dismissed 5s after load.
   const tipIdx = useRef(null);
-  const tipActive = loading || !minTimePassed;
+  const tipActive = loading;
   useEffect(() => {
     const id = "aotm-tip";
     if (tipIdx.current === null) tipIdx.current = pickWeighted();
@@ -224,10 +250,6 @@ export default function DishesPage() {
   }, [tipActive]);
 
   // ---------- Render gating ----------
-  if (loading || !minTimePassed) {
-    return <LoadingFacts />;
-  }
-
   if (error) {
     return (
       <div className="empty-state">
@@ -237,7 +259,9 @@ export default function DishesPage() {
     );
   }
 
-  if (!dishes || dishes.length === 0) {
+  // Only a genuine miss — an empty library AFTER loading finished — is an error.
+  // While loading, fall through and render the page with a skeleton grid.
+  if (!loading && (!dishes || dishes.length === 0)) {
     return (
       <div className="empty-state">
         <h3>Dish data missing</h3>
@@ -265,7 +289,7 @@ export default function DishesPage() {
         {/* Sticky filter section */}
         <div className="sticky-filter-header">
           <div className="filter-row-horizontal">
-            <SearchBox value={search} onChange={setSearch} placeholder="Search dishes…" />
+            <SearchBox value={search} onChange={setSearch} placeholder="Search by name, ingredient, creator…" />
             {FilterChips && (
               <FilterChips
                 activeCourse={courseFilter}
@@ -294,7 +318,20 @@ export default function DishesPage() {
             onSortChange={setSortBy}
           />
         )}
-        {visible.length === 0 ? (
+        {loading ? (
+          // Skeleton in place of the old full-screen branded screen: the page
+          // chrome (search, filters, cuisines) is usable immediately, and only
+          // the grid is pending. Nothing here shifts when the real cards land.
+          <main className="dishes" aria-busy="true" aria-label="Loading dishes">
+            {Array.from({ length: 8 }, (_, i) => (
+              <div key={i} className="dish-skeleton" aria-hidden="true">
+                <div className="dish-skeleton-img skeleton-shimmer" />
+                <div className="dish-skeleton-line skeleton-shimmer" />
+                <div className="dish-skeleton-line short skeleton-shimmer" />
+              </div>
+            ))}
+          </main>
+        ) : visible.length === 0 ? (
           <div className="empty-state">
             <h3>No dishes match those filters.</h3>
             <p>Try clearing search or course — or pick a different cuisine.</p>
@@ -308,7 +345,7 @@ export default function DishesPage() {
                   dish={r}
                   inMenu={menu.some(it => it.id === r.id)}
                   onAddToMenu={addToMenu}
-                  onOpen={openDish}
+                  onOpen={goToDish}
                 />
               )
             ))}
@@ -319,7 +356,7 @@ export default function DishesPage() {
       <footer className="foot">
         Ahead of the Menu · Dishes are free to use, share, and adapt for your kitchen ·
         Source dishes are linked to their authors. Found an issue?{' '}
-        <a href="mailto:hello@aheadofthemenu.com?subject=Dishes feedback" style={{ color: 'var(--moss)' }}>Email us</a>.
+        <a href="mailto:aheadofthemenu@gmail.com?subject=Dishes feedback" style={{ color: 'var(--moss)' }}>Email us</a>.
       </footer>
 
       <MenuDrawer

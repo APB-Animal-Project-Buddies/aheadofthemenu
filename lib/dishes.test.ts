@@ -1,5 +1,5 @@
 import { test, expect } from "bun:test";
-import { CUISINES, DISH_TYPES, ALLERGENS, UNITS, TRIED_BY, buildDishData } from "./dishes";
+import { CUISINES, DISH_TYPES, ALLERGENS, UNITS, TRIED_BY, buildDishData, isValidQuantity, parseQuantity } from "./dishes";
 
 test("allowed sets are frozen lists", () => {
   expect(TRIED_BY).toEqual(["just_me", "friends", "family", "strangers", "a_lot"]);
@@ -229,6 +229,69 @@ test("buildDishData round-trips a full new-format dish (sections + nested altern
       ],
     },
     { name: "salt", quantity: null, unit: "to_taste" },
+  ]);
+});
+
+// ── Effort / difficulty (1–3, defaults to 2) ──
+
+test("buildDishData defaults effort to 2 (middle) when unset", () => {
+  expect(buildDishData({ title: "x" } as any).difficulty).toBe(2);
+  expect(buildDishData({ title: "x", difficulty: "" } as any).difficulty).toBe(2);
+});
+
+test("buildDishData accepts effort 1–3 as number or string", () => {
+  expect(buildDishData({ title: "x", difficulty: 1 } as any).difficulty).toBe(1);
+  expect(buildDishData({ title: "x", difficulty: "3" } as any).difficulty).toBe(3);
+});
+
+test("buildDishData rejects out-of-range or non-integer effort", () => {
+  expect(() => buildDishData({ title: "x", difficulty: 0 } as any)).toThrow(/effort/i);
+  expect(() => buildDishData({ title: "x", difficulty: 4 } as any)).toThrow(/effort/i);
+  expect(() => buildDishData({ title: "x", difficulty: 2.5 } as any)).toThrow(/effort/i);
+});
+
+// ── Fractional ingredient quantities: plain numbers stay numeric, fractions kept as text ──
+
+test("parseQuantity converts amounts to floats", () => {
+  expect(parseQuantity("2")).toBe(2);
+  expect(parseQuantity("1.5")).toBe(1.5);
+  expect(parseQuantity(".5")).toBe(0.5);
+  expect(parseQuantity("2/3")).toBeCloseTo(0.6667, 4);
+  expect(parseQuantity("1 1/2")).toBe(1.5);
+  expect(parseQuantity("½")).toBe(0.5);
+  expect(parseQuantity("1½")).toBe(1.5);
+  // Non-numeric, ranges, and division-by-zero are not single floats.
+  for (const bad of ["", "x", "abc", "-1", "1/", "1/0", "two", "1-2", "1/2 to 3/4"]) {
+    expect(parseQuantity(bad)).toBeNull();
+  }
+});
+
+test("isValidQuantity accepts float-convertible amounts, rejects the rest", () => {
+  for (const ok of ["", "2", "1.5", ".5", "2/3", "1 1/2", "½", "1½"]) {
+    expect(isValidQuantity(ok)).toBe(true);
+  }
+  for (const bad of ["x", "abc", "-1", "1/", "1/0", "two", "1-2"]) {
+    expect(isValidQuantity(bad)).toBe(false);
+  }
+});
+
+test("buildDishData keeps plain numbers numeric but preserves fractions as text", () => {
+  const d = buildDishData({
+    title: "x",
+    ingredients: [
+      { name: "flour", quantity: "2", unit: "cup" },      // plain number string → number
+      { name: "sugar", quantity: 1.5, unit: "cup" },       // number → number
+      { name: "vanilla", quantity: "2/3", unit: "tsp" },   // fraction → verbatim string
+      { name: "milk", quantity: "1 1/2", unit: "cup" },    // mixed number → verbatim string
+      { name: "salt", quantity: "bogus", unit: "tsp" },    // garbage → null
+    ],
+  } as any);
+  expect(d.ingredients).toEqual([
+    { name: "flour", quantity: 2, unit: "cup" },
+    { name: "sugar", quantity: 1.5, unit: "cup" },
+    { name: "vanilla", quantity: "2/3", unit: "tsp" },
+    { name: "milk", quantity: "1 1/2", unit: "cup" },
+    { name: "salt", quantity: null, unit: "tsp" },
   ]);
 });
 

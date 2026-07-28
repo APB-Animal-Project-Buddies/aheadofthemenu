@@ -11,6 +11,10 @@ import { NextRequest, NextResponse } from "next/server";
 import { graphql } from "@/lib/nhost";
 
 export const dynamic = "force-dynamic";
+// Nhost can be slow after idle (cold start); the default function timeout killed
+// requests mid-mutation — Hasura had already committed, so the client saw a
+// "network error" yet the write succeeded. 60s lets the function wait it out.
+export const maxDuration = 60;
 
 type Creator = { display_name: string; creator_name: string | null };
 
@@ -54,7 +58,17 @@ export async function POST(request: NextRequest) {
     if (res.errors?.length) {
       const msg = res.errors[0].message;
       if (/unique|duplicate/i.test(msg)) {
-        return NextResponse.json({ error: "That creator is already in the list." }, { status: 409 });
+        // Already in the list — treat as success so a retry after a dropped
+        // response (Nhost cold start, killed function) doesn't dead-end the
+        // user even though the first attempt committed.
+        const existing = await graphql<{ creators: Array<{ id: string; display_name: string }> }>(
+          `query ($dn: String!) {
+             creators(where: { display_name: { _ilike: $dn } }, limit: 1) { id display_name }
+           }`,
+          // Escape LIKE wildcards so _ilike is an exact case-insensitive match.
+          { useAdminSecret: true, variables: { dn: displayName.replace(/[\\%_]/g, (m) => `\\${m}`) } }
+        );
+        return NextResponse.json({ ok: true, creator: existing.data?.creators?.[0] ?? null, existed: true });
       }
       throw new Error(msg);
     }

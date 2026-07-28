@@ -15,7 +15,7 @@ export function Modal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-      <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-lg">
+      <div className="relative w-full max-w-md rounded-lg bg-white p-6 shadow-lg">
         <h2 className="text-lg font-semibold text-apb">{title}</h2>
         <div className="mt-4">{children}</div>
         <button

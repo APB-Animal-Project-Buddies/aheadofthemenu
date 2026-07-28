@@ -17,6 +17,7 @@ export function MultiSelect({
   labels,
   placeholder = "—",
   className,
+  searchable = false,
 }: {
   value: string[];
   onChange: (next: string[]) => void;
@@ -24,12 +25,15 @@ export function MultiSelect({
   labels?: Record<string, string>;
   placeholder?: string;
   className?: string;
+  /** Show a filter input at the top of the panel. */
+  searchable?: boolean;
 }) {
   const [open, setOpen] = useState(false);
+  const [query, setQuery] = useState("");
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!open) return;
+    if (!open) { setQuery(""); return; }
     const onDoc = (e: MouseEvent) => {
       if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
     };
@@ -40,6 +44,8 @@ export function MultiSelect({
   const toggle = (o: string) =>
     onChange(value.includes(o) ? value.filter((x) => x !== o) : [...value, o]);
 
+  const q = query.trim().toLowerCase();
+  const shown = searchable && q ? options.filter((o) => fmt(o, labels).toLowerCase().includes(q)) : options;
   const summary = value.length ? value.map((v) => fmt(v, labels)).join(", ") : placeholder;
 
   return (
@@ -60,7 +66,16 @@ export function MultiSelect({
           aria-multiselectable="true"
           className="absolute z-10 mt-1 max-h-64 w-full overflow-auto rounded-lg border border-neutral-200 bg-white shadow"
         >
-          {options.map((o) => {
+          {searchable && (
+            <input
+              autoFocus
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Search…"
+              className="sticky top-0 w-full border-b border-neutral-200 px-3 py-2 text-sm outline-none"
+            />
+          )}
+          {shown.map((o) => {
             const on = value.includes(o);
             return (
               <button
@@ -83,6 +98,9 @@ export function MultiSelect({
               </button>
             );
           })}
+          {shown.length === 0 ? (
+            <div className="px-3 py-2 text-sm text-neutral-400">No matches</div>
+          ) : null}
         </div>
       ) : null}
     </div>

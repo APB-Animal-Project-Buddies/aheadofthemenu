@@ -102,66 +102,111 @@ function FilterChips({ activeCourse, onCourseChange, activeCreator, onCreatorCha
   const [creatorDropdownOpen, setCreatorDropdownOpen] = useState(false);
   const [creatorSearch, setCreatorSearch] = useState('');
   const [creatorOrder, setCreatorOrder] = useState([]);
-  const creatorDropdownRef = useRef(null);
-  const moreButtonRef = useRef(null);
+  // No refs for click-outside: the creator picker renders its own full-screen
+  // backdrop with an onClick, so a document listener was redundant. The old one
+  // was also dead — creatorDropdownRef was never attached to any element, so its
+  // guard short-circuited on null every time — and moreButtonRef was attached to
+  // TWO buttons (desktop row and mobile modal), where the last mount silently won.
 
   const handleMoreClick = () => {
     setCreatorDropdownOpen(!creatorDropdownOpen);
   };
 
-  const handleCreatorSelect = (creator) => {
-    // Update LRU order - move selected creator to front
-    setCreatorOrder(prev => {
-      const filtered = prev.filter(c => c !== creator);
-      return [creator, ...filtered];
-    });
+  // `activeCreator` is an array of selected creators; [] means no filter. The
+  // legacy 'all' string is tolerated so any stale caller still behaves.
+  const selectedCreators =
+    Array.isArray(activeCreator) ? activeCreator
+    : activeCreator && activeCreator !== 'all' ? [activeCreator]
+    : [];
 
-    if (typeof activeCreator === 'string') {
-      // Single select
-      if (activeCreator === creator) {
-        onCreatorChange('all');
-      } else {
-        onCreatorChange(creator);
-      }
-    } else if (Array.isArray(activeCreator)) {
-      // Multi-select
-      if (activeCreator.includes(creator)) {
-        const next = activeCreator.filter(c => c !== creator);
-        onCreatorChange(next.length > 0 ? next : 'all');
-      } else {
-        onCreatorChange([...activeCreator, creator]);
-      }
-    }
+  const handleCreatorSelect = (creator) => {
+    // LRU: the most recently picked creator moves to the front, which is what
+    // makes the visible chips reorder around what you actually use.
+    setCreatorOrder(prev => [creator, ...prev.filter(c => c !== creator)]);
+
+    onCreatorChange(
+      selectedCreators.includes(creator)
+        ? selectedCreators.filter(c => c !== creator)
+        : [...selectedCreators, creator]
+    );
   };
 
-  // Sort creators by recency (LRU): selected/recent ones first
+  /**
+   * Chip order: currently-selected creators first, then most-recently-used,
+   * then the rest. Only the first few chips are visible, so without this a
+   * creator you just picked from the "More" dropdown would vanish back into it
+   * the moment the dropdown closed — which is what "the tabs don't reorganize"
+   * described.
+   */
   const sortedCreators = creatorOptions ? [
-    ...creatorOrder.filter(c => creatorOptions.includes(c)),
-    ...creatorOptions.filter(c => !creatorOrder.includes(c))
+    ...creatorOptions.filter(c => selectedCreators.includes(c)),
+    ...creatorOrder.filter(c => creatorOptions.includes(c) && !selectedCreators.includes(c)),
+    ...creatorOptions.filter(c => !creatorOrder.includes(c) && !selectedCreators.includes(c)),
   ] : [];
 
+  /**
+   * Chips actually rendered in the row.
+   *
+   * EVERY selected creator is shown, always — a plain slice(0, 3) hid your own
+   * selection the moment you picked a fourth, leaving it filtered but invisible
+   * and only removable from inside the nested picker. Unselected creators then
+   * fill whatever slots remain up to CHIP_SLOTS.
+   */
+  const CHIP_SLOTS = 3; // row length when nothing is selected
+  const MAX_VISIBLE_SELECTED = 5; // hard cap, so the row can't grow unbounded
+
+  const selectedInOrder = sortedCreators.filter(c => selectedCreators.includes(c));
+  const shownSelected = selectedInOrder.slice(0, MAX_VISIBLE_SELECTED);
+  const hiddenSelectedCount = selectedInOrder.length - shownSelected.length;
+  const unselected = sortedCreators.filter(c => !selectedCreators.includes(c));
+  const visibleCreators = [
+    ...shownSelected,
+    ...unselected.slice(0, Math.max(0, CHIP_SLOTS - shownSelected.length)),
+  ];
+
+  /**
+   * Escape closes the TOPMOST layer only.
+   *
+   * The creator picker opens on top of the filters modal, so a single shared
+   * handler would close both at once and dump you back to the page after one
+   * keypress. Ordered innermost-first, and only one layer is handled per event.
+   */
   useEffect(() => {
-    function handleClickOutside(e) {
-      if (creatorDropdownRef.current && !creatorDropdownRef.current.contains(e.target) &&
-          moreButtonRef.current && !moreButtonRef.current.contains(e.target)) {
-        setCreatorDropdownOpen(false);
-      }
+    if (!open && !creatorDropdownOpen && !moreFiltersOpen) return;
+    function onKeyDown(e) {
+      if (e.key !== 'Escape') return;
+      e.stopPropagation();
+      if (creatorDropdownOpen) setCreatorDropdownOpen(false);
+      else if (moreFiltersOpen) setMoreFiltersOpen(false);
+      else setOpen(false);
     }
-    if (creatorDropdownOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
-      return () => document.removeEventListener('mousedown', handleClickOutside);
-    }
-  }, [creatorDropdownOpen]);
+    document.addEventListener('keydown', onKeyDown);
+    return () => document.removeEventListener('keydown', onKeyDown);
+  }, [open, creatorDropdownOpen, moreFiltersOpen]);
+
+  /**
+   * Lock body scroll while any layer is open, so the page behind a full-screen
+   * mobile modal doesn't scroll under your finger. Restores the previous value
+   * rather than hard-coding '' — nested layers unmount independently, and the
+   * inner one closing must not unlock the outer one.
+   */
+  useEffect(() => {
+    if (!open && !creatorDropdownOpen && !moreFiltersOpen) return;
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => { document.body.style.overflow = previous; };
+  }, [open, creatorDropdownOpen, moreFiltersOpen]);
 
   const activeCount =
     (activeCourse && activeCourse !== 'all' ? 1 : 0) +
-    (activeCreator && activeCreator !== 'all' ? 1 : 0) +
+    // Each selected creator counts, so the badge matches what's actually on.
+    selectedCreators.length +
     (activeDiets || []).length +
     (activeTags || []).length;
 
   function clearAll() {
     if (activeCourse !== 'all') onCourseChange('all');
-    if (activeCreator !== 'all') onCreatorChange('all');
+    if (selectedCreators.length) onCreatorChange([]);
     (activeDiets || []).forEach(d => onDietToggle(d));
     (activeTags || []).forEach(t => onTagToggle(t));
   }
@@ -199,23 +244,36 @@ function FilterChips({ activeCourse, onCourseChange, activeCreator, onCreatorCha
         {(creatorOptions || []).length > 0 ? (
           <div className="filter-group">
             <span className="group-label">Creator</span>
-            <div className="fchip-group">
+            <div className="fchip-group creator-chips">
               <button
-                className={"fchip" + (activeCreator === 'all' ? ' on' : '')}
-                onClick={() => { onCreatorChange('all'); setCreatorDropdownOpen(false); }}
+                className={"fchip" + (selectedCreators.length === 0 ? ' on' : '')}
+                onClick={() => { onCreatorChange([]); setCreatorDropdownOpen(false); }}
               >All</button>
-              {(creatorOptions || []).slice(0, 3).map(c => (
+              {/* sortedCreators, not creatorOptions — selected creators stay
+                  visible instead of being pushed out of the first three. */}
+              {visibleCreators.map(c => {
+                const on = selectedCreators.includes(c);
+                return (
+                  <button
+                    key={c}
+                    className={"fchip" + (on ? ' on' : '')}
+                    aria-pressed={on}
+                    style={on ? { fontWeight: '700', boxShadow: '0 0 0 2px var(--moss, #1e4d2b)' } : {}}
+                    onClick={() => handleCreatorSelect(c)}
+                  >{c}</button>
+                );
+              })}
+              {hiddenSelectedCount > 0 ? (
                 <button
-                  key={c}
-                  className={"fchip" + (activeCreator === c ? ' on' : '')}
-                  style={activeCreator === c ? { fontWeight: '700', boxShadow: '0 0 0 2px var(--moss, #1e4d2b)' } : {}}
-                  onClick={() => { onCreatorChange(c); setCreatorDropdownOpen(false); }}
-                >{c}</button>
-              ))}
+                  className="fchip on fchip-overflow"
+                  onClick={handleMoreClick}
+                  title={`${hiddenSelectedCount} more selected creator${hiddenSelectedCount === 1 ? '' : 's'}`}
+                  aria-label={`${hiddenSelectedCount} more selected creator${hiddenSelectedCount === 1 ? '' : 's'} — open picker`}
+                >(…)</button>
+              ) : null}
               {(creatorOptions || []).length > 3 ? (
                 <>
                   <button
-                    ref={moreButtonRef}
                     className="fchip"
                     onClick={handleMoreClick}
                   >
@@ -271,23 +329,34 @@ function FilterChips({ activeCourse, onCourseChange, activeCreator, onCreatorCha
                 {(creatorOptions || []).length > 0 ? (
                   <div className="filter-group">
                     <span className="group-label">Creator</span>
-                    <div className="fchip-group">
+                    <div className="fchip-group creator-chips">
                       <button
-                        className={"fchip" + (activeCreator === 'all' ? ' on' : '')}
-                        onClick={() => onCreatorChange('all')}
+                        className={"fchip" + (selectedCreators.length === 0 ? ' on' : '')}
+                        onClick={() => onCreatorChange([])}
                       >All</button>
-                      {(creatorOptions || []).slice(0, 3).map(c => (
+                      {visibleCreators.map(c => {
+                        const on = selectedCreators.includes(c);
+                        return (
+                          <button
+                            key={c}
+                            className={"fchip" + (on ? ' on' : '')}
+                            aria-pressed={on}
+                            style={on ? { fontWeight: '700', boxShadow: '0 0 0 2px var(--moss, #1e4d2b)' } : {}}
+                            onClick={() => handleCreatorSelect(c)}
+                          >{c}</button>
+                        );
+                      })}
+                      {hiddenSelectedCount > 0 ? (
                         <button
-                          key={c}
-                          className={"fchip" + (activeCreator === c ? ' on' : '')}
-                          style={activeCreator === c ? { fontWeight: '700', boxShadow: '0 0 0 2px var(--moss, #1e4d2b)' } : {}}
-                          onClick={() => onCreatorChange(c)}
-                        >{c}</button>
-                      ))}
+                          className="fchip on fchip-overflow"
+                          onClick={handleMoreClick}
+                          title={`${hiddenSelectedCount} more selected creator${hiddenSelectedCount === 1 ? '' : 's'}`}
+                          aria-label={`${hiddenSelectedCount} more selected creator${hiddenSelectedCount === 1 ? '' : 's'} — open picker`}
+                        >(…)</button>
+                      ) : null}
                       {(creatorOptions || []).length > 3 ? (
                         <button
-                          ref={moreButtonRef}
-                          className="fchip"
+                                className="fchip"
                           onClick={handleMoreClick}
                         >
                           More ▾
@@ -396,10 +465,15 @@ function FilterChips({ activeCourse, onCourseChange, activeCreator, onCreatorCha
             <div className="max-h-96 overflow-y-auto">
               {creatorOptions
                 .filter(c => c.toLowerCase().includes(creatorSearch.toLowerCase()))
+                // Selected bubble to the top, so what you've picked is never
+                // buried further down a 100-entry alphabetical list.
+                .sort((a, b) => {
+                  const sa = selectedCreators.includes(a) ? 0 : 1;
+                  const sb = selectedCreators.includes(b) ? 0 : 1;
+                  return sa - sb || a.localeCompare(b);
+                })
                 .map(c => {
-                  const isSelected = Array.isArray(activeCreator)
-                    ? activeCreator.includes(c)
-                    : activeCreator === c;
+                  const isSelected = selectedCreators.includes(c);
                   return (
                     <button
                       key={c}
@@ -521,7 +595,7 @@ function DishCard({ dish, saved, inMenu, onToggleSave, onAddToMenu, onOpen }) {
         <div className="meta">
           <div className="m"><div className="v">{dish.time || dish.prep || '—'}</div><div className="l">Prep</div></div>
           <div className="m"><div className="v">{dish.servings ?? '—'}</div><div className="l">Serves</div></div>
-          <div className="m"><div className="v"><DiffDots n={dish.difficulty || 1} /></div><div className="l">Effort</div></div>
+          <div className="m"><div className="v"><DiffDots n={dish.difficulty || 2} /></div><div className="l">Effort</div></div>
           <div className="m"><div className="v">{fmtCost(dish.cost)}</div><div className="l">/ plate</div></div>
         </div>
       </div>
@@ -608,7 +682,7 @@ function DishModal({ dish, open, onClose, onAddToMenu, inMenu }) {
           <div className="meta-row">
             <div className="b"><div className="l">Prep</div><div className="v">{dish.time || dish.prep || '—'}</div></div>
             <div className="b"><div className="l">Serves</div><div className="v">{dish.servings ?? '—'}</div></div>
-            <div className="b"><div className="l">Effort</div><div className="v"><DiffDots n={dish.difficulty || 1} /></div></div>
+            <div className="b"><div className="l">Effort</div><div className="v"><DiffDots n={dish.difficulty || 2} /></div></div>
             <div className="b"><div className="l">/ plate</div><div className="v">{fmtCost(dish.cost)}</div></div>
           </div>
 

@@ -50,10 +50,11 @@ export const USER_TYPE_LABELS: Record<UserType, string> = {
 };
 
 /**
- * Where to send a user after login, based on account type: businesses
- * (restaurants/chefs) land on the operator tools; consumers (and anyone whose
- * type is unknown) land on the diner-facing dishes feed.
+ * Where to send a user after login. Everyone currently lands on the diner-facing
+ * dishes feed: /recipes (the business operator surface) is temporarily deprecated
+ * pending a terms-of-use review, so businesses fall through to /dishes too. Restore
+ * the "business" → "/recipes" branch when that page comes back.
  */
 export function landingPathForUserType(userType: UserType | null | undefined): string {
-  return userType === "business" ? "/recipes" : "/dishes";
+  return userType === "business" ? "/dishes" : "/dishes";
 }

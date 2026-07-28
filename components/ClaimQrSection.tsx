@@ -8,6 +8,7 @@
  */
 import { useCallback, useEffect, useState } from "react";
 import { useAuth } from "@/components/AuthProvider";
+import { authFetch } from "@/lib/nhost/auth-fetch";
 import { QrScanButton } from "@/components/QrScanButton";
 
 type TargetType = "active_dishes" | "dish_instance";
@@ -39,7 +40,7 @@ export function ClaimQrSection() {
   const loadClaimed = useCallback(async () => {
     if (!accessToken) return;
     try {
-      const res = await fetch("/api/qr/claim", { headers: { Authorization: `Bearer ${accessToken}` } });
+      const res = await authFetch("/api/qr/claim");
       if (res.ok) setClaimed((await res.json()).qrs ?? []);
     } catch {
       /* non-critical */
@@ -60,9 +61,7 @@ export function ClaimQrSection() {
       setScan(null);
       if (!c || !accessToken) return;
       try {
-        const res = await fetch(`/api/qr/claim?code=${encodeURIComponent(c)}`, {
-          headers: { Authorization: `Bearer ${accessToken}` },
-        });
+        const res = await authFetch(`/api/qr/claim?code=${encodeURIComponent(c)}`);
         const data = await res.json().catch(() => ({}));
         if (res.ok && data?.status) {
           setScan({ status: data.status, code: data.code ?? c, target_type: data.target_type, target_id: data.target_id });
@@ -85,9 +84,9 @@ export function ClaimQrSection() {
     setError(null);
     setOkUrl(null);
     try {
-      const res = await fetch("/api/qr/claim", {
+      const res = await authFetch("/api/qr/claim", {
         method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${accessToken}` },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ code, targetType, instanceCode }),
       });
       const data = await res.json().catch(() => ({}));

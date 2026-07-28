@@ -1,0 +1,762 @@
+[
+  {
+    "title": "Faux Gras Terrine (Sans cruauté)",
+    "description": "Slow-aged cashew-cacao butter terrine seasoned with miso, soy, tahini, beetroot, cognac and port — Chef Alexis Gauthier's restaurant-grade vegan answer to foie gras, served sliced cold with toasted sourdough or brioche, fig jam or onion confit, and flaky salt. The single most credible plant-based French starter on the market.",
+    "cuisines": [
+      "french"
+    ],
+    "dishType": [
+      "appetizer"
+    ],
+    "tags": [
+      "bulk-prep"
+    ],
+    "ingredients": [
+      {
+        "name": "cremini or chestnut mushrooms",
+        "quantity": 1,
+        "unit": "lb",
+        "note": "roughly chopped"
+      },
+      {
+        "name": "green or brown lentils",
+        "quantity": 1,
+        "unit": "cup",
+        "note": "rinsed"
+      },
+      {
+        "name": "medium onion",
+        "quantity": 1,
+        "unit": "",
+        "note": "diced"
+      },
+      {
+        "name": "garlic",
+        "quantity": 3,
+        "unit": "clove",
+        "note": "minced"
+      },
+      {
+        "name": "olive oil",
+        "quantity": 2,
+        "unit": "tbsp"
+      },
+      {
+        "name": "cognac or brandy",
+        "quantity": 2,
+        "unit": "tbsp"
+      },
+      {
+        "name": "white miso paste",
+        "quantity": 1,
+        "unit": "tbsp"
+      },
+      {
+        "name": "soy sauce",
+        "quantity": 1,
+        "unit": "tbsp"
+      },
+      {
+        "name": "fresh thyme leaves",
+        "quantity": 1,
+        "unit": "tbsp"
+      },
+      {
+        "name": "ground allspice",
+        "quantity": "½",
+        "unit": "tsp"
+      },
+      {
+        "name": "ground nutmeg",
+        "quantity": "¼",
+        "unit": "tsp"
+      },
+      {
+        "name": "salt and black pepper",
+        "quantity": null,
+        "unit": "to_taste",
+        "note": "to taste"
+      },
+      {
+        "name": "vegan butter",
+        "quantity": 2,
+        "unit": "tbsp"
+      },
+      {
+        "name": "fresh bay leaves and black peppercorns",
+        "quantity": null,
+        "unit": "",
+        "note": "for garnish"
+      },
+      {
+        "name": "toasted baguette slices",
+        "quantity": null,
+        "unit": "",
+        "note": "for serving"
+      }
+    ],
+    "originalCreator": "Alexis Gauthier",
+    "allergens": [
+      "gluten",
+      "soy"
+    ],
+    "resourceLink": "https://chefalexisgauthier.substack.com/p/faux-gras-20",
+    "servings": 10,
+    "difficulty": 2,
+    "prepTime": "30m"
+  },
+  {
+    "title": "Soupe VGE (Sans cruauté)",
+    "description": "Slow-concentrated vegetable broth, morels, faux gras quenelles, black truffle, and vegan vermouth, sealed in a bowl under glazed puff pastry and baked. Cracked tableside to release a wave of truffle and vermouth aroma. Gauthier's vegan tribute to one of the most legendary French dishes of the 20th century. **Reserve a Wednesday-only or weekend-only feature with limited covers** — both for cost discipline and to preserve the showstopper status.",
+    "cuisines": [
+      "french"
+    ],
+    "dishType": [
+      "appetizer"
+    ],
+    "tags": [
+      "bulk-prep"
+    ],
+    "ingredients": [
+      {
+        "name": "medium carrots",
+        "quantity": 3,
+        "unit": "",
+        "note": "peeled and diced"
+      },
+      {
+        "name": "stalks celery",
+        "quantity": 3,
+        "unit": "",
+        "note": "diced"
+      },
+      {
+        "name": "medium leeks",
+        "quantity": 2,
+        "unit": "",
+        "note": "sliced"
+      },
+      {
+        "name": "medium turnips",
+        "quantity": 2,
+        "unit": "",
+        "note": "peeled and diced"
+      },
+      {
+        "name": "medium fennel bulb",
+        "quantity": 1,
+        "unit": "",
+        "note": "sliced thin"
+      },
+      {
+        "name": "small head cauliflower",
+        "quantity": 1,
+        "unit": "",
+        "note": "cut into small florets"
+      },
+      {
+        "name": "rich vegetable consommé",
+        "quantity": 6,
+        "unit": "cup"
+      },
+      {
+        "name": "olive oil",
+        "quantity": 2,
+        "unit": "tbsp"
+      },
+      {
+        "name": "garlic",
+        "quantity": 3,
+        "unit": "clove",
+        "note": "minced"
+      },
+      {
+        "name": "bouquet garni",
+        "quantity": 1,
+        "unit": ""
+      },
+      {
+        "name": "black truffle oil",
+        "quantity": 1,
+        "unit": "tsp"
+      },
+      {
+        "name": "flaky sea salt and white pepper",
+        "quantity": null,
+        "unit": "to_taste",
+        "note": "to taste"
+      },
+      {
+        "name": "fresh chervil or chive sprigs",
+        "quantity": null,
+        "unit": ""
+      }
+    ],
+    "originalCreator": "Alexis Gauthier",
+    "resourceLink": "https://chefalexisgauthier.substack.com/p/soupe-vge",
+    "servings": 4,
+    "difficulty": 3,
+    "prepTime": "12h"
+  },
+  {
+    "title": "Soupe de Poisson with Rouille (Sans cruauté)",
+    "description": "Provençal sea-vegetable broth — fennel-and-saffron-deep, finished with white wine and Pastis, served piping hot over a slick of saffron-cayenne-aquafaba rouille on grilled sourdough. Tastes like the sea without a single fish. The Gauthier-grade vegan answer to the Marseille classic.",
+    "cuisines": [
+      "french"
+    ],
+    "dishType": [
+      "appetizer"
+    ],
+    "tags": [
+      "bulk-prep"
+    ],
+    "ingredients": [
+      {
+        "name": "dried dulse flakes",
+        "quantity": 1,
+        "unit": "oz"
+      },
+      {
+        "name": "dried laver seaweed",
+        "quantity": "½",
+        "unit": "oz"
+      },
+      {
+        "name": "medium onion",
+        "quantity": 1,
+        "unit": "",
+        "note": "diced"
+      },
+      {
+        "name": "stalks celery",
+        "quantity": 3,
+        "unit": "",
+        "note": "diced"
+      },
+      {
+        "name": "medium carrots",
+        "quantity": 2,
+        "unit": "",
+        "note": "diced"
+      },
+      {
+        "name": "fennel bulb",
+        "quantity": 1,
+        "unit": "",
+        "note": "sliced"
+      },
+      {
+        "name": "garlic",
+        "quantity": 4,
+        "unit": "clove",
+        "note": "minced"
+      },
+      {
+        "name": "olive oil",
+        "quantity": 3,
+        "unit": "tbsp"
+      },
+      {
+        "name": "dry white wine",
+        "quantity": 1,
+        "unit": "cup"
+      },
+      {
+        "name": "crushed tomatoes",
+        "quantity": 1,
+        "unit": "can"
+      },
+      {
+        "name": "vegetable broth",
+        "quantity": 4,
+        "unit": "cup"
+      },
+      {
+        "name": "smoked paprika",
+        "quantity": 1,
+        "unit": "tsp"
+      },
+      {
+        "name": "saffron threads",
+        "quantity": null,
+        "unit": "pinch"
+      },
+      {
+        "name": "vegan mayonnaise",
+        "quantity": "½",
+        "unit": "cup"
+      },
+      {
+        "name": "garlic",
+        "quantity": 2,
+        "unit": "clove"
+      },
+      {
+        "name": "smoked paprika",
+        "quantity": 1,
+        "unit": "tsp"
+      },
+      {
+        "name": "toasted baguette slices and vegan gruyère",
+        "quantity": null,
+        "unit": ""
+      }
+    ],
+    "originalCreator": "Alexis Gauthier",
+    "allergens": [
+      "gluten"
+    ],
+    "resourceLink": "https://chefalexisgauthier.substack.com/p/this-is-the-queen-of-the-sea",
+    "servings": 4,
+    "difficulty": 2,
+    "prepTime": "15m"
+  },
+  {
+    "title": "Bœuf Bourguignon (Sans cruauté)",
+    "description": "Maitake clusters marinated in soy and red wine, grilled, and slow-braised with carrots, baby onions, and cabbage in a sealed cast-iron pot — pâte-morte-sealed in the classic French manner so the lid dough is broken tableside, releasing the wine-and-thyme aroma. Plated with mashed potatoes and the rich braising sauce.",
+    "cuisines": [
+      "french"
+    ],
+    "dishType": [
+      "main"
+    ],
+    "tags": [
+      "bulk-prep"
+    ],
+    "ingredients": [
+      {
+        "name": "maitake mushrooms",
+        "quantity": 1,
+        "unit": "lb",
+        "note": "torn into large pieces"
+      },
+      {
+        "name": "pearl onions",
+        "quantity": 8,
+        "unit": "oz",
+        "note": "peeled"
+      },
+      {
+        "name": "medium carrots",
+        "quantity": 3,
+        "unit": "",
+        "note": "cut into 1-inch pieces"
+      },
+      {
+        "name": "stalks celery",
+        "quantity": 3,
+        "unit": "",
+        "note": "sliced"
+      },
+      {
+        "name": "garlic",
+        "quantity": 4,
+        "unit": "clove",
+        "note": "minced"
+      },
+      {
+        "name": "olive oil",
+        "quantity": 2,
+        "unit": "tbsp"
+      },
+      {
+        "name": "all-purpose flour",
+        "quantity": 2,
+        "unit": "tbsp"
+      },
+      {
+        "name": "½ cups dry red wine",
+        "quantity": 1,
+        "unit": ""
+      },
+      {
+        "name": "vegetable broth",
+        "quantity": 1,
+        "unit": "cup"
+      },
+      {
+        "name": "tomato paste",
+        "quantity": 2,
+        "unit": "tbsp"
+      },
+      {
+        "name": "bouquet garni",
+        "quantity": 1,
+        "unit": ""
+      },
+      {
+        "name": "vegan butter",
+        "quantity": 1,
+        "unit": "tbsp"
+      },
+      {
+        "name": "salt and black pepper",
+        "quantity": null,
+        "unit": "to_taste",
+        "note": "to taste"
+      },
+      {
+        "name": "fresh flat-leaf parsley",
+        "quantity": null,
+        "unit": "",
+        "note": "chopped"
+      }
+    ],
+    "originalCreator": "Alexis Gauthier",
+    "allergens": [
+      "gluten"
+    ],
+    "resourceLink": "https://chefalexisgauthier.substack.com/p/bourguignon",
+    "servings": 4,
+    "difficulty": 2,
+    "prepTime": "30m"
+  },
+  {
+    "title": "Barbajuans (Niçoise Swiss Chard Turnovers)",
+    "description": "Crispy, airy olive-oil-dough half-moons stuffed with chard, spinach, leek, vegan ricotta, parsley, and a fierce hit of black pepper. The signature Niçoise café snack — the kind you'd find at a beachfront café in Vieux Nice with a glass of rosé. Bar-snack-friendly, brunch-friendly, starter-friendly. **One of the catalog's strongest passed-canapé / shareable apéro plates.**",
+    "cuisines": [
+      "french"
+    ],
+    "dishType": [
+      "appetizer"
+    ],
+    "tags": [
+      "bulk-prep"
+    ],
+    "ingredients": [
+      {
+        "name": "all-purpose flour",
+        "quantity": 250,
+        "unit": "g"
+      },
+      {
+        "name": "water",
+        "quantity": 90,
+        "unit": "g"
+      },
+      {
+        "name": "extra virgin olive oil",
+        "quantity": 30,
+        "unit": "g"
+      },
+      {
+        "name": "fine salt",
+        "quantity": 1,
+        "unit": "pinch"
+      },
+      {
+        "name": "fresh spinach",
+        "quantity": 150,
+        "unit": "g"
+      },
+      {
+        "name": "Swiss chard",
+        "quantity": 100,
+        "unit": "g"
+      },
+      {
+        "name": "small leek",
+        "quantity": 1,
+        "unit": "",
+        "note": "finely diced"
+      },
+      {
+        "name": "small onion",
+        "quantity": 1,
+        "unit": "",
+        "note": "finely diced"
+      },
+      {
+        "name": "garlic",
+        "quantity": 2,
+        "unit": "clove",
+        "note": "minced"
+      },
+      {
+        "name": "vegan ricotta",
+        "quantity": 120,
+        "unit": "g"
+      },
+      {
+        "name": "fresh flat-leaf parsley",
+        "quantity": 1,
+        "unit": "tbsp",
+        "note": "chopped"
+      },
+      {
+        "name": "fresh thyme leaves",
+        "quantity": 1,
+        "unit": "tsp"
+      },
+      {
+        "name": "generous freshly ground black pepper",
+        "quantity": null,
+        "unit": ""
+      },
+      {
+        "name": "fine salt",
+        "quantity": null,
+        "unit": "to_taste",
+        "note": "to taste"
+      },
+      {
+        "name": "neutral oil for deep-frying",
+        "quantity": null,
+        "unit": ""
+      },
+      {
+        "name": "fleur de sel",
+        "quantity": null,
+        "unit": "",
+        "note": "for serving"
+      }
+    ],
+    "originalCreator": "Alexis Gauthier",
+    "allergens": [
+      "gluten",
+      "nuts"
+    ],
+    "resourceLink": "https://chefalexisgauthier.substack.com/p/swiss-chard",
+    "servings": 20,
+    "difficulty": 2,
+    "prepTime": "15m"
+  },
+  {
+    "title": "Crème Brûlée (Sans cruauté)",
+    "description": "Vanilla-infused soya-and-plant-cream custard, set silky-smooth in ramekins overnight, finished with a torched demerara-caster sugar shatter-crust to order. The bistro classic — recreated to Michelin-restaurant standard by Chef Alexis Gauthier after years of iteration. The shatter is everything.",
+    "cuisines": [
+      "french"
+    ],
+    "dishType": [
+      "dessert"
+    ],
+    "tags": [
+      "bulk-prep"
+    ],
+    "ingredients": [
+      {
+        "name": "soya milk",
+        "quantity": 500,
+        "unit": "g"
+      },
+      {
+        "name": "plant cream",
+        "quantity": 500,
+        "unit": "g"
+      },
+      {
+        "name": "caster sugar",
+        "quantity": 140,
+        "unit": "g"
+      },
+      {
+        "name": "cornflour",
+        "quantity": 40,
+        "unit": "g"
+      },
+      {
+        "name": "vegan custard powder",
+        "quantity": 40,
+        "unit": "g"
+      },
+      {
+        "name": "vanilla pod",
+        "quantity": 1,
+        "unit": "",
+        "note": "split and scraped"
+      },
+      {
+        "name": "fine salt",
+        "quantity": 1,
+        "unit": "pinch"
+      },
+      {
+        "name": "vegan butter",
+        "quantity": 2,
+        "unit": "tbsp"
+      },
+      {
+        "name": "demerara sugar",
+        "quantity": 60,
+        "unit": "g"
+      },
+      {
+        "name": "caster sugar",
+        "quantity": 20,
+        "unit": "g"
+      }
+    ],
+    "originalCreator": "Alexis Gauthier",
+    "allergens": [
+      "soy"
+    ],
+    "resourceLink": "https://chefalexisgauthier.substack.com/p/creme-brulee",
+    "servings": 6,
+    "difficulty": 2,
+    "prepTime": "25m"
+  },
+  {
+    "title": "Iles Flottantes (Sans cruauté)",
+    "description": "Soft aquafaba meringue island floating on silky vanilla crème anglaise, hidden under a thin caramel dome that's cracked tableside. A nearly-extinct French bistro dessert restored to plant-based form by Chef Alexis Gauthier — a pure-pleasure, Old-World pudding.",
+    "cuisines": [
+      "french"
+    ],
+    "dishType": [
+      "dessert"
+    ],
+    "tags": [
+      "bulk-prep"
+    ],
+    "ingredients": [
+      {
+        "name": "aquafaba",
+        "quantity": 300,
+        "unit": "g",
+        "note": "reduced to 100 g"
+      },
+      {
+        "name": "caster sugar",
+        "quantity": 100,
+        "unit": "g"
+      },
+      {
+        "name": "icing sugar",
+        "quantity": 70,
+        "unit": "g"
+      },
+      {
+        "name": "cornflour",
+        "quantity": 15,
+        "unit": "g"
+      },
+      {
+        "name": "white wine vinegar",
+        "quantity": 1,
+        "unit": "tsp"
+      },
+      {
+        "name": "fine salt",
+        "quantity": 1,
+        "unit": "pinch"
+      },
+      {
+        "name": "Flora plant cream",
+        "quantity": 200,
+        "unit": "g"
+      },
+      {
+        "name": "oat milk",
+        "quantity": 200,
+        "unit": "g"
+      },
+      {
+        "name": "soya milk",
+        "quantity": 100,
+        "unit": "g"
+      },
+      {
+        "name": "caster sugar",
+        "quantity": 70,
+        "unit": "g"
+      },
+      {
+        "name": "cornflour",
+        "quantity": 20,
+        "unit": "g"
+      },
+      {
+        "name": "vegan custard powder",
+        "quantity": 30,
+        "unit": "g"
+      },
+      {
+        "name": "vanilla pod",
+        "quantity": 1,
+        "unit": "",
+        "note": "split and scraped"
+      },
+      {
+        "name": "caster sugar",
+        "quantity": 100,
+        "unit": "g"
+      }
+    ],
+    "originalCreator": "Alexis Gauthier",
+    "allergens": [
+      "soy"
+    ],
+    "resourceLink": "https://chefalexisgauthier.substack.com/p/a-vegan-floating-island",
+    "servings": 6,
+    "difficulty": 2,
+    "prepTime": "30m"
+  },
+  {
+    "title": "Crème Caramel (Sans cruauté)",
+    "description": "Silky vanilla custard with an amber caramel cap that flows down the sides when unmoulded — the classic French bistro flan parisien. Lighter and looser than a crème brûlée, with the showstopper element of the caramel cascading on plate-up. Old-world Parisian comfort.",
+    "cuisines": [
+      "french"
+    ],
+    "dishType": [
+      "dessert"
+    ],
+    "tags": [
+      "bulk-prep"
+    ],
+    "ingredients": [
+      {
+        "name": "caster sugar",
+        "quantity": 120,
+        "unit": "g"
+      },
+      {
+        "name": "water",
+        "quantity": 3,
+        "unit": "tbsp"
+      },
+      {
+        "name": "soya milk",
+        "quantity": 415,
+        "unit": "ml"
+      },
+      {
+        "name": "oat milk",
+        "quantity": 400,
+        "unit": "ml"
+      },
+      {
+        "name": "caster sugar",
+        "quantity": 110,
+        "unit": "g"
+      },
+      {
+        "name": "cornflour",
+        "quantity": 57,
+        "unit": "g"
+      },
+      {
+        "name": "vegan custard powder",
+        "quantity": 23,
+        "unit": "g"
+      },
+      {
+        "name": "refined coconut oil",
+        "quantity": 70,
+        "unit": "g"
+      },
+      {
+        "name": "vanilla extract",
+        "quantity": 1,
+        "unit": "tbsp"
+      }
+    ],
+    "originalCreator": "Alexis Gauthier",
+    "allergens": [
+      "soy",
+      "coconut"
+    ],
+    "resourceLink": "https://chefalexisgauthier.substack.com/p/vegan-creme-caramel",
+    "servings": 6,
+    "difficulty": 2,
+    "prepTime": "25m"
+  }
+]

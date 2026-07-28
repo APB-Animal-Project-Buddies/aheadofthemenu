@@ -9,6 +9,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useAuth } from "@/components/AuthProvider";
+import { authFetch } from "@/lib/nhost/auth-fetch";
 
 type TargetType = "active_dishes" | "dish_instance";
 
@@ -40,9 +41,9 @@ export function TakeQr({ code }: { code: string }) {
     setBusy(true);
     setError(null);
     try {
-      const res = await fetch("/api/qr/claim", {
+      const res = await authFetch("/api/qr/claim", {
         method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${accessToken}` },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ code, targetType, instanceCode }),
       });
       const data = await res.json().catch(() => ({}));

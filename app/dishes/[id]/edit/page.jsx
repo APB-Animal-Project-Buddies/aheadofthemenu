@@ -4,7 +4,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { graphql } from "@/lib/nhost";
-import { RecipeIntakeForm } from "@/app/submit-dish/RecipeIntakeForm";
+import { DishIntakeForm } from "@/app/submit-dish/DishIntakeForm";
 import { dishToFormValues } from "@/app/submit-dish/ingredient-format";
 
 export const dynamic = "force-dynamic";
@@ -33,7 +33,7 @@ export default async function EditDishPage({ params }) {
       <h1 className="mt-3 text-2xl font-bold text-apb">Edit recipe</h1>
       <p className="mt-2 text-neutral-600">Update any field and save. Empty a field to clear it.</p>
       <div className="mt-6">
-        <RecipeIntakeForm dishId={row.id} initialValues={initialValues} />
+        <DishIntakeForm dishId={row.id} initialValues={initialValues} />
       </div>
     </main>
   );

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/components/AuthProvider";
@@ -13,16 +13,27 @@ type Tab = { href: string; label: string };
 // both share Top Alternatives. Signed-out visitors see the consumer set.
 // Keep these lists in sync with the static prototype's `site-nav.js` so the
 // emerald bar is identical across Next pages and the static apps.
+// Protein Guide is temporarily hidden from the nav (page still exists at
+// /protein-guide, just unlinked) while the Creators launch goes first.
 const CONSUMER_TABS: Tab[] = [
   { href: "/dishes", label: "Dishes" },
+  { href: "/creators", label: "Creators" },
   { href: "/top-alternatives", label: "Top Alternatives" },
-  { href: "/reverse-lookup", label: "Reverse Lookup" },
+  { href: "/eat-this", label: "Eat This!" }
 ];
 const BUSINESS_TABS: Tab[] = [
-  { href: "/recipes", label: "Recipes" },
   { href: "/menus", label: "Menus" },
+  { href: "/recipes", label: "Recipes" },
   { href: "/top-alternatives", label: "Top Alternatives" },
+  { href: "/tips-and-tricks", label: "Tips & Tricks" },
+  { href: "/eat-this", label: "Eat This!" }
 ];
+
+// Some sections belong to one mode regardless of login: a signed-out visitor on a
+// business-only page (/recipes, /menus, /tips-and-tricks) still gets the restaurant nav,
+// and /dishes always reads as consumer. Shared sections fall back to the account type.
+const BUSINESS_SECTIONS = new Set(["recipes", "menus", "tips-and-tricks"]);
+const CONSUMER_SECTIONS = new Set(["dishes", "creators"]);
 
 // The nav has its own header on the landing + auth screens, and is intentionally
 // hidden on the user's profile and public handle pages.
@@ -42,11 +53,13 @@ const KNOWN_SECTIONS = new Set([
   "recipes",
   "menus",
   "dishes",
+  "creators",
   "top-alternatives",
   "tips-and-tricks",
-  "reverse-lookup",
+  "eat-this",
   "reviews",
   "submit-dish",
+  "protein-guide",
   "admin",
   "s",
   "hooks",
@@ -72,7 +85,27 @@ export function SiteNav() {
   const { isAuthenticated, email, displayName, avatarUrl, role, userType, signOut } = useAuth();
   const [accountOpen, setAccountOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const tabs = userType === "business" ? BUSINESS_TABS : CONSUMER_TABS;
+  // Nav "mode": signed in → account type wins; else the entry section decides
+  // (business-only pages → business, /dishes → consumer), and on ambivalent pages the
+  // #business/#consumer param carries the mode forward (no param → consumer).
+  const [hash, setHash] = useState("");
+  useEffect(() => {
+    const read = () => setHash(window.location.hash.replace(/^#/, ""));
+    read();
+    window.addEventListener("hashchange", read);
+    return () => window.removeEventListener("hashchange", read);
+  }, [pathname]);
+
+  const seg = pathname.split("/").filter(Boolean)[0] ?? "";
+  const mode: "business" | "consumer" = isAuthenticated
+    ? (userType === "business" ? "business" : "consumer")
+    : BUSINESS_SECTIONS.has(seg) ? "business"
+      : CONSUMER_SECTIONS.has(seg) ? "consumer"
+        : hash === "business" ? "business"
+          : "consumer";
+  const tabs = mode === "business" ? BUSINESS_TABS : CONSUMER_TABS;
+  // Always carry the mode forward on every tab link (no param → consumer).
+  const withMode = (href: string) => `${href}#${mode}`;
 
   if (
     pathname === "/" ||
@@ -101,12 +134,11 @@ export function SiteNav() {
             return (
               <li key={t.href}>
                 <Link
-                  href={t.href}
-                  className={`relative flex h-16 items-center text-sm font-medium transition ${
-                    active
-                      ? "text-white after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 after:bg-apb-accent"
-                      : "text-apb-cream/65 hover:text-apb-cream"
-                  }`}
+                  href={withMode(t.href)}
+                  className={`relative flex h-16 items-center text-sm font-medium transition ${active
+                    ? "text-white after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 after:bg-apb-accent"
+                    : "text-apb-cream/65 hover:text-apb-cream"
+                    }`}
                 >
                   {t.label}
                 </Link>
@@ -182,7 +214,7 @@ export function SiteNav() {
             return (
               <li key={t.href}>
                 <Link
-                  href={t.href}
+                  href={withMode(t.href)}
                   onClick={() => setMobileOpen(false)}
                   className={`block py-2.5 text-sm font-medium transition ${active ? "text-apb-accent" : "text-apb-cream/80 hover:text-apb-cream"}`}
                 >

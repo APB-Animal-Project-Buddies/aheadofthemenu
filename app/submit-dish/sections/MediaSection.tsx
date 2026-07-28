@@ -11,6 +11,7 @@ import { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { useAuth } from "@/components/AuthProvider";
 import { getNhost } from "@/lib/nhost/client";
+import { authFetch } from "@/lib/nhost/auth-fetch";
 import { storageErrorMessage } from "@/lib/storage-error";
 
 export type StagedMedia = { fileId: string; kind: "image" | "video"; preview: string };
@@ -64,9 +65,9 @@ export function MediaSection({
     onChange(media.filter((m) => m.fileId !== fileId));
     // Discard the staged storage object too; best-effort.
     if (accessToken) {
-      fetch("/api/dish-media", {
+      authFetch("/api/dish-media", {
         method: "DELETE",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${accessToken}` },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ fileId }),
       }).catch(() => {});
     }

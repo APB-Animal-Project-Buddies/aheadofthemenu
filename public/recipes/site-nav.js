@@ -16,13 +16,18 @@
 (function () {
   const CONSUMER_TABS = [
     { id: 'dishes',   href: '/dishes',           label: 'Dishes' },
+    { id: 'creators', href: '/creators',         label: 'Creators' },
     { id: 'dairy',    href: '/top-alternatives', label: 'Top Alternatives' },
-    { id: 'reverse',  href: '/reverse-lookup',   label: 'Reverse Lookup' },
+    { id: 'eatthis',  href: '/eat-this',         label: 'Eat This!' },
   ];
+  // "Recipes" tab is temporarily removed — /recipes is deprecated pending a
+  // terms-of-use review. Re-add { id: 'recipes', href: '/recipes', label: 'Recipes' }
+  // to restore it.
   const BUSINESS_TABS = [
-    { id: 'recipes',  href: '/recipes',          label: 'Recipes' },
     { id: 'menus',    href: '/menus',            label: 'Menus' },
     { id: 'dairy',    href: '/top-alternatives', label: 'Top Alternatives' },
+    { id: 'tips',     href: '/tips-and-tricks',  label: 'Tips & Tricks' },
+    { id: 'eatthis',  href: '/eat-this',         label: 'Eat This!' },
   ];
 
   // The session object the Nhost SDK persists; null when signed out or unreadable.
@@ -40,11 +45,23 @@
       session && session.user && session.user.metadata
         ? session.user.metadata.user_type
         : null;
-    const TABS = userType === 'business' ? BUSINESS_TABS : CONSUMER_TABS;
 
     const active = (document.body && document.body.dataset.activeNav) || '';
+    const hash = (window.location.hash || '').replace(/^#/, '');
+    // Mode: signed in → account type wins; else the entry section decides (business-only
+    // pages → business, /dishes → consumer); on ambivalent pages the #business/#consumer
+    // param carries it forward (no param → consumer).
+    const BUSINESS_SECTIONS = ['recipes', 'menus', 'tips'];
+    const CONSUMER_SECTIONS = ['dishes', 'creators'];
+    const mode = session
+      ? (userType === 'business' ? 'business' : 'consumer')
+      : BUSINESS_SECTIONS.indexOf(active) !== -1 ? 'business'
+      : CONSUMER_SECTIONS.indexOf(active) !== -1 ? 'consumer'
+      : hash === 'business' ? 'business'
+      : 'consumer';
+    const TABS = mode === 'business' ? BUSINESS_TABS : CONSUMER_TABS;
     const links = TABS
-      .map(t => `<li><a href="${t.href}"${t.id === active ? ' class="active"' : ''}>${t.label}</a></li>`)
+      .map(t => `<li><a href="${t.href}#${mode}"${t.id === active ? ' class="active"' : ''}>${t.label}</a></li>`)
       .join('');
 
     // Right side mirrors the Next nav: profile link when signed in, otherwise
@@ -79,7 +96,9 @@
     wrap.innerHTML = html;
     const navEl = wrap.firstElementChild;
 
-    const mount = document.getElementById('site-nav-mount');
+    // Replace the mount on first render, or the already-rendered nav on a re-render
+    // (so a hashchange swaps the bar in place instead of prepending a duplicate).
+    const mount = document.getElementById('site-nav-mount') || document.querySelector('nav.recipes-nav');
     if (mount) {
       mount.replaceWith(navEl);
     } else {
@@ -107,4 +126,7 @@
   } else {
     render();
   }
+  // Re-render when the mode param changes (address-bar edit, back/forward) so the bar
+  // reflects #business/#consumer without a full page reload.
+  window.addEventListener('hashchange', render);
 })();

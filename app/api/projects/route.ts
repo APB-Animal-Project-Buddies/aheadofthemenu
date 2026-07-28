@@ -6,6 +6,10 @@ const adminSecret = process.env.NHOST_GRAPHQL_SECRET;
 const graphqlUrl = `https://${subdomain}.hasura.${region}.nhost.run/v1/graphql`;
 
 export const dynamic = "force-dynamic";
+// Nhost can be slow after idle (cold start); the default function timeout killed
+// requests mid-mutation — Hasura had already committed, so the client saw a
+// "network error" yet the write succeeded. 60s lets the function wait it out.
+export const maxDuration = 60;
 
 export async function GET() {
   type ProjectsResponse = {

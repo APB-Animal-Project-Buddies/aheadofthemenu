@@ -4,7 +4,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { graphql } from "@/lib/nhost";
-import { RecipeIntakeForm } from "@/app/submit-dish/RecipeIntakeForm";
+import { DishIntakeForm } from "@/app/submit-dish/DishIntakeForm";
 import { dishToFormValues } from "@/app/submit-dish/ingredient-format";
 
 export const dynamic = "force-dynamic";
@@ -36,7 +36,7 @@ export default async function SuggestEditPage({ params }) {
         the dish won&rsquo;t change until it&rsquo;s approved. Add your name so we can credit you.
       </p>
       <div className="mt-6">
-        <RecipeIntakeForm dishId={row.id} initialValues={initialValues} mode="propose" />
+        <DishIntakeForm dishId={row.id} initialValues={initialValues} mode="propose" />
       </div>
     </main>
   );

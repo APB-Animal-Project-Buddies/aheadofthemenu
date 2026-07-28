@@ -1,0 +1,342 @@
+# Reverse Lookup v2 — Design
+
+**Date:** 2026-07-05
+**Status:** Approved by user (pending spec review)
+
+## Purpose
+
+Turn the static reverse-lookup page (`public/reverse-lookup/`, CDN React + static
+`seattle.json`) into a database-backed, community-driven catalog inside the Next
+app. Diners search for a vegan dish they're craving and see which local
+restaurants serve it; signed-in users add dishes and vote them up or down.
+
+User requirements driving this:
+
+1. People can add dishes and give them a thumbs up / thumbs down.
+2. Adding a dish at an unlisted venue lets the user enter the restaurant's
+   name and address inline.
+3. Voting (and adding) requires being signed in.
+
+Decisions made with the user:
+
+- Votes attach to a **dish at a specific restaurant**, not a dish concept.
+- Signed-in additions go **live immediately** (no moderation queue); an admin
+  `hidden` status is the killswitch. Anonymous users cannot add or vote.
+- Users **can create restaurants inline** while adding a dish. CSV-seeded
+  venues are flagged `verified`; user-created ones are not.
+- Ratings display Rotten-Tomatoes style (per the user's "Yum Lookup" sample):
+  percentage scores split **LOCALS vs VISITORS**, with mood tiers and cute
+  faces. Every vote carries an "Are you a local?" toggle defaulted to yes —
+  no chef/critic scores, no profile locality field.
+- A **Leaderboards** tab ranks dishes per category, styled on the sample.
+
+## The core loop
+
+Crave → search → see where → trust it (votes) → contribute (add/vote). Every UI
+element serves one of those verbs.
+
+## UX
+
+### Page `/reverse-lookup` (app router)
+
+The static page retires; a real app-router page replaces it at the same URL,
+using the site's Tailwind design system, shared header, and Nhost auth session.
+
+Cold-start reality: the seed provides ~26 restaurants but only a handful of
+dishes. A dishes-only page would look empty, so the page has **three tabs**:
+
+- **Dishes** — dish@restaurant cards. Sort: dishes at or above the score
+  threshold first (overall score desc), then still-tallying dishes (total
+  votes desc, then newest). Same-named dishes at different venues are separate
+  cards; search groups them adjacently by name.
+- **Restaurants** — directory of all venues (cuisine types, neighborhoods,
+  addresses, description). Every restaurant card ends with "Know their menu?
+  + Add a dish" — the directory doubles as the contribution funnel.
+- **Leaderboards** — category rankings ("Best Pizza in Seattle"), see below.
+
+The search box drives the Dishes and Restaurants tabs; the Leaderboards tab
+swaps it for a category picker.
+
+### Visual language: the Yum Meter (from the user's style sample)
+
+Style reference vendored at `docs/superpowers/specs/assets/yum-lookup-sample/`
+("Yum Lookup" mock — keep the page's existing earthy-green style; ratings and
+leaderboards adopt this sample's design).
+
+Ratings render Rotten-Tomatoes style as percentage scores with a mood tier and
+a cute SVG face (`CuteFace` component in the sample — port it):
+
+| score | tier label | color |
+|---|---|---|
+| ≥ 90 | Top Bite | `#3F8F5A` |
+| ≥ 80 | Yum | `#6BA84A` |
+| ≥ 70 | Tasty | `#CFA017` |
+| ≥ 55 | Meh | `#D17B3A` |
+| < 55 | Skip | `#C95B4F` |
+
+Two scores per dish — the Rotten-Tomatoes "critics vs audience" split becomes
+**LOCALS vs VISITORS** (is it actually good, or a tourist trap?):
+
+- **LOCALS SAY** — thumbs from votes cast with the "local" toggle:
+  `round(100 × up / (up + down))` over that cohort's votes.
+- **VISITORS SAY** — same math over votes cast as "visiting".
+
+Score confidence gates on a minimum vote threshold —
+**`MIN_VOTES_TO_SCORE = 5`**, an exported constant in `lib/reverse-lookup.ts`
+(one knob, used everywhere a score gates; raise it as traffic grows). A cohort
+block renders in three states:
+
+- **Scored** (cohort votes ≥ threshold): tier-colored percentage, mood face,
+  tier label, vote count ("91% · Top Bite · 24 votes").
+- **Still tallying** (1 to threshold−1 votes): **no percentage** — a neutral
+  gray face with "Still tallying the votes… · 3 so far". Early percentages
+  are deliberately hidden so they can't anchor how the next person votes.
+- **No votes**: gray face, "No votes yet — be the first."
+
+**Cohort capture:** every vote carries the answer to "Are you a local?",
+**defaulted to yes**. The vote widget shows a lightweight toggle —
+"Voting as: [🏠 Local ✓ | 🧳 Visiting]" — pre-set to Local and remembered
+client-side (localStorage) so regulars never touch it, while visitors flip it
+once. Each vote row snapshots `voter_kind` at vote time, so no profile field
+is needed and historical scores stay stable if someone's situation changes.
+(A future option is inferring locality automatically — e.g. Google Maps /
+location signals — see out-of-scope.)
+
+The thumbs 👍/👎 buttons remain the *input* ("Was it good?"); the Yum Meter is
+the *output*. Voting updates the meter optimistically.
+
+### Leaderboards tab
+
+Based directly on the sample's leaderboard page:
+
+- Category picker (pills) built from the dish tag vocabulary — e.g. pizza,
+  burger, dessert. A category qualifies for the picker when it has ≥ 2
+  rankable dishes.
+- Ranked list: rank number, mood-face thumbnail, dish name, restaurant +
+  neighborhood, one-line description, and score blocks (LOCALS / VISITORS —
+  each block gated by `MIN_VOTES_TO_SCORE`, gray "Still tallying…" below it).
+- Ranking key: overall score across ALL votes, `round(100 × up / (up + down))`;
+  a dish needs ≥ `MIN_VOTES_TO_SCORE` total votes to rank at all.
+- #1 gets the "CHAMP" crown treatment (highlighted row).
+- Rankings are computed live from the catalog (no refresh copy like the
+  sample's "updated hourly" — ours is instant, client-side).
+
+Layout (mobile-first, mirrors the sticky filter header pattern on `/dishes`):
+
+```
+┌──────────────────────────────────────────────────┐
+│  Reverse Lookup · Seattle                        │
+│  Tell us what you're craving — we'll tell you    │
+│  where to find it vegan.                         │
+│  ┌────────────────────────────────────────────┐  │
+│  │ 🔍  Try "pad thai", "donut", "Ballard"…    │  │  ← search is the hero
+│  └────────────────────────────────────────────┘  │
+│  [Dishes (12)] [Restaurants (26)] [Leaderboards] │
+│                                          [+ Add] │
+├──────────────────────────────────────────────────┤
+│  Category: (All) (breakfast) (dessert) (drink)…  │  ← sticky on scroll
+└──────────────────────────────────────────────────┘
+```
+
+Search matches dish name, description, tags, ingredients (from `details`),
+restaurant name, and neighborhood — token-AND semantics, ported from the
+current static app.
+
+### Dish card
+
+```
+┌──────────────────────────────────────────────────┐
+│  Vegan Katsu Curry              (savoury)        │
+│  from Plum Bistro · Capitol Hill  [verified ✓]   │
+│                                                  │
+│  ┌───────────────────┐ ┌──────────────────────┐  │
+│  │ ☺ LOCALS SAY      │ │ 😐 VISITORS SAY      │  │  ← Yum Meter
+│  │   91% · Top Bite  │ │  Still tallying the  │  │    (mood faces,
+│  │        · 24 votes │ │  votes… · 3 so far   │  │     tier colors;
+│  └───────────────────┘ └──────────────────────┘  │     no % below 5)
+│  Crispy panko tofu over rich curry rice.         │
+│  📍 1429 12th Ave, Seattle    ↗ website          │
+│  Was it good?  [ 👍 ] [ 👎 ]  as 🏠 Local ▾      │
+│  added by @handle                                │
+└──────────────────────────────────────────────────┘
+```
+
+- The vote widget is labeled ("Was it good?") so the affordance is instantly
+  legible. The caller's active vote renders filled; tapping it again removes
+  the vote; tapping the other side switches it. Optimistic UI (meter recomputes
+  locally), reconciled on the server response.
+- Community-added dishes show "added by @handle" attribution.
+
+### Add-a-dish flow (signed-in) — one modal, two steps
+
+1. **Where?** Searchable restaurant picker (seeded + community venues, with
+   neighborhood shown). "+ New restaurant" expands inline fields: name
+   (required), street address (required), neighborhood, website (optional).
+2. **What?** Dish name (required), one-line description, tag chips (existing
+   vocabulary + free text). While typing, a client-side check against the
+   already-loaded catalog warns "Already listed at this restaurant — vote it
+   up instead ↓" with a jump link.
+
+Submit → dish is live immediately, toast confirms, list scrolls to the new
+highlighted card.
+
+### Signed-out experience
+
+Vote and Add controls are visible but gated: tapping opens a small prompt —
+"Sign in to vote — it takes a minute" → `/login?next=/reverse-lookup`. Actions
+are signposted, never hidden.
+
+Note: `/login` does not currently honor a `next` query param — adding that
+redirect (validated as a same-origin path) is part of this work.
+
+## Data model
+
+Migrations live in the sibling `backend_migrations` repo (canonical clone, not
+the stale nested submodule). Postgres DOMAINs, not enums:
+
+```sql
+CREATE DOMAIN rl_dish_status AS TEXT CHECK (VALUE IN ('live','hidden'));
+CREATE DOMAIN vote_value     AS SMALLINT CHECK (VALUE IN (-1, 1));
+CREATE DOMAIN voter_kind     AS TEXT CHECK (VALUE IN ('local','visitor'));
+```
+
+### `restaurants`
+
+| column | type | notes |
+|---|---|---|
+| id | uuid PK | `gen_random_uuid()` |
+| city | text NOT NULL | default `'seattle'` |
+| name | text NOT NULL | unique `(city, lower(name))` |
+| website / instagram / facebook | text NULL | |
+| description | text NULL | |
+| cuisines | text[] NOT NULL default '{}' | split of CSV pipe-separated `types` |
+| verified | boolean NOT NULL default false | CSV seeds true; user-created false |
+| last_verified | date NULL | from CSV |
+| created_by | uuid NULL → auth.users | null for seeds |
+| created_at | timestamptz NOT NULL default now() | |
+
+### `restaurant_locations`
+
+| column | type | notes |
+|---|---|---|
+| id | uuid PK | |
+| restaurant_id | uuid FK → restaurants ON DELETE CASCADE | |
+| address | text NOT NULL | |
+| neighborhood | text NULL | |
+| phone | text NULL | |
+
+CSV positional columns `address_1..4` / `neighborhood_1..4` / `phone_1..4`
+normalize to one row per location.
+
+### `restaurant_dishes`
+
+| column | type | notes |
+|---|---|---|
+| id | uuid PK | |
+| restaurant_id | uuid FK → restaurants ON DELETE CASCADE | |
+| name | text NOT NULL | unique `(restaurant_id, lower(name))` |
+| description | text NULL | |
+| tags | jsonb NOT NULL default '[]' | |
+| details | jsonb NOT NULL default '{}' | ingredients / allergens / flavors from seattle.json ride along without schema churn |
+| status | rl_dish_status NOT NULL default 'live' | admin killswitch |
+| created_by | uuid NULL → auth.users | |
+| created_at | timestamptz NOT NULL default now() | |
+
+### `restaurant_dish_votes`
+
+| column | type | notes |
+|---|---|---|
+| dish_id | uuid FK → restaurant_dishes ON DELETE CASCADE | PK part |
+| user_id | uuid FK → auth.users ON DELETE CASCADE | PK part |
+| value | vote_value NOT NULL | +1 / −1 |
+| voter_kind | voter_kind NOT NULL default 'local' | snapshot of the per-vote "Are you a local?" toggle |
+| created_at / updated_at | timestamptz | |
+
+PK `(dish_id, user_id)` = one vote per user per dish. Re-vote is an upsert
+(may change `value` and/or `voter_kind`); un-vote is a delete — idempotent by
+construction.
+
+### Read path
+
+The whole city catalog ships in one query per visit (dishes ⋈ restaurants ⋈
+locations + votes aggregate); all search/filter is client-side, like today's
+static JSON. Pagination is deferred until a city outgrows this.
+
+### Existing table
+
+`reverse_lookup_suggestions` is left untouched (it may hold pending rows), but
+the anonymous suggest modal and mailto links retire with the static page.
+
+## API surface
+
+All routes: `export const dynamic = "force-dynamic"` and
+`export const maxDuration = 60` (Nhost cold-start protection). Auth uses the
+existing fail-closed `verifyNhostJwt` Bearer pattern from `lib/jwt.ts` (as in
+`qr/claim`). GraphQL calls use the admin secret server-side with the verified
+`user_id` from the token.
+
+| Route | Auth | Behavior |
+|---|---|---|
+| `GET /api/reverse-lookup/catalog?city=` | optional Bearer | Catalog (live dishes only) + per-cohort vote totals (`locals: {up,down}`, `visitors: {up,down}`); adds `myVote` per dish for valid tokens |
+| `POST /api/reverse-lookup/dishes` | Bearer required | Add dish. Body: `{restaurantId}` **or** `{newRestaurant:{name,address,neighborhood?,website?}}`, plus `{name, description?, tags?}`. Duplicate dish or restaurant → `200 {ok, existed:true}` with the existing row |
+| `PUT /api/reverse-lookup/dishes/[id]/vote` | Bearer required | `{value: 1 \| -1 \| null, isLocal?: boolean}` (`isLocal` defaults true) — upsert vote or delete on null; returns new per-cohort totals |
+| `PATCH /api/reverse-lookup/dishes/[id]` | admin secret (`adminGuard`) | `{status:'hidden'\|'live'}` moderation killswitch |
+
+Every mutation is idempotent so a retry after a dropped response (the cold-start
+failure mode fixed on 2026-07-05) can never dead-end the user.
+
+## Error handling
+
+- Vote/add with an invalid or expired token → 401 with a friendly client
+  prompt to sign in again.
+- Catalog fetch failure → error card with retry button (port of the current
+  `rl-error` state).
+- Optimistic vote reconciliation: on failure the client reverts the count and
+  shows a toast.
+- Server validation mirrors client rules (name lengths, tag count cap, URL
+  shape for websites) — client checks are UX, server checks are the contract.
+
+## Seeding
+
+`scripts/seed-reverse-lookup.ts`, run manually with admin credentials:
+
+1. Parse the SVG Guide CSV (26 Seattle-area restaurants) → `restaurants`
+   (`verified=true`, `last_verified` from CSV) + `restaurant_locations`.
+   The CSV is vendored into the repo (`scripts/data/svg-guide-2026-06-29.csv`)
+   rather than fetched from GitHub at seed time, so seeds are reproducible
+   and the user can append restaurants to the file before the seed run.
+2. Port `public/reverse-lookup/data/seattle.json` dishes → `restaurant_dishes`,
+   creating venues not present in the CSV (e.g. Three Cats Cafe) as verified
+   entries with their known addresses.
+3. Idempotent upserts keyed on the unique indexes — safe to re-run.
+
+**Hard gate:** the seed does NOT run until the user explicitly approves — they
+plan to add more restaurants to the list first. (Also: localhost dev is wired
+to the production database; no test writes.)
+
+## Testing
+
+- `bun test` units for pure logic extracted to `lib/reverse-lookup.ts`:
+  CSV row → restaurant/location normalization, seattle.json → dish mapping,
+  per-cohort score math (percentage, mood tiers, min-vote thresholds),
+  leaderboard ranking/qualification, request validation.
+- Manual end-to-end pass after deploy: search both tabs, vote toggle/switch/
+  remove, add dish (existing + new restaurant), duplicate warning, signed-out
+  gates, admin hide.
+- No automated tests write to the (production) database.
+
+## Out of scope (YAGNI)
+
+- Multi-city UI (schema is city-ready; UI stays Seattle-only).
+- Dish photos, comments, or star ratings (thumbs only).
+- Restaurant claiming/ownership, hours, menus.
+- Migrating `reverse_lookup_suggestions` pending rows (manual triage later).
+- Google Maps / Places integration for restaurant data (canonical addresses,
+  hours, geo, place IDs) and for inferring voter locality — wanted later; the
+  `restaurant_locations` table is the natural attachment point when it comes.
+- Server-side search — v1 ships the whole city catalog and filters client-side.
+  The agreed upgrade path when the catalog outgrows that: (1) `pg_trgm` GIN
+  index for typo-tolerant/fuzzy search and fuzzy duplicate detection, then
+  (2) pgvector + embeddings for semantic craving-style queries, only at a
+  scale (multi-city) where keyword search visibly fails. Both bolt onto
+  `restaurant_dishes` with no schema rework.
