@@ -102,8 +102,11 @@ function FilterChips({ activeCourse, onCourseChange, activeCreator, onCreatorCha
   const [creatorDropdownOpen, setCreatorDropdownOpen] = useState(false);
   const [creatorSearch, setCreatorSearch] = useState('');
   const [creatorOrder, setCreatorOrder] = useState([]);
-  const creatorDropdownRef = useRef(null);
-  const moreButtonRef = useRef(null);
+  // No refs for click-outside: the creator picker renders its own full-screen
+  // backdrop with an onClick, so a document listener was redundant. The old one
+  // was also dead — creatorDropdownRef was never attached to any element, so its
+  // guard short-circuited on null every time — and moreButtonRef was attached to
+  // TWO buttons (desktop row and mobile modal), where the last mount silently won.
 
   const handleMoreClick = () => {
     setCreatorDropdownOpen(!creatorDropdownOpen);
@@ -141,18 +144,53 @@ function FilterChips({ activeCourse, onCourseChange, activeCreator, onCreatorCha
     ...creatorOptions.filter(c => !creatorOrder.includes(c) && !selectedCreators.includes(c)),
   ] : [];
 
+  /**
+   * Chips actually rendered in the row.
+   *
+   * EVERY selected creator is shown, always — a plain slice(0, 3) hid your own
+   * selection the moment you picked a fourth, leaving it filtered but invisible
+   * and only removable from inside the nested picker. Unselected creators then
+   * fill whatever slots remain up to CHIP_SLOTS.
+   */
+  const CHIP_SLOTS = 3;
+  const unselected = sortedCreators.filter(c => !selectedCreators.includes(c));
+  const visibleCreators = [
+    ...sortedCreators.filter(c => selectedCreators.includes(c)),
+    ...unselected.slice(0, Math.max(0, CHIP_SLOTS - selectedCreators.length)),
+  ];
+
+  /**
+   * Escape closes the TOPMOST layer only.
+   *
+   * The creator picker opens on top of the filters modal, so a single shared
+   * handler would close both at once and dump you back to the page after one
+   * keypress. Ordered innermost-first, and only one layer is handled per event.
+   */
   useEffect(() => {
-    function handleClickOutside(e) {
-      if (creatorDropdownRef.current && !creatorDropdownRef.current.contains(e.target) &&
-          moreButtonRef.current && !moreButtonRef.current.contains(e.target)) {
-        setCreatorDropdownOpen(false);
-      }
+    if (!open && !creatorDropdownOpen && !moreFiltersOpen) return;
+    function onKeyDown(e) {
+      if (e.key !== 'Escape') return;
+      e.stopPropagation();
+      if (creatorDropdownOpen) setCreatorDropdownOpen(false);
+      else if (moreFiltersOpen) setMoreFiltersOpen(false);
+      else setOpen(false);
     }
-    if (creatorDropdownOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
-      return () => document.removeEventListener('mousedown', handleClickOutside);
-    }
-  }, [creatorDropdownOpen]);
+    document.addEventListener('keydown', onKeyDown);
+    return () => document.removeEventListener('keydown', onKeyDown);
+  }, [open, creatorDropdownOpen, moreFiltersOpen]);
+
+  /**
+   * Lock body scroll while any layer is open, so the page behind a full-screen
+   * mobile modal doesn't scroll under your finger. Restores the previous value
+   * rather than hard-coding '' — nested layers unmount independently, and the
+   * inner one closing must not unlock the outer one.
+   */
+  useEffect(() => {
+    if (!open && !creatorDropdownOpen && !moreFiltersOpen) return;
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => { document.body.style.overflow = previous; };
+  }, [open, creatorDropdownOpen, moreFiltersOpen]);
 
   const activeCount =
     (activeCourse && activeCourse !== 'all' ? 1 : 0) +
@@ -208,7 +246,7 @@ function FilterChips({ activeCourse, onCourseChange, activeCreator, onCreatorCha
               >All</button>
               {/* sortedCreators, not creatorOptions — selected creators stay
                   visible instead of being pushed out of the first three. */}
-              {sortedCreators.slice(0, 3).map(c => {
+              {visibleCreators.map(c => {
                 const on = selectedCreators.includes(c);
                 return (
                   <button
@@ -223,7 +261,6 @@ function FilterChips({ activeCourse, onCourseChange, activeCreator, onCreatorCha
               {(creatorOptions || []).length > 3 ? (
                 <>
                   <button
-                    ref={moreButtonRef}
                     className="fchip"
                     onClick={handleMoreClick}
                   >
@@ -284,7 +321,7 @@ function FilterChips({ activeCourse, onCourseChange, activeCreator, onCreatorCha
                         className={"fchip" + (selectedCreators.length === 0 ? ' on' : '')}
                         onClick={() => onCreatorChange([])}
                       >All</button>
-                      {sortedCreators.slice(0, 3).map(c => {
+                      {visibleCreators.map(c => {
                         const on = selectedCreators.includes(c);
                         return (
                           <button
@@ -298,8 +335,7 @@ function FilterChips({ activeCourse, onCourseChange, activeCreator, onCreatorCha
                       })}
                       {(creatorOptions || []).length > 3 ? (
                         <button
-                          ref={moreButtonRef}
-                          className="fchip"
+                                className="fchip"
                           onClick={handleMoreClick}
                         >
                           More ▾
