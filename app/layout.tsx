@@ -37,8 +37,10 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <title>Ahead of the Menu</title>
-        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+        {/* Title and icon come from the `metadata` export above — a literal
+            <title> here renders FIRST and wins over every page's own, which is
+            what shipped two <title> elements site-wide. Re-added by the
+            icon-and-title merge; do not put it back. */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
           href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
