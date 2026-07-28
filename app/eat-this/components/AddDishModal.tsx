@@ -11,7 +11,7 @@
  * an idempotent `existed: true` response counts as success and jumps to the
  * existing card. A 401 (expired session) shows a sign-in prompt.
  */
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useRef } from "react";
 import { Modal } from "@/components/ui/modal";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/components/AuthProvider";
@@ -20,6 +20,20 @@ import type { CatalogDish } from "./DishCard";
 
 type NewRestaurantFields = { name: string; address: string; neighborhood: string; website: string };
 const EMPTY_NEW: NewRestaurantFields = { name: "", address: "", neighborhood: "", website: "" };
+
+// LocationIQ Autocomplete response type
+type LocationIQResult = {
+  display_place: string;
+  display_address: string;
+  address: {
+    name?: string;
+    road?: string;
+    house_number?: string;
+    city?: string;
+    postcode?: string;
+    country?: string;
+  };
+};
 
 export function AddDishModal({ open, onClose, restaurants, dishes, initialRestaurantId, onAdded, onJumpToDish }: {
   open: boolean;
@@ -39,6 +53,17 @@ export function AddDishModal({ open, onClose, restaurants, dishes, initialRestau
   const [restaurantId, setRestaurantId] = useState<string | null>(null);
   const [creatingNew, setCreatingNew] = useState(false);
   const [newRestaurant, setNewRestaurant] = useState<NewRestaurantFields>(EMPTY_NEW);
+
+  // Autocomplete state
+  const [nameAutocompleteResults, setNameAutocompleteResults] = useState<LocationIQResult[]>([]);
+  const [addressAutocompleteResults, setAddressAutocompleteResults] = useState<LocationIQResult[]>([]);
+  const [showNameAutocomplete, setShowNameAutocomplete] = useState(false);
+  const [showAddressAutocomplete, setShowAddressAutocomplete] = useState(false);
+  const [autocompleteLoading, setAutocompleteLoading] = useState(false);
+
+  // Debounce timers
+  const nameDebounceTimer = useRef<NodeJS.Timeout | null>(null);
+  const addressDebounceTimer = useRef<NodeJS.Timeout | null>(null);
 
   const [dishName, setDishName] = useState("");
   const [description, setDescription] = useState("");
@@ -70,7 +95,138 @@ export function AddDishModal({ open, onClose, restaurants, dishes, initialRestau
     setSubmitting(false);
     setError(null);
     setSessionExpired(false);
+    setNameAutocompleteResults([]);
+    setAddressAutocompleteResults([]);
+    setShowNameAutocomplete(false);
+    setShowAddressAutocomplete(false);
   }, [open, initialRestaurantId]);
+
+  // Cleanup debounce timers on unmount
+  useEffect(() => {
+    return () => {
+      if (nameDebounceTimer.current) clearTimeout(nameDebounceTimer.current);
+      if (addressDebounceTimer.current) clearTimeout(addressDebounceTimer.current);
+    };
+  }, []);
+
+  /**
+   * Fetch autocomplete suggestions from LocationIQ
+   * When searching by restaurant name: populate both name and address fields
+   * When searching by address: populate only address field
+   */
+  const fetchAutocomplete = async (query: string, type: "name" | "address") => {
+    if (!query || query.length < 3) {
+      if (type === "name") setNameAutocompleteResults([]);
+      else setAddressAutocompleteResults([]);
+      return;
+    }
+
+    try {
+      setAutocompleteLoading(true);
+      const locationiqKey = process.env.NEXT_PUBLIC_LOCATIONIQ_API_KEY;
+      if (!locationiqKey) {
+        console.warn("LocationIQ API key not configured");
+        return;
+      }
+
+      const response = await fetch(
+        `https://api.locationiq.com/v1/autocomplete?key=${locationiqKey}&q=${encodeURIComponent(query)}&limit=5`
+      );
+
+      if (!response.ok) {
+        console.error("LocationIQ autocomplete error:", response.statusText);
+        return;
+      }
+
+      const results = await response.json() as LocationIQResult[];
+
+      if (type === "name") {
+        setNameAutocompleteResults(results);
+        setShowNameAutocomplete(true);
+      } else {
+        setAddressAutocompleteResults(results);
+        setShowAddressAutocomplete(true);
+      }
+    } catch (err) {
+      console.error("Error fetching autocomplete:", err);
+    } finally {
+      setAutocompleteLoading(false);
+    }
+  };
+
+  /**
+   * Handle restaurant name input with debounce (1 second)
+   */
+  const handleNameChange = (value: string) => {
+    setNewRestaurant({ ...newRestaurant, name: value });
+
+    // Clear existing timer
+    if (nameDebounceTimer.current) clearTimeout(nameDebounceTimer.current);
+
+    // Trigger autocomplete after 1 second of inactivity
+    nameDebounceTimer.current = setTimeout(() => {
+      if (value.length >= 3) {
+        fetchAutocomplete(value, "name");
+      } else {
+        setNameAutocompleteResults([]);
+        setShowNameAutocomplete(false);
+      }
+    }, 1000);
+  };
+
+  /**
+   * Handle address input with debounce (1 second)
+   */
+  const handleAddressChange = (value: string) => {
+    setNewRestaurant({ ...newRestaurant, address: value });
+
+    // Clear existing timer
+    if (addressDebounceTimer.current) clearTimeout(addressDebounceTimer.current);
+
+    // Trigger autocomplete after 1 second of inactivity
+    addressDebounceTimer.current = setTimeout(() => {
+      if (value.length >= 3) {
+        fetchAutocomplete(value, "address");
+      } else {
+        setAddressAutocompleteResults([]);
+        setShowAddressAutocomplete(false);
+      }
+    }, 1000);
+  };
+
+  /**
+   * Handle selection from name autocomplete
+   * Fills both name and address fields
+   */
+  const handleNameAutocompleteSelect = (result: LocationIQResult) => {
+    const name = result.display_place || result.address.name || "";
+    const address = result.display_address || "";
+
+    setNewRestaurant({
+      ...newRestaurant,
+      name,
+      address,
+    });
+
+    setNameAutocompleteResults([]);
+    setShowNameAutocomplete(false);
+  };
+
+  /**
+   * Handle selection from address autocomplete
+   * Fills only the address field
+   */
+  const handleAddressAutocompleteSelect = (result: LocationIQResult) => {
+    const address = result.display_address || "";
+
+    setNewRestaurant({
+      ...newRestaurant,
+      address,
+    });
+
+    setAddressAutocompleteResults([]);
+    setShowAddressAutocomplete(false);
+  };
 
   const filteredRestaurants = useMemo(() => {
     const q = restaurantQuery.trim().toLowerCase();
@@ -146,11 +302,11 @@ export function AddDishModal({ open, onClose, restaurants, dishes, initialRestau
           restaurantId: creatingNew ? null : restaurantId,
           newRestaurant: creatingNew
             ? {
-                name: newRestaurant.name.trim(),
-                address: newRestaurant.address.trim(),
-                neighborhood: newRestaurant.neighborhood.trim() || null,
-                website: newRestaurant.website.trim() || null,
-              }
+              name: newRestaurant.name.trim(),
+              address: newRestaurant.address.trim(),
+              neighborhood: newRestaurant.neighborhood.trim() || null,
+              website: newRestaurant.website.trim() || null,
+            }
             : null,
           name: dishName.trim(),
           description: description.trim() || null,
@@ -191,17 +347,16 @@ export function AddDishModal({ open, onClose, restaurants, dishes, initialRestau
             <>
               <Input
                 autoFocus
-                placeholder="Search restaurants by name or neighborhood…"
+                placeholder="Search restaurants…"
                 value={restaurantQuery}
                 onChange={(e) => setRestaurantQuery(e.target.value)}
               />
-              <div className="max-h-56 overflow-y-auto rounded-lg border border-neutral-200">
+              <div className="max-h-64 overflow-y-auto border border-neutral-200 rounded-lg">
                 {filteredRestaurants.map((r) => (
                   <label
                     key={r.id}
-                    className={`flex cursor-pointer items-center gap-2.5 border-b border-neutral-100 px-3 py-2 last:border-b-0 ${
-                      restaurantId === r.id ? "bg-apb/5" : "hover:bg-neutral-50"
-                    }`}
+                    className={`flex cursor-pointer items-center gap-2.5 border-b border-neutral-100 px-3 py-2 last:border-b-0 ${restaurantId === r.id ? "bg-apb/5" : "hover:bg-neutral-50"
+                      }`}
                   >
                     <input
                       type="radio"
@@ -235,14 +390,65 @@ export function AddDishModal({ open, onClose, restaurants, dishes, initialRestau
 
           {creatingNew && (
             <div className="flex flex-col gap-2">
-              <Input placeholder="Restaurant name *" value={newRestaurant.name}
-                onChange={(e) => setNewRestaurant({ ...newRestaurant, name: e.target.value })} />
-              <Input placeholder="Street address *" value={newRestaurant.address}
-                onChange={(e) => setNewRestaurant({ ...newRestaurant, address: e.target.value })} />
-              <Input placeholder="Neighborhood" value={newRestaurant.neighborhood}
-                onChange={(e) => setNewRestaurant({ ...newRestaurant, neighborhood: e.target.value })} />
-              <Input placeholder="Website" value={newRestaurant.website}
-                onChange={(e) => setNewRestaurant({ ...newRestaurant, website: e.target.value })} />
+              {/* Restaurant Name Input with Autocomplete */}
+              <div className="relative">
+                <Input
+                  placeholder="Restaurant name *"
+                  value={newRestaurant.name}
+                  onChange={(e) => handleNameChange(e.target.value)}
+                  autoComplete="off"
+                />
+                {showNameAutocomplete && nameAutocompleteResults.length > 0 && (
+                  <div className="absolute top-full left-0 right-0 mt-1 border border-neutral-200 rounded-lg bg-white shadow-md z-10">
+                    {nameAutocompleteResults.map((result, idx) => (
+                      <button
+                        key={idx}
+                        type="button"
+                        onClick={() => handleNameAutocompleteSelect(result)}
+                        className="w-full text-left px-3 py-2 text-sm border-b border-neutral-100 last:border-b-0 hover:bg-neutral-50 transition"
+                      >
+                        <div className="font-medium text-neutral-800">{result.display_place}</div>
+                        <div className="text-xs text-neutral-500">{result.display_address}</div>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Address Input with Autocomplete */}
+              <div className="relative">
+                <Input
+                  placeholder="Street address *"
+                  value={newRestaurant.address}
+                  onChange={(e) => handleAddressChange(e.target.value)}
+                  autoComplete="off"
+                />
+                {showAddressAutocomplete && addressAutocompleteResults.length > 0 && (
+                  <div className="absolute top-full left-0 right-0 mt-1 border border-neutral-200 rounded-lg bg-white shadow-md z-10">
+                    {addressAutocompleteResults.map((result, idx) => (
+                      <button
+                        key={idx}
+                        type="button"
+                        onClick={() => handleAddressAutocompleteSelect(result)}
+                        className="w-full text-left px-3 py-2 text-sm border-b border-neutral-100 last:border-b-0 hover:bg-neutral-50 transition"
+                      >
+                        <div className="text-sm text-neutral-800">{result.display_address}</div>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <Input
+                placeholder="Neighborhood"
+                value={newRestaurant.neighborhood}
+                onChange={(e) => setNewRestaurant({ ...newRestaurant, neighborhood: e.target.value })}
+              />
+              <Input
+                placeholder="Website"
+                value={newRestaurant.website}
+                onChange={(e) => setNewRestaurant({ ...newRestaurant, website: e.target.value })}
+              />
             </div>
           )}
 
@@ -287,11 +493,10 @@ export function AddDishModal({ open, onClose, restaurants, dishes, initialRestau
                   key={v}
                   type="button"
                   onClick={() => setAvailability(v)}
-                  className={`rounded-full border px-3 py-1 text-xs font-medium capitalize transition ${
-                    availability === v
-                      ? "border-apb bg-apb text-white"
-                      : "border-neutral-300 bg-white text-neutral-600 hover:bg-neutral-50"
-                  }`}
+                  className={`rounded-full border px-3 py-1 text-xs font-medium capitalize transition ${availability === v
+                    ? "border-apb bg-apb text-white"
+                    : "border-neutral-300 bg-white text-neutral-600 hover:bg-neutral-50"
+                    }`}
                 >
                   {v}
                 </button>
@@ -307,11 +512,10 @@ export function AddDishModal({ open, onClose, restaurants, dishes, initialRestau
                   key={tag}
                   type="button"
                   onClick={() => toggleTag(tag)}
-                  className={`rounded-full border px-2.5 py-1 text-xs font-medium capitalize transition ${
-                    tags.includes(tag)
-                      ? "border-apb bg-apb text-white"
-                      : "border-neutral-300 bg-white text-neutral-600 hover:bg-neutral-50"
-                  }`}
+                  className={`rounded-full border px-2.5 py-1 text-xs font-medium capitalize transition ${tags.includes(tag)
+                    ? "border-apb bg-apb text-white"
+                    : "border-neutral-300 bg-white text-neutral-600 hover:bg-neutral-50"
+                    }`}
                 >
                   {tag}
                 </button>
@@ -346,11 +550,10 @@ export function AddDishModal({ open, onClose, restaurants, dishes, initialRestau
                   key={c}
                   type="button"
                   onClick={() => toggleCustomization(c)}
-                  className={`rounded-full border px-2.5 py-1 text-xs font-medium capitalize transition ${
-                    customizations.includes(c)
-                      ? "border-apb bg-apb text-white"
-                      : "border-neutral-300 bg-white text-neutral-600 hover:bg-neutral-50"
-                  }`}
+                  className={`rounded-full border px-2.5 py-1 text-xs font-medium capitalize transition ${customizations.includes(c)
+                    ? "border-apb bg-apb text-white"
+                    : "border-neutral-300 bg-white text-neutral-600 hover:bg-neutral-50"
+                    }`}
                 >
                   {c}
                 </button>
