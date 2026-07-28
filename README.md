@@ -21,6 +21,7 @@ git clone <repo-url>
 cd aheadofthemenu
 git submodule update --init --recursive     # populates / updates backend_migrations/
 ```
+If asked for GitHub username and password, [create a personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-personal-access-token-classic) as the password.
 
 ### 2. Run the Next.js app locally
 
