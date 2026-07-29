@@ -60,7 +60,18 @@ export async function POST(request: NextRequest) {
           variables: {
             obj: {
               city, name: nr.name, website: nr.website, created_by: caller.userId,
-              locations: { data: [{ address: nr.address, neighborhood: nr.neighborhood }] },
+              locations: {
+                data: [{
+                  address: nr.address,
+                  neighborhood: nr.neighborhood,
+                  lat: nr.lat,
+                  lng: nr.lng,
+                  // Provenance, so a bad geocoding run is revertible and
+                  // hand-corrected coordinates survive a backfill.
+                  geocode_source: nr.lat !== null ? "locationiq_autocomplete" : null,
+                  geocoded_at: nr.lat !== null ? new Date().toISOString() : null,
+                }],
+              },
             },
           },
         }

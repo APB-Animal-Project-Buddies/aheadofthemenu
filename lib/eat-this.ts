@@ -1,3 +1,5 @@
+import { parseCoords } from "@/lib/geo";
+
 /**
  * lib/eat-this.ts
  *
@@ -269,7 +271,7 @@ const str = (v: unknown, max: number) => String(v ?? "").trim().slice(0, max);
 
 export type AddDishInput = {
   restaurantId: string | null;
-  newRestaurant: { name: string; address: string; neighborhood: string | null; website: string | null } | null;
+  newRestaurant: { name: string; address: string; neighborhood: string | null; website: string | null; lat: number | null; lng: number | null } | null;
   name: string;
   description: string | null;
   tags: string[];
@@ -307,7 +309,18 @@ export function validateAddDish(body: any): AddDishInput | { error: string } {
     if (!rn || !addr) return { error: "Pick a restaurant or give a new one a name and address" };
     let website = str(body?.newRestaurant?.website, 300) || null;
     if (website && !/^https?:\/\//i.test(website)) website = `https://${website}`;
-    newRestaurant = { name: rn, address: addr, neighborhood: str(body?.newRestaurant?.neighborhood, 80) || null, website };
+    // Coordinates are optional and only trusted as a valid pair — parseCoords
+    // rejects a half pair, so a missing lng can never be read as 0 and drop the
+    // restaurant into the Gulf of Guinea.
+    const coords = parseCoords(body?.newRestaurant?.lat, body?.newRestaurant?.lng);
+    newRestaurant = {
+      name: rn,
+      address: addr,
+      neighborhood: str(body?.newRestaurant?.neighborhood, 80) || null,
+      website,
+      lat: coords?.lat ?? null,
+      lng: coords?.lng ?? null,
+    };
   }
 
   const availability: DishAvailability = body?.availability === "seasonal" ? "seasonal" : "permanent";

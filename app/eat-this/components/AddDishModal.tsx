@@ -12,19 +12,27 @@
  * existing card. A 401 (expired session) shows a sign-in prompt.
  */
 import { useEffect, useMemo, useState, useRef } from "react";
+import { parseCoords } from "@/lib/geo";
 import { Modal } from "@/components/ui/modal";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/components/AuthProvider";
 import type { CatalogRestaurant } from "./RestaurantCard";
 import type { CatalogDish } from "./DishCard";
 
-type NewRestaurantFields = { name: string; address: string; neighborhood: string; website: string };
+// lat/lng are optional: only set when the address came from an autocomplete
+// hit. A hand-typed restaurant is stored ungeocoded and picked up by a later
+// backfill rather than blocking the submission.
+type NewRestaurantFields = { name: string; address: string; neighborhood: string; website: string; lat?: string; lng?: string };
 const EMPTY_NEW: NewRestaurantFields = { name: "", address: "", neighborhood: "", website: "" };
 
 // LocationIQ Autocomplete response type
 type LocationIQResult = {
   display_place: string;
   display_address: string;
+  // LocationIQ returns these as STRINGS. They were previously dropped on the
+  // floor — the geocode was already being paid for, just discarded.
+  lat?: string;
+  lon?: string;
   address: {
     name?: string;
     road?: string;
@@ -198,6 +206,16 @@ export function AddDishModal({ open, onClose, restaurants, dishes, initialRestau
    * Handle selection from name autocomplete
    * Fills both name and address fields
    */
+  /**
+   * Pull coordinates off an autocomplete hit. Returns {} rather than nulls when
+   * the result has none, so spreading it never clobbers coordinates already on
+   * the draft (picking a name then refining the address keeps the name's point).
+   */
+  const coordsFrom = (result: LocationIQResult): { lat?: string; lng?: string } => {
+    const c = parseCoords(result.lat, result.lon);
+    return c ? { lat: String(c.lat), lng: String(c.lng) } : {};
+  };
+
   const handleNameAutocompleteSelect = (result: LocationIQResult) => {
     const name = result.display_place || result.address.name || "";
     const address = result.display_address || "";
@@ -206,6 +224,7 @@ export function AddDishModal({ open, onClose, restaurants, dishes, initialRestau
       ...newRestaurant,
       name,
       address,
+      ...coordsFrom(result),
     });
 
     setNameAutocompleteResults([]);
@@ -222,6 +241,7 @@ export function AddDishModal({ open, onClose, restaurants, dishes, initialRestau
     setNewRestaurant({
       ...newRestaurant,
       address,
+      ...coordsFrom(result),
     });
 
     setAddressAutocompleteResults([]);
@@ -306,6 +326,10 @@ export function AddDishModal({ open, onClose, restaurants, dishes, initialRestau
               address: newRestaurant.address.trim(),
               neighborhood: newRestaurant.neighborhood.trim() || null,
               website: newRestaurant.website.trim() || null,
+              // Only present when the address came from an autocomplete hit;
+              // a hand-typed address stays ungeocoded until a backfill run.
+              lat: newRestaurant.lat ?? null,
+              lng: newRestaurant.lng ?? null,
             }
             : null,
           name: dishName.trim(),
