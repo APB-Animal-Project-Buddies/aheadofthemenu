@@ -20,6 +20,69 @@ import { AddDishModal } from "./components/AddDishModal";
 type Catalog = { city: string; restaurants: CatalogRestaurant[]; dishes: CatalogDish[] };
 type Tab = "dishes" | "restaurants" | "leaderboards";
 
+/** Displays tag pills with overflow handling using a "+ more" button. */
+function TagPillRow({
+  tags,
+  selectedTags,
+  tagButton,
+  onMoreClick,
+  visibleCountRef,
+}: {
+  tags: string[];
+  selectedTags: Set<string>;
+  tagButton: (tag: string, isSelected: boolean) => React.ReactNode;
+  onMoreClick: () => void;
+  visibleCountRef: React.MutableRefObject<string[]>;
+}) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [visibleCount, setVisibleCount] = useState(tags.length);
+  const measureRef = useRef<boolean>(false);
+
+  // First effect: when size changes or tags change, mark that we need to measure
+  useEffect(() => {
+    measureRef.current = true;
+  }, [tags, selectedTags.size]);
+
+  // Second effect: measure and update if needed
+  useEffect(() => {
+    if (!measureRef.current || !containerRef.current) return;
+    measureRef.current = false;
+
+    const container = containerRef.current;
+
+    // Measure current state
+    const overflows = container.scrollWidth > container.offsetWidth;
+
+    if (overflows && visibleCount > 0) {
+      // Hide one tag and let React re-render
+      const newCount = visibleCount - 1;
+      setVisibleCount(newCount);
+      visibleCountRef.current = tags.slice(0, newCount);
+      // Mark for another measurement on next render
+      measureRef.current = true;
+    }
+  });
+
+  const visibleTags = tags.slice(0, visibleCount);
+  const hiddenTags = tags.slice(visibleCount);
+  const hasHidden = hiddenTags.length > 0;
+
+  return (
+    <div ref={containerRef} className="flex items-center gap-2 overflow-hidden">
+      {visibleTags.map((tag) => tagButton(tag, selectedTags.has(tag)))}
+      {hasHidden && (
+        <button
+          type="button"
+          onClick={onMoreClick}
+          className="shrink-0 rounded-full border border-neutral-300 bg-white px-2.5 py-1 text-xs font-semibold text-neutral-700 hover:bg-neutral-50"
+        >
+          + {hiddenTags.length} more
+        </button>
+      )}
+    </div>
+  );
+}
+
 export default function EatThisPage() {
   const { session, isAuthenticated } = useAuth();
   const accessToken = session?.accessToken ?? null;
@@ -30,7 +93,9 @@ export default function EatThisPage() {
 
   const [tab, setTab] = useState<Tab>("dishes");
   const [query, setQuery] = useState("");
-  const [activeTag, setActiveTag] = useState("all");
+  const [selectedTags, setSelectedTags] = useState<Set<string>>(new Set());
+  const [showMoreMenu, setShowMoreMenu] = useState(false);
+  const moreMenuRef = useRef<HTMLDivElement>(null);
 
   const [modalOpen, setModalOpen] = useState(false);
   const [modalRestaurantId, setModalRestaurantId] = useState<string | null>(null);
@@ -38,7 +103,9 @@ export default function EatThisPage() {
   const [sessionExpired, setSessionExpired] = useState(false);
 
   const [highlightId, setHighlightId] = useState<string | null>(null);
+  const [tagQuery, setTagQuery] = useState("");
   const pendingJumpRef = useRef<string | null>(null);
+  const visibleTagsRef = useRef<string[]>([]);
 
   // The mount fetch (no token) and the post-hydration fetch (with token) can
   // resolve out of order; only the latest request may set state, or the
@@ -79,12 +146,23 @@ export default function EatThisPage() {
 
   const tokens = useMemo(() => tokenize(query), [query]);
 
+  // Filter tags based on tagQuery
+  const filteredTags = useMemo(() => {
+    if (!tagQuery.trim()) return tags;
+    const lowerQuery = tagQuery.toLowerCase();
+    return tags.filter((tag) => tag.toLowerCase().includes(lowerQuery));
+  }, [tags, tagQuery]);
+
   // Token-AND matching over the dish haystack (lib/eat-this).
   const filteredDishes = useMemo(() => {
-    return dishes.filter(
-      (d) => (activeTag === "all" || d.tags.includes(activeTag)) && dishMatchesTokens(d, tokens)
-    );
-  }, [dishes, tokens, activeTag]);
+    return dishes.filter((d) => {
+      // If tags are selected, dish must include at least one selected tag
+      if (selectedTags.size > 0 && !Array.from(selectedTags).some((tag) => d.tags.includes(tag))) {
+        return false;
+      }
+      return dishMatchesTokens(d, tokens);
+    });
+  }, [dishes, tokens, selectedTags]);
 
   const sortedDishes = useMemo(() => {
     const sorted = sortDishCards(filteredDishes);
@@ -108,17 +186,46 @@ export default function EatThisPage() {
   const jumpToDish = useCallback((dishId: string) => {
     setTab("dishes");
     setQuery("");
-    setActiveTag("all");
+    setSelectedTags(new Set());
     setHighlightId(dishId);
   }, []);
 
   useEffect(() => {
-    if (!highlightId) return;
-    const el = document.getElementById(`dish-${highlightId}`);
-    if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
-    const timer = setTimeout(() => setHighlightId(null), 3500);
-    return () => clearTimeout(timer);
-  }, [highlightId, catalog]);
+    if (!showMoreMenu) return;
+    const handleOutsideClick = (e: MouseEvent) => {
+      if (moreMenuRef.current && !moreMenuRef.current.contains(e.target as Node)) {
+        setShowMoreMenu(false);
+      }
+    };
+    document.addEventListener("mousedown", handleOutsideClick);
+    return () => document.removeEventListener("mousedown", handleOutsideClick);
+  }, [showMoreMenu]);
+
+  const toggleTag = (tag: string) => {
+    setSelectedTags((prev) => {
+      const next = new Set(prev);
+      if (next.has(tag)) {
+        next.delete(tag);
+      } else {
+        next.add(tag);
+      }
+      return next;
+    });
+  };
+
+  const tagButton = (tag: string, isSelected: boolean) => (
+    <button
+      key={tag}
+      type="button"
+      onClick={() => toggleTag(tag)}
+      className={`shrink-0 rounded-full border px-3 py-1 text-xs font-semibold capitalize transition ${isSelected
+        ? "border-apb bg-apb text-white"
+        : "border-neutral-300 bg-white text-neutral-700 hover:bg-neutral-50"
+        }`}
+    >
+      {tag}
+    </button>
+  );
 
   // A freshly-added dish needs a refetch before it can be jumped to.
   useEffect(() => {
@@ -191,9 +298,8 @@ export default function EatThisPage() {
     <button
       type="button"
       onClick={() => setTab(key)}
-      className={`rounded-full px-4 py-1.5 text-sm font-semibold transition ${
-        tab === key ? "bg-apb text-white" : "bg-white text-neutral-700 border border-neutral-300 hover:bg-neutral-50"
-      }`}
+      className={`rounded-full px-4 py-1.5 text-sm font-semibold transition ${tab === key ? "bg-apb text-white" : "bg-white text-neutral-700 border border-neutral-300 hover:bg-neutral-50"
+        }`}
     >
       {label}
     </button>
@@ -215,23 +321,23 @@ export default function EatThisPage() {
         </h1>
         {/* Search drives the Dishes and Restaurants tabs; Leaderboards swaps it for the category picker. */}
         {tab !== "leaderboards" && (
-        <label className="mt-4 flex items-center gap-2 rounded-2xl border border-neutral-300 bg-white px-4 py-3 shadow-sm focus-within:border-apb">
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="shrink-0 text-neutral-400"><circle cx="11" cy="11" r="7" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></svg>
-          <input
-            type="text"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder='Try "pad thai", "donut", "Ballard"…'
-            className="w-full bg-transparent text-sm outline-none placeholder:text-neutral-400"
-          />
-          {!loading && !loadError && (
-            <span className="shrink-0 text-xs font-medium text-neutral-400">
-              {resultCount} {tab === "restaurants"
-                ? resultCount === 1 ? "spot" : "spots"
-                : resultCount === 1 ? "dish" : "dishes"}
-            </span>
-          )}
-        </label>
+          <label className="mt-4 flex items-center gap-2 rounded-2xl border border-neutral-300 bg-white px-4 py-3 shadow-sm focus-within:border-apb">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="shrink-0 text-neutral-400"><circle cx="11" cy="11" r="7" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></svg>
+            <input
+              type="text"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder='Try "pad thai", "donut", "Ballard"…'
+              className="w-full bg-transparent text-sm outline-none placeholder:text-neutral-400"
+            />
+            {!loading && !loadError && (
+              <span className="shrink-0 text-xs font-medium text-neutral-400">
+                {resultCount} {tab === "restaurants"
+                  ? resultCount === 1 ? "spot" : "spots"
+                  : resultCount === 1 ? "dish" : "dishes"}
+              </span>
+            )}
+          </label>
         )}
       </header>
 
@@ -275,22 +381,54 @@ export default function EatThisPage() {
       {/* Sticky tag-pill row (Dishes tab), mirroring the /dishes sticky filter */}
       {tab === "dishes" && !loading && !loadError && tags.length > 0 && (
         <div className="sticky top-16 z-30 -mx-4 mt-4 border-b border-neutral-200/80 bg-apb-cream/95 px-4 py-2.5 backdrop-blur">
+          <div className="mb-3 flex items-center gap-2">
+            <span className="shrink-0 text-[10px] font-bold tracking-wide text-neutral-400">FIND CATEGORY</span>
+            <input
+              type="text"
+              value={tagQuery}
+              onChange={(e) => setTagQuery(e.target.value)}
+              placeholder="Search tags…"
+              className="flex-1 rounded-full border border-neutral-300 bg-white px-3 py-1.5 text-xs outline-none placeholder:text-neutral-400 focus:border-apb"
+            />
+            {tagQuery && (
+              <button
+                type="button"
+                onClick={() => setTagQuery("")}
+                className="shrink-0 text-neutral-400 hover:text-neutral-600"
+                aria-label="Clear tag search"
+              >
+                ✕
+              </button>
+            )}
+          </div>
           <div className="flex items-center gap-2 overflow-x-auto">
             <span className="shrink-0 text-[10px] font-bold tracking-wide text-neutral-400">CATEGORY</span>
-            {["all", ...tags].map((tag) => (
+            {selectedTags.size > 0 && (
               <button
-                key={tag}
                 type="button"
-                onClick={() => setActiveTag(tag)}
-                className={`shrink-0 rounded-full border px-3 py-1 text-xs font-semibold capitalize transition ${
-                  activeTag === tag
-                    ? "border-apb bg-apb text-white"
-                    : "border-neutral-300 bg-white text-neutral-700 hover:bg-neutral-50"
-                }`}
+                onClick={() => setSelectedTags(new Set())}
+                className="shrink-0 rounded-full border border-neutral-300 bg-white px-2.5 py-1 text-[10px] font-semibold text-neutral-600 hover:bg-neutral-50"
               >
-                {tag === "all" ? "All" : tag}
+                Clear
               </button>
-            ))}
+            )}
+            <TagPillRow
+              tags={filteredTags}
+              selectedTags={selectedTags}
+              tagButton={tagButton}
+              onMoreClick={() => setShowMoreMenu(true)}
+              visibleCountRef={visibleTagsRef}
+            />
+            {showMoreMenu && filteredTags.length > 0 && (
+              <div
+                ref={moreMenuRef}
+                className="absolute right-4 top-full z-50 mt-2 flex max-h-60 flex-col gap-2 overflow-y-auto rounded-xl border border-neutral-200 bg-white p-3 shadow-lg"
+              >
+                {visibleTagsRef.current && filteredTags
+                  .slice(visibleTagsRef.current.length)
+                  .map((tag) => tagButton(tag, selectedTags.has(tag)))}
+              </div>
+            )}
           </div>
         </div>
       )}

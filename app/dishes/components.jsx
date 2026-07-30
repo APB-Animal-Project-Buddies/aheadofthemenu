@@ -116,8 +116,8 @@ function FilterChips({ activeCourse, onCourseChange, activeCreator, onCreatorCha
   // legacy 'all' string is tolerated so any stale caller still behaves.
   const selectedCreators =
     Array.isArray(activeCreator) ? activeCreator
-    : activeCreator && activeCreator !== 'all' ? [activeCreator]
-    : [];
+      : activeCreator && activeCreator !== 'all' ? [activeCreator]
+        : [];
 
   const handleCreatorSelect = (creator) => {
     // LRU: the most recently picked creator moves to the front, which is what
@@ -356,7 +356,7 @@ function FilterChips({ activeCourse, onCourseChange, activeCreator, onCreatorCha
                       ) : null}
                       {(creatorOptions || []).length > 3 ? (
                         <button
-                                className="fchip"
+                          className="fchip"
                           onClick={handleMoreClick}
                         >
                           More ▾
@@ -484,7 +484,7 @@ function FilterChips({ activeCourse, onCourseChange, activeCreator, onCreatorCha
                       <input
                         type="checkbox"
                         checked={isSelected}
-                        onChange={() => {}}
+                        onChange={() => { }}
                         className="w-4 h-4 rounded"
                         onClick={(e) => e.stopPropagation()}
                       />
@@ -502,19 +502,138 @@ function FilterChips({ activeCourse, onCourseChange, activeCreator, onCreatorCha
 }
 
 // ---------- CuisineBar ----------
-function CuisineBar({ active, onChange, counts }) {
+// Now supports multi-select with search and overflow handling
+function CuisineBar({ activeCuisines = [], cuisineQuery = '', onCuisineChange, onQueryChange, counts }) {
+  const [showMoreMenu, setShowMoreMenu] = useState(false);
+  const moreMenuRef = useRef(null);
+  const containerRef = useRef(null);
+  // Account for the "All" button which is always shown
+  const [visibleCount, setVisibleCount] = useState(CUISINE_META.length - 1);
+
+  // Handle outside click to close dropdown
+  useEffect(() => {
+    if (!showMoreMenu) return;
+    const handleOutsideClick = (e) => {
+      if (moreMenuRef.current && !moreMenuRef.current.contains(e.target)) {
+        setShowMoreMenu(false);
+      }
+    };
+    document.addEventListener('mousedown', handleOutsideClick);
+    return () => document.removeEventListener('mousedown', handleOutsideClick);
+  }, [showMoreMenu]);
+
+  // Measure available space for cuisines
+  const measureRef = useRef(false);
+
+  useEffect(() => {
+    measureRef.current = true;
+  }, [cuisineQuery, activeCuisines.length]);
+
+  useEffect(() => {
+    if (!measureRef.current || !containerRef.current) return;
+    measureRef.current = false;
+
+    const container = containerRef.current;
+
+    // Measure current state
+    const overflows = container.scrollWidth > container.offsetWidth;
+
+    if (overflows && visibleCount > 0) {
+      // Hide one cuisine and let React re-render
+      setVisibleCount(visibleCount - 1);
+      measureRef.current = true;
+    }
+  });
+
+  // Filter cuisines by search (excluding the "all" cuisine if it exists)
+  const filteredCuisines = useMemo(() => {
+    let cuisines = CUISINE_META;
+    if (!cuisineQuery.trim()) {
+      return cuisines.filter(c => c.id !== 'all');
+    }
+    const q = cuisineQuery.toLowerCase();
+    return cuisines.filter(c => c.id !== 'all' && c.name.toLowerCase().includes(q));
+  }, [cuisineQuery]);
+
+  const visibleCuisines = filteredCuisines.slice(0, visibleCount);
+  const hiddenCuisines = filteredCuisines.slice(visibleCount);
+  const hasHidden = hiddenCuisines.length > 0;
+
+  const cuisineButton = (cuisine, isSelected) => (
+    <button
+      key={cuisine.id}
+      className={"chip" + (isSelected ? " active" : "")}
+      onClick={() => onCuisineChange(cuisine.id)}
+    >
+      {cuisine.name}
+      <span className="ct">{counts[cuisine.id] ?? 0}</span>
+    </button>
+  );
+
+  const isAllSelected = activeCuisines.length === 0;
+
   return (
-    <div className="cuisine-bar">
-      {CUISINE_META.map(c => (
+    <div className="cuisine-bar-wrapper">
+      <div className="cuisine-search">
+        <input
+          type="text"
+          value={cuisineQuery}
+          onChange={(e) => onQueryChange(e.target.value)}
+          placeholder="Search cuisines…"
+          className="cuisine-query-input"
+        />
+        {cuisineQuery && (
+          <button
+            type="button"
+            onClick={() => onQueryChange('')}
+            className="cuisine-query-clear"
+            aria-label="Clear cuisine search"
+          >
+            ✕
+          </button>
+        )}
+        {activeCuisines.length > 0 && (
+          <button
+            type="button"
+            onClick={() => onCuisineChange(null)}
+            className="cuisine-clear-all"
+          >
+            Clear all
+          </button>
+        )}
+      </div>
+      <div ref={containerRef} className="cuisine-bar">
         <button
-          key={c.id}
-          className={"chip" + (active === c.id ? " active" : "")}
-          onClick={() => onChange(c.id)}
+          className={"chip" + (isAllSelected ? " active" : "")}
+          onClick={() => onCuisineChange(null)}
         >
-          {c.name}
-          <span className="ct">{counts[c.id] ?? 0}</span>
+          All
+          <span className="ct">{counts.all ?? 0}</span>
         </button>
-      ))}
+        {visibleCuisines.map(c => cuisineButton(c, activeCuisines.includes(c.id)))}
+        {hasHidden && (
+          <button
+            type="button"
+            data-more="true"
+            className="chip more-button"
+            onClick={() => setShowMoreMenu(true)}
+          >
+            + {hiddenCuisines.length} more
+          </button>
+        )}
+        {showMoreMenu && hiddenCuisines.length > 0 && (
+          <div
+            ref={moreMenuRef}
+            className="cuisine-more-dropdown"
+            style={{
+              top: containerRef.current ? containerRef.current.getBoundingClientRect().bottom + window.scrollY + 8 : 'auto',
+              left: containerRef.current ? containerRef.current.getBoundingClientRect().right - 200 + window.scrollX : 'auto',
+            }}
+          >
+            {hiddenCuisines.map(c => cuisineButton(c, activeCuisines.includes(c.id)))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

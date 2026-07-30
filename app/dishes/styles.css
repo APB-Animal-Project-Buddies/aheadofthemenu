@@ -8,9 +8,11 @@
   --cream: oklch(0.96 0.015 85);
   --cream-warm: oklch(0.93 0.025 80);
   --paper: oklch(0.99 0.01 85);
-  --terracotta: #ff6b35;            /* Ahead of the Menu accent */
+  --terracotta: #ff6b35;
+  /* Ahead of the Menu accent */
   --mustard: oklch(0.78 0.13 85);
-  --plum: #b4421f;                  /* secondary accent → burnt orange */
+  --plum: #b4421f;
+  /* secondary accent → burnt orange */
   --line: oklch(0.32 0.06 145 / 0.18);
   --line-soft: oklch(0.32 0.06 145 / 0.08);
 
@@ -24,7 +26,8 @@
   --tint-leaf: oklch(0.94 0.04 150);
   --tint-lavender: oklch(0.94 0.04 290);
 
-  --serif: 'Fraunces', Georgia, 'Times New Roman', serif; /* brand serif — matches globals.css --apb-serif */
+  --serif: 'Fraunces', Georgia, 'Times New Roman', serif;
+  /* brand serif — matches globals.css --apb-serif */
   --sans: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
   --mono: 'DM Mono', ui-monospace, Menlo, monospace;
 }
@@ -266,7 +269,7 @@ a {
   z-index: 50;
   background: var(--cream);
   border-bottom: 1px solid var(--line-soft);
-  padding: 14px 32px;
+  padding-top: 8px;
   display: flex;
   gap: 8px;
   overflow-x: auto;
@@ -377,7 +380,12 @@ a {
   gap: 12px;
   padding: 0 20px 4px;
 }
-.filters-toggle { display: none; }   /* desktop: no toggle — filters shown directly */
+
+.filters-toggle {
+  display: none;
+}
+
+/* desktop: no toggle — filters shown directly */
 .filters-clear {
   background: none;
   border: none;
@@ -389,8 +397,13 @@ a {
   cursor: pointer;
   padding: 4px 6px;
 }
+
 @media (max-width: 840px) {
-  .filters-bar { justify-content: space-between; margin-bottom: 8px; }
+  .filters-bar {
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+
   .filters-toggle {
     display: inline-flex;
     align-items: center;
@@ -405,10 +418,22 @@ a {
     color: var(--moss-ink);
     cursor: pointer;
   }
-  .filters-toggle .caret { transition: transform 0.2s ease; }
-  .filters-toggle[aria-expanded="true"] .caret { transform: rotate(180deg); }
-  .filter-groups { display: none; }
-  .filter-groups.open { display: block; }
+
+  .filters-toggle .caret {
+    transition: transform 0.2s ease;
+  }
+
+  .filters-toggle[aria-expanded="true"] .caret {
+    transform: rotate(180deg);
+  }
+
+  .filter-groups {
+    display: none;
+  }
+
+  .filter-groups.open {
+    display: block;
+  }
 }
 
 /* ---------- dish grid ---------- */
@@ -3394,6 +3419,7 @@ body.no-why .card .why {
   background: var(--moss-deep);
   transform: translateY(-1px);
 }
+
 /* ---------- Sticky filter header ---------- */
 .sticky-filter-header {
   position: sticky;
@@ -3411,12 +3437,12 @@ body.no-why .card .why {
   flex-wrap: wrap;
 }
 
-.filter-row-horizontal > div:first-child {
+.filter-row-horizontal>div:first-child {
   flex: 1 1 auto;
   min-width: 200px;
 }
 
-.filter-row-horizontal > div:not(:first-child) {
+.filter-row-horizontal>div:not(:first-child) {
   flex: 1 1 auto;
 }
 
@@ -3460,8 +3486,8 @@ body.no-why .card .why {
      and `.filter-row-horizontal > div:first-child` sets min-width: 200px — the
      latter is more specific, so it wins over the mobile `min-width: 0` set
      earlier and keeps the row from fitting on narrow phones. */
-  .filter-row-horizontal > div:first-child,
-  .filter-row-horizontal > .search-box {
+  .filter-row-horizontal>div:first-child,
+  .filter-row-horizontal>.search-box {
     flex: 1 1 auto;
     min-width: 0;
     max-width: none;
@@ -3524,3 +3550,198 @@ body.no-why .card .why {
 
 /* The shimmer itself is .skeleton-shimmer in globals.css, shared with the
    /creators skeleton. These rules only set size and shape. */
+
+/* Enhanced CuisineBar Styles */
+
+.cuisine-bar-wrapper {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+
+/* Cuisine Search Input Row */
+.cuisine-search {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.cuisine-query-input {
+  flex: 1;
+  padding: 0.5rem 1rem;
+  border: 1px solid #ddd;
+  border-radius: 999px;
+  font-size: 0.875rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.cuisine-query-input:focus {
+  border-color: #1e4d2b;
+  /* moss color, adjust to your theme */
+  box-shadow: 0 0 0 2px rgba(30, 77, 43, 0.1);
+}
+
+.cuisine-query-clear,
+.cuisine-clear-all {
+  padding: 0.5rem 0.75rem;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #666;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 0.2s;
+}
+
+.cuisine-query-clear:hover,
+.cuisine-clear-all:hover {
+  background-color: #f5f5f5;
+}
+
+/* Cuisine Bar Container */
+.cuisine-bar {
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  align-items: center;
+  padding-bottom: 0.25rem;
+}
+
+/* Cuisine Chip Button */
+.cuisine-bar .chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 999px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.cuisine-bar .chip:hover {
+  background-color: #f9f9f9;
+}
+
+.cuisine-bar .chip.active {
+  background-color: #1e4d2b;
+  /* moss color */
+  color: white;
+  border-color: #1e4d2b;
+  font-weight: 600;
+}
+
+.cuisine-bar .chip.active:hover {
+  opacity: 0.9;
+}
+
+.cuisine-bar .chip .ct {
+  font-size: 0.75rem;
+  opacity: 0.7;
+  font-weight: 400;
+}
+
+.cuisine-bar .chip.active .ct {
+  opacity: 0.9;
+}
+
+/* More Button */
+.cuisine-bar .more-button {
+  background: white;
+  border: 1px solid #ddd;
+  font-weight: 600;
+  color: #666;
+  padding: 0.5rem 0.75rem;
+}
+
+.cuisine-bar .more-button:hover {
+  background-color: #f5f5f5;
+}
+
+/* More Dropdown Menu - positioned absolutely so it doesn't affect layout */
+.cuisine-more-dropdown {
+  position: fixed;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  max-height: 300px;
+  overflow-y: auto;
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 200px;
+}
+
+.cuisine-more-dropdown .chip {
+  width: 100%;
+  justify-content: space-between;
+  border: 1px solid transparent;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+}
+
+.cuisine-more-dropdown .chip:hover {
+  background-color: #f9f9f9;
+  border-color: #eee;
+}
+
+.cuisine-more-dropdown .chip.active {
+  background-color: #1e4d2b;
+  color: white;
+  border-color: #1e4d2b;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .cuisine-bar-wrapper {
+    gap: 0.5rem;
+  }
+
+  .cuisine-search {
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .cuisine-query-input {
+    min-width: 180px;
+  }
+
+  .cuisine-bar .chip {
+    font-size: 0.8125rem;
+    padding: 0.4rem 0.75rem;
+  }
+
+  .cuisine-more-dropdown {
+    min-width: 180px;
+  }
+}
+
+/* Scrollbar Styling (for webkit browsers) */
+.cuisine-bar::-webkit-scrollbar {
+  height: 6px;
+}
+
+.cuisine-bar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.cuisine-bar::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 3px;
+}
+
+.cuisine-bar::-webkit-scrollbar-thumb:hover {
+  background: #999;
+}
