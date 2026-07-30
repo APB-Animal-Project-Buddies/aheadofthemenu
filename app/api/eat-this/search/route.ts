@@ -25,6 +25,7 @@ import {
   toSearchResult,
   type SearchableDish,
 } from "@/lib/eat-this-agent";
+import { parseCoords } from "@/lib/geo";
 
 export const maxDuration = 60; // Nhost cold starts outlast the default timeout.
 
@@ -56,11 +57,51 @@ const QUERY = `query ($city: String!) {
   }
 }`;
 
+/**
+ * Distance ordering, computed by PostGIS.
+ *
+ * eat_this_dishes_near() is a tracked SQL function returning dish ids ordered
+ * by ST_Distance from the caller's point, backed by a GiST index. It runs as a
+ * SEPARATE query from the catalog fetch rather than as a join, so a failure
+ * here — most likely the postgis extension not being enabled — degrades to
+ * normal relevance ordering instead of taking the whole search down.
+ *
+ * Ungeocoded restaurants come back with distance_m = Infinity and sort last;
+ * they are never dropped, which matters while the geocoding backfill is
+ * incomplete.
+ */
+async function distanceOrder(
+  city: string,
+  origin: { lat: number; lng: number }
+): Promise<Map<string, number> | null> {
+  try {
+    const res = await graphql<{
+      eat_this_dishes_near: Array<{ dish_id: string; distance_m: number }>;
+    }>(
+      `query ($lat: float8!, $lng: float8!, $city: String!) {
+         eat_this_dishes_near(args: { origin_lat: $lat, origin_lng: $lng, city_filter: $city }) {
+           dish_id
+           distance_m
+         }
+       }`,
+      { useAdminSecret: true, variables: { lat: origin.lat, lng: origin.lng, city } }
+    );
+    if (res.errors?.length) throw new Error(res.errors[0].message);
+    const rows = res.data?.eat_this_dishes_near ?? [];
+    return new Map(rows.map((r) => [r.dish_id, r.distance_m]));
+  } catch (error) {
+    console.error("eat-this distance ordering unavailable:", error);
+    return null;
+  }
+}
+
 export async function GET(request: NextRequest) {
   const p = request.nextUrl.searchParams;
   const city = (p.get("city") ?? "seattle").toLowerCase();
   const limit = parseLimit(p.get("limit"));
   const offset = parseOffset(p.get("offset"));
+  // Opt-in: no coordinates means the existing quality-first ranking is used.
+  const origin = parseCoords(p.get("lat"), p.get("lng"));
   const tags = (p.get("tags") ?? "")
     .split(",")
     .map((t) => t.trim())
@@ -92,7 +133,20 @@ export async function GET(request: NextRequest) {
       neighborhood: p.get("neighborhood"),
       tags,
     });
-    const ranked = rankResults(filtered.map(toSearchResult));
+    const shaped = filtered.map(toSearchResult);
+
+    // Distance ordering replaces quality ordering when a point is supplied —
+    // "nearest" and "best" are different questions, so they don't blend.
+    const byDistance = origin ? await distanceOrder(city, origin) : null;
+    const ranked = byDistance
+      ? [...shaped]
+          .map((r) => ({ ...r, distanceMeters: byDistance.get(r.dishId) ?? null }))
+          .sort((a, b) => {
+            const ad = a.distanceMeters ?? Infinity;
+            const bd = b.distanceMeters ?? Infinity;
+            return ad - bd || a.dish.localeCompare(b.dish);
+          })
+      : rankResults(shaped);
 
     return NextResponse.json(
       {
@@ -100,12 +154,19 @@ export async function GET(request: NextRequest) {
         total: ranked.length,
         limit,
         offset,
+        sortedBy: byDistance ? "distance" : "relevance",
+        // Told plainly, so a caller that asked for distance and silently got
+        // relevance can tell the difference.
+        ...(origin && !byDistance ? { note: "Distance ordering unavailable; sorted by relevance." } : {}),
       },
       {
         headers: {
-          // Cache at the edge so repeat queries never reach Nhost. The catalog
-          // changes on the order of minutes, not seconds.
-          "Cache-Control": "public, s-maxage=300, stale-while-revalidate=600",
+          // Per-point results must not land in a shared edge cache — that would
+          // serve one user's nearest-first list to the next. Only the
+          // location-free response is cacheable.
+          "Cache-Control": origin
+            ? "private, no-store"
+            : "public, s-maxage=300, stale-while-revalidate=600",
         },
       }
     );
