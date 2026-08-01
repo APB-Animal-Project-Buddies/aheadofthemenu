@@ -126,7 +126,7 @@ test("restaurant creation is the most restricted write", () => {
 
 test("consume allows the first call in a window", async () => {
   const { client } = fakeGql([1]);
-  expect(await consume("key-1", "vote", client, NOW)).toEqual({
+  expect(await consume("user-1", "vote", client, NOW)).toEqual({
     allowed: true,
     remaining: HOURLY_LIMITS.vote - 1,
   });
@@ -134,13 +134,13 @@ test("consume allows the first call in a window", async () => {
 
 test("consume denies once the returned count passes the limit", async () => {
   const { client } = fakeGql([HOURLY_LIMITS.vote + 1]);
-  const r = await consume("key-1", "vote", client, NOW);
+  const r = await consume("user-1", "vote", client, NOW);
   expect(r.allowed).toBe(false);
 });
 
 test("consume allows the call that exactly reaches the limit", async () => {
   const { client } = fakeGql([HOURLY_LIMITS.comment]);
-  expect(await consume("key-1", "comment", client, NOW)).toEqual({
+  expect(await consume("user-1", "comment", client, NOW)).toEqual({
     allowed: true,
     remaining: 0,
   });
@@ -148,21 +148,21 @@ test("consume allows the call that exactly reaches the limit", async () => {
 
 test("consume applies the per-endpoint limit, not a shared one", async () => {
   const at = HOURLY_LIMITS.add_restaurant + 1; // over for restaurants, under for votes
-  const a = await consume("key-1", "add_restaurant", fakeGql([at]).client, NOW);
-  const b = await consume("key-1", "vote", fakeGql([at]).client, NOW);
+  const a = await consume("user-1", "add_restaurant", fakeGql([at]).client, NOW);
+  const b = await consume("user-1", "vote", fakeGql([at]).client, NOW);
   expect(a.allowed).toBe(false);
   expect(b.allowed).toBe(true);
 });
 
-test("consume scopes the counter to key, endpoint and window", async () => {
+test("consume scopes the counter to account, endpoint and window", async () => {
   const { client, calls } = fakeGql([1]);
-  await consume("key-7", "add_dish", client, NOW);
+  await consume("user-7", "add_dish", client, NOW);
   expect(calls[0].variables).toMatchObject({
-    key: "key-7",
+    user: "user-7",
     endpoint: "add_dish",
     window: "2026-07-26T12:00:00.000Z",
     obj: {
-      api_key_id: "key-7",
+      user_id: "user-7",
       endpoint: "add_dish",
       window_start: "2026-07-26T12:00:00.000Z",
       count: 0,
@@ -170,11 +170,26 @@ test("consume scopes the counter to key, endpoint and window", async () => {
   });
 });
 
+test("consume counts two different keys on one account against one quota", async () => {
+  // The whole point of the per-account axis: the counter must not be keyed on
+  // anything key-specific, or minting a second key doubles the ceiling.
+  const { client, calls } = fakeGql([1, 2]);
+  await consume("user-9", "vote", client, NOW);
+  await consume("user-9", "vote", client, NOW);
+
+  const [first, second] = calls;
+  expect((first.variables as any).user).toBe("user-9");
+  expect((second.variables as any).user).toBe("user-9");
+  // Same row both times, so the second call sees the first call's increment.
+  expect((first.variables as any).obj).toEqual((second.variables as any).obj);
+  expect(first.query).not.toContain("api_key_id");
+});
+
 test("consume seeds with count 0 and increments separately", async () => {
   // Regression guard: listing `count` in update_columns would reset the counter
   // to the proposed value on every call, so the limit would never trip.
   const { client, calls } = fakeGql([1]);
-  await consume("key-1", "vote", client, NOW);
+  await consume("user-1", "vote", client, NOW);
   expect(calls[0].query).toContain("update_columns: []");
   expect(calls[0].query).toContain("_inc: { count: 1 }");
   expect((calls[0].variables as any).obj.count).toBe(0);
@@ -182,23 +197,23 @@ test("consume seeds with count 0 and increments separately", async () => {
 
 test("consume issues a single round trip", async () => {
   const { client, calls } = fakeGql([1]);
-  await consume("key-1", "vote", client, NOW);
+  await consume("user-1", "vote", client, NOW);
   expect(calls).toHaveLength(1);
 });
 
 test("consume throws on upstream error", async () => {
   const client = (async () => ({ errors: [{ message: "deadlock detected" }] })) as unknown as GqlClient;
-  await expect(consume("key-1", "vote", client, NOW)).rejects.toThrow("deadlock detected");
+  await expect(consume("user-1", "vote", client, NOW)).rejects.toThrow("deadlock detected");
 });
 
 test("consume fails closed when no count comes back", async () => {
   const client = (async () => ({ data: { bump: { returning: [] } } })) as unknown as GqlClient;
-  const r = await consume("key-1", "vote", client, NOW);
+  const r = await consume("user-1", "vote", client, NOW);
   expect(r.allowed).toBe(false);
 });
 
 test("consume fails closed when the response shape is unexpected", async () => {
   const client = (async () => ({ data: {} })) as unknown as GqlClient;
-  const r = await consume("key-1", "vote", client, NOW);
+  const r = await consume("user-1", "vote", client, NOW);
   expect(r.allowed).toBe(false);
 });

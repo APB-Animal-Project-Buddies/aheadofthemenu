@@ -77,11 +77,14 @@ ${ALL_SCOPES.map((s) => `  ${s}`).join("\n")}
 
 Voting is off by default on new keys and must be enabled explicitly.
 
-## Rate limits (per key, per hour)
+## Rate limits (per account, per hour)
 
 ${Object.entries(HOURLY_LIMITS)
   .map(([k, v]) => `  ${k.padEnd(16)} ${v}`)
   .join("\n")}
+
+These are shared across every key on the account, so issuing yourself extra keys does
+not raise the ceiling.
 
 Exceeding a limit returns 429 with a \`retryAfter\` value in seconds. Honour it.
 

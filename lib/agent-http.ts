@@ -89,7 +89,7 @@ export async function gate(
 
   let limit;
   try {
-    limit = await consume(caller.apiKeyId, endpoint);
+    limit = await consume(caller.userId, endpoint);
   } catch {
     return {
       ok: false,
@@ -101,7 +101,7 @@ export async function gate(
       ok: false,
       response: NextResponse.json(
         {
-          error: "Rate limit reached for this key. Try again shortly.",
+          error: "Rate limit reached for this account. Try again shortly.",
           code: "rate_limited",
           retryAfter: limit.retryAfter,
         },
