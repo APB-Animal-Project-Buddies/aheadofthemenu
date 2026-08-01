@@ -1,22 +1,27 @@
 /**
  * lib/agent-limits.ts
  *
- * Per-key rate limiting for the agent write endpoints, counted in fixed hourly
- * windows in Postgres. No Redis: the counter is three columns and an upsert,
- * and the write volume is trivially small.
+ * Per-account rate limiting for the agent write endpoints, counted in fixed
+ * hourly windows in Postgres. No Redis: the counter is three columns and an
+ * upsert, and the write volume is trivially small.
  *
- * Per-KEY rather than per-IP on purpose. One agent is one IP, and many agents
- * share cloud egress IPs, so an IP limit both under- and over-counts. The
- * Vercel WAF rule stays as a coarse per-IP layer on the public read endpoints.
+ * Per-ACCOUNT, not per-key: keys are self-serve and unlimited, so a per-key
+ * limit is bypassed by creating another key. The quota belongs to the identity
+ * the writes are attributed to.
+ *
+ * Not per-IP either. One agent is one IP, and many agents share cloud egress
+ * IPs, so an IP limit both under- and over-counts. The Vercel WAF rule stays as
+ * a coarse per-IP layer on the public read endpoints.
  */
 import type { GqlClient } from "@/lib/agent-keys";
 
 export type LimitedEndpoint = "add_restaurant" | "add_dish" | "vote" | "comment";
 
 /**
- * Starting limits per key per hour. These are guesses — revisit once there is
- * real traffic. Generous enough for honest seeding work, tight enough that a
- * runaway loop is capped within the hour.
+ * Starting limits per ACCOUNT per hour, shared across every key that account
+ * owns. These are guesses — revisit once there is real traffic. Generous enough
+ * for honest seeding work, tight enough that a runaway loop is capped within
+ * the hour.
  */
 export const HOURLY_LIMITS: Record<LimitedEndpoint, number> = {
   add_restaurant: 10,
@@ -58,7 +63,8 @@ export function decide(count: number, limit: number, now: Date = new Date()): Li
 }
 
 /**
- * Increments the counter for (key, endpoint, window) and decides on the result.
+ * Increments the counter for (account, endpoint, window) and decides on the
+ * result.
  *
  * Increment-then-check, not check-then-increment: the mutation returns the new
  * count atomically, so two concurrent calls cannot both read "one under the
@@ -72,7 +78,7 @@ export function decide(count: number, limit: number, now: Date = new Date()): Li
  * fields are in one mutation, which Hasura runs sequentially in one transaction.
  */
 export async function consume(
-  apiKeyId: string,
+  userId: string,
   endpoint: LimitedEndpoint,
   gql?: GqlClient,
   now: Date = new Date()
@@ -83,14 +89,14 @@ export async function consume(
   const res = await client<{
     bump: { returning: Array<{ count: number }> };
   }>(
-    `mutation ($obj: api_key_usage_insert_input!, $key: uuid!, $endpoint: String!, $window: timestamptz!) {
-       seed: insert_api_key_usage_one(
+    `mutation ($obj: agent_usage_insert_input!, $user: uuid!, $endpoint: String!, $window: timestamptz!) {
+       seed: insert_agent_usage_one(
          object: $obj,
-         on_conflict: { constraint: api_key_usage_pkey, update_columns: [] }
+         on_conflict: { constraint: agent_usage_pkey, update_columns: [] }
        ) { count }
-       bump: update_api_key_usage(
+       bump: update_agent_usage(
          where: {
-           api_key_id: { _eq: $key },
+           user_id: { _eq: $user },
            endpoint: { _eq: $endpoint },
            window_start: { _eq: $window }
          },
@@ -100,8 +106,8 @@ export async function consume(
     {
       useAdminSecret: true,
       variables: {
-        obj: { api_key_id: apiKeyId, endpoint, window_start: window, count: 0 },
-        key: apiKeyId,
+        obj: { user_id: userId, endpoint, window_start: window, count: 0 },
+        user: userId,
         endpoint,
         window,
       },
@@ -111,7 +117,7 @@ export async function consume(
 
   const count = res.data?.bump?.returning?.[0]?.count;
   // A missing count means the row vanished between insert and update (only
-  // possible if the key was deleted mid-request). Fail closed.
+  // possible if the account was deleted mid-request). Fail closed.
   if (typeof count !== "number") return { allowed: false, retryAfter: secondsUntilNextWindow(now) };
 
   return decide(count, HOURLY_LIMITS[endpoint], now);

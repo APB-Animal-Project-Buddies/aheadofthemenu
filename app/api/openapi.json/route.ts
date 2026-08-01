@@ -77,7 +77,7 @@ const SPEC = {
         type: "http",
         scheme: "bearer",
         description: `Bearer token of the form aotm_ak_… Scopes: ${ALL_SCOPES.join(", ")}. ` +
-          `Hourly per-key limits: ${Object.entries(HOURLY_LIMITS)
+          `Hourly limits, shared across every key on the account: ${Object.entries(HOURLY_LIMITS)
             .map(([k, v]) => `${k}=${v}`)
             .join(", ")}.`,
       },
