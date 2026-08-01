@@ -4,7 +4,7 @@
 
 "use client";
 
-import { useState, useEffect, useMemo, useRef } from "react";
+import { useState, useEffect, useLayoutEffect, useMemo, useRef } from "react";
 import { createPortal } from "react-dom";
 import {
   CUISINE_META, DiffDots, UrlStatusBadge,
@@ -522,38 +522,96 @@ function CuisineBar({ activeCuisines = [], cuisineQuery = '', onCuisineChange, o
     return () => document.removeEventListener('mousedown', handleOutsideClick);
   }, [showMoreMenu]);
 
-  // Measure available space for cuisines
-  const measureRef = useRef(false);
+  // `true` means "the next render shows every chip, so widths can be measured".
+  const remeasure = useRef(true);
 
+  // Filter cuisines by search (excluding the "all" cuisine if it exists), with
+  // selected cuisines bubbled to the front.
+  //
+  // The hoist matters because the row truncates into "+ N more": select a
+  // cuisine via search, clear the search, and it drops back to its original
+  // slot — usually hidden — so the filter narrowing the list is invisible and
+  // can't be switched off without hunting through the overflow dropdown.
+  // Selected cuisines are also kept in the list when they no longer match the
+  // current query, so an active filter is never hidden by an unrelated search.
+  const filteredCuisines = useMemo(() => {
+    const q = cuisineQuery.trim().toLowerCase();
+    const base = CUISINE_META.filter(c => c.id !== 'all');
+    const matches = q ? base.filter(c => c.name.toLowerCase().includes(q)) : base;
+
+    const selected = base.filter(c => activeCuisines.includes(c.id));
+    const rest = matches.filter(c => !activeCuisines.includes(c.id));
+    return [...selected, ...rest];
+  }, [cuisineQuery, activeCuisines]);
+
+  // Anything that changes the content or the available width restarts
+  // measurement from "show everything", so the row can grow back. Without the
+  // reset a transient squeeze — the "Clear all" button appearing, a narrower
+  // window — costs a chip slot permanently and the row ratchets down.
   useEffect(() => {
-    measureRef.current = true;
-  }, [cuisineQuery, activeCuisines.length]);
+    remeasure.current = true;
+    setVisibleCount(filteredCuisines.length);
+  }, [filteredCuisines, activeCuisines.length]);
 
+  // Observe the PARENT, not the chip container. The container is sized by its
+  // content, so removing a chip changes its own width — observing it turns
+  // every shrink step into a resize and loops forever.
   useEffect(() => {
-    if (!measureRef.current || !containerRef.current) return;
-    measureRef.current = false;
+    const el = containerRef.current?.parentElement;
+    if (!el || typeof ResizeObserver === 'undefined') return;
 
-    const container = containerRef.current;
+    let lastWidth = el.offsetWidth;
+    const ro = new ResizeObserver(() => {
+      const width = el.offsetWidth;
+      if (width === lastWidth) return;
+      lastWidth = width;
+      remeasure.current = true;
+      setVisibleCount(filteredCuisines.length);
+    });
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [filteredCuisines]);
 
-    // Measure current state
-    const overflows = container.scrollWidth > container.offsetWidth;
+  // Measure in ONE pass rather than dropping a chip per render: iterating from
+  // a full reset needs one render per hidden chip, which past ~50 exceeds
+  // React's nested-update limit and throws instead of settling.
+  useLayoutEffect(() => {
+    const el = containerRef.current;
+    if (!el || !remeasure.current) return;
+    remeasure.current = false;
 
-    if (overflows && visibleCount > 0) {
-      // Hide one cuisine and let React re-render
-      setVisibleCount(visibleCount - 1);
-      measureRef.current = true;
+    const available = el.offsetWidth;
+    // Only real chips: excludes the "+ N more" pill and the dropdown panel,
+    // both of which also live inside this container.
+    const chips = Array.from(el.querySelectorAll(':scope > .chip:not(.more-button)'));
+    const GAP_PX = 8; // matches .cuisine-bar gap
+
+    let used = 0;
+    let fits = 0;
+    for (const chip of chips) {
+      const next = used + (fits > 0 ? GAP_PX : 0) + chip.offsetWidth;
+      if (next > available) break;
+      used = next;
+      fits++;
     }
+
+    // `fits` counts the always-rendered "All" chip, which isn't part of
+    // filteredCuisines.
+    let count = Math.max(0, fits - 1);
+    // Overflowing means a "+ N more" pill has to fit too, so give up one chip.
+    if (count < filteredCuisines.length) count = Math.max(0, count - 1);
+    setVisibleCount(count);
   });
 
-  // Filter cuisines by search (excluding the "all" cuisine if it exists)
-  const filteredCuisines = useMemo(() => {
-    let cuisines = CUISINE_META;
-    if (!cuisineQuery.trim()) {
-      return cuisines.filter(c => c.id !== 'all');
+  // Corrective pass for the rare case where the reserved slot still wasn't
+  // enough; the measurement above already lands close, so this is bounded.
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el || remeasure.current) return;
+    if (el.scrollWidth > el.offsetWidth && visibleCount > 0) {
+      setVisibleCount(visibleCount - 1);
     }
-    const q = cuisineQuery.toLowerCase();
-    return cuisines.filter(c => c.id !== 'all' && c.name.toLowerCase().includes(q));
-  }, [cuisineQuery]);
+  });
 
   const visibleCuisines = filteredCuisines.slice(0, visibleCount);
   const hiddenCuisines = filteredCuisines.slice(visibleCount);
