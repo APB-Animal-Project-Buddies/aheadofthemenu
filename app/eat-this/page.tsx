@@ -38,14 +38,37 @@ function TagPillRow({
   const [visibleCount, setVisibleCount] = useState(tags.length);
 
   // `true` means "the next render shows every chip, so widths can be measured".
-  const remeasure = useRef(true);
+  //
+  // This is STATE, not a ref, and that matters. Effects run layout-first then
+  // passive, so on mount the measure pass below sets a fitted count and the
+  // reset effect immediately puts it back to tags.length — the value it already
+  // had. A ref-based flag would leave React bailing out of that no-op state
+  // update, so no re-render, no second measure, and the row renders every chip
+  // un-truncated forever. Flipping a state flag guarantees the re-render.
+  const [needsMeasure, setNeedsMeasure] = useState(true);
 
-  // Anything that changes the content or the available width restarts
-  // measurement from "show everything", so the row can grow back. Without the
-  // reset a transient squeeze — the Clear button appearing, a narrower window —
-  // costs a chip slot permanently and the row ratchets down over a session.
+  // Anything that changes the content restarts measurement from "show
+  // everything", so the row can grow back. Without the reset a transient
+  // squeeze — the Clear button appearing, a narrower window — costs a chip slot
+  // permanently and the row ratchets down over a session.
+  //
+  // Guarded on the actual content rather than firing on mount. Effects run
+  // layout-first then passive, so an unguarded reset runs right after the mount
+  // measurement and puts visibleCount back to tags.length — the value it
+  // already had. Both updates batch into a no-op, React bails out of the
+  // re-render, and the row is stuck rendering every chip untruncated. Comparing
+  // a content key also makes this idempotent under StrictMode's double-invoke.
+  const measuredKey = useRef<string | null>(null);
   useEffect(() => {
-    remeasure.current = true;
+    const key = `${selectedTags.size} ${tags.join(" ")}`;
+    if (measuredKey.current === key) return;
+
+    const isInitial = measuredKey.current === null;
+    measuredKey.current = key;
+    // On mount the initial state is already "show everything, needs measuring".
+    if (isInitial) return;
+
+    setNeedsMeasure(true);
     setVisibleCount(tags.length);
   }, [tags, selectedTags.size]);
 
@@ -66,7 +89,7 @@ function TagPillRow({
       const width = el.offsetWidth;
       if (width === lastWidth) return;
       lastWidth = width;
-      remeasure.current = true;
+      setNeedsMeasure(true);
       setVisibleCount(tags.length);
     });
     ro.observe(el);
@@ -82,8 +105,7 @@ function TagPillRow({
   // and compute how many fit, so the row converges in a single extra render.
   useLayoutEffect(() => {
     const el = containerRef.current;
-    if (!el || !remeasure.current) return;
-    remeasure.current = false;
+    if (!el || !needsMeasure) return;
 
     const available = el.offsetWidth;
     const chips = Array.from(el.children) as HTMLElement[];
@@ -101,6 +123,7 @@ function TagPillRow({
     // Overflowing means a "+ N more" pill has to fit too, so give up one chip
     // to make room for it.
     if (fits < chips.length) fits = Math.max(0, fits - 1);
+    setNeedsMeasure(false);
     setVisibleCount(fits);
   });
 
@@ -109,7 +132,7 @@ function TagPillRow({
   // or two because the measurement above already lands close.
   useEffect(() => {
     const el = containerRef.current;
-    if (!el || remeasure.current) return;
+    if (!el || needsMeasure) return;
     if (el.scrollWidth > el.offsetWidth && visibleCount > 0) {
       setVisibleCount(visibleCount - 1);
     }

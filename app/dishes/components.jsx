@@ -523,7 +523,8 @@ function CuisineBar({ activeCuisines = [], cuisineQuery = '', onCuisineChange, o
   }, [showMoreMenu]);
 
   // `true` means "the next render shows every chip, so widths can be measured".
-  const remeasure = useRef(true);
+  // State, not a ref: see the reset effect below for why the re-render matters.
+  const [needsMeasure, setNeedsMeasure] = useState(true);
 
   // Filter cuisines by search (excluding the "all" cuisine if it exists), with
   // selected cuisines bubbled to the front.
@@ -544,12 +545,28 @@ function CuisineBar({ activeCuisines = [], cuisineQuery = '', onCuisineChange, o
     return [...selected, ...rest];
   }, [cuisineQuery, activeCuisines]);
 
-  // Anything that changes the content or the available width restarts
-  // measurement from "show everything", so the row can grow back. Without the
-  // reset a transient squeeze — the "Clear all" button appearing, a narrower
-  // window — costs a chip slot permanently and the row ratchets down.
+  // Anything that changes the content restarts measurement from "show
+  // everything", so the row can grow back. Without the reset a transient
+  // squeeze — the "Clear all" button appearing, a narrower window — costs a
+  // chip slot permanently and the row ratchets down.
+  //
+  // Guarded on the actual content rather than firing on mount. Effects run
+  // layout-first then passive, so an unguarded reset runs right after the mount
+  // measurement and puts visibleCount back to the full length — the value it
+  // already had. Both updates batch into a no-op, React bails out of the
+  // re-render, and the row is stuck rendering every chip untruncated. Comparing
+  // a content key also makes this idempotent under StrictMode's double-invoke.
+  const measuredKey = useRef(null);
   useEffect(() => {
-    remeasure.current = true;
+    const key = `${activeCuisines.length} ${filteredCuisines.map(c => c.id).join(' ')}`;
+    if (measuredKey.current === key) return;
+
+    const isInitial = measuredKey.current === null;
+    measuredKey.current = key;
+    // On mount the initial state is already "show everything, needs measuring".
+    if (isInitial) return;
+
+    setNeedsMeasure(true);
     setVisibleCount(filteredCuisines.length);
   }, [filteredCuisines, activeCuisines.length]);
 
@@ -565,7 +582,7 @@ function CuisineBar({ activeCuisines = [], cuisineQuery = '', onCuisineChange, o
       const width = el.offsetWidth;
       if (width === lastWidth) return;
       lastWidth = width;
-      remeasure.current = true;
+      setNeedsMeasure(true);
       setVisibleCount(filteredCuisines.length);
     });
     ro.observe(el);
@@ -577,8 +594,7 @@ function CuisineBar({ activeCuisines = [], cuisineQuery = '', onCuisineChange, o
   // React's nested-update limit and throws instead of settling.
   useLayoutEffect(() => {
     const el = containerRef.current;
-    if (!el || !remeasure.current) return;
-    remeasure.current = false;
+    if (!el || !needsMeasure) return;
 
     const available = el.offsetWidth;
     // Only real chips: excludes the "+ N more" pill and the dropdown panel,
@@ -600,6 +616,7 @@ function CuisineBar({ activeCuisines = [], cuisineQuery = '', onCuisineChange, o
     let count = Math.max(0, fits - 1);
     // Overflowing means a "+ N more" pill has to fit too, so give up one chip.
     if (count < filteredCuisines.length) count = Math.max(0, count - 1);
+    setNeedsMeasure(false);
     setVisibleCount(count);
   });
 
@@ -607,7 +624,7 @@ function CuisineBar({ activeCuisines = [], cuisineQuery = '', onCuisineChange, o
   // enough; the measurement above already lands close, so this is bounded.
   useEffect(() => {
     const el = containerRef.current;
-    if (!el || remeasure.current) return;
+    if (!el || needsMeasure) return;
     if (el.scrollWidth > el.offsetWidth && visibleCount > 0) {
       setVisibleCount(visibleCount - 1);
     }
