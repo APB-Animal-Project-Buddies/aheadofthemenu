@@ -8,7 +8,7 @@
  * against the server's fresh cohort totals; all score math lives in
  * lib/eat-this.
  */
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 import { useAuth } from "@/components/AuthProvider";
 import { sortDishCards, applyVote, groupByName, tokenize, dishMatchesTokens, type OrderType } from "@/lib/eat-this";
@@ -36,36 +36,94 @@ function TagPillRow({
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [visibleCount, setVisibleCount] = useState(tags.length);
-  const measureRef = useRef<boolean>(false);
 
-  // First effect: when size changes or tags change, mark that we need to measure
+  // `true` means "the next render shows every chip, so widths can be measured".
+  const remeasure = useRef(true);
+
+  // Anything that changes the content or the available width restarts
+  // measurement from "show everything", so the row can grow back. Without the
+  // reset a transient squeeze — the Clear button appearing, a narrower window —
+  // costs a chip slot permanently and the row ratchets down over a session.
   useEffect(() => {
-    measureRef.current = true;
+    remeasure.current = true;
+    setVisibleCount(tags.length);
   }, [tags, selectedTags.size]);
 
-  // Second effect: measure and update if needed
+  // Same reset on width changes, which is what makes the row respond to the
+  // window being resized rather than only to tag/selection changes.
+  //
+  // Observe the PARENT, not the chip container. The container is a flex child
+  // sized by its content, so dropping a chip changes its own width — observing
+  // it would turn every shrink step into a resize, reset the count, and loop
+  // forever. The parent's width is set by the page layout and is unaffected by
+  // how many chips we render.
   useEffect(() => {
-    if (!measureRef.current || !containerRef.current) return;
-    measureRef.current = false;
+    const el = containerRef.current?.parentElement;
+    if (!el || typeof ResizeObserver === "undefined") return;
 
-    const container = containerRef.current;
+    let lastWidth = el.offsetWidth;
+    const ro = new ResizeObserver(() => {
+      const width = el.offsetWidth;
+      if (width === lastWidth) return;
+      lastWidth = width;
+      remeasure.current = true;
+      setVisibleCount(tags.length);
+    });
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [tags]);
 
-    // Measure current state
-    const overflows = container.scrollWidth > container.offsetWidth;
+  // Measure in ONE pass rather than dropping a chip per render. Shrinking
+  // iteratively from a full reset would need one render per hidden chip — with
+  // ~57 tags that is ~51 nested updates, past React's limit of 50, which throws
+  // "Maximum update depth exceeded" instead of settling.
+  //
+  // On the render where every chip is present we can read each width directly
+  // and compute how many fit, so the row converges in a single extra render.
+  useLayoutEffect(() => {
+    const el = containerRef.current;
+    if (!el || !remeasure.current) return;
+    remeasure.current = false;
 
-    if (overflows && visibleCount > 0) {
-      // Hide one tag and let React re-render
-      const newCount = visibleCount - 1;
-      setVisibleCount(newCount);
-      visibleCountRef.current = tags.slice(0, newCount);
-      // Mark for another measurement on next render
-      measureRef.current = true;
+    const available = el.offsetWidth;
+    const chips = Array.from(el.children) as HTMLElement[];
+    const GAP_PX = 8; // matches gap-2
+
+    let used = 0;
+    let fits = 0;
+    for (const chip of chips) {
+      const next = used + (fits > 0 ? GAP_PX : 0) + chip.offsetWidth;
+      if (next > available) break;
+      used = next;
+      fits++;
+    }
+
+    // Overflowing means a "+ N more" pill has to fit too, so give up one chip
+    // to make room for it.
+    if (fits < chips.length) fits = Math.max(0, fits - 1);
+    setVisibleCount(fits);
+  });
+
+  // Corrective pass for the rare case where the reserved slot still wasn't
+  // enough (an unusually wide "+ N more" label). Bounded in practice to a step
+  // or two because the measurement above already lands close.
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el || remeasure.current) return;
+    if (el.scrollWidth > el.offsetWidth && visibleCount > 0) {
+      setVisibleCount(visibleCount - 1);
     }
   });
 
   const visibleTags = tags.slice(0, visibleCount);
   const hiddenTags = tags.slice(visibleCount);
   const hasHidden = hiddenTags.length > 0;
+
+  // The parent renders the overflow dropdown from this, so it has to track
+  // every change, not just the shrink steps.
+  useEffect(() => {
+    visibleCountRef.current = visibleTags;
+  });
 
   return (
     <div ref={containerRef} className="flex items-center gap-2 overflow-hidden">
@@ -146,12 +204,25 @@ export default function EatThisPage() {
 
   const tokens = useMemo(() => tokenize(query), [query]);
 
-  // Filter tags based on tagQuery
+  // Filter tags based on tagQuery, with selected tags bubbled to the front.
+  //
+  // The hoist matters because the row is alphabetical and truncates into
+  // "+ N more": search "tofu", select it, clear the search, and the tag drops
+  // back to its alphabetical slot — usually hidden — so the filter narrowing
+  // the list is invisible and can't be switched off without hunting for it.
+  // Selected tags are also kept in the list even when they don't match the
+  // current query, so an active filter is never hidden by an unrelated search.
   const filteredTags = useMemo(() => {
-    if (!tagQuery.trim()) return tags;
-    const lowerQuery = tagQuery.toLowerCase();
-    return tags.filter((tag) => tag.toLowerCase().includes(lowerQuery));
-  }, [tags, tagQuery]);
+    const q = tagQuery.trim().toLowerCase();
+    const matches = q ? tags.filter((tag) => tag.toLowerCase().includes(q)) : tags;
+
+    const selected: string[] = [];
+    const rest: string[] = [];
+    for (const tag of tags) if (selectedTags.has(tag)) selected.push(tag);
+    for (const tag of matches) if (!selectedTags.has(tag)) rest.push(tag);
+
+    return [...selected, ...rest];
+  }, [tags, tagQuery, selectedTags]);
 
   // Token-AND matching over the dish haystack (lib/eat-this).
   const filteredDishes = useMemo(() => {
