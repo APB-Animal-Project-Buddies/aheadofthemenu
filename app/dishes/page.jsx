@@ -60,7 +60,8 @@ export default function DishesPage() {
     if (target) openDish(target);
   }, [dishes]);
 
-  const [activeCuisine, setActiveCuisine] = useState('all');
+  const [activeCuisines, setActiveCuisines] = useState([]);
+  const [cuisineQuery, setCuisineQuery] = useState('');
   const [sortBy, setSortBy] = useState('curated');
   const [search, setSearch] = useState('');
   const [courseFilter, setCourseFilter] = useState('all');
@@ -126,7 +127,8 @@ export default function DishesPage() {
     if (!dishes) return [];
     const q = search.trim().toLowerCase();
     let list = dishes.filter(r => {
-      if (activeCuisine !== 'all' && !(r.cuisines || []).includes(activeCuisine)) return false;
+      // OR across selected cuisines — several cuisines widen the results
+      if (activeCuisines.length > 0 && !activeCuisines.some(c => (r.cuisines || []).includes(c))) return false;
       if (courseFilter !== 'all' && !(r.courses || []).includes(courseFilter)) return false;
       // OR across selected creators — several creators widen the results.
       if (creatorFilter.length > 0 && !creatorFilter.includes(r.originalCreator || '')) return false;
@@ -161,7 +163,7 @@ export default function DishesPage() {
       });
     }
     return list;
-  }, [dishes, activeCuisine, sortBy, search, courseFilter, creatorFilter, sourcingFilter, tagFilters, dietFilters]);
+  }, [dishes, activeCuisines, sortBy, search, courseFilter, creatorFilter, sourcingFilter, tagFilters, dietFilters]);
 
   // ---------- Featured (Pick of the week) ----------
   // ---------- Toasts + actions ----------
@@ -208,6 +210,16 @@ export default function DishesPage() {
   function closeDish() {
     setModalOpen(false);
     setTimeout(() => setModalDish(null), 220);
+  }
+
+  function toggleCuisine(cuisine) {
+    if (cuisine === null) {
+      // "All" button clicked - clear all selections
+      setActiveCuisines([]);
+    } else {
+      // Regular cuisine toggled
+      setActiveCuisines(prev => prev.includes(cuisine) ? prev.filter(c => c !== cuisine) : [...prev, cuisine]);
+    }
   }
 
   function toggleTag(tag) {
@@ -272,9 +284,11 @@ export default function DishesPage() {
 
   const cuisineMeta = (typeof window !== 'undefined' && CUISINE_META) || [];
 
-  const activeName = activeCuisine === 'all'
+  const activeName = activeCuisines.length === 0
     ? 'The whole library'
-    : (cuisineMeta.find(c => c.id === activeCuisine)?.name + ' kitchen');
+    : activeCuisines.length === 1
+      ? (cuisineMeta.find(c => c.id === activeCuisines[0])?.name + ' kitchen')
+      : `${activeCuisines.length} cuisines`;
 
   return (
     <>
@@ -306,7 +320,13 @@ export default function DishesPage() {
           </div>
           {CuisineBar && (
             <div className="cuisine-row">
-              <CuisineBar active={activeCuisine} onChange={setActiveCuisine} counts={counts} />
+              <CuisineBar
+                activeCuisines={activeCuisines}
+                cuisineQuery={cuisineQuery}
+                onCuisineChange={toggleCuisine}
+                onQueryChange={setCuisineQuery}
+                counts={counts}
+              />
             </div>
           )}
         </div>
