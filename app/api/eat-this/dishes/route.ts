@@ -1,6 +1,10 @@
 /**
  * POST /api/eat-this/dishes  (Bearer auth required)
  * Adds a live dish, optionally creating its restaurant inline.
+ * 
+ * ENHANCEMENT: When creating a new restaurant with the same name as an existing one,
+ * instead of just reusing the existing restaurant, also adds the new location to it.
+ * 
  * IDEMPOTENT: a duplicate dish (or duplicate new restaurant) returns 200 with
  * { existed: true } and the existing row — never a dead-end 409. See the
  * 2026-07-05 cold-start retry fixes for why.
@@ -36,6 +40,42 @@ async function findDish(restaurantId: string, name: string) {
   return res.data?.restaurant_dishes?.[0] ?? null;
 }
 
+/**
+ * Add a location to an existing restaurant
+ * Used when user adds a new location for a restaurant that already exists in the system
+ */
+async function addLocationToRestaurant(
+  restaurantId: string,
+  address: string,
+  neighborhood: string | null
+) {
+  const res = await graphql<{ insert_restaurant_locations_one: { id: string } | null }>(
+    `mutation ($obj: restaurant_locations_insert_input!) {
+       insert_restaurant_locations_one(object: $obj) { id }
+     }`,
+    {
+      useAdminSecret: true,
+      variables: {
+        obj: {
+          restaurant_id: restaurantId,
+          address,
+          neighborhood,
+        },
+      },
+    }
+  );
+
+  if (res.errors?.length) {
+    // It's okay if the location already exists (duplicate), we can ignore it
+    if (!isDuplicate(res.errors[0].message)) {
+      console.error("Error adding location:", res.errors[0].message);
+      throw new Error(res.errors[0].message);
+    }
+  }
+
+  return res.data?.insert_restaurant_locations_one?.id ?? null;
+}
+
 export async function POST(request: NextRequest) {
   const token = bearerToken(request.headers.get("authorization"));
   const caller = verifyNhostJwt(token);
@@ -67,7 +107,18 @@ export async function POST(request: NextRequest) {
       );
       if (res.errors?.length) {
         if (!isDuplicate(res.errors[0].message)) throw new Error(res.errors[0].message);
+        // Restaurant already exists, find it
         restaurantId = (await findRestaurant(city, nr.name))?.id ?? null;
+
+        // If we have a restaurant and new address details, add the location
+        if (restaurantId && nr.address) {
+          try {
+            await addLocationToRestaurant(restaurantId, nr.address, nr.neighborhood);
+          } catch (error) {
+            // Log but don't fail - location might already exist or other issue
+            console.warn("Could not add location to existing restaurant:", error);
+          }
+        }
       } else {
         restaurantId = res.data?.insert_restaurants_one?.id ?? null;
       }

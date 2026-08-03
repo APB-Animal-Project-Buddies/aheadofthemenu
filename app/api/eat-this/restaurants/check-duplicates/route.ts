@@ -201,17 +201,6 @@ export async function POST(
 
         const restaurants = res.data?.restaurants || [];
 
-        // Debug: Log what we got
-        console.log(`[Duplicate Check] Fetched ${restaurants.length} restaurants for city: ${city}`);
-        if (restaurants.length > 0) {
-            console.log(`[Duplicate Check] First restaurant:`, {
-                id: restaurants[0].id,
-                name: restaurants[0].name,
-                locationsCount: restaurants[0].locations?.length || 0,
-                locations: restaurants[0].locations,
-            });
-        }
-
         // Calculate similarity scores for each restaurant
         const matches: RestaurantMatch[] = restaurants
             .map((restaurant: any) => {
