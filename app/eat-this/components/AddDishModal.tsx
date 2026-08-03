@@ -72,6 +72,12 @@ export function AddDishModal({ open, onClose, restaurants, dishes, initialRestau
   // Track if user has made a selection (to show expanded form)
   const [restaurantSelected, setRestaurantSelected] = useState(false);
 
+  // Duplicate detection state
+  const [duplicateMatches, setDuplicateMatches] = useState<any[]>([]);
+  const [showingDuplicates, setShowingDuplicates] = useState(false);
+  const [checkingDuplicates, setCheckingDuplicates] = useState(false);
+  const [duplicateCheckAttempts, setDuplicateCheckAttempts] = useState(0);
+
   // Debounce timer
   const searchDebounceTimer = useRef<NodeJS.Timeout | null>(null);
 
@@ -111,6 +117,10 @@ export function AddDishModal({ open, onClose, restaurants, dishes, initialRestau
     setAutocompleteLoading(false);
     setAutocompleteError(null);
     setRestaurantSelected(false);
+    setDuplicateMatches([]);
+    setShowingDuplicates(false);
+    setCheckingDuplicates(false);
+    setDuplicateCheckAttempts(0);
   }, [open, initialRestaurantId]);
 
   // Cleanup debounce timer on unmount
@@ -235,6 +245,75 @@ export function AddDishModal({ open, onClose, restaurants, dishes, initialRestau
     setCreatingNew(false);
     setNewRestaurant(EMPTY_NEW);
     setSearchQuery("");
+  };
+
+  /**
+   * Check for duplicate restaurants in the database
+   * Uses fuzzy matching on name and address
+   */
+  const checkForDuplicates = async () => {
+    if (!newRestaurant.name.trim() || !newRestaurant.address.trim()) {
+      return;
+    }
+
+    setCheckingDuplicates(true);
+    try {
+      const response = await fetch("/api/eat-this/restaurants/check-duplicates", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: newRestaurant.name.trim(),
+          address: newRestaurant.address.trim(),
+          city: "seattle", // You might want to make this dynamic
+        }),
+      });
+
+      if (!response.ok) {
+        console.error("Duplicate check failed");
+        setDuplicateMatches([]);
+        return;
+      }
+
+      const data = await response.json();
+      setDuplicateMatches(data.similarRestaurants || []);
+
+      if (data.hasDuplicates) {
+        setShowingDuplicates(true);
+        setDuplicateCheckAttempts(0); // Reset attempts when showing duplicates
+      } else {
+        // No duplicates, proceed to dish form
+        setStep("what");
+      }
+    } catch (error) {
+      console.error("Error checking duplicates:", error);
+      // On error, allow user to proceed anyway
+      setStep("what");
+    } finally {
+      setCheckingDuplicates(false);
+    }
+  };
+
+  /**
+   * Handle user confirming they want to use an existing restaurant from duplicates
+   */
+  const handleUseDuplicateRestaurant = (duplicateRestaurantId: string) => {
+    setRestaurantId(duplicateRestaurantId);
+    setShowingDuplicates(false);
+    setDuplicateMatches([]);
+    setCreatingNew(false);
+    setNewRestaurant(EMPTY_NEW);
+    setStep("what");
+  };
+
+  /**
+   * Handle user confirming they want to create a new restaurant anyway
+   * (This happens when they click Continue again without editing)
+   */
+  const handleProceedWithNewRestaurant = () => {
+    setShowingDuplicates(false);
+    setDuplicateMatches([]);
+    setDuplicateCheckAttempts(prev => prev + 1);
+    setStep("what");
   };
 
   const filteredRestaurants = useMemo(() => {
@@ -492,12 +571,18 @@ export function AddDishModal({ open, onClose, restaurants, dishes, initialRestau
                 <Input
                   placeholder="Restaurant name *"
                   value={newRestaurant.name}
-                  onChange={(e) => setNewRestaurant({ ...newRestaurant, name: e.target.value })}
+                  onChange={(e) => {
+                    setNewRestaurant({ ...newRestaurant, name: e.target.value });
+                    setShowingDuplicates(false); // Hide duplicates when editing
+                  }}
                 />
                 <Input
                   placeholder="Street address *"
                   value={newRestaurant.address}
-                  onChange={(e) => setNewRestaurant({ ...newRestaurant, address: e.target.value })}
+                  onChange={(e) => {
+                    setNewRestaurant({ ...newRestaurant, address: e.target.value });
+                    setShowingDuplicates(false); // Hide duplicates when editing
+                  }}
                 />
                 <Input
                   placeholder="Neighborhood"
@@ -510,18 +595,60 @@ export function AddDishModal({ open, onClose, restaurants, dishes, initialRestau
                   onChange={(e) => setNewRestaurant({ ...newRestaurant, website: e.target.value })}
                 />
               </div>
+
+              {/* Duplicate matches warning */}
+              {showingDuplicates && duplicateMatches.length > 0 && (
+                <div className="p-3 rounded-lg bg-blue-50 border border-blue-200">
+                  <div className="text-sm font-semibold text-blue-900 mb-2">
+                    Did you mean one of these restaurants?
+                  </div>
+                  <div className="space-y-2">
+                    {duplicateMatches.map((match) => (
+                      <button
+                        key={match.id}
+                        type="button"
+                        onClick={() => handleUseDuplicateRestaurant(match.id)}
+                        className="w-full text-left p-2 rounded-lg bg-white hover:bg-blue-100 border border-blue-100 transition"
+                      >
+                        <div className="font-medium text-neutral-800">{match.name}</div>
+                        <div className="text-xs text-neutral-600 mt-1">
+                          {match.locations.length === 1
+                            ? match.locations[0].address
+                            : `${match.locations[0].address} ${match.locations.length > 1 ? `+${match.locations.length - 1} more` : ""}`}
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={handleProceedWithNewRestaurant}
+                    className="w-full mt-2 text-xs font-semibold text-blue-600 hover:text-blue-800 py-1"
+                  >
+                    No, add this as a new restaurant
+                  </button>
+                </div>
+              )}
             </>
           )}
 
-          {/* Continue button */}
+          {/* Continue button - for new restaurants, check duplicates first */}
           {(restaurantSelected || restaurantId !== null) && (
             <button
               type="button"
-              disabled={!whereReady}
-              onClick={() => setStep("what")}
+              disabled={!whereReady || checkingDuplicates}
+              onClick={() => {
+                if (creatingNew) {
+                  // For new restaurants, check for duplicates first
+                  checkForDuplicates();
+                } else {
+                  // For existing restaurants, go straight to dish form
+                  setStep("what");
+                }
+              }}
               className="mt-1 rounded-lg bg-apb px-4 py-2 text-sm font-semibold text-white transition disabled:cursor-not-allowed disabled:opacity-40"
             >
-              Continue
+              {checkingDuplicates ? "Checking..." : "Continue"}
             </button>
           )}
         </div>
@@ -563,8 +690,8 @@ export function AddDishModal({ open, onClose, restaurants, dishes, initialRestau
                   type="button"
                   onClick={() => setAvailability(v)}
                   className={`rounded-full border px-3 py-1 text-xs font-medium capitalize transition ${availability === v
-                      ? "border-apb bg-apb text-white"
-                      : "border-neutral-300 bg-white text-neutral-600 hover:bg-neutral-50"
+                    ? "border-apb bg-apb text-white"
+                    : "border-neutral-300 bg-white text-neutral-600 hover:bg-neutral-50"
                     }`}
                 >
                   {v}
@@ -582,8 +709,8 @@ export function AddDishModal({ open, onClose, restaurants, dishes, initialRestau
                   type="button"
                   onClick={() => toggleTag(tag)}
                   className={`rounded-full border px-2.5 py-1 text-xs font-medium capitalize transition ${tags.includes(tag)
-                      ? "border-apb bg-apb text-white"
-                      : "border-neutral-300 bg-white text-neutral-600 hover:bg-neutral-50"
+                    ? "border-apb bg-apb text-white"
+                    : "border-neutral-300 bg-white text-neutral-600 hover:bg-neutral-50"
                     }`}
                 >
                   {tag}
@@ -623,8 +750,8 @@ export function AddDishModal({ open, onClose, restaurants, dishes, initialRestau
                   type="button"
                   onClick={() => toggleCustomization(c)}
                   className={`rounded-full border px-2.5 py-1 text-xs font-medium capitalize transition ${customizations.includes(c)
-                      ? "border-apb bg-apb text-white"
-                      : "border-neutral-300 bg-white text-neutral-600 hover:bg-neutral-50"
+                    ? "border-apb bg-apb text-white"
+                    : "border-neutral-300 bg-white text-neutral-600 hover:bg-neutral-50"
                     }`}
                 >
                   {c}
