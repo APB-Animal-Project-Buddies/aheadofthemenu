@@ -611,10 +611,13 @@ export function AddDishModal({ open, onClose, restaurants, dishes, initialRestau
                         className="w-full text-left p-2 rounded-lg bg-white hover:bg-blue-100 border border-blue-100 transition"
                       >
                         <div className="font-medium text-neutral-800">{match.name}</div>
-                        <div className="text-xs text-neutral-600 mt-1">
-                          {match.locations.length === 1
-                            ? match.locations[0].address
-                            : `${match.locations[0].address} ${match.locations.length > 1 ? `+${match.locations.length - 1} more` : ""}`}
+                        <div className="text-xs text-neutral-600 mt-1 space-y-0.5">
+                          {match.locations.slice(0, 3).map((loc, idx) => (
+                            <div key={idx}>{loc.address}</div>
+                          ))}
+                          {match.locations.length > 3 && (
+                            <div className="text-neutral-500">+{match.locations.length - 3} more location{match.locations.length - 3 !== 1 ? 's' : ''}</div>
+                          )}
                         </div>
                       </button>
                     ))}
