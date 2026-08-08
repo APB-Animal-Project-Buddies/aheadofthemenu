@@ -9,6 +9,7 @@
  */
 import { useEffect, useState } from "react";
 import type { VoteTotals, CustomizationTotals, OrderType } from "@/lib/eat-this";
+import { isAskToBeMadeVeganTag } from "@/lib/eat-this";
 import { hasAdminSecret, adminHeaders } from "@/lib/admin-client";
 import { YumMeter } from "./YumMeter";
 import { VoteWidget, type MyVote } from "./VoteWidget";
@@ -97,11 +98,26 @@ export function DishCard({ dish, onVote, onChanged }: {
             )}
           </div>
         </div>
-        {dish.tags[0] && (
-          <span className="shrink-0 rounded-full bg-neutral-100 px-2.5 py-1 text-[10px] font-bold tracking-wide text-neutral-500">
-            {dish.tags[0].toUpperCase()}
-          </span>
-        )}
+        {(() => {
+          // "Ask to be Made Vegan" always gets its own green badge, wherever
+          // it sits in the tag list — otherwise fall back to the generic
+          // gray badge for whatever tag happens to be first.
+          const askVeganTag = dish.tags.find(isAskToBeMadeVeganTag);
+          if (askVeganTag) {
+            return (
+              <span className="shrink-0 rounded-full bg-green-100 px-2.5 py-1 text-[10px] font-bold tracking-wide text-green-700">
+                🌱 {askVeganTag.toUpperCase()}
+              </span>
+            );
+          }
+          return (
+            dish.tags[0] && (
+              <span className="shrink-0 rounded-full bg-neutral-100 px-2.5 py-1 text-[10px] font-bold tracking-wide text-neutral-500">
+                {dish.tags[0].toUpperCase()}
+              </span>
+            )
+          );
+        })()}
       </header>
 
       <div className="mt-3">
