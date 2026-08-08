@@ -14,7 +14,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { graphql } from "@/lib/nhost";
-import { aggregateVotes, meterState, type VoteRow } from "@/lib/eat-this";
+import { aggregateVotes, meterState, isAskToBeMadeVeganTag, type VoteRow } from "@/lib/eat-this";
 import { absoluteUrl } from "@/lib/site-url";
 import { truncateAtWord } from "@/lib/meta-text";
 
@@ -108,11 +108,15 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
   };
 }
 
-function Pill({ children, tone = "neutral" }: { children: React.ReactNode; tone?: "neutral" | "accent" }) {
+function Pill({ children, tone = "neutral" }: { children: React.ReactNode; tone?: "neutral" | "accent" | "vegan-ask" }) {
   return (
     <span
       className={`rounded-full px-2.5 py-1 text-xs ${
-        tone === "accent" ? "bg-apb/10 text-apb" : "bg-neutral-100 text-neutral-600"
+        tone === "vegan-ask"
+          ? "bg-green-100 text-green-700"
+          : tone === "accent"
+            ? "bg-apb/10 text-apb"
+            : "bg-neutral-100 text-neutral-600"
       }`}
     >
       {children}
@@ -214,8 +218,8 @@ export default async function EatThisDishPage({ params }: { params: { id: string
         {tags.length ? (
           <div className="mt-4 flex flex-wrap gap-1.5">
             {tags.map((t) => (
-              <Pill key={t} tone="accent">
-                {t}
+              <Pill key={t} tone={isAskToBeMadeVeganTag(t) ? "vegan-ask" : "accent"}>
+                {isAskToBeMadeVeganTag(t) ? `🌱 ${t}` : t}
               </Pill>
             ))}
           </div>

@@ -10,6 +10,17 @@
  * "Still tallying…" with NO percentage (early numbers would anchor voters). */
 export const MIN_VOTES_TO_SCORE = 5;
 
+/**
+ * The one dish tag that gets its own green treatment everywhere tags render
+ * (DishCard's compact badge, the dish detail page's Pill list): a dish that
+ * isn't vegan by default but can be made vegan if you ask (e.g. Habesha's Ful
+ * Medames — vegan only when ordered as "Vegan Ful"). Centralized here so the
+ * two render sites can't drift on the literal string.
+ */
+export const ASK_TO_BE_MADE_VEGAN_TAG = "Ask to be Made Vegan";
+export const isAskToBeMadeVeganTag = (tag: string) =>
+  tag.trim().toLowerCase() === ASK_TO_BE_MADE_VEGAN_TAG.toLowerCase();
+
 export type VoterKind = "local" | "visitor";
 /** Vote tallies per cohort. `meh` (the neutral 😐 vote) is optional so existing
  * two-field call sites stay valid; readers coalesce a missing `meh` to 0. */
