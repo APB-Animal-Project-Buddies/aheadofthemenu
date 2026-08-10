@@ -80,6 +80,8 @@ export function AddDishModal({ open, onClose, restaurants, dishes, initialRestau
 
   // Debounce timer
   const searchDebounceTimer = useRef<NodeJS.Timeout | null>(null);
+  // AbortController for cancelling stale autocomplete requests
+  const autocompleteAbortController = useRef<AbortController | null>(null);
 
   const [dishName, setDishName] = useState("");
   const [description, setDescription] = useState("");
@@ -123,15 +125,19 @@ export function AddDishModal({ open, onClose, restaurants, dishes, initialRestau
     setDuplicateCheckAttempts(0);
   }, [open, initialRestaurantId]);
 
-  // Cleanup debounce timer on unmount
+  // Cleanup debounce timer and abort pending requests on unmount
   useEffect(() => {
     return () => {
       if (searchDebounceTimer.current) clearTimeout(searchDebounceTimer.current);
+      if (autocompleteAbortController.current) {
+        autocompleteAbortController.current.abort();
+      }
     };
   }, []);
 
   /**
    * Fetch autocomplete suggestions from our backend API
+   * Uses AbortController to cancel stale requests if a newer one comes in
    */
   const fetchAutocomplete = async (query: string) => {
     if (!query || query.length < 3) {
@@ -143,8 +149,18 @@ export function AddDishModal({ open, onClose, restaurants, dishes, initialRestau
       setAutocompleteLoading(true);
       setAutocompleteError(null);
 
+      // Cancel any previous in-flight request
+      if (autocompleteAbortController.current) {
+        autocompleteAbortController.current.abort();
+      }
+
+      // Create a new AbortController for this request
+      const controller = new AbortController();
+      autocompleteAbortController.current = controller;
+
       const response = await fetch(
-        `/api/autocomplete/location?q=${encodeURIComponent(query)}&limit=5`
+        `/api/autocomplete/location?q=${encodeURIComponent(query)}&limit=5`,
+        { signal: controller.signal }
       );
 
       if (!response.ok) {
@@ -153,9 +169,14 @@ export function AddDishModal({ open, onClose, restaurants, dishes, initialRestau
       }
 
       const data = await response.json();
+      // Only update state if this request wasn't aborted
       setAutocompleteResults(data.results || []);
       setShowAutocomplete(true);
     } catch (err) {
+      // Don't show error if request was aborted (user moved on to new query)
+      if (err instanceof Error && err.name === "AbortError") {
+        return;
+      }
       const message = err instanceof Error ? err.message : "Failed to fetch suggestions";
       setAutocompleteError(message);
       setAutocompleteResults([]);
@@ -200,11 +221,11 @@ export function AddDishModal({ open, onClose, restaurants, dishes, initialRestau
     const name = result.display_place || result.address.name || "";
     const address = result.display_address || "";
 
-    setNewRestaurant({
-      ...newRestaurant,
+    setNewRestaurant((prev) => ({
+      ...prev,
       name,
       address,
-    });
+    }));
 
     setSearchQuery("");
     setAutocompleteResults([]);
@@ -226,10 +247,10 @@ export function AddDishModal({ open, onClose, restaurants, dishes, initialRestau
         handleAutocompleteSelect(autocompleteResults[0]);
       } else {
         // User is entering manually
-        setNewRestaurant({
-          ...newRestaurant,
+        setNewRestaurant((prev) => ({
+          ...prev,
           name: searchQuery,
-        });
+        }));
         setSearchQuery("");
         setCreatingNew(true);
         setRestaurantSelected(true);
@@ -572,7 +593,7 @@ export function AddDishModal({ open, onClose, restaurants, dishes, initialRestau
                   placeholder="Restaurant name *"
                   value={newRestaurant.name}
                   onChange={(e) => {
-                    setNewRestaurant({ ...newRestaurant, name: e.target.value });
+                    setNewRestaurant((prev) => ({ ...prev, name: e.target.value }));
                     setShowingDuplicates(false); // Hide duplicates when editing
                   }}
                 />
@@ -580,19 +601,19 @@ export function AddDishModal({ open, onClose, restaurants, dishes, initialRestau
                   placeholder="Street address *"
                   value={newRestaurant.address}
                   onChange={(e) => {
-                    setNewRestaurant({ ...newRestaurant, address: e.target.value });
+                    setNewRestaurant((prev) => ({ ...prev, address: e.target.value }));
                     setShowingDuplicates(false); // Hide duplicates when editing
                   }}
                 />
                 <Input
                   placeholder="Neighborhood"
                   value={newRestaurant.neighborhood}
-                  onChange={(e) => setNewRestaurant({ ...newRestaurant, neighborhood: e.target.value })}
+                  onChange={(e) => setNewRestaurant((prev) => ({ ...prev, neighborhood: e.target.value }))}
                 />
                 <Input
                   placeholder="Website"
                   value={newRestaurant.website}
-                  onChange={(e) => setNewRestaurant({ ...newRestaurant, website: e.target.value })}
+                  onChange={(e) => setNewRestaurant((prev) => ({ ...prev, website: e.target.value }))}
                 />
               </div>
 
