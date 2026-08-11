@@ -553,11 +553,17 @@ export function AddDishModal({ open, onClose, restaurants, dishes, initialRestau
                       }, 0);
                     }}
                     autoComplete="off"
+                    role="combobox"
+                    aria-expanded={showAutocomplete}
+                    aria-controls="autocomplete-listbox"
+                    aria-autocomplete="list"
                   />
 
                   {/* Autocomplete dropdown */}
                   {showAutocomplete && (
                     <div
+                      id="autocomplete-listbox"
+                      role="listbox"
                       className="absolute top-full left-0 right-0 mt-1 border border-neutral-200 rounded-lg bg-white shadow-md z-20"
                       onMouseDown={(e) => {
                         // Prevent blur from firing when clicking dropdown
@@ -599,6 +605,8 @@ export function AddDishModal({ open, onClose, restaurants, dishes, initialRestau
                                   }
                                 }, 0);
                               }}
+                              role="option"
+                              aria-selected={false}
                               className="w-full text-left px-3 py-2 text-sm border-b border-neutral-100 last:border-b-0 hover:bg-neutral-50 focus:outline-none focus:bg-neutral-100 transition"
                             >
                               <div className="font-medium text-neutral-800">{result.display_place}</div>
