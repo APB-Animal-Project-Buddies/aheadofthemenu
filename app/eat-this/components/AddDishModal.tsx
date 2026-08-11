@@ -82,6 +82,8 @@ export function AddDishModal({ open, onClose, restaurants, dishes, initialRestau
   const searchDebounceTimer = useRef<NodeJS.Timeout | null>(null);
   // AbortController for cancelling stale autocomplete requests
   const autocompleteAbortController = useRef<AbortController | null>(null);
+  // Track if any dropdown button currently has focus
+  const dropdownButtonFocusedRef = useRef(false);
 
   const [dishName, setDishName] = useState("");
   const [description, setDescription] = useState("");
@@ -266,6 +268,14 @@ export function AddDishModal({ open, onClose, restaurants, dishes, initialRestau
     setCreatingNew(false);
     setNewRestaurant(EMPTY_NEW);
     setSearchQuery("");
+  };
+
+  /**
+   * Dismiss the autocomplete dropdown
+   */
+  const dismissAutocomplete = () => {
+    setShowAutocomplete(false);
+    setAutocompleteResults([]);
   };
 
   /**
@@ -522,13 +532,38 @@ export function AddDishModal({ open, onClose, restaurants, dishes, initialRestau
                     placeholder="Search location (e.g., 'Pizza Brooklyn') or press Enter to continue"
                     value={searchQuery}
                     onChange={(e) => handleSearchChange(e.target.value)}
-                    onKeyDown={handleSearchKeyDown}
+                    onKeyDown={(e) => {
+                      // Escape dismisses dropdown without closing modal
+                      if (e.key === "Escape") {
+                        e.preventDefault();
+                        dismissAutocomplete();
+                        return;
+                      }
+                      // Tab to next element - let focus management handle it
+                      handleSearchKeyDown(e);
+                    }}
+                    onBlur={() => {
+                      // Input lost focus
+                      // If a dropdown button will get focus, dropdownButtonFocusedRef will be set to true
+                      // Otherwise, the button's onBlur will close the dropdown
+                      setTimeout(() => {
+                        if (!dropdownButtonFocusedRef.current) {
+                          dismissAutocomplete();
+                        }
+                      }, 0);
+                    }}
                     autoComplete="off"
                   />
 
                   {/* Autocomplete dropdown */}
                   {showAutocomplete && (
-                    <div className="absolute top-full left-0 right-0 mt-1 border border-neutral-200 rounded-lg bg-white shadow-md z-20">
+                    <div
+                      className="absolute top-full left-0 right-0 mt-1 border border-neutral-200 rounded-lg bg-white shadow-md z-20"
+                      onMouseDown={(e) => {
+                        // Prevent blur from firing when clicking dropdown
+                        e.preventDefault();
+                      }}
+                    >
                       {autocompleteLoading && (
                         <div className="px-3 py-3 text-center text-xs text-neutral-500">
                           Searching…
@@ -549,7 +584,22 @@ export function AddDishModal({ open, onClose, restaurants, dishes, initialRestau
                               key={idx}
                               type="button"
                               onClick={() => handleAutocompleteSelect(result)}
-                              className="w-full text-left px-3 py-2 text-sm border-b border-neutral-100 last:border-b-0 hover:bg-neutral-50 transition"
+                              onFocus={() => {
+                                // A button got focus, keep dropdown open
+                                dropdownButtonFocusedRef.current = true;
+                              }}
+                              onBlur={() => {
+                                // Button lost focus, but another button might get it
+                                // Reset the flag - it will be set to true if next focus is a button
+                                dropdownButtonFocusedRef.current = false;
+                                // Close on next tick if no button gets focus
+                                setTimeout(() => {
+                                  if (!dropdownButtonFocusedRef.current) {
+                                    dismissAutocomplete();
+                                  }
+                                }, 0);
+                              }}
+                              className="w-full text-left px-3 py-2 text-sm border-b border-neutral-100 last:border-b-0 hover:bg-neutral-50 focus:outline-none focus:bg-neutral-100 transition"
                             >
                               <div className="font-medium text-neutral-800">{result.display_place}</div>
                               <div className="text-xs text-neutral-500">{result.display_address}</div>
