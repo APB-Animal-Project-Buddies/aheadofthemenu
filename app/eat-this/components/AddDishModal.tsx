@@ -585,9 +585,9 @@ export function AddDishModal({ open, onClose, restaurants, dishes, initialRestau
                       {!autocompleteLoading &&
                         !autocompleteError &&
                         autocompleteResults.length > 0 && (
-                          autocompleteResults.map((result, idx) => (
+                          autocompleteResults.map((result) => (
                             <button
-                              key={idx}
+                              key={result.place_id}
                               type="button"
                               onClick={() => handleAutocompleteSelect(result)}
                               onFocus={() => {
@@ -691,8 +691,8 @@ export function AddDishModal({ open, onClose, restaurants, dishes, initialRestau
                       >
                         <div className="font-medium text-neutral-800">{match.name}</div>
                         <div className="text-xs text-neutral-600 mt-1 space-y-0.5">
-                          {match.locations.slice(0, 3).map((loc, idx) => (
-                            <div key={idx}>{loc.address}</div>
+                          {match.locations.slice(0, 3).map((loc) => (
+                            <div key={loc.id}>{loc.address}</div>
                           ))}
                           {match.locations.length > 3 && (
                             <div className="text-neutral-500">+{match.locations.length - 3} more location{match.locations.length - 3 !== 1 ? 's' : ''}</div>
