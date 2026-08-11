@@ -150,6 +150,7 @@ export function AddDishModal({ open, onClose, restaurants, dishes, initialRestau
     try {
       setAutocompleteLoading(true);
       setAutocompleteError(null);
+      setShowAutocomplete(true);  // Show dropdown immediately while loading
 
       // Cancel any previous in-flight request
       if (autocompleteAbortController.current) {
@@ -173,7 +174,6 @@ export function AddDishModal({ open, onClose, restaurants, dishes, initialRestau
       const data = await response.json();
       // Only update state if this request wasn't aborted
       setAutocompleteResults(data.results || []);
-      setShowAutocomplete(true);
     } catch (err) {
       // Don't show error if request was aborted (user moved on to new query)
       if (err instanceof Error && err.name === "AbortError") {
