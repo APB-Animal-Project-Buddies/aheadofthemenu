@@ -300,8 +300,10 @@ export function AddDishModal({ open, onClose, restaurants, dishes, initialRestau
       });
 
       if (!response.ok) {
-        console.error("Duplicate check failed");
-        setDuplicateMatches([]);
+        console.error("Duplicate check failed:", response.status);
+        // On server error, allow user to proceed (fail open, don't block user)
+        // This prevents users from getting stuck if the check-duplicates route is down
+        setStep("what");
         return;
       }
 
