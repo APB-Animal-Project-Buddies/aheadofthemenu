@@ -72,8 +72,18 @@ export function AddDishModal({ open, onClose, restaurants, dishes, initialRestau
   // Track if user has made a selection (to show expanded form)
   const [restaurantSelected, setRestaurantSelected] = useState(false);
 
+  // Duplicate detection state
+  const [duplicateMatches, setDuplicateMatches] = useState<any[]>([]);
+  const [showingDuplicates, setShowingDuplicates] = useState(false);
+  const [checkingDuplicates, setCheckingDuplicates] = useState(false);
+  const [duplicateCheckAttempts, setDuplicateCheckAttempts] = useState(0);
+
   // Debounce timer
   const searchDebounceTimer = useRef<NodeJS.Timeout | null>(null);
+  // AbortController for cancelling stale autocomplete requests
+  const autocompleteAbortController = useRef<AbortController | null>(null);
+  // Track if any dropdown button currently has focus
+  const dropdownButtonFocusedRef = useRef(false);
 
   const [dishName, setDishName] = useState("");
   const [description, setDescription] = useState("");
@@ -111,17 +121,25 @@ export function AddDishModal({ open, onClose, restaurants, dishes, initialRestau
     setAutocompleteLoading(false);
     setAutocompleteError(null);
     setRestaurantSelected(false);
+    setDuplicateMatches([]);
+    setShowingDuplicates(false);
+    setCheckingDuplicates(false);
+    setDuplicateCheckAttempts(0);
   }, [open, initialRestaurantId]);
 
-  // Cleanup debounce timer on unmount
+  // Cleanup debounce timer and abort pending requests on unmount
   useEffect(() => {
     return () => {
       if (searchDebounceTimer.current) clearTimeout(searchDebounceTimer.current);
+      if (autocompleteAbortController.current) {
+        autocompleteAbortController.current.abort();
+      }
     };
   }, []);
 
   /**
    * Fetch autocomplete suggestions from our backend API
+   * Uses AbortController to cancel stale requests if a newer one comes in
    */
   const fetchAutocomplete = async (query: string) => {
     if (!query || query.length < 3) {
@@ -132,9 +150,20 @@ export function AddDishModal({ open, onClose, restaurants, dishes, initialRestau
     try {
       setAutocompleteLoading(true);
       setAutocompleteError(null);
+      setShowAutocomplete(true);  // Show dropdown immediately while loading
+
+      // Cancel any previous in-flight request
+      if (autocompleteAbortController.current) {
+        autocompleteAbortController.current.abort();
+      }
+
+      // Create a new AbortController for this request
+      const controller = new AbortController();
+      autocompleteAbortController.current = controller;
 
       const response = await fetch(
-        `/api/autocomplete/location?q=${encodeURIComponent(query)}&limit=5`
+        `/api/autocomplete/location?q=${encodeURIComponent(query)}&limit=5`,
+        { signal: controller.signal }
       );
 
       if (!response.ok) {
@@ -143,9 +172,13 @@ export function AddDishModal({ open, onClose, restaurants, dishes, initialRestau
       }
 
       const data = await response.json();
+      // Only update state if this request wasn't aborted
       setAutocompleteResults(data.results || []);
-      setShowAutocomplete(true);
     } catch (err) {
+      // Don't show error if request was aborted (user moved on to new query)
+      if (err instanceof Error && err.name === "AbortError") {
+        return;
+      }
       const message = err instanceof Error ? err.message : "Failed to fetch suggestions";
       setAutocompleteError(message);
       setAutocompleteResults([]);
@@ -190,11 +223,11 @@ export function AddDishModal({ open, onClose, restaurants, dishes, initialRestau
     const name = result.display_place || result.address.name || "";
     const address = result.display_address || "";
 
-    setNewRestaurant({
-      ...newRestaurant,
+    setNewRestaurant((prev) => ({
+      ...prev,
       name,
       address,
-    });
+    }));
 
     setSearchQuery("");
     setAutocompleteResults([]);
@@ -216,10 +249,10 @@ export function AddDishModal({ open, onClose, restaurants, dishes, initialRestau
         handleAutocompleteSelect(autocompleteResults[0]);
       } else {
         // User is entering manually
-        setNewRestaurant({
-          ...newRestaurant,
+        setNewRestaurant((prev) => ({
+          ...prev,
           name: searchQuery,
-        });
+        }));
         setSearchQuery("");
         setCreatingNew(true);
         setRestaurantSelected(true);
@@ -235,6 +268,85 @@ export function AddDishModal({ open, onClose, restaurants, dishes, initialRestau
     setCreatingNew(false);
     setNewRestaurant(EMPTY_NEW);
     setSearchQuery("");
+  };
+
+  /**
+   * Dismiss the autocomplete dropdown
+   */
+  const dismissAutocomplete = () => {
+    setShowAutocomplete(false);
+    setAutocompleteResults([]);
+  };
+
+  /**
+   * Check for duplicate restaurants in the database
+   * Uses fuzzy matching on name and address
+   */
+  const checkForDuplicates = async () => {
+    if (!newRestaurant.name.trim() || !newRestaurant.address.trim()) {
+      return;
+    }
+
+    setCheckingDuplicates(true);
+    try {
+      const response = await fetch("/api/eat-this/restaurants/check-duplicates", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: newRestaurant.name.trim(),
+          address: newRestaurant.address.trim(),
+          city: "seattle", // You might want to make this dynamic
+        }),
+      });
+
+      if (!response.ok) {
+        console.error("Duplicate check failed:", response.status);
+        // On server error, allow user to proceed (fail open, don't block user)
+        // This prevents users from getting stuck if the check-duplicates route is down
+        setStep("what");
+        return;
+      }
+
+      const data = await response.json();
+      setDuplicateMatches(data.similarRestaurants || []);
+
+      if (data.hasDuplicates) {
+        setShowingDuplicates(true);
+        setDuplicateCheckAttempts(0); // Reset attempts when showing duplicates
+      } else {
+        // No duplicates, proceed to dish form
+        setStep("what");
+      }
+    } catch (error) {
+      console.error("Error checking duplicates:", error);
+      // On error, allow user to proceed anyway
+      setStep("what");
+    } finally {
+      setCheckingDuplicates(false);
+    }
+  };
+
+  /**
+   * Handle user confirming they want to use an existing restaurant from duplicates
+   */
+  const handleUseDuplicateRestaurant = (duplicateRestaurantId: string) => {
+    setRestaurantId(duplicateRestaurantId);
+    setShowingDuplicates(false);
+    setDuplicateMatches([]);
+    setCreatingNew(false);
+    setNewRestaurant(EMPTY_NEW);
+    setStep("what");
+  };
+
+  /**
+   * Handle user confirming they want to create a new restaurant anyway
+   * (This happens when they click Continue again without editing)
+   */
+  const handleProceedWithNewRestaurant = () => {
+    setShowingDuplicates(false);
+    setDuplicateMatches([]);
+    setDuplicateCheckAttempts(prev => prev + 1);
+    setStep("what");
   };
 
   const filteredRestaurants = useMemo(() => {
@@ -422,13 +534,44 @@ export function AddDishModal({ open, onClose, restaurants, dishes, initialRestau
                     placeholder="Search location (e.g., 'Pizza Brooklyn') or press Enter to continue"
                     value={searchQuery}
                     onChange={(e) => handleSearchChange(e.target.value)}
-                    onKeyDown={handleSearchKeyDown}
+                    onKeyDown={(e) => {
+                      // Escape dismisses dropdown without closing modal
+                      if (e.key === "Escape") {
+                        e.preventDefault();
+                        dismissAutocomplete();
+                        return;
+                      }
+                      // Tab to next element - let focus management handle it
+                      handleSearchKeyDown(e);
+                    }}
+                    onBlur={() => {
+                      // Input lost focus
+                      // If a dropdown button will get focus, dropdownButtonFocusedRef will be set to true
+                      // Otherwise, the button's onBlur will close the dropdown
+                      setTimeout(() => {
+                        if (!dropdownButtonFocusedRef.current) {
+                          dismissAutocomplete();
+                        }
+                      }, 0);
+                    }}
                     autoComplete="off"
+                    role="combobox"
+                    aria-expanded={showAutocomplete}
+                    aria-controls="autocomplete-listbox"
+                    aria-autocomplete="list"
                   />
 
                   {/* Autocomplete dropdown */}
                   {showAutocomplete && (
-                    <div className="absolute top-full left-0 right-0 mt-1 border border-neutral-200 rounded-lg bg-white shadow-md z-20">
+                    <div
+                      id="autocomplete-listbox"
+                      role="listbox"
+                      className="absolute top-full left-0 right-0 mt-1 border border-neutral-200 rounded-lg bg-white shadow-md z-20"
+                      onMouseDown={(e) => {
+                        // Prevent blur from firing when clicking dropdown
+                        e.preventDefault();
+                      }}
+                    >
                       {autocompleteLoading && (
                         <div className="px-3 py-3 text-center text-xs text-neutral-500">
                           Searching…
@@ -444,12 +587,29 @@ export function AddDishModal({ open, onClose, restaurants, dishes, initialRestau
                       {!autocompleteLoading &&
                         !autocompleteError &&
                         autocompleteResults.length > 0 && (
-                          autocompleteResults.map((result, idx) => (
+                          autocompleteResults.map((result) => (
                             <button
-                              key={idx}
+                              key={result.place_id}
                               type="button"
                               onClick={() => handleAutocompleteSelect(result)}
-                              className="w-full text-left px-3 py-2 text-sm border-b border-neutral-100 last:border-b-0 hover:bg-neutral-50 transition"
+                              onFocus={() => {
+                                // A button got focus, keep dropdown open
+                                dropdownButtonFocusedRef.current = true;
+                              }}
+                              onBlur={() => {
+                                // Button lost focus, but another button might get it
+                                // Reset the flag - it will be set to true if next focus is a button
+                                dropdownButtonFocusedRef.current = false;
+                                // Close on next tick if no button gets focus
+                                setTimeout(() => {
+                                  if (!dropdownButtonFocusedRef.current) {
+                                    dismissAutocomplete();
+                                  }
+                                }, 0);
+                              }}
+                              role="option"
+                              aria-selected={false}
+                              className="w-full text-left px-3 py-2 text-sm border-b border-neutral-100 last:border-b-0 hover:bg-neutral-50 focus:outline-none focus:bg-neutral-100 transition"
                             >
                               <div className="font-medium text-neutral-800">{result.display_place}</div>
                               <div className="text-xs text-neutral-500">{result.display_address}</div>
@@ -492,36 +652,87 @@ export function AddDishModal({ open, onClose, restaurants, dishes, initialRestau
                 <Input
                   placeholder="Restaurant name *"
                   value={newRestaurant.name}
-                  onChange={(e) => setNewRestaurant({ ...newRestaurant, name: e.target.value })}
+                  onChange={(e) => {
+                    setNewRestaurant((prev) => ({ ...prev, name: e.target.value }));
+                    setShowingDuplicates(false); // Hide duplicates when editing
+                  }}
                 />
                 <Input
                   placeholder="Street address *"
                   value={newRestaurant.address}
-                  onChange={(e) => setNewRestaurant({ ...newRestaurant, address: e.target.value })}
+                  onChange={(e) => {
+                    setNewRestaurant((prev) => ({ ...prev, address: e.target.value }));
+                    setShowingDuplicates(false); // Hide duplicates when editing
+                  }}
                 />
                 <Input
                   placeholder="Neighborhood"
                   value={newRestaurant.neighborhood}
-                  onChange={(e) => setNewRestaurant({ ...newRestaurant, neighborhood: e.target.value })}
+                  onChange={(e) => setNewRestaurant((prev) => ({ ...prev, neighborhood: e.target.value }))}
                 />
                 <Input
                   placeholder="Website"
                   value={newRestaurant.website}
-                  onChange={(e) => setNewRestaurant({ ...newRestaurant, website: e.target.value })}
+                  onChange={(e) => setNewRestaurant((prev) => ({ ...prev, website: e.target.value }))}
                 />
               </div>
+
+              {/* Duplicate matches warning */}
+              {showingDuplicates && duplicateMatches.length > 0 && (
+                <div className="p-3 rounded-lg bg-blue-50 border border-blue-200">
+                  <div className="text-sm font-semibold text-blue-900 mb-2">
+                    Did you mean one of these restaurants?
+                  </div>
+                  <div className="space-y-2">
+                    {duplicateMatches.map((match) => (
+                      <button
+                        key={match.id}
+                        type="button"
+                        onClick={() => handleUseDuplicateRestaurant(match.id)}
+                        className="w-full text-left p-2 rounded-lg bg-white hover:bg-blue-100 border border-blue-100 transition"
+                      >
+                        <div className="font-medium text-neutral-800">{match.name}</div>
+                        <div className="text-xs text-neutral-600 mt-1 space-y-0.5">
+                          {match.locations.slice(0, 3).map((loc) => (
+                            <div key={loc.id}>{loc.address}</div>
+                          ))}
+                          {match.locations.length > 3 && (
+                            <div className="text-neutral-500">+{match.locations.length - 3} more location{match.locations.length - 3 !== 1 ? 's' : ''}</div>
+                          )}
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={handleProceedWithNewRestaurant}
+                    className="w-full mt-2 text-xs font-semibold text-blue-600 hover:text-blue-800 py-1"
+                  >
+                    No, add this as a new restaurant
+                  </button>
+                </div>
+              )}
             </>
           )}
 
-          {/* Continue button */}
+          {/* Continue button - for new restaurants, check duplicates first */}
           {(restaurantSelected || restaurantId !== null) && (
             <button
               type="button"
-              disabled={!whereReady}
-              onClick={() => setStep("what")}
+              disabled={!whereReady || checkingDuplicates}
+              onClick={() => {
+                if (creatingNew) {
+                  // For new restaurants, check for duplicates first
+                  checkForDuplicates();
+                } else {
+                  // For existing restaurants, go straight to dish form
+                  setStep("what");
+                }
+              }}
               className="mt-1 rounded-lg bg-apb px-4 py-2 text-sm font-semibold text-white transition disabled:cursor-not-allowed disabled:opacity-40"
             >
-              Continue
+              {checkingDuplicates ? "Checking..." : "Continue"}
             </button>
           )}
         </div>
@@ -563,8 +774,8 @@ export function AddDishModal({ open, onClose, restaurants, dishes, initialRestau
                   type="button"
                   onClick={() => setAvailability(v)}
                   className={`rounded-full border px-3 py-1 text-xs font-medium capitalize transition ${availability === v
-                      ? "border-apb bg-apb text-white"
-                      : "border-neutral-300 bg-white text-neutral-600 hover:bg-neutral-50"
+                    ? "border-apb bg-apb text-white"
+                    : "border-neutral-300 bg-white text-neutral-600 hover:bg-neutral-50"
                     }`}
                 >
                   {v}
@@ -582,8 +793,8 @@ export function AddDishModal({ open, onClose, restaurants, dishes, initialRestau
                   type="button"
                   onClick={() => toggleTag(tag)}
                   className={`rounded-full border px-2.5 py-1 text-xs font-medium capitalize transition ${tags.includes(tag)
-                      ? "border-apb bg-apb text-white"
-                      : "border-neutral-300 bg-white text-neutral-600 hover:bg-neutral-50"
+                    ? "border-apb bg-apb text-white"
+                    : "border-neutral-300 bg-white text-neutral-600 hover:bg-neutral-50"
                     }`}
                 >
                   {tag}
@@ -623,8 +834,8 @@ export function AddDishModal({ open, onClose, restaurants, dishes, initialRestau
                   type="button"
                   onClick={() => toggleCustomization(c)}
                   className={`rounded-full border px-2.5 py-1 text-xs font-medium capitalize transition ${customizations.includes(c)
-                      ? "border-apb bg-apb text-white"
-                      : "border-neutral-300 bg-white text-neutral-600 hover:bg-neutral-50"
+                    ? "border-apb bg-apb text-white"
+                    : "border-neutral-300 bg-white text-neutral-600 hover:bg-neutral-50"
                     }`}
                 >
                   {c}
