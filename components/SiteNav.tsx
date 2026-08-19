@@ -22,6 +22,7 @@ const CONSUMER_TABS: Tab[] = [
   { href: "/eat-this", label: "Eat This!" }
 ];
 const BUSINESS_TABS: Tab[] = [
+  { href: "/revamp", label: "Getting Started" },
   { href: "/menus", label: "Menus" },
   { href: "/recipes", label: "Recipes" },
   { href: "/top-alternatives", label: "Top Alternatives" },
@@ -32,7 +33,7 @@ const BUSINESS_TABS: Tab[] = [
 // Some sections belong to one mode regardless of login: a signed-out visitor on a
 // business-only page (/recipes, /menus, /tips-and-tricks) still gets the restaurant nav,
 // and /dishes always reads as consumer. Shared sections fall back to the account type.
-const BUSINESS_SECTIONS = new Set(["recipes", "menus", "tips-and-tricks"]);
+const BUSINESS_SECTIONS = new Set(["recipes", "menus", "tips-and-tricks", "revamp"]);
 const CONSUMER_SECTIONS = new Set(["dishes", "creators"]);
 
 // The nav has its own header on the landing + auth screens, and is intentionally
@@ -56,6 +57,7 @@ const KNOWN_SECTIONS = new Set([
   "creators",
   "top-alternatives",
   "tips-and-tricks",
+  "revamp",
   "eat-this",
   "reviews",
   "submit-dish",

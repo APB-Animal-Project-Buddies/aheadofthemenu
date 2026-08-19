@@ -1,292 +1,263 @@
-// Tips & Tricks — magazine-style render of the Final Notes sections.
-// Reads window.APB_TIPS (from /recipes/data/_tips.js).
+// Tips & Tricks — the research behind plant-forward menus, and the concrete
+// moves (guest-facing nudges + kitchen economics) that turn it into profit.
+// Self-contained: no longer reads the vegan-restaurant-catalog data (that
+// pipeline now only feeds /recipes). Content lives directly in this file.
 
-const tips = window.APB_TIPS || [];
-const lookup = window.APB_LOOKUP || {};
+const STATS = [
+  { num: '27% vs 16%', label: 'of Gen Z & Millennials eat plant-based most of the time, against Boomers' },
+  { num: '+25–108%', label: 'more orders from an appetising name alone' },
+  { num: '20–40%', label: 'lower cost per portion: legumes, grains & mushrooms vs. meat' },
+  { num: '+41–79%', label: 'more plant sales when you double the plant-based options' },
+];
 
-// The parser pre-bakes qualifier-stripped + tail variants into _lookup.json,
-// so we only need to normalize the input here and check the map directly.
-function normDish(s) {
-  return String(s)
-    .normalize('NFD').replace(/[̀-ͯ]/g, '')
-    .toLowerCase()
-    .replace(/œ/g,'oe').replace(/æ/g,'ae')
-    .replace(/\(([^)]+)\)/g, '')
-    .replace(/[''"`]/g, '')
-    .replace(/[^a-z0-9\s\-\/&]/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim();
-}
-function dishHref(text) {
-  const n = normDish(text);
-  const id = lookup[n] || lookup[n.split('/')[0].trim()];
-  return id ? `/recipes#r=${id}` : null;
-}
+const LEVERS = [
+  {
+    icon: '🥘',
+    title: 'Big profits on simple dishes',
+    body: 'Many traditional plant-based foods are cheap — sub-$1.50 food costs that stay fresh for days, are easy to make, and sell at a high margin.',
+    examples: ['Dal makhani', 'Mole poblano', 'Mujadara', 'Hummus'],
+  },
+  {
+    icon: '🛡️',
+    title: 'Fewer health-code scares',
+    body: 'No raw meat means no salmonella, listeria or E. coli temperature-danger-zone violations from that station. Fewer contamination risks means fewer failed inspections, recalls and shutdown scares.',
+  },
+  {
+    icon: '💰',
+    title: 'Lower cost per plate',
+    body: 'Legumes, grains, mushrooms and seasonal vegetables typically run 20–40% cheaper per portion than meat or fish — and they don’t swing with commodity protein and dairy prices.',
+  },
+  {
+    icon: '🔁',
+    title: 'Blended protein saves money',
+    body: 'Blend finely chopped mushrooms into patties and stews at 25–30% and you cut your priciest ingredient while keeping — often improving — the flavour guests taste.',
+  },
+  {
+    icon: '😊',
+    title: 'Cheaper food, happier customers',
+    body: 'Price the plant dish at or below its meat equivalent. Because it usually costs less to make, the volume it earns and the margin it carries compound in the same direction.',
+  },
+  {
+    icon: '📦',
+    title: 'Less spoilage, less waste',
+    body: 'Dry legumes and grains keep for months, not days. Anchoring low-turnover dishes on shelf-stable staples instead of fresh meat and dairy cuts write-offs and gives the kitchen more slack.',
+  },
+  {
+    icon: '🎯',
+    title: 'Position for margin',
+    body: 'Guests order what’s easiest to notice. Put the plant dish with the best margin where eyes land first — top of the section, boxed, chef’s favorite — so the highest-margin dish is also the most-ordered one.',
+  },
+];
 
-function escHtml(s) {
-  return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-}
+const MOVES = [
+  {
+    n: 1,
+    title: 'Focus on tasty titles',
+    body: 'Name dishes for flavour, texture and provenance — the way you\'d talk about a dish you\'re proud of. “Smoky maple-glazed carrots” beats “healthy carrots.” Words like vegan, meat-free and healthy quietly read as compromise and suppress orders.',
+    cite: 'Indulgent flavour names were chosen up to 41% more often; one curry renamed “Mild & Sweet Chickpea Curry” sold 108% better.',
+  },
+  {
+    n: 2,
+    title: 'Do NOT separate the menu',
+    badge: 'Biggest mistake',
+    body: 'A separate “Vegan / Veggie” box tells meat-eaters this isn\'t for them. Plant-rich dishes belong beside comparable animal ones, inside each course, on equal footing. Keep your (V) markers — guests need them, and allergen info is often a legal requirement — just move them to the end of the line so the food leads, not the label.',
+    cite: 'Integrating plant dishes instead of a separate “vegetarian” section raised how often diners picked them by ~7 percentage points (Bacon & Krpan, 2018). Note: a menu-choice experiment, not till data.',
+  },
+  {
+    n: 3,
+    title: 'Be proud and plant-based',
+    body: (
+      <>
+        Train the floor to genuinely recommend the plant-rich dishes and highlight them via
+        &ldquo;Our Favorite&rdquo; sections on your menu — but make sure your staff loves what
+        they&rsquo;re serving, since guests can tell if it&rsquo;s not a real recommendation.{' '}
+        <a href="/dishes">Click here for inspiration</a>, and if you still can&rsquo;t genuinely
+        recommend anything on your menu yet,{' '}
+        <a href="mailto:aheadofthemenu@gmail.com?subject=Help%20with%20our%20plant-based%20dishes">
+          reach out to us for help
+        </a>.
+      </>
+    ),
+  },
+  {
+    n: 4,
+    title: 'Make meats add-ons',
+    body: 'Flip the framing. Not “veggie burger (or add beef)” but “our signature mushroom-and-bean burger — make it beef +$2.” The plant version becomes the dish; the animal version becomes the deliberate opt-in.',
+    cite: 'In a field trial, flipping the default took one dish from ~9% to 80% uptake, and another from 16% to 58%.',
+  },
+  {
+    n: 5,
+    title: 'Price plant-based dishes fairly',
+    body: 'Don\'t try to charge more for plant-based dishes. An equivalent plant dish should cost the same or less than its animal counterpart — and oat milk shouldn\'t cost more than regular milk. A premium tells guests the plant option is a sacrifice, and it measurably discourages plant-based purchases.',
+  },
+  {
+    n: 6,
+    title: 'Have lots of options',
+    body: 'More plant-based dishes on the menu means more get ordered — across starters, mains, sides, desserts and drinks, not just one.',
+    cite: 'Across 90,000+ meals, doubling the share of plant-based options raised plant sales 41–79% and cut meat sales ~15 percentage points.',
+  },
+  {
+    n: 7,
+    title: 'Save money on the meat',
+    body: 'Shrink the meat share per plate and fold in plant-based proteins without losing the taste. Finely chopped mushrooms folded into patties at 25–30% keep the juiciness guests order for. Aquafaba for eggs, plant milks for dairy, and legumes for extra protein.',
+    cite: 'Mushroom-beef blends can read as more savoury than all-beef, not less.',
+  },
+  {
+    n: 8,
+    title: 'Make plant-rich eating feel abundant',
+    body: 'Tie it together with generosity. Hero descriptions, tempting sides, a plant-forward special that changes with the season — the menu should make eating plants feel like a treat, not a box ticked.',
+  },
+  {
+    n: 9,
+    title: 'The Extra Mile',
+    badge: 'Bonus move',
+    badgeTone: 'accent',
+    body: 'Once the first eight are working, go further. Reward plant-based orders through your loyalty program, build combo platters that lean plant-forward by default, or put the impact right on the menu next to the price — the water, carbon and animal lives a dish saves versus its meat-based counterpart.',
+    cite: 'e.g. “Saves a life, 450 gallons of water, and 6kg of CO2 versus the beef version.” Guests remember a number next to a price far longer than a paragraph.',
+  },
+];
 
-// Inline markdown → safe HTML.
-// Order: escape special chars first, then apply markdown patterns (which all
-// use plain ASCII tokens that survive escaping). Bolded dish names that
-// resolve in the lookup become anchors; other bolds stay as <strong>.
-function inline(s) {
-  if (!s) return '';
-  let out = escHtml(String(s));
-  out = out.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g,
-    (_, text, url) => `<a class="ext-link" href="${url}" target="_blank" rel="noopener noreferrer">${text}</a>`);
-  out = out.replace(/==([^=]+)==/g, '<span class="accent-green">$1</span>');
-  out = out.replace(/\*\*([^*]+)\*\*/g, (_, inner) => {
-    const href = dishHref(inner);
-    return href
-      ? `<a class="dish-link" href="${href}"><strong>${inner}</strong></a>`
-      : `<strong>${inner}</strong>`;
-  });
-  out = out.replace(/(^|[^*])\*([^*]+)\*([^*]|$)/g, '$1<em>$2</em>$3');
-  out = out.replace(/`([^`]+)`/g, '<code>$1</code>');
-  out = out.replace(/\$(\d+(?:\.\d+)?)(?:[–\-—]\$?(\d+(?:\.\d+)?))?/g,
-    (_, a, b) => b
-      ? `<span class="price">$${a}–${b}</span>`
-      : `<span class="price">$${a}</span>`);
-  return out;
-}
+const SOURCES = [
+  {
+    href: 'https://globescan.com/2024/06/05/insight-of-the-week-plant-based-consumption-across-generations/',
+    title: 'Plant-Based Consumption across Generations',
+    src: 'GlobeScan “Grains of Truth” — 29,565 people, 31 markets (2023) — the generational split',
+  },
+  {
+    href: 'https://pubmed.ncbi.nlm.nih.gov/29428546/',
+    title: '(Not) Eating for the environment: restaurant menu design and vegetarian food choice',
+    src: 'Bacon & Krpan, Appetite 125 (2018) 190-200 — the separate-section finding',
+  },
+  {
+    href: 'https://www.wri.org/insights/its-all-name-how-boost-sales-plant-based-menu-items',
+    title: 'It’s All in a Name: How to Boost the Sales of Plant-Based Menu Items',
+    src: 'World Resources Institute — Better Buying Lab',
+  },
+  {
+    href: 'https://www.pnas.org/doi/10.1073/pnas.1907207116',
+    title: 'Impact of increasing vegetarian availability on meal selection and sales in cafeterias',
+    src: 'Garnett et al., PNAS',
+  },
+  {
+    href: 'https://www.sciencedirect.com/science/article/pii/S0195666322001404',
+    title: 'A reversal of defaults: a menu-based default nudge for plant-based alternatives',
+    src: 'Appetite — default-framing field trial',
+  },
+  {
+    href: 'https://gfi.org/resource/promoting-plant-based-items-on-menus/',
+    title: 'How to promote plant-based items on menus',
+    src: 'Good Food Institute',
+  },
+  {
+    href: 'https://www.mushroomcouncil.com/the-blend/',
+    title: 'The Blend — mushroom & meat “protein flip”',
+    src: 'Mushroom Council / Culinary Institute of America',
+  },
+  {
+    href: 'https://www.betterfoodfoundation.org/research-and-reports/research-plant-based-defaults-work/',
+    title: 'Why plant-based defaults work',
+    src: 'Better Food Foundation — DefaultVeg',
+  },
+];
 
-// Split a tip-section body into themed clusters keyed by their bold header.
-// Body is markdown, structured like:
-//   **Header A** (subtitle):
-//   - bullet
-//   - bullet
-//
-//   **Header B** (subtitle):
-//   - bullet
-function splitClusters(body) {
-  const clusters = [];
-  let current = null;
-  let buf = [];
-
-  function flush() {
-    if (current) {
-      current.body = buf.join('\n').trim();
-      clusters.push(current);
-    }
-    current = null;
-    buf = [];
-  }
-
-  const lines = body.split(/\r?\n/);
-  for (const raw of lines) {
-    const line = raw.trim();
-    // A header line is **Header text** optionally followed by ":" or " (subtitle)"
-    const headerMatch = line.match(/^\*\*([^*]+)\*\*\s*(?:\(([^)]+)\))?\s*[:.]?\s*$/);
-    // Guard against bullet rows ("- foo" / "* foo") but allow standalone **bold** headers.
-    if (headerMatch && !/^[-*]\s/.test(line)) {
-      flush();
-      current = { title: headerMatch[1].trim(), subtitle: headerMatch[2]?.trim() || null, body: '' };
-      continue;
-    }
-    if (current) {
-      buf.push(raw);
-    } else if (line) {
-      // Body content before any header — treat as intro.
-      if (!clusters.length || clusters[0].title !== '__intro__') {
-        clusters.unshift({ title: '__intro__', subtitle: null, body: '' });
-      }
-      clusters[0].body += (clusters[0].body ? '\n' : '') + raw;
-    }
-  }
-  flush();
-  return clusters;
-}
-
-// Render a body string (after splitClusters) into either a list of dish cards
-// (when bullets contain a $price tier) or a plain bullet list.
-function renderClusterBody(body) {
-  const lines = body.split(/\r?\n/);
-  const items = [];
-  let buf = [];
-
-  function flushPara() {
-    if (buf.length) {
-      items.push({ kind: 'p', text: buf.join(' ').trim() });
-      buf = [];
-    }
-  }
-
-  for (const raw of lines) {
-    const line = raw.trim();
-    if (!line) { flushPara(); continue; }
-    const ulMatch = line.match(/^[-*]\s+(.*)$/);
-    const olMatch = line.match(/^\d+\.\s+(.*)$/);
-    if (ulMatch) { flushPara(); items.push({ kind: 'ul', text: ulMatch[1] }); continue; }
-    if (olMatch) { flushPara(); items.push({ kind: 'ol', text: olMatch[1] }); continue; }
-    buf.push(line);
-  }
-  flushPara();
-
-  // Are these dish-card bullets (contain a $price tier or em-dash separator)?
-  const isDishCards = items.length >= 3 &&
-    items.every(it => it.kind === 'ul') &&
-    items.filter(it => /\$\d+/.test(it.text)).length >= Math.ceil(items.length * 0.5);
-
-  if (isDishCards) {
-    return (
-      <div className="dish-grid">
-        {items.map((it, i) => {
-          const parts = it.text.split(/\s+—\s+/);
-          const head = parts[0];
-          const rest = parts.slice(1).join(' — ');
-          // Strip markdown bold from head for lookup
-          const headPlain = head.replace(/\*\*/g, '');
-          const href = dishHref(headPlain);
-          const headHtml = inline(head);
-          return (
-            <article key={i} className="dish-pill">
-              {href
-                ? <a className="dish-name dish-link" href={href} dangerouslySetInnerHTML={{ __html: headHtml }} />
-                : <div className="dish-name" dangerouslySetInnerHTML={{ __html: headHtml }} />}
-              {rest && <div className="dish-meta" dangerouslySetInnerHTML={{ __html: inline(rest) }} />}
-            </article>
-          );
-        })}
-      </div>
-    );
-  }
-
-  // Otherwise plain blocks (paragraphs + simple lists)
-  const blocks = [];
-  let listType = null;
-  let listBuf = [];
-  function flushList() {
-    if (listBuf.length) {
-      const Tag = listType === 'ol' ? 'ol' : 'ul';
-      blocks.push(
-        <Tag key={`l-${blocks.length}`} className={Tag === 'ol' ? 'numbered' : 'bulleted'}>
-          {listBuf.map((t, j) => <li key={j} dangerouslySetInnerHTML={{ __html: inline(t) }} />)}
-        </Tag>
-      );
-      listBuf = [];
-      listType = null;
-    }
-  }
-  for (const it of items) {
-    if (it.kind === 'p') {
-      flushList();
-      blocks.push(<p key={`p-${blocks.length}`} dangerouslySetInnerHTML={{ __html: inline(it.text) }} />);
-    } else {
-      if (listType && listType !== it.kind) flushList();
-      listType = it.kind;
-      listBuf.push(it.text);
-    }
-  }
-  flushList();
-  return <>{blocks}</>;
-}
-
-// Quick-glance summary cards at the top: surface anchor / showcase / quick-service archetypes.
-function ArchetypeStrip() {
-  const cards = [
-    {
-      id: 'anchor',
-      eyebrow: 'High-margin · Low-labor',
-      title: 'Anchor dishes',
-      blurb: 'Sub-$1.50 food cost. Holds 3+ days. Plates in <5 minutes.',
-      examples: ['Dal makhani', 'Mole poblano', 'Mujadara', 'Cuban black beans', 'Hummus'],
-    },
-    {
-      id: 'showcase',
-      eyebrow: 'High-ticket · High-interest',
-      title: 'Showcase plates',
-      blurb: 'The destination dishes. Drive press, social, and check average.',
-      examples: ['Beef Wellington', 'Bistecca alla Fiorentina', 'Picanha', 'Peking "Duck"', 'Bourguignon'],
-    },
-    {
-      id: 'fast',
-      eyebrow: 'Fast-service · Lunch volume',
-      title: 'Quick-fire mains',
-      blurb: 'Under 8 minutes from prepped components. Your $13–17 lunch tier.',
-      examples: ['Pad thai', 'Bánh mì', 'Falafel', 'Bibimbap', 'Mac & cheese'],
-    },
-  ];
+function LeverCard({ l }) {
   return (
-    <div className="archetype-strip">
-      {cards.map(c => (
-        <article key={c.id} className={`arch arch-${c.id}`}>
-          <div className="eyebrow">{c.eyebrow}</div>
-          <h3>{c.title}</h3>
-          <p className="blurb">{c.blurb}</p>
-          <ul className="examples">
-            {c.examples.map(e => {
-              const href = dishHref(e);
-              return (
-                <li key={e}>
-                  {href ? <a href={href}>{e}</a> : e}
-                </li>
-              );
-            })}
-          </ul>
-        </article>
-      ))}
-    </div>
+    <article className="lever-card">
+      <span className="lever-icon" aria-hidden="true">{l.icon}</span>
+      <h3>{l.title}</h3>
+      <p>{l.body}</p>
+      {l.examples && (
+        <ul className="lever-examples">
+          {l.examples.map(e => <li key={e}>{e}</li>)}
+        </ul>
+      )}
+    </article>
+  );
+}
+
+function MoveCard({ m }) {
+  return (
+    <article className={'move-card' + (m.badge ? (m.badgeTone === 'accent' ? ' bonus' : ' flagged') : '')}>
+      <div className="move-head">
+        <div className="move-num">Move {m.n}</div>
+        {m.badge && (
+          <span className={'move-badge' + (m.badgeTone === 'accent' ? ' bonus' : '')}>{m.badge}</span>
+        )}
+      </div>
+      <h3>{m.title}</h3>
+      <p>{m.body}</p>
+      {m.cite && <p className="cite">{m.cite}</p>}
+    </article>
   );
 }
 
 function App() {
-  const { useMemo } = React;
-  const renderedTips = useMemo(
-    () => tips.map(t => ({ ...t, clusters: splitClusters(t.body) })),
-    []
-  );
   return (
     <>
       <section className="tips-hero">
-        <div className="eyebrow"><span className="dot"/>Tips · Restaurant deployment guidance</div>
+        <div className="trend-line">
+          <span className="dot" />
+          Gen Z and Millennials eat plant-based food most of the time at nearly twice the rate of Boomers &mdash; and the menus that meet them are the ones printing money.
+        </div>
+        <div className="eyebrow"><span className="dot" />Tips &amp; Tricks &middot; Research-backed, profit-focused</div>
         <h1>
-          Run a plant-based kitchen that <em>pays the rent</em>.
+          Make guests happier <em>and save yourself some money</em> while you&rsquo;re doing it.
         </h1>
-        <p className="lede">
-          Where to put the high-margin items, where to lead with branded faux-meat, how to source it,
-          and the menu-engineering tactics that turn a 28% food-cost dish into a 9% one.
+        <div className="stat-strip">
+          {STATS.map(s => (
+            <div className="stat" key={s.label}>
+              <div className="num">{s.num}</div>
+              <div className="lbl">{s.label}</div>
+            </div>
+          ))}
+        </div>
+        <div className="cta-row">
+          <a className="tt-btn tt-btn-primary" href="#levers">See the profit levers</a>
+          <a className="tt-btn tt-btn-secondary" href="#moves">See the eight moves</a>
+        </div>
+      </section>
+
+      <section id="levers" className="lever-section">
+        <div className="section-head">
+          <div className="eyebrow-sm">Kitchen economics</div>
+          <h2>Why you&rsquo;ll save money with plants</h2>
+        </div>
+        <div className="lever-grid">
+          {LEVERS.map(l => <LeverCard l={l} key={l.title} />)}
+        </div>
+        <p className="section-note">
+          Want a hand applying this to your own menu? <a href="/revamp#business">Get a Revamp</a> and we&rsquo;ll mark up your actual dishes.
         </p>
       </section>
 
-      <ArchetypeStrip />
+      <section id="moves" className="moves-section">
+        <div className="section-head">
+          <div className="eyebrow-sm">The playbook</div>
+          <h2>Eight moves, backed by research</h2>
+        </div>
+        <div className="moves-grid">
+          {MOVES.map(m => <MoveCard m={m} key={m.n} />)}
+        </div>
+      </section>
 
-      <main className="tips">
-        {tips.length === 0 ? (
-          <div className="empty-state">
-            <h3>Tips data missing</h3>
-            <p>Run the parser:</p>
-            <p style={{ fontFamily: 'var(--mono)', fontSize: 12, opacity: 0.7, marginTop: 12 }}>
-              bun recipes/base_document/scripts/parse-catalog.ts
-            </p>
-          </div>
-        ) : renderedTips.map((t, idx) => {
-          const clusters = t.clusters;
-          return (
-            <article key={t.id} className="tip-section">
-              <div className="tip-num">{String(idx + 1).padStart(2, '0')}</div>
-              <h2>{t.title}</h2>
-              <div className="tip-body">
-                {clusters.map((cluster, i) => (
-                  <section key={i} className={"cluster" + (cluster.title === '__intro__' ? ' intro' : '')}>
-                    {cluster.title !== '__intro__' && (
-                      <header className="cluster-head">
-                        <h4>{cluster.title}</h4>
-                        {cluster.subtitle && <span className="cluster-sub">{cluster.subtitle}</span>}
-                      </header>
-                    )}
-                    {renderClusterBody(cluster.body)}
-                  </section>
-                ))}
-              </div>
-            </article>
-          );
-        })}
-      </main>
+      <section className="sources-section">
+        <div className="section-head">
+          <div className="eyebrow-sm">Go deeper</div>
+          <h2>The research behind the moves</h2>
+        </div>
+        <ul className="sources">
+          {SOURCES.map(s => (
+            <li key={s.href}>
+              <a href={s.href} target="_blank" rel="noopener noreferrer">{s.title}</a>
+              <span className="src">{s.src}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
 
       <footer className="foot">
-        Source: <em>vegan-restaurant-catalog-v5.md</em> · Pricing reflects 2025–26 US foodservice rates · Verify quarterly with your distributor.
+        Guidance draws on published behavioural science and restaurant field trials, plus standard foodservice
+        cost benchmarks &middot; offered as suggestions, not guarantees &middot; verify pricing quarterly with your distributor.
       </footer>
     </>
   );

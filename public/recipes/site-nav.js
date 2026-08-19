@@ -24,6 +24,7 @@
   // terms-of-use review. Re-add { id: 'recipes', href: '/recipes', label: 'Recipes' }
   // to restore it.
   const BUSINESS_TABS = [
+    { id: 'revamp',   href: '/revamp',           label: 'Getting Started' },
     { id: 'menus',    href: '/menus',            label: 'Menus' },
     { id: 'dairy',    href: '/top-alternatives', label: 'Top Alternatives' },
     { id: 'tips',     href: '/tips-and-tricks',  label: 'Tips & Tricks' },
@@ -51,7 +52,7 @@
     // Mode: signed in → account type wins; else the entry section decides (business-only
     // pages → business, /dishes → consumer); on ambivalent pages the #business/#consumer
     // param carries it forward (no param → consumer).
-    const BUSINESS_SECTIONS = ['recipes', 'menus', 'tips'];
+    const BUSINESS_SECTIONS = ['recipes', 'menus', 'tips', 'revamp'];
     const CONSUMER_SECTIONS = ['dishes', 'creators'];
     const mode = session
       ? (userType === 'business' ? 'business' : 'consumer')

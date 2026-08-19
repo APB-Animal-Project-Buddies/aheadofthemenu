@@ -567,6 +567,17 @@ function tintForCategory(cat, index) {
 //   3. Description (blurb)
 //   4. Stat strip (consumer rating)
 //   5. "See all alternatives" button → opens modal listing every pick
+/**
+ * First sentence of a blurb, so a card shows one line of context instead of a
+ * paragraph. Falls back to the whole string when there's no sentence break.
+ * Abbreviation-naive on purpose — the blurbs are plain prose.
+ */
+function firstSentence(text) {
+  if (!text) return '';
+  const m = String(text).match(/^.*?[.!?](?=\s|$)/);
+  return (m ? m[0] : String(text)).trim();
+}
+
 function CategoryCard({ cat, parityText, index }) {
   const [modalOpen, setModalOpen] = useState(false);
   const catHasParity = cat.tasteParity || (cat.picks || []).some(p => p.tasteParity);
@@ -596,7 +607,6 @@ function CategoryCard({ cat, parityText, index }) {
         </div>
         <div className="cat-block">
           <div className="cat-name">{displayName}</div>
-          <div className="cat-use">{cat.use}</div>
         </div>
       </div>
 
@@ -614,8 +624,8 @@ function CategoryCard({ cat, parityText, index }) {
         </div>
       )}
 
-      {/* 3. Description */}
-      <p className="blurb">{cat.blurb}</p>
+      {/* 3. One sentence of context — the full blurb lives in the modal. */}
+      {cat.blurb && <p className="blurb">{firstSentence(cat.blurb)}</p>}
 
       {/* 4. Open modal — even for single-pick categories */}
       {picks.length > 0 && (
@@ -703,38 +713,6 @@ function AlternativesTab({ data, sectionLabel, parityLabel }) {
       {/* Section header */}
       <div className="alt-section-header">
         <h2>{sectionLabel}</h2>
-        <p className="alt-section-sub">{data.headline}</p>
-      </div>
-
-      {/* Section-level callouts */}
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginBottom: 24 }}>
-        {hasParity && (
-          <div style={{
-            display: 'inline-flex', alignItems: 'center', gap: 10,
-            padding: '8px 14px', borderRadius: 999,
-            background: 'oklch(0.62 0.14 45 / 0.12)',
-            border: '1.5px solid var(--terracotta)',
-            fontSize: 13,
-            color: 'oklch(0.45 0.10 35)', fontWeight: 600,
-          }}>
-            <span>&#129505;</span>
-            {parityText} — matched the animal benchmark in blind testing
-          </div>
-        )}
-        {recommends.length > 0 && (
-          <div style={{
-            display: 'inline-flex', alignItems: 'center', gap: 10,
-            padding: '8px 14px', borderRadius: 999,
-            background: 'oklch(0.78 0.13 85 / 0.18)',
-            border: '1.5px solid oklch(0.78 0.13 85)',
-            fontSize: 13,
-            color: 'oklch(0.32 0.06 145)', fontWeight: 600,
-          }}>
-            <span>&#128081;</span>
-            We recommend: {recommends.join(' · ')}
-            <span style={{ fontWeight: 500, opacity: 0.75 }}>(for those willing to spend a bit more)</span>
-          </div>
-        )}
       </div>
 
       <div className="alt-grid">
@@ -744,10 +722,11 @@ function AlternativesTab({ data, sectionLabel, parityLabel }) {
       </div>
 
       {/* Footer attribution */}
-      <div className="alt-foot">
-        Top products distilled from <a href={data.sourceUrl} target="_blank" rel="noopener noreferrer">{data.source}</a>.
-        We will return to highlight more findings from the study soon.
-      </div>
+      {data.source && (
+        <div className="alt-foot">
+          Source: <a href={data.sourceUrl} target="_blank" rel="noopener noreferrer">{data.source}</a>
+        </div>
+      )}
     </section>
   );
 }
