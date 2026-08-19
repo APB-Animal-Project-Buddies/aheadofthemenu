@@ -120,6 +120,11 @@ export function CreatorsGallery({ creators }: { creators: GalleryCreator[] }) {
             {secondaryLabel(c) ? (
               <div className="mt-0.5 line-clamp-1 text-xs text-neutral-500">({secondaryLabel(c)})</div>
             ) : null}
+            {c.plant_based ? (
+              <div className="mt-1.5 inline-flex items-center gap-1 rounded-full bg-green-50 px-2.5 py-1 text-[11px] font-semibold text-green-700">
+                <span aria-hidden="true">💚</span> Fully Plant-Based
+              </div>
+            ) : null}
             {c.dishCount ? (
               <div className="mt-0.5 text-xs text-neutral-400">
                 {c.dishCount} recipe{c.dishCount === 1 ? "" : "s"}

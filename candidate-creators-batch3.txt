@@ -1,0 +1,82 @@
+# Batch 3 — New Vegan Recipe Creator Candidates (PENDING APPEND)
+
+Status: researched 2026-07-19. NOT yet in the Contact Sheet — the sheet's OAuth token
+expired mid-session; append after Claude Code restart + re-auth. Final dedupe should be
+re-run against the LIVE sheet before appending (a few may have been added in parallel).
+
+Verified By = "Claude" for all. Contact prefers EMAIL where a real one was found on a page.
+Vegan Status uses: Vegan (fully) / Plant-based focus / Vegetarian.
+
+Excluded as already-in-sheet duplicates: Vegan Punks, Vegan Richa, Plant-Based on a Budget
+(= Toni Okamoto, already listed as Food Sharing Vegan).
+
+Format: Name (Person / Brand) | Position | Contact Type | Contact | Vegan Status | Notes
+
+============================================================
+SOUTH ASIAN / INDIAN
+============================================================
+1. Sara N. / The Pakistani Vegan | Creator of The Pakistani Vegan | Email | thepakvegan@gmail.com | Vegan | Atlanta-based, vegan 13+ yrs; veganized Pakistani classics (biryani, chapli kabab, ras malai); runs Punjab Spice Company. Email high conf (thepakistanivegan.com). IG @thepakistanivegan.
+2. Sanah Alban / Sabzi Khor | Creator of Sabzi Khor | Email | sabzi.khor.2020@gmail.com | Plant-based focus | Plant-based Pakistani blog (Kabuli pilau, bolani); small IG (~500) but explicit business email. sabzikhor.com. IG @sabzi.khor.
+3. Dr. Sheil Shukla / Plant-Based Artist | Creator of Plant-Based Artist; James Beard-nominated author | Website | https://www.sheilshukla.com/let-us-connect | Plant-based focus | ~90K IG; author "Plant-Based India" + forthcoming "Kari"; Gujarati/Indian vegan. No public email (form only). IG @plantbasedartist.
+4. Diksha Patgiri | Creator of @dikshapatgirionlyfood | Instagram | @dikshapatgirionlyfood | Vegan | Assam-based vegan home cook; ~426K IG + ~587K YouTube; big reach, no email/blog — IG DM only.
+5. Nisha Balsara / Lose Your Veganity | Creator of Lose Your Veganity (YouTube) | Instagram | @nisha.balsara | Vegan | Vegan Indian recipes + lifestyle; actress/host so leans lifestyle; no public email. Also X @nmbalsara.
+6. Shivani / Kahaniwali Shivani | Creator of Kahaniwali Shivani | Instagram | @kahaniwalishivani | Vegan | India-based; vegan Indian recipes + family/regional storytelling; no website/email, surname not public.
+7. The Vegan Food Junction (name not public) | Creator of @theveganfoodjunction | Instagram | @theveganfoodjunction | Vegan | Vegan Indian dishes (curries, biryanis); no website/email/real name found — lowest-confidence contact.
+
+============================================================
+EAST & SOUTHEAST ASIAN
+============================================================
+8. Hannah Che / The Plant-Based Wok | Author of "The Vegan Chinese Kitchen" | Email | hello@theplantbasedwok.com | Vegan | Deep Cantonese/Sichuan/Chinese Buddhist vegan; site has press media kit. Email high conf. IG @hannah.che.
+9. George Lee / Chez Jorge | Author of "A-Gong's Table" | Email | hello@chejorge.com | Vegan | ~618K IG; Taiwanese heritage vegan recipes. Email high conf. IG @chez.jorge.
+10. Lisa Kitahara / Okonomi Kitchen | Creator of Okonomi Kitchen | Email | lisa@juggernautmp.com | Vegan | ~505K IG; Japanese-Canadian; email is her talent mgmt (Juggernaut MP), med conf — or DM @okonomikitchen. okonomikitchen.com.
+11. Akiko / Plant-Based Matters | Creator of Plant-Based Matters | Website | https://plantbasedmatters.net/contact-us/ | Vegan | ~26K IG; authentic home-style Japanese vegan; no public email (form). IG @plantbased_matters.
+12. RG Enriquez-Diez / ASTIG Vegan | Author of "Filipino Vegan" | Email | rg@astigvegan.com | Vegan | Flagship vegan Filipino creator; featured VegNews/Bon Appetit/CNN PH. Email high conf. IG @astigvegan.
+13. Kip (Catherine) / Messy Vegan Cook | Creator of Messy Vegan Cook | Website | https://messyvegancook.com/contact/ | Vegan | Vegan since 2009; deep Thai + other Asian; no public email (form). IG @Kippysnacks.
+14. Davina Goh / Davina Da Vegan | Creator of Davina Da Vegan | Email | hello@davinadavegan.com | Vegan | Malaysian Nyonya/Peranakan vegan (Pong Teh, rendang). Email high conf. IG handle not verified.
+
+============================================================
+LATIN AMERICAN / CARIBBEAN / AFRICAN / MIDDLE EASTERN
+============================================================
+15. Alexa Soto / Fueled Naturally | Author of "Plantas" (vegan Mexican) | Email | Fuelednaturally@gmail.com | Vegan | Mexican-American; Forbes Best Cookbook Summer 2024; large following. Email med (IG bio). fuelednaturally.net. IG @alexafuelednaturally.
+16. Bruna / Feed Yourself Plants | Creator of Feed Yourself Plants | Email | feedyourselfplants@gmail.com | Vegan | Brazilian (Vancouver-based); pao de queijo etc.; caveat — blog also carries many non-Brazilian recipes. Email high conf. IG @feedyourselfplants.
+17. Tiffany / Ital Eats and Treats | Creator of Ital Eats and Treats | Email | italeatsandtreats@gmail.com | Vegan | Jamaican-American; authentic vegan Caribbean/Jamaican; also TikTok/YouTube. Email high conf. IG @italeatsandtreats.
+18. Fati / Je Gbese | Creator of Je Gbese | Email | fati@jegbese.com | Vegan | Nigerian-born (Bronx-raised); plant-based West African; alt jegbese@gmail.com. Email high conf. IG @jegbese.
+19. Tomi Makanjuola / The Vegan Nigerian | Author of "Vegan Nigerian Kitchen" | Email | vegannigerian@gmail.com | Vegan | Nigeria-born, UK-based; long-running blog + private-chef dining. Email high conf. IG @vegannigerian.
+20. Helen / Ethiopian Foodie | Creator of Ethiopian Foodie; founder Amaarech spice blends | Instagram | @ethiopianfoodie | Vegan | ~18K IG; vegan Ethiopian recipes/ebook. Email hello@ethiopianfoodie.co.uk only med conf (site pages 404'd) — prefer IG.
+21. Elham / Plant-Based Persian | Creator of Plant-Based Persian | Website | https://plantbasedpersian.com/contact/ | Vegan | Authentic vegan Persian recipes w/ her mom; a @plantbasedpersian.com email exists on page but local-part unreadable — use form. IG @plant_basedpersian.
+22. Mana Shamshiri / The Iranian Vegan | Creator of The Iranian Vegan | Instagram | @theiranianvegan | Vegan | ~358K IG, high reach; Persian vegan; also YouTube; no email surfaced — IG DM.
+
+============================================================
+VEGAN BAKING & DESSERTS
+============================================================
+23. Anthea Cheng / Rainbow Nourishments | Cookbook author; vegan cakes/desserts | Email | anthea@rainbownourishments.com | Vegan | Australia-based cook/photographer; showstopper vegan cakes. Email high conf. IG @rainbownourishments.
+24. Brittany Berlin / The Banana Diaries | Author of "Baked With Love" | Email | hello@thebananadiaries.com | Vegan | Vegan/allergen-friendly baking; email is a media-kit request line. High conf. IG @the_bananadiaries.
+25. Hannah / Domestic Gothess | Creator of Domestic Gothess | Website | https://domesticgothess.com/work-with-me/ | Vegan | UK vegan recipe developer/food photographer; baking focus; on-page email redacted — use Work With Me. IG @domestic_gothess.
+26. Sarah / My Darling Vegan | Creator of My Darling Vegan | Email | sarah@mydarlingvegan.com | Vegan | Portland-based; strong pastry/dessert output; Work With Us page too. Email high conf. IG @mydarlingvegan.
+27. Marly McMillen Beelman / Namely Marly | Creator of Namely Marly | Website | https://namelymarly.com/work-with-us/ | Vegan | Long-running vegan site, cookies/cakes/chocolate; email obfuscated — use Work With Us. IG @namelymarly.
+28. Chloe / BakedbyClo | Creator of BakedbyClo | Website | https://bakedbyclo.com/contact/ | Vegan | Dundee, UK vegan desserts (cakes, tarts, cookies); email redacted in sources — not guessed. IG @bakedbyclo.
+29. Jessica / Plant Based Jess | Creator of Plant Based Jess | Email | jessica@plantbasedjess.com | Plant-based focus | Maine-based; solid dessert/baking; site says "plant-based" not explicitly "vegan" — confirm. High conf email. IG @plantbasedjesscom.
+30. Tom Adams / Project Vegan Baking | Creator of Project Vegan Baking | Instagram | @projectveganbaking | Vegan | Scientist-turned-baker (~50-55K IG); science-driven veganized classics (macarons); no public email — DM.
+
+============================================================
+HIGH-PROTEIN / FITNESS + BUDGET / QUICK / FAMILY
+============================================================
+31. Natalie Matthews / Fit Vegan Chef | IFBB-pro vegan bodybuilder; cookbook author | Email | info@fitveganchef.com | Vegan | High-protein "Fit Vegan Kitchen" (100+ recipes) + coaching. Email high conf. IG @fitveganchef.
+32. Stephanie Manzinali / That Vegan Babe | Creator of That Vegan Babe | Email | mgmt@thatveganbabe.com | Vegan | High-protein vegan recipes + fitness programs; site contact is a form, email from secondary source (med) — verify. IG @that.veganbabe.
+33. Derek Simnett / Simnett Nutrition | Certified holistic nutritionist | Email | Info@simnettnutrition.com | Vegan | ~446K YT; "Easy Vegan Muscle Meals" ebook w/ macros; strong high-protein lane. High conf. IG @simnettnutrition.
+34. Carleigh Bodrug / PlantYou | NYT-bestselling author (Scrappy/Quickies) | Email | carleigh@portraitmgmt.com | Vegan | Huge quick/budget brand (millions of followers); on-site emails Cloudflare-obscured, mgmt email is reliable (med). plantyou.com. IG @plantyou.
+35. Liz & Paul Madsen / ZardyPlants | Creators of ZardyPlants | Email | liz@zardyplants.com | Vegan | Easy budget-friendly oil-free comfort food; email via search (med), alt zardyplants@gmail.com — verify. IG @zardyplants.
+36. Vanessa Croessmann / Vegan Family Recipes | Author of "Awesome Vegan Soups" | Website | https://www.veganfamilyrecipes.com/contact | Plant-based focus | ~19K IG; family-friendly; recipes vegan but runs a flexible household; form only. IG @veganfamilyrecipes.
+37. Nisha Melvani / Cooking for Peanuts | Registered dietitian | Email | info@cookingforpeanuts.com | Plant-based focus | Pantry-friendly family recipes; recipes vegan but no stated strict personal vegan diet. IG @cookingforpeanuts.
+
+============================================================
+EUROPEAN (often non-English-first) + GOURMET / CHEF-DRIVEN
+============================================================
+38. Nadine Horn & Jörg Mayer / Eat This! | One of Germany's biggest vegan blogs; cookbook authors | Website | https://www.eat-this.org/pr-media/ | Vegan | 500+ recipes since 2011; no public email — PR page/form. IG @eatthisorg.
+39. Marie Laforêt / 100% Végétal | France's most prolific vegan cookbook author | Email | 100vegetal@gmail.com | Vegan | Blog since 2009; culinary author/photographer. Email high conf. IG @marielaforetvegan. (French-language)
+40. Stéphanie Tresch Medici / La fée Stéphanie | Vegan cookbook author | Website | https://www.lafeestephanie.com/contact/ | Vegan | Alsatian-Italian French-language creator; now fully vegan (legacy vegetarian archive); form only. IG @lafeestephanie.
+41. Serena / Benvenuti a Las Vegans | Creator on GialloZafferano network | Email | thinksfood@gmail.com | Vegan | Italian; veganizes classic Italian dishes. Email high conf. IG @benvenuti_a_las_vegans. (Italian-language)
+42. Gloria Carrión Moñiz / La Gloria Vegana | Author of "Recetas veganas fáciles" | Email | info@lagloriavegana.com | Vegan | Spanish 100%-plant-based; blog since 2015; offers collabs. Email high conf. IG @lagloriavegana. (Spanish-language)
+43. Lenna Omrani | Simple/healthy vegan recipes | Email | lenna@therightplace.tv | Vegan | Dutch creator; dedicated collab email + kitchen@/management@. High conf. lennaomrani.com. IG @lennaomrani.
+44. Maricel Lukkanit / Vegan Crush | Gourmet/raw vegan chef | Email | mail@maricelsvegancrush.com | Vegan | German-origin, now Bangkok-based; weekly recipe YouTube + workshops; chef-driven gourmet. High conf. IG @maricelsvegancrush.
+45. Max La Manna | Low-waste plant-based chef/author | Website | https://www.maxlamanna.com/contact | Vegan | ~1M IG; "World's Best Vegan Cookbook 2023"; US-born UK-based; no public email — press/business form. IG @maxlamanna.

@@ -21,7 +21,7 @@ type Creator = { display_name: string; creator_name: string | null };
 export async function GET() {
   try {
     const res = await graphql<{ creators: Creator[] }>(
-      `query { creators(order_by: { display_name: asc }) { display_name creator_name } }`,
+      `query { creators(where: { hidden: { _eq: false } }, order_by: { display_name: asc }) { display_name creator_name } }`,
       { useAdminSecret: true }
     );
     if (res.errors?.length) throw new Error(res.errors[0].message);

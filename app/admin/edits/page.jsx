@@ -8,6 +8,7 @@ import { diffEatThisDishFields, formatEatThisField } from "@/lib/eat-this-dish-e
 const TABS = [
   { key: "dishes", label: "Dishes", list: "/api/admin/edits", act: (id) => `/api/admin/edits/${id}` },
   { key: "eat-this", label: "Eat This!", list: "/api/admin/eat-this/edits", act: (id) => `/api/admin/eat-this/edits/${id}` },
+  { key: "creator-claims", label: "Creator claims", list: "/api/admin/creator-claims", act: (id) => `/api/admin/creator-claims/${id}`, resKey: "claims" },
 ];
 
 export default function AdminEditsPage() {
@@ -30,7 +31,7 @@ export default function AdminEditsPage() {
       if (res.status === 401) { clearAdminSecret(); setAuthed(false); setError("Wrong admin secret."); return; }
       if (!res.ok) { setError("Failed to load proposals."); return; }
       const j = await res.json();
-      setEdits(j.edits || []);
+      setEdits(j[cfg.resKey || "edits"] || []);
     } catch { setError("Failed to load proposals."); }
     finally { setLoading(false); }
   }, [cfg.list]);
@@ -48,8 +49,17 @@ export default function AdminEditsPage() {
       if (!res.ok) {
         const j = await res.json().catch(() => ({}));
         setError(j.error || `Could not ${action}.`);
+        // A 409 here can mean the list is stale (e.g. a sibling creator claim
+        // was auto-rejected server-side when another claim on the same
+        // creator got approved) — refetch so the row's real current status
+        // shows up instead of leaving stale Approve/Reject buttons live.
+        if (res.status === 409) await load();
       } else {
-        setEdits((prev) => prev.filter((e) => e.id !== id));
+        // Refetch rather than only filtering out the acted-on row: approving
+        // one creator claim auto-rejects sibling pending claims on the same
+        // creator server-side, and a local filter would leave those stale
+        // rows visible as still-pending with live action buttons.
+        await load();
       }
     } catch { setError(`Could not ${action}.`); }
     finally { setBusy(null); }
@@ -113,11 +123,11 @@ export default function AdminEditsPage() {
       ) : null}
 
       <div className="mt-6 flex flex-col gap-6">
-        {edits.map((e) =>
-          tab === "dishes"
-            ? <DishEditCard key={e.id} e={e} act={act} busy={busy} />
-            : <RlEditCard key={e.id} e={e} act={act} busy={busy} />
-        )}
+        {edits.map((e) => {
+          if (tab === "dishes") return <DishEditCard key={e.id} e={e} act={act} busy={busy} />;
+          if (tab === "eat-this") return <RlEditCard key={e.id} e={e} act={act} busy={busy} />;
+          return <ClaimEditCard key={e.id} e={e} act={act} busy={busy} />;
+        })}
       </div>
     </main>
   );
@@ -211,6 +221,52 @@ function RlEditCard({ e, act, busy }) {
         <ReviewActions e={e} act={act} busy={busy} />
       </div>
       <div className="mt-4"><DiffRows changes={changes} cur={cur} prop={prop} format={formatEatThisField} /></div>
+    </div>
+  );
+}
+
+const URL_RE = /^https?:\/\//i;
+
+function ClaimEditCard({ e, act, busy }) {
+  const who = e.user?.metadata?.handle || e.user?.displayName || "anonymous";
+  const note = e.note?.trim();
+  // ClaimCreatorModal submits note as "{evidenceUrl}\n\n{freeform note}" (note
+  // optional) — split back apart the same way PendingBanner in
+  // ClaimCreatorSection.tsx does, so the link renders as a link and any
+  // free-text context the claimant added isn't glued into the href.
+  const [evidenceUrl, ...rest] = note ? note.split("\n\n") : [];
+  const extraNote = rest.join("\n\n").trim();
+  const evidenceIsUrl = !!evidenceUrl && URL_RE.test(evidenceUrl);
+  return (
+    <div className="rounded-[16px] border border-neutral-200 p-5">
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <Link href={`/creators/${e.creator?.slug || e.creator?.id}`} className="text-lg font-semibold text-apb hover:underline">
+            {e.creator?.display_name || "Creator"}
+          </Link>
+          <p className="mt-0.5 text-xs text-neutral-400">
+            claimed by {who}
+            {e.created_at ? ` · ${new Date(e.created_at).toLocaleString()}` : ""}
+          </p>
+          {note ? (
+            <>
+              {evidenceIsUrl ? (
+                <p className="mt-2 text-sm">
+                  <a href={evidenceUrl} target="_blank" rel="noopener noreferrer" className="text-apb hover:underline break-all">
+                    {evidenceUrl}
+                  </a>
+                </p>
+              ) : (
+                <p className="mt-2 text-sm italic text-neutral-600">“{evidenceUrl}”</p>
+              )}
+              {extraNote ? <p className="mt-1 text-sm italic text-neutral-600">“{extraNote}”</p> : null}
+            </>
+          ) : (
+            <p className="mt-2 text-sm text-neutral-400">No note provided.</p>
+          )}
+        </div>
+        <ReviewActions e={e} act={act} busy={busy} />
+      </div>
     </div>
   );
 }

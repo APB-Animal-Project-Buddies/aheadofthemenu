@@ -8,10 +8,9 @@ import { notFound } from "next/navigation";
 import {
   getCreatorProfileBySlug,
   getCreatorDishes,
-  orderedSocials,
-  type CreatorProfile,
   type CreatorTopVideo,
 } from "@/lib/creators";
+import { CreatorProfileEditor } from "@/components/CreatorProfileEditor";
 
 export const dynamic = "force-dynamic";
 
@@ -23,46 +22,6 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     title: `${name} — Creator`,
     description: creator.bio ?? `Recipes and profile for ${name}.`,
   };
-}
-
-function SocialLinks({ creator }: { creator: CreatorProfile }) {
-  // Present socials, primary_social pinned first (the creator's "current profile").
-  const links = orderedSocials(creator);
-  const extra = (creator.other_links ?? []).filter((l) => l && l.url);
-  if (!links.length && !extra.length) return null;
-  return (
-    <div className="mt-4 flex flex-wrap gap-2">
-      {links.map(({ key, label, url }) => {
-        const isPrimary = key === creator.primary_social;
-        return (
-          <a
-            key={key}
-            href={url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={
-              isPrimary
-                ? "rounded-full bg-apb px-4 py-1.5 text-sm font-semibold text-white transition hover:opacity-90"
-                : "rounded-full border border-neutral-200 bg-white/70 px-4 py-1.5 text-sm font-medium text-apb transition hover:border-apb hover:bg-white"
-            }
-          >
-            {label}
-          </a>
-        );
-      })}
-      {extra.map((l, i) => (
-        <a
-          key={`x-${i}`}
-          href={l.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="rounded-full border border-neutral-200 bg-white/70 px-4 py-1.5 text-sm font-medium text-neutral-600 transition hover:border-apb hover:bg-white"
-        >
-          {l.label || new URL(l.url).hostname.replace(/^www\./, "")}
-        </a>
-      ))}
-    </div>
-  );
 }
 
 function VideoEmbed({ platform, video }: { platform: "youtube" | "tiktok" | "instagram"; video: CreatorTopVideo }) {
@@ -118,48 +77,7 @@ export default async function CreatorPage({ params }: { params: { slug: string }
     <main className="mx-auto max-w-3xl px-4 py-8">
       <Link href="/dishes" className="text-sm text-neutral-400 hover:text-apb">← All dishes</Link>
 
-      {/* Header */}
-      <header className="mt-4 flex flex-col gap-5 sm:flex-row sm:items-start">
-        {creator.image_url ? (
-          // eslint-disable-next-line @next/next/no-img-element -- external/re-hosted URLs, no next/image domains configured
-          <img
-            src={creator.image_url}
-            alt={creator.display_name}
-            className="h-28 w-28 shrink-0 rounded-full border border-neutral-200 object-cover"
-          />
-        ) : (
-          <div className="flex h-28 w-28 shrink-0 items-center justify-center rounded-full border border-neutral-200 bg-apb/10 text-3xl font-bold text-apb">
-            {creator.display_name.slice(0, 1).toUpperCase()}
-          </div>
-        )}
-        <div className="min-w-0">
-          <h1 className="text-3xl font-bold text-apb">{creator.display_name}</h1>
-          {creator.creator_name && creator.creator_name !== creator.display_name ? (
-            <p className="text-neutral-500">{creator.creator_name}</p>
-          ) : null}
-          {creator.real_name && creator.real_name !== creator.display_name ? (
-            <p className="text-sm text-neutral-400">{creator.real_name}</p>
-          ) : null}
-          {creator.website ? (
-            <a
-              href={creator.website}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-1 inline-block text-sm font-medium text-apb hover:underline"
-            >
-              {new URL(creator.website).hostname.replace(/^www\./, "")} ↗
-            </a>
-          ) : null}
-          <SocialLinks creator={creator} />
-        </div>
-      </header>
-
-      {/* Bio */}
-      {creator.bio ? (
-        <p className="mt-6 rounded-[16px] border border-neutral-200 bg-white/60 px-5 py-4 leading-relaxed text-neutral-800">
-          {creator.bio}
-        </p>
-      ) : null}
+      <CreatorProfileEditor creator={creator} />
 
       {/* Most-watched clips */}
       {videoEntries.length ? (

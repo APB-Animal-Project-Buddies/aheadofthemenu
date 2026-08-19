@@ -15,6 +15,13 @@ export type CreatorRow = {
   created_at: string;
 };
 
+/** Curation flags: `hidden` pulls a creator out of public pages; `plant_based`
+ * records whether the creator's own brand is fully vegan (null = not yet reviewed). */
+export type CreatorFlags = {
+  hidden: boolean;
+  plant_based: boolean | null;
+};
+
 /** A most-watched clip on one platform, with a ready-to-embed (muted-autoplay) URL. */
 export type CreatorTopVideo = {
   url: string;
@@ -25,7 +32,8 @@ export type CreatorTopVideo = {
 };
 
 /** Full public profile row rendered by the creator page. */
-export type CreatorProfile = CreatorRow & {
+export type CreatorProfile = CreatorRow & CreatorFlags & {
+  owner_id: string | null;
   real_name: string | null;
   bio: string | null;
   website: string | null;
@@ -54,6 +62,18 @@ export const CREATOR_SOCIALS: Array<{ key: keyof CreatorProfile; label: string }
   { key: "pinterest", label: "Pinterest" },
 ];
 
+/** Allowed values of the `creator_social_key` Postgres DOMAIN (constrains `primary_social`). */
+export const CREATOR_SOCIAL_KEYS = [
+  "youtube",
+  "instagram",
+  "tiktok",
+  "facebook",
+  "twitter_x",
+  "pinterest",
+  "substack",
+  "website",
+] as const;
+
 /** The creator's present socials as {key,label,url}, with primary_social first. */
 export function orderedSocials(c: CreatorProfile): Array<{ key: string; label: string; url: string }> {
   const present = CREATOR_SOCIALS
@@ -77,6 +97,7 @@ export type GalleryCreator = {
   bio: string | null;
   cuisines: string[];
   dishCount: number;
+  plant_based: boolean | null;
 };
 
 export function slugify(name: string): string {
@@ -155,14 +176,98 @@ export async function resolveOrCreateCreator(name: string): Promise<{ id: string
   throw new Error(`could not allocate slug for creator "${trimmed}"`);
 }
 
+/** Read-only lookup — every claimable creator (unclaimed, not hidden), for the
+ * claim-search entry point. Small table; the caller filters client-side. */
+export async function getUnclaimedCreators(): Promise<
+  Array<{ id: string; display_name: string; creator_name: string | null; slug: string | null }>
+> {
+  const { graphql } = await import("@/lib/nhost");
+  const res = await graphql<{
+    creators: Array<{ id: string; display_name: string; creator_name: string | null; slug: string | null }>;
+  }>(
+    `query {
+       creators(where: { owner_id: { _is_null: true }, hidden: { _eq: false } }, order_by: { display_name: asc }) {
+         id display_name creator_name slug
+       }
+     }`,
+    { useAdminSecret: true }
+  );
+  if (res.errors?.length) throw new Error(res.errors[0].message);
+  return res.data?.creators ?? [];
+}
+
+/** Thrown by createOwnedCreator when the display name is already taken —
+ * distinct from a slug collision (which is retried silently). */
+export class CreatorNameTakenError extends Error {}
+
+/**
+ * Create a brand-new creator profile owned immediately by `userId` (path b of
+ * claiming: "this isn't listed yet"). Always INSERTs — never find-or-create —
+ * so an existing name surfaces as CreatorNameTakenError rather than silently
+ * resolving to (and letting the caller believe they now own) someone else's
+ * row; claiming an existing name goes through the claim flow instead. Same
+ * slugify + retry-on-slug-collision shape as resolveOrCreateCreator.
+ */
+export async function createOwnedCreator(
+  userId: string,
+  fields: { displayName: string; creatorName?: string; realName?: string; website?: string }
+): Promise<{ id: string; slug: string | null }> {
+  const trimmed = fields.displayName.trim();
+  if (!trimmed) throw new Error("displayName is required");
+
+  const base = slugify(trimmed) || "creator";
+  const { graphql } = await import("@/lib/nhost");
+  for (let attempt = 0; attempt < 4; attempt++) {
+    const slug = attempt === 0 ? base : `${base}-${attempt + 1}`;
+    const res = await graphql<{ insert_creators_one: { id: string; slug: string } | null }>(
+      `mutation ($dn: String!, $cn: String, $rn: String, $web: String, $slug: String!, $uid: uuid!) {
+         insert_creators_one(object: {
+           display_name: $dn, creator_name: $cn, real_name: $rn, website: $web, slug: $slug, owner_id: $uid
+         }) { id slug }
+       }`,
+      {
+        useAdminSecret: true,
+        variables: {
+          dn: trimmed.slice(0, 120),
+          cn: fields.creatorName?.trim().slice(0, 120) || null,
+          rn: fields.realName?.trim().slice(0, 120) || null,
+          web: fields.website?.trim() || null,
+          slug,
+          uid: userId,
+        },
+      }
+    );
+    if (!res.errors?.length && res.data?.insert_creators_one) return res.data.insert_creators_one;
+    const msg = res.errors?.[0]?.message ?? "";
+    if (/creators_display_name_lower_idx/i.test(msg)) {
+      throw new CreatorNameTakenError(`"${trimmed}" is already taken`);
+    }
+    if (!/unique|duplicate/i.test(msg)) throw new Error(msg || "creator insert failed");
+    // Slug collision only (name itself was fine) — retry with the next suffix.
+  }
+  throw new Error(`could not allocate slug for creator "${trimmed}"`);
+}
+
 const PROFILE_FIELDS = `
   id display_name creator_name slug created_at
+  owner_id
   real_name bio website image_url
   youtube instagram tiktok facebook twitter_x pinterest substack
   primary_social other_links top_videos
+  hidden plant_based
 `;
 
-/** Full profile by slug for /creators/[slug]. Read-only; null when not found. */
+// Hasura returns jsonb as parsed values already; normalize the nullable shapes
+// (shared by every read path that fetches PROFILE_FIELDS).
+function normalizeProfile(row: CreatorProfile): CreatorProfile {
+  return {
+    ...row,
+    other_links: Array.isArray(row.other_links) ? row.other_links : [],
+    top_videos: row.top_videos && typeof row.top_videos === "object" ? row.top_videos : null,
+  };
+}
+
+/** Full profile by slug for /creators/[slug]. Read-only; null when not found or hidden. */
 export async function getCreatorProfileBySlug(slug: string): Promise<CreatorProfile | null> {
   const s = slug.trim().toLowerCase();
   if (!s) return null;
@@ -173,13 +278,98 @@ export async function getCreatorProfileBySlug(slug: string): Promise<CreatorProf
   );
   if (res.errors?.length) throw new Error(res.errors[0].message);
   const row = res.data?.creators?.[0];
-  if (!row) return null;
-  // Hasura returns jsonb as parsed values already; normalize the nullable shapes.
-  return {
-    ...row,
-    other_links: Array.isArray(row.other_links) ? row.other_links : [],
-    top_videos: row.top_videos && typeof row.top_videos === "object" ? row.top_videos : null,
-  };
+  if (!row || row.hidden) return null;
+  return normalizeProfile(row);
+}
+
+/** Thrown by updateOwnedCreator when the caller doesn't own a creator profile. */
+export class CreatorNotFoundError extends Error {}
+
+/** Subset of CreatorProfile's text/URL fields that PATCH /api/creators/mine can update. */
+export type CreatorProfilePatch = Partial<{
+  displayName: string | null;
+  creatorName: string | null;
+  realName: string | null;
+  bio: string | null;
+  website: string | null;
+  imageUrl: string | null;
+  youtube: string | null;
+  instagram: string | null;
+  tiktok: string | null;
+  facebook: string | null;
+  twitterX: string | null;
+  pinterest: string | null;
+  substack: string | null;
+  primarySocial: string | null;
+  otherLinks: Array<{ label?: string; url: string }>;
+}>;
+
+const PATCH_COLUMNS: Record<keyof CreatorProfilePatch, { column: string; gqlType: string }> = {
+  displayName: { column: "display_name", gqlType: "String" },
+  creatorName: { column: "creator_name", gqlType: "String" },
+  realName: { column: "real_name", gqlType: "String" },
+  bio: { column: "bio", gqlType: "String" },
+  website: { column: "website", gqlType: "String" },
+  imageUrl: { column: "image_url", gqlType: "String" },
+  youtube: { column: "youtube", gqlType: "String" },
+  instagram: { column: "instagram", gqlType: "String" },
+  tiktok: { column: "tiktok", gqlType: "String" },
+  facebook: { column: "facebook", gqlType: "String" },
+  twitterX: { column: "twitter_x", gqlType: "String" },
+  pinterest: { column: "pinterest", gqlType: "String" },
+  substack: { column: "substack", gqlType: "String" },
+  // `creator_social_key` is a Postgres DOMAIN over text with no Hasura custom-scalar
+  // mapping configured, so it shows up in the GraphQL schema as its base type.
+  primarySocial: { column: "primary_social", gqlType: "String" },
+  otherLinks: { column: "other_links", gqlType: "jsonb" },
+};
+
+/**
+ * Partial update of the caller's own creator profile (owner_id = userId). Only
+ * the keys present in `patch` are touched — this is a true partial update, not
+ * a full-row replace, so omitted fields are left exactly as they were.
+ * Throws CreatorNotFoundError if the caller doesn't own a creator row, or
+ * CreatorNameTakenError if a `displayName` change collides with the
+ * case-insensitive unique index.
+ */
+export async function updateOwnedCreator(userId: string, patch: CreatorProfilePatch): Promise<CreatorProfile> {
+  const { graphql } = await import("@/lib/nhost");
+  const keys = (Object.keys(patch) as Array<keyof CreatorProfilePatch>).filter((k) => patch[k] !== undefined);
+
+  if (!keys.length) {
+    const res = await graphql<{ creators: CreatorProfile[] }>(
+      `query ($uid: uuid!) { creators(where: { owner_id: { _eq: $uid } }, limit: 1) { ${PROFILE_FIELDS} } }`,
+      { useAdminSecret: true, variables: { uid: userId } }
+    );
+    if (res.errors?.length) throw new Error(res.errors[0].message);
+    const row = res.data?.creators?.[0];
+    if (!row) throw new CreatorNotFoundError();
+    return normalizeProfile(row);
+  }
+
+  const varDecls = keys.map((k) => `$${k}: ${PATCH_COLUMNS[k].gqlType}`).join(", ");
+  const setFields = keys.map((k) => `${PATCH_COLUMNS[k].column}: $${k}`).join(", ");
+  const variables: Record<string, unknown> = { uid: userId };
+  for (const k of keys) variables[k] = patch[k];
+
+  const res = await graphql<{ update_creators: { returning: CreatorProfile[] } }>(
+    `mutation ($uid: uuid!, ${varDecls}) {
+       update_creators(where: { owner_id: { _eq: $uid } }, _set: { ${setFields} }) {
+         returning { ${PROFILE_FIELDS} }
+       }
+     }`,
+    { useAdminSecret: true, variables }
+  );
+  if (res.errors?.length) {
+    const msg = res.errors[0].message;
+    if (/creators_display_name_lower_idx/i.test(msg)) {
+      throw new CreatorNameTakenError(msg);
+    }
+    throw new Error(msg);
+  }
+  const row = res.data?.update_creators?.returning?.[0];
+  if (!row) throw new CreatorNotFoundError();
+  return normalizeProfile(row);
 }
 
 /**
@@ -221,7 +411,9 @@ export async function getCreatorsGallery(): Promise<GalleryCreator[]> {
   const { graphql } = await import("@/lib/nhost");
   const res = await graphql<{ creators: any[]; dishes: any[] }>(
     `query {
-       creators(order_by: { display_name: asc }) { id slug display_name creator_name image_url bio }
+       creators(where: { hidden: { _eq: false } }, order_by: { display_name: asc }) {
+         id slug display_name creator_name image_url bio plant_based
+       }
        dishes { creator_id dish_data }
      }`,
     { useAdminSecret: true }
@@ -257,6 +449,7 @@ export async function getCreatorsGallery(): Promise<GalleryCreator[]> {
       bio: c.bio,
       cuisines: Array.from(cuisineSets.get(c.id) ?? []).sort(),
       dishCount: counts.get(c.id) ?? 0,
+      plant_based: c.plant_based ?? null,
     }))
     .filter((c) => c.slug && (c.bio || c.image_url || c.dishCount > 0));
 }

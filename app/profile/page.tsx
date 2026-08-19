@@ -7,11 +7,14 @@ import { useAuth } from "@/components/AuthProvider";
 import { Avatar } from "@/components/Avatar";
 import { QrShareCard } from "@/components/QrShareCard";
 import { ClaimQrSection } from "@/components/ClaimQrSection";
+import { ClaimCreatorSection } from "@/components/ClaimCreatorSection";
 import { ActiveDishesList } from "@/components/ActiveDishesList";
 import { AgentKeysSection } from "@/components/AgentKeysSection";
 import { ROLE_OPTIONS, USER_TYPE_LABELS } from "@/lib/nhost/roles";
 import { normalizeHandle, validateHandle } from "@/lib/handle";
 import { getNhost } from "@/lib/nhost/client";
+import { authFetch } from "@/lib/nhost/auth-fetch";
+import { InlineEditField } from "@/components/ui/InlineEditField";
 
 function roleLabel(role: string | null): string {
   if (!role) return "—";
@@ -196,7 +199,24 @@ export default function ProfilePage() {
             <span className="capitalize">{userType ? USER_TYPE_LABELS[userType] : "—"}</span>
           </Row>
           <Row label="Role">{roleLabel(role)}</Row>
-          <Row label="Zip code">{zipCode || "—"}</Row>
+          <Row label="Zip code">
+            <InlineEditField
+              label="Zip code"
+              value={zipCode || ""}
+              emptyText="Add your zip code"
+              placeholder="e.g. 94110"
+              onSave={async (next) => {
+                const res = await authFetch("/api/profile", {
+                  method: "PATCH",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ zipCode: next }),
+                });
+                const data = await res.json().catch(() => ({}));
+                if (!res.ok) throw new Error(data?.error || "Couldn't save");
+                await getNhost().refreshSession(0); // pull updated metadata into the session
+              }}
+            />
+          </Row>
           <Row label="Email status">
             {emailVerified ? (
               <span className="inline-flex items-center gap-1.5 font-medium text-emerald-600">
@@ -256,6 +276,10 @@ export default function ProfilePage() {
       {/* Agent API keys — not gated on `handle`, since an agent acts as the
           user account rather than through their public profile URL. */}
       <AgentKeysSection />
+
+      {/* Claim/create your creator page — authenticated-only (this page always
+          is; redirects to /login otherwise). */}
+      <ClaimCreatorSection />
     </main>
   );
 }
