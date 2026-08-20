@@ -34,6 +34,19 @@ const BUSINESS_TABS: Tab[] = [
 // business-only page (/recipes, /menus, /tips-and-tricks) still gets the restaurant nav,
 // and /dishes always reads as consumer. Shared sections fall back to the account type.
 const BUSINESS_SECTIONS = new Set(["recipes", "menus", "tips-and-tricks", "getting-started"]);
+
+/**
+ * Where the resolved nav mode is remembered.
+ *
+ * The mode used to live ONLY in the #business / #consumer fragment, which any
+ * redirect silently drops — the /recipes -> /dishes redirect being the live
+ * example: a business visitor clicked Recipes and landed on /dishes with no
+ * fragment, so the bar flipped to the consumer tabs. sessionStorage survives
+ * that, and expires with the tab, which is the right lifetime for "which side of
+ * the site am I browsing".
+ */
+const MODE_KEY = "apb-nav-mode";
+type NavMode = "business" | "consumer";
 // `dishes` is deliberately NOT pinned here: it's meaningful to both audiences, so
 // it honours the #business / #consumer hash like the other ambivalent sections
 // (falling back to consumer when no hash is present, which is the old behaviour).
@@ -101,13 +114,39 @@ export function SiteNav() {
     return () => window.removeEventListener("hashchange", read);
   }, [pathname]);
 
+  // Read on mount rather than during render: sessionStorage doesn't exist on the
+  // server, so touching it inline would break hydration.
+  const [storedMode, setStoredMode] = useState<NavMode | null>(null);
+  useEffect(() => {
+    try {
+      const v = window.sessionStorage.getItem(MODE_KEY);
+      if (v === "business" || v === "consumer") setStoredMode(v);
+    } catch {
+      /* private mode / storage disabled — the hash still works */
+    }
+  }, []);
+
   const seg = pathname.split("/").filter(Boolean)[0] ?? "";
-  const mode: "business" | "consumer" = isAuthenticated
+  const mode: NavMode = isAuthenticated
     ? (userType === "business" ? "business" : "consumer")
     : BUSINESS_SECTIONS.has(seg) ? "business"
       : CONSUMER_SECTIONS.has(seg) ? "consumer"
         : hash === "business" ? "business"
-          : "consumer";
+          : hash === "consumer" ? "consumer"
+            // Nothing in the URL says which side we're on — use what the last
+            // page established, so a fragment-dropping redirect doesn't reset it.
+            : storedMode ?? "consumer";
+  // Persist the resolved mode so a later page that loses the fragment can recover
+  // it. Deliberately after resolution, not just on an explicit hash: landing on a
+  // pinned section like /menus should also establish the mode.
+  useEffect(() => {
+    try {
+      window.sessionStorage.setItem(MODE_KEY, mode);
+    } catch {
+      /* storage disabled — nothing to persist to */
+    }
+  }, [mode]);
+
   const tabs = mode === "business" ? BUSINESS_TABS : CONSUMER_TABS;
   // Always carry the mode forward on every tab link (no param → consumer).
   const withMode = (href: string) => `${href}#${mode}`;

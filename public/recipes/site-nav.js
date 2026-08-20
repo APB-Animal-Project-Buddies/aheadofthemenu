@@ -49,18 +49,32 @@
 
     const active = (document.body && document.body.dataset.activeNav) || '';
     const hash = (window.location.hash || '').replace(/^#/, '');
-    // Mode: signed in → account type wins; else the entry section decides (business-only
-    // pages → business, /dishes → consumer); on ambivalent pages the #business/#consumer
-    // param carries it forward (no param → consumer).
+    // Mode: signed in → account type wins; else the entry section decides
+    // (business-only pages → business); on ambivalent pages the
+    // #business/#consumer fragment carries it forward, and when even that is
+    // missing we fall back to the mode the last page established.
+    //
+    // That last fallback exists because ANY redirect drops the fragment — the
+    // live case being /recipes → /dishes, which used to strip a business
+    // visitor back to the consumer tabs. Kept in sync with MODE_KEY in
+    // components/SiteNav.tsx; both navs read and write the same key.
+    const MODE_KEY = 'apb-nav-mode';
     const BUSINESS_SECTIONS = ['recipes', 'menus', 'tips', 'getting-started'];
     // `dishes` is not pinned — it honours the #business / #consumer hash.
     const CONSUMER_SECTIONS = ['creators'];
+    let storedMode = null;
+    try {
+      const v = window.sessionStorage.getItem(MODE_KEY);
+      if (v === 'business' || v === 'consumer') storedMode = v;
+    } catch (e) { /* storage disabled — the fragment still works */ }
     const mode = session
       ? (userType === 'business' ? 'business' : 'consumer')
       : BUSINESS_SECTIONS.indexOf(active) !== -1 ? 'business'
       : CONSUMER_SECTIONS.indexOf(active) !== -1 ? 'consumer'
       : hash === 'business' ? 'business'
-      : 'consumer';
+      : hash === 'consumer' ? 'consumer'
+      : storedMode || 'consumer';
+    try { window.sessionStorage.setItem(MODE_KEY, mode); } catch (e) { /* no-op */ }
     const TABS = mode === 'business' ? BUSINESS_TABS : CONSUMER_TABS;
     const links = TABS
       .map(t => `<li><a href="${t.href}#${mode}"${t.id === active ? ' class="active"' : ''}>${t.label}</a></li>`)
