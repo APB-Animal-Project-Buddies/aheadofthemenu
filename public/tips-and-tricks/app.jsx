@@ -25,17 +25,38 @@ const LEVERS = [
   {
     icon: '💰',
     title: 'Lower cost per plate',
-    body: 'Legumes, grains, mushrooms and seasonal vegetables typically run 20–40% cheaper per portion than meat or fish — and they don’t swing with commodity protein and dairy prices.',
-  },
-  {
-    icon: '🔁',
-    title: 'Blended protein saves money',
-    body: 'Blend finely chopped mushrooms into patties and stews at 25–30% and you cut your priciest ingredient while keeping — often improving — the flavour guests taste.',
+    body: 'Legumes, grains, mushrooms and seasonal vegetables typically run 20–40% cheaper per portion than meat or fish, and they don’t swing with commodity protein and dairy prices. Where meat stays, blending finely chopped mushrooms into patties and stews at 25–30% cuts your priciest ingredient while keeping — often improving — the flavour guests taste.',
   },
   {
     icon: '😊',
     title: 'Cheaper food, happier customers',
     body: 'Price the plant dish at or below its meat equivalent. Because it usually costs less to make, the volume it earns and the margin it carries compound in the same direction.',
+  },
+  {
+    icon: '📈',
+    title: 'Growing demand',
+    body: '27% of Gen Z and millennials want to eat plant-based foods, and the share keeps climbing. The menus that meet them are winning bookings their meat-only competitors are turning away.',
+  },
+  {
+    icon: '🤝',
+    title: 'Everyone can eat it',
+    body: 'A plant dish is the lowest common denominator at a full table: no shellfish, fish, dairy or egg, and it works for vegans, vegetarians and pescetarians alike. One order nobody has to negotiate — and one dish that stops a group booking walking out the door.',
+  },
+  {
+    icon: '🌾',
+    title: 'Resilience and sourcing',
+    body: 'A plant-forward menu is less exposed to meat and dairy supply shocks and price spikes, and far easier to source locally and seasonally — which makes for a fresher story on the plate too.',
+  },
+  {
+    icon: '🎨',
+    title: 'More creativity',
+    body: (
+      <>
+        Cooking with plants pushes a kitchen out of its comfort zone, and the range of plant-based
+        products worth cooking with keeps widening.{' '}
+        <a href="/top-alternatives">See which ones actually pass a blind taste test</a>.
+      </>
+    ),
   },
   {
     icon: '📦',
@@ -220,7 +241,7 @@ function App() {
       <section id="levers" className="lever-section">
         <div className="section-head">
           <div className="eyebrow-sm">Kitchen economics</div>
-          <h2>Why you&rsquo;ll save money with plants</h2>
+          <h2>Why you&rsquo;ll make money with plants</h2>
         </div>
         <div className="lever-grid">
           {LEVERS.map(l => <LeverCard l={l} key={l.title} />)}

@@ -111,36 +111,79 @@ const MOVES = [
   },
 ];
 
-const PAYOFFS = [
+/**
+ * Kept in sync with LEVERS in public/tips-and-tricks/app.jsx — same eleven
+ * reasons, same order, so a restaurant reading either page gets one story.
+ * `examples` renders as pills; a JSX body may carry a link.
+ */
+const PAYOFFS: Array<{
+  icon: string;
+  title: string;
+  body: React.ReactNode;
+  examples?: string[];
+}> = [
   {
-    icon: "💰",
-    title: "Healthier margins",
-    body: "Legumes, grains, mushrooms and seasonal veg usually cost less per portion than meat and fish, and ride out protein price swings better. A well-priced plant dish can carry a stronger margin and still feel generous.",
-  },
-  {
-    icon: "👥",
-    title: "Win the whole table",
-    body: "The fastest-growing group isn't strict vegans — it's flexitarians choosing plant-rich by preference. One uninspiring veggie option can lose the whole booking when a single guest can't find anything they want.",
-  },
-  {
-    icon: "📈",
-    title: "Sell what you already make",
-    body: "Most of the eight moves are free: a better name, a reordered section, a flipped default. No new cost, no new prep — just guests choosing dishes that are already on your pass.",
+    icon: "🥘",
+    title: "Big profits on simple dishes",
+    body: "Many traditional plant-based foods are cheap — sub-$1.50 food costs that stay fresh for days, are easy to make, and sell at a high margin.",
+    examples: ["Dal makhani", "Mole poblano", "Mujadara", "Hummus"],
   },
   {
     icon: "🛡️",
+    title: "Fewer health-code scares",
+    body: "No raw meat means no salmonella, listeria or E. coli temperature-danger-zone violations from that station. Fewer contamination risks means fewer failed inspections, recalls and shutdown scares.",
+  },
+  {
+    icon: "💰",
+    title: "Lower cost per plate",
+    body: "Legumes, grains, mushrooms and seasonal vegetables typically run 20–40% cheaper per portion than meat or fish, and they don't swing with commodity protein and dairy prices. Where meat stays, blending finely chopped mushrooms into patties and stews at 25–30% cuts your priciest ingredient while keeping — often improving — the flavour guests taste.",
+  },
+  {
+    icon: "😊",
+    title: "Cheaper food, happier customers",
+    body: "Price the plant dish at or below its meat equivalent. Because it usually costs less to make, the volume it earns and the margin it carries compound in the same direction.",
+  },
+  {
+    icon: "📈",
+    title: "Growing demand",
+    body: "27% of Gen Z and millennials want to eat plant-based foods, and the share keeps climbing. The menus that meet them are winning bookings their meat-only competitors are turning away.",
+  },
+  {
+    icon: "🤝",
+    title: "Everyone can eat it",
+    body: "A plant dish is the lowest common denominator at a full table: no shellfish, fish, dairy or egg, and it works for vegans, vegetarians and pescetarians alike. One order nobody has to negotiate — and one dish that stops a group booking walking out the door.",
+  },
+  {
+    icon: "🌾",
     title: "Resilience and sourcing",
-    body: "A plant-forward menu is less exposed to meat and dairy supply shocks, and easier to source locally and seasonally — which makes for a fresher story on the plate too.",
+    body: "A plant-forward menu is less exposed to meat and dairy supply shocks and price spikes, and far easier to source locally and seasonally — which makes for a fresher story on the plate too.",
   },
   {
-    icon: "✨",
-    title: "Reputation that travels",
-    body: "Diners notice and reward places that make eating this way delicious and easy. A creative plant-forward menu earns goodwill, press, and word of mouth that fills tables.",
+    icon: "🎨",
+    title: "More creativity",
+    body: (
+      <>
+        Cooking with plants pushes a kitchen out of its comfort zone, and the range of plant-based
+        products worth cooking with keeps widening.{" "}
+        <Link
+          href="/top-alternatives"
+          className="font-medium text-apb-light underline underline-offset-4 hover:text-apb"
+        >
+          See which ones actually pass a blind taste test
+        </Link>
+        .
+      </>
+    ),
   },
   {
-    icon: "🍽️",
-    title: "Room for the kitchen",
-    body: "Blended patties, legume-led mains, clever swaps — space to build signature dishes your chefs are proud of, rather than a token veggie option nobody wants their name on.",
+    icon: "📦",
+    title: "Less spoilage, less waste",
+    body: "Dry legumes and grains keep for months, not days. Anchoring low-turnover dishes on shelf-stable staples instead of fresh meat and dairy cuts write-offs and gives the kitchen more slack.",
+  },
+  {
+    icon: "🎯",
+    title: "Position for margin",
+    body: "Guests order what's easiest to notice. Put the plant dish with the best margin where eyes land first — top of the section, boxed, chef's favorite — so the highest-margin dish is also the most-ordered one.",
   },
 ];
 
@@ -358,9 +401,8 @@ export default function RevampPage() {
       {/* ---- Why it pays ---- */}
       <section className="mx-auto max-w-5xl px-5 py-16 md:px-8 md:py-20">
         <div className="max-w-2xl">
-          <div className="text-[12px] font-semibold uppercase tracking-[0.16em] text-apb-light">Why bother</div>
-          <h2 className="mt-2 text-3xl font-semibold text-apb md:text-4xl">
-            Good for the planet. Also good for the P&amp;L.
+          <h2 className="text-3xl font-semibold text-apb md:text-4xl">
+            Good for the planet, also good for your wallet
           </h2>
         </div>
         <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
@@ -369,6 +411,15 @@ export default function RevampPage() {
               <span className="text-2xl" aria-hidden>{p.icon}</span>
               <h3 className="mt-3 text-lg font-semibold text-apb">{p.title}</h3>
               <p className="mt-2 text-[15px] leading-relaxed text-neutral-600">{p.body}</p>
+              {p.examples && (
+                <ul className="mt-3 flex flex-wrap gap-1.5">
+                  {p.examples.map((e) => (
+                    <li key={e} className="rounded-full bg-apb-cream px-2.5 py-1 text-[11px] text-apb">
+                      {e}
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
           ))}
         </div>
