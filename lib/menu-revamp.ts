@@ -2,9 +2,9 @@
  * lib/menu-revamp.ts
  *
  * The Revamp scorecard: an uploaded restaurant menu (PDF or photo) in, a scored
- * analysis out. Powers POST /api/revamp/analyze.
+ * analysis out. Powers POST /api/getting-started/analyze.
  *
- * The rubric is the same eight moves the /revamp and /tips-and-tricks pages
+ * The rubric is the same eight moves the /getting-started and /tips-and-tricks pages
  * describe, so a restaurant reads the page and then gets scored against exactly
  * what it just read. `id`s are stable machine keys; `name`s match the site copy.
  *

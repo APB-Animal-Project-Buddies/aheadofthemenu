@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * The upload + scorecard surface on /revamp.
+ * The upload + scorecard surface on /getting-started.
  *
  * No sign-in, no allowance, nothing stored — drop a menu in, get a scorecard
  * back. Three states: idle (dropzone), running (the model call), and the
@@ -147,7 +147,7 @@ export function MenuAnalyzer() {
     pending
       .then((fileId) => {
         if (!fileId) return;
-        return fetch("/api/revamp/discard", {
+        return fetch("/api/getting-started/discard", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ fileId }),
@@ -217,7 +217,7 @@ export function MenuAnalyzer() {
       let res: Response;
       if (fileId) {
         // The cheap path: hand the backend an id and let it pull the bytes.
-        res = await fetch("/api/revamp/analyze", {
+        res = await fetch("/api/getting-started/analyze", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ fileId }),
@@ -229,7 +229,7 @@ export function MenuAnalyzer() {
         // POST straight through, so the feature still works.
         const body = new FormData();
         body.append("menu", file);
-        res = await fetch("/api/revamp/analyze", { method: "POST", body });
+        res = await fetch("/api/getting-started/analyze", { method: "POST", body });
       } else {
         // Too big for a direct POST and storage wouldn't take it — nothing left.
         setError("We couldn't upload that menu. Please check your connection and try again.");

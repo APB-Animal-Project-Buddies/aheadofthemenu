@@ -3,7 +3,7 @@ import Link from "next/link";
 import { MenuAnalyzer } from "./MenuAnalyzer";
 
 /**
- * /revamp — the restaurant-facing landing page for Revamp, our menu service:
+ * /getting-started — the restaurant-facing landing page for our menu service:
  * we take an existing menu and rework it so the plant-rich dishes are the ones
  * guests actually want to order. Copy is adapted from the Sell More Plants
  * behavioural-science playbook and pointed at Ahead of the Menu's own tools

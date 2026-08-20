@@ -1,5 +1,5 @@
 /**
- * POST /api/revamp/analyze — score an uploaded menu against the eight moves.
+ * POST /api/getting-started/analyze — score an uploaded menu against the eight moves.
  *
  * Open to everyone: no sign-in, no account, no quota, nothing stored. A visitor
  * uploads a menu, the model scores it, the scorecard comes straight back in the

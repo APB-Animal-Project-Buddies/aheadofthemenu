@@ -22,7 +22,7 @@ const CONSUMER_TABS: Tab[] = [
   { href: "/eat-this", label: "Eat This!" }
 ];
 const BUSINESS_TABS: Tab[] = [
-  { href: "/revamp", label: "Getting Started" },
+  { href: "/getting-started", label: "Getting Started" },
   { href: "/menus", label: "Menus" },
   { href: "/recipes", label: "Recipes" },
   { href: "/top-alternatives", label: "Top Alternatives" },
@@ -33,8 +33,11 @@ const BUSINESS_TABS: Tab[] = [
 // Some sections belong to one mode regardless of login: a signed-out visitor on a
 // business-only page (/recipes, /menus, /tips-and-tricks) still gets the restaurant nav,
 // and /dishes always reads as consumer. Shared sections fall back to the account type.
-const BUSINESS_SECTIONS = new Set(["recipes", "menus", "tips-and-tricks", "revamp"]);
-const CONSUMER_SECTIONS = new Set(["dishes", "creators"]);
+const BUSINESS_SECTIONS = new Set(["recipes", "menus", "tips-and-tricks", "getting-started"]);
+// `dishes` is deliberately NOT pinned here: it's meaningful to both audiences, so
+// it honours the #business / #consumer hash like the other ambivalent sections
+// (falling back to consumer when no hash is present, which is the old behaviour).
+const CONSUMER_SECTIONS = new Set(["creators"]);
 
 // The nav has its own header on the landing + auth screens, and is intentionally
 // hidden on the user's profile and public handle pages.
@@ -57,7 +60,7 @@ const KNOWN_SECTIONS = new Set([
   "creators",
   "top-alternatives",
   "tips-and-tricks",
-  "revamp",
+  "getting-started",
   "eat-this",
   "reviews",
   "submit-dish",

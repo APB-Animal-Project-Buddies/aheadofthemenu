@@ -1,5 +1,5 @@
 /**
- * POST /api/revamp/discard — drop a menu upload we're never going to analyse.
+ * POST /api/getting-started/discard — drop a menu upload we're never going to analyse.
  *
  * The uploader starts pushing a file to Nhost storage the moment it's chosen,
  * before the user commits to scoring it. That makes the upload free in wall-clock

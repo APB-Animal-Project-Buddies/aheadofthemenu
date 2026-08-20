@@ -226,7 +226,7 @@ function App() {
           {LEVERS.map(l => <LeverCard l={l} key={l.title} />)}
         </div>
         <p className="section-note">
-          Want a hand applying this to your own menu? <a href="/revamp#business">Get a Revamp</a> and we&rsquo;ll mark up your actual dishes.
+          Want a hand applying this to your own menu? <a href="/getting-started#business">Get a Revamp</a> and we&rsquo;ll mark up your actual dishes.
         </p>
       </section>
 
