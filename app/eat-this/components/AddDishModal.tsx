@@ -43,6 +43,12 @@ type LocationIQResult = {
   };
 };
 
+type DuplicateMatch = {
+  id: string;
+  name: string;
+  locations: Array<{ id: string; address: string; neighborhood?: string }>;
+};
+
 export function AddDishModal({ open, onClose, restaurants, dishes, initialRestaurantId, onAdded, onJumpToDish }: {
   open: boolean;
   onClose: () => void;
@@ -73,7 +79,10 @@ export function AddDishModal({ open, onClose, restaurants, dishes, initialRestau
   const [restaurantSelected, setRestaurantSelected] = useState(false);
 
   // Duplicate detection state
-  const [duplicateMatches, setDuplicateMatches] = useState<any[]>([]);
+  // Mirrors RestaurantMatch in app/api/eat-this/restaurants/check-duplicates/route.ts.
+  // Typed rather than any[] so the locations map below doesn't land an implicit
+  // any on its callback param, which fails the production typecheck.
+  const [duplicateMatches, setDuplicateMatches] = useState<DuplicateMatch[]>([]);
   const [showingDuplicates, setShowingDuplicates] = useState(false);
   const [checkingDuplicates, setCheckingDuplicates] = useState(false);
   const [duplicateCheckAttempts, setDuplicateCheckAttempts] = useState(0);

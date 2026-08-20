@@ -263,7 +263,9 @@ export function reachableKeys(): Set<string> {
  * Throws at import time rather than letting a bad key reach the database.
  */
 function assertKeysInGamut(): void {
-  const orphans = [...reachableKeys()].filter((k) => !NUTRIENT_META[k]);
+  // Array.from rather than spreading the Set: the project's tsconfig target
+  // predates downlevel iteration, so spreading an iterable fails the build.
+  const orphans = Array.from(reachableKeys()).filter((k) => !NUTRIENT_META[k]);
   if (orphans.length) {
     throw new Error(
       `usda-gamut-map: ${orphans.length} mapping target(s) absent from gamut.ts — ` +
