@@ -21,7 +21,9 @@ import {
   CreatorNotFoundError,
   CREATOR_SOCIAL_KEYS,
   MAX_GALLERY_ITEMS,
+  MAX_COOKBOOKS,
   sanitizeGallery,
+  sanitizeCookbooks,
   type CreatorProfilePatch,
 } from "@/lib/creators";
 
@@ -181,6 +183,20 @@ export async function PATCH(req: NextRequest) {
       );
     }
     patch.gallery = clean;
+  }
+
+  if (body?.cookbooks !== undefined) {
+    if (!Array.isArray(body.cookbooks)) {
+      return NextResponse.json({ error: "cookbooks must be an array" }, { status: 400 });
+    }
+    if (body.cookbooks.length > MAX_COOKBOOKS) {
+      return NextResponse.json({ error: `You can feature up to ${MAX_COOKBOOKS} cookbooks` }, { status: 400 });
+    }
+    const clean = sanitizeCookbooks(body.cookbooks);
+    if (clean.length !== body.cookbooks.length) {
+      return NextResponse.json({ error: "Each cookbook needs a title and an https:// link" }, { status: 400 });
+    }
+    patch.cookbooks = clean;
   }
 
   if (!Object.keys(patch).length) {

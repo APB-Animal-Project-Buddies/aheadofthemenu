@@ -112,6 +112,33 @@ export function sanitizeGallery(input: unknown): GalleryItem[] {
   return out;
 }
 
+/** A featured cookbook on a creator page (creators.cookbooks JSONB). */
+export type Cookbook = { title: string; url: string; cover?: string; blurb?: string };
+export const MAX_COOKBOOKS = 6;
+
+/** Server-side sanitizer for creators.cookbooks: title + https link required, cover/blurb optional, de-duped by url, capped. */
+export function sanitizeCookbooks(input: unknown): Cookbook[] {
+  if (!Array.isArray(input)) return [];
+  const out: Cookbook[] = [];
+  const seen = new Set<string>();
+  const https = /^https:\/\/.+/i;
+  for (const raw of input) {
+    if (!raw || typeof raw !== "object") continue;
+    const r = raw as Record<string, unknown>;
+    const title = typeof r.title === "string" ? r.title.trim().slice(0, 120) : "";
+    const url = typeof r.url === "string" ? r.url.trim() : "";
+    if (!title || !https.test(url)) continue;
+    if (seen.has(url)) continue;
+    seen.add(url);
+    const item: Cookbook = { title, url };
+    if (typeof r.cover === "string" && https.test(r.cover.trim())) item.cover = r.cover.trim();
+    if (typeof r.blurb === "string" && r.blurb.trim()) item.blurb = r.blurb.trim().slice(0, 200);
+    out.push(item);
+    if (out.length >= MAX_COOKBOOKS) break;
+  }
+  return out;
+}
+
 /** Full public profile row rendered by the creator page. */
 export type CreatorProfile = CreatorRow & CreatorFlags & {
   owner_id: string | null;
@@ -129,6 +156,7 @@ export type CreatorProfile = CreatorRow & CreatorFlags & {
   other_links: Array<{ label?: string; url: string }>;
   top_videos: Partial<Record<"youtube" | "tiktok" | "instagram", CreatorTopVideo>> | null;
   gallery: GalleryItem[];
+  cookbooks: Cookbook[];
   // Which social the profile leads with ("current profile"); editable, not computed.
   primary_social: string | null;
 };
@@ -390,7 +418,7 @@ const PROFILE_FIELDS = `
   owner_id
   real_name bio website image_url
   youtube instagram tiktok facebook twitter_x pinterest substack
-  primary_social other_links top_videos gallery
+  primary_social other_links top_videos gallery cookbooks
   hidden plant_based
 `;
 
@@ -402,6 +430,7 @@ function normalizeProfile(row: CreatorProfile): CreatorProfile {
     other_links: Array.isArray(row.other_links) ? row.other_links : [],
     top_videos: row.top_videos && typeof row.top_videos === "object" ? row.top_videos : null,
     gallery: sanitizeGallery(row.gallery),
+    cookbooks: sanitizeCookbooks(row.cookbooks),
   };
 }
 
@@ -441,6 +470,7 @@ export type CreatorProfilePatch = Partial<{
   primarySocial: string | null;
   otherLinks: Array<{ label?: string; url: string }>;
   gallery: GalleryItem[];
+  cookbooks: Cookbook[];
 }>;
 
 const PATCH_COLUMNS: Record<keyof CreatorProfilePatch, { column: string; gqlType: string }> = {
@@ -462,6 +492,7 @@ const PATCH_COLUMNS: Record<keyof CreatorProfilePatch, { column: string; gqlType
   primarySocial: { column: "primary_social", gqlType: "String" },
   otherLinks: { column: "other_links", gqlType: "jsonb" },
   gallery: { column: "gallery", gqlType: "jsonb" },
+  cookbooks: { column: "cookbooks", gqlType: "jsonb" },
 };
 
 /**

@@ -1,5 +1,5 @@
 import { test, expect, describe } from "bun:test";
-import { slugify, pickCreatorMatch, socialHandle, creatorSearchTerms, parseInstagramUrl, parseGalleryLink, sanitizeGallery, MAX_GALLERY_ITEMS, galleryTileShape } from "./creators";
+import { slugify, pickCreatorMatch, socialHandle, creatorSearchTerms, parseInstagramUrl, parseGalleryLink, sanitizeGallery, MAX_GALLERY_ITEMS, galleryTileShape, sanitizeCookbooks, MAX_COOKBOOKS } from "./creators";
 
 test("slugify kebab-cases and strips punctuation", () => {
   expect(slugify("Rainbow Plant Life")).toBe("rainbow-plant-life");
@@ -109,5 +109,19 @@ describe("galleryTileShape", () => {
   test("sanitizeGallery keeps valid dimensions and drops bogus ones", () => {
     expect(sanitizeGallery([{ kind: "image", url: "https://h/a.jpg", w: 800, h: 600 }])[0]).toMatchObject({ w: 800, h: 600 });
     expect(sanitizeGallery([{ kind: "image", url: "https://h/a.jpg", w: -1, h: "x" }])[0]).not.toHaveProperty("w");
+  });
+});
+
+describe("sanitizeCookbooks", () => {
+  test("requires title + https url; keeps cover/blurb; de-dupes; caps", () => {
+    expect(sanitizeCookbooks([
+      { title: "  Vegan Richa's Everyday Kitchen ", url: "https://amzn.to/abc", cover: "https://h/c.jpg", blurb: " 100 recipes " },
+      { title: "", url: "https://x" },
+      { title: "No link" },
+      { title: "Insecure", url: "http://x" },
+      { title: "Dup", url: "https://amzn.to/abc" },
+    ])).toEqual([{ title: "Vegan Richa's Everyday Kitchen", url: "https://amzn.to/abc", cover: "https://h/c.jpg", blurb: "100 recipes" }]);
+    expect(sanitizeCookbooks(Array.from({ length: 10 }, (_, i) => ({ title: `B${i}`, url: `https://h/${i}` })))).toHaveLength(MAX_COOKBOOKS);
+    expect(sanitizeCookbooks(null)).toEqual([]);
   });
 });

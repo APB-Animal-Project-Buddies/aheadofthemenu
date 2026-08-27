@@ -63,6 +63,19 @@ function VideoEmbed({ platform, video }: { platform: "youtube" | "tiktok" | "ins
   );
 }
 
+/** Last tile of the Recipes grid: anyone can submit a dish attributed to this creator. */
+function AddRecipeTile({ name }: { name: string }) {
+  return (
+    <Link
+      href={`/submit-dish?creator=${encodeURIComponent(name)}`}
+      className="flex aspect-square flex-col items-center justify-center gap-2 rounded-[16px] border-2 border-dashed border-apb/40 bg-apb/5 text-apb transition hover:border-apb hover:bg-apb/10"
+    >
+      <span className="flex h-12 w-12 items-center justify-center rounded-full bg-apb text-3xl font-light leading-none text-white">+</span>
+      <span className="text-sm font-semibold">Add a recipe</span>
+    </Link>
+  );
+}
+
 export default async function CreatorPage({ params }: { params: { slug: string } }) {
   const creator = await getCreatorProfileBySlug(params.slug).catch(() => null);
   if (!creator) notFound();
@@ -120,9 +133,15 @@ export default async function CreatorPage({ params }: { params: { slug: string }
                 </Link>
               );
             })}
+            <AddRecipeTile name={creator.display_name} />
           </div>
         ) : (
-          <p className="text-sm text-neutral-400">No dishes linked to this creator yet.</p>
+          <div>
+            <p className="text-sm text-neutral-400">No dishes linked to this creator yet.</p>
+            <div className="mt-3 grid grid-cols-2 gap-4 sm:grid-cols-3">
+              <AddRecipeTile name={creator.display_name} />
+            </div>
+          </div>
         )}
       </section>
     </main>

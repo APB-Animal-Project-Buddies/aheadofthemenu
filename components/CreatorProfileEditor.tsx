@@ -27,6 +27,7 @@ import { authFetch } from "@/lib/nhost/auth-fetch";
 import { InlineEditField, clip } from "@/components/ui/InlineEditField";
 import { CreatorPhotoUpload } from "@/components/CreatorPhotoUpload";
 import { CreatorGallery } from "@/components/CreatorGallery";
+import { CreatorCookbooks } from "@/components/CreatorCookbooks";
 import { CreatorOwnerBar } from "@/components/CreatorOwnerBar";
 import { CREATOR_SOCIALS, orderedSocials, type CreatorProfile } from "@/lib/creators";
 
@@ -181,6 +182,7 @@ export function CreatorProfileEditor({ creator, claimed }: { creator: CreatorPro
           </p>
         ) : null}
 
+        <CreatorCookbooks items={view.cookbooks ?? []} />
         <CreatorGallery items={view.gallery ?? []} />
       </>
     );
@@ -320,6 +322,11 @@ export function CreatorProfileEditor({ creator, claimed }: { creator: CreatorPro
         />
       </div>
 
+      <CreatorCookbooks
+        items={profile.cookbooks ?? []}
+        editable
+        onChange={(cookbooks) => setProfile((p) => ({ ...p, cookbooks }))}
+      />
       <CreatorGallery
         items={profile.gallery ?? []}
         editable
