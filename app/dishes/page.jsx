@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useMemo, useRef } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { useDishes } from "@/app/hooks/useDishes";
 import { useCreatorsStore } from "@/app/stores/creators";
 import './styles.css';
@@ -193,13 +193,19 @@ export default function DishesPage() {
   }
 
   const router = useRouter();
+  const pathname = usePathname();
+  // This page is served at both /dishes (consumer) and /recipes (business). A
+  // dish page isn't pinned to either side, so when we came in via /recipes carry
+  // the mode explicitly instead of relying on the nav's remembered session mode —
+  // otherwise the bar can flash (or, with storage disabled, flip) to consumer.
+  const modeHash = pathname?.startsWith("/recipes") ? "#business" : "";
 
   // Clicking a dish card navigates straight to the full dish page. The DishModal
   // popup is dropped for now — it stays defined and wired to the #r= deep-link
   // below, so restoring it is just swapping this back to `openDish`.
   function goToDish(dish) {
     if (!dish?._id) return;
-    router.push(`/dishes/${dish._id}`);
+    router.push(`/dishes/${dish._id}${modeHash}`);
   }
 
   function openDish(dish) {
