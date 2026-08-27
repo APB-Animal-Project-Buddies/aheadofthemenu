@@ -200,7 +200,13 @@ export function CreatorGallery({
                     className={
                       landscape
                         ? "absolute left-0 top-1/2 h-[112.5%] w-full -translate-y-1/2"
-                        : "absolute left-1/2 top-0 h-full w-[112.5%] -translate-x-1/2"
+                        : g.platform === "youtube"
+                          ? // YouTube paints its desktop chrome (title strip on top, logo/controls
+                            // at the bottom) even on a Short. Make the iframe an exact 9:16 that's
+                            // 20% taller than the 1:2 cell (2.4w × 1.35w) and centre it, so the top
+                            // and bottom 10% — where that chrome lives — are cropped away.
+                            "absolute left-1/2 top-1/2 h-[120%] w-[135%] -translate-x-1/2 -translate-y-1/2"
+                          : "absolute left-1/2 top-0 h-full w-[112.5%] -translate-x-1/2"
                     }
                   />
                 ) : (
