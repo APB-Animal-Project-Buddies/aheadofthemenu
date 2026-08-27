@@ -44,12 +44,16 @@ export default function AheadOfTheMenu() {
           </p>
 
           <nav className="aotm-paths" aria-label="Choose your path">
-            <a className="aotm-card" href="/recipes">
+            {/* Lands on the business side of the site: /getting-started is a
+                BUSINESS_SECTION in SiteNav, so the bar shows the restaurant tabs
+                (Getting Started first). /recipes used to be here, but it currently
+                redirects to /dishes and dropped visitors into the consumer nav. */}
+            <a className="aotm-card" href="/getting-started#business">
               <span className="aotm-card-num">01</span>
               <span className="aotm-card-body">
                 <span className="who">For restaurateurs &amp; chefs</span>
-                <span className="what">Recipes &amp; Menus</span>
-                <span className="desc">Line-tested plant-based recipes engineered for service.</span>
+                <span className="what">Getting Started</span>
+                <span className="desc">Score your menu, then add line-tested plant-based dishes engineered for service.</span>
               </span>
               <span className="aotm-card-arrow" aria-hidden="true">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
