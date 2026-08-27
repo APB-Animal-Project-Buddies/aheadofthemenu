@@ -1,5 +1,5 @@
 import { test, expect, describe } from "bun:test";
-import { slugify, pickCreatorMatch, socialHandle, creatorSearchTerms } from "./creators";
+import { slugify, pickCreatorMatch, socialHandle, creatorSearchTerms, parseInstagramUrl, parseGalleryLink, sanitizeGallery, MAX_GALLERY_ITEMS } from "./creators";
 
 test("slugify kebab-cases and strips punctuation", () => {
   expect(slugify("Rainbow Plant Life")).toBe("rainbow-plant-life");
@@ -48,5 +48,41 @@ describe("creatorSearchTerms", () => {
       creatorSearchTerms({ display_name: "PlantsInASlurry", creator_name: " PlantsInASlurry ", slug: "plantsinaslurry", handles: ["plantsinaslurry", "plantsinaslurry"] })
     ).toEqual(["PlantsInASlurry", "plantsinaslurry"]);
     expect(creatorSearchTerms({ display_name: "Nora Cooks", creator_name: null, slug: null, handles: [] })).toEqual(["Nora Cooks"]);
+  });
+});
+
+describe("gallery", () => {
+  test("parseInstagramUrl accepts posts, reels and tv; rejects profiles and other hosts", () => {
+    expect(parseInstagramUrl("https://www.instagram.com/p/CxYz_12-ab/?utm=1")).toEqual({ kind: "instagram", id: "CxYz_12-ab", url: "https://www.instagram.com/p/CxYz_12-ab/" });
+    expect(parseInstagramUrl("https://instagram.com/reel/DEF456ghi")).toEqual({ kind: "instagram", id: "DEF456ghi", url: "https://www.instagram.com/p/DEF456ghi/" });
+    expect(parseInstagramUrl("https://www.instagram.com/mixforamission/reel/DEF456ghi/")?.id).toBe("DEF456ghi");
+    expect(parseInstagramUrl("https://www.instagram.com/mixforamission/")).toBeNull();
+    expect(parseInstagramUrl("https://www.tiktok.com/@x/video/123")).toBeNull();
+    expect(parseInstagramUrl("nope")).toBeNull();
+  });
+  test("parseGalleryLink routes to video or instagram", () => {
+    expect(parseGalleryLink("https://youtu.be/dQw4w9WgXcQ")).toEqual({ kind: "video", platform: "youtube", id: "dQw4w9WgXcQ", url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" });
+    expect(parseGalleryLink("https://www.tiktok.com/@x/video/7000000000000000000")?.kind).toBe("video");
+    expect(parseGalleryLink("https://www.instagram.com/p/ABCDEFG/")?.kind).toBe("instagram");
+    expect(parseGalleryLink("https://example.com")).toBeNull();
+  });
+  test("sanitizeGallery normalizes, drops junk, de-dupes and caps", () => {
+    const out = sanitizeGallery([
+      { kind: "image", url: " https://x.storage.nhost.run/v1/files/abc ", caption: "  Hi " },
+      { kind: "image", url: "http://insecure.example/x.jpg" },
+      { url: "https://youtu.be/dQw4w9WgXcQ" },
+      { kind: "video", url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { url: "https://www.instagram.com/reel/ABCDEFG/" },
+      "garbage",
+      null,
+    ]);
+    expect(out).toEqual([
+      { kind: "image", url: "https://x.storage.nhost.run/v1/files/abc", caption: "Hi" },
+      { kind: "video", platform: "youtube", id: "dQw4w9WgXcQ", url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { kind: "instagram", id: "ABCDEFG", url: "https://www.instagram.com/p/ABCDEFG/" },
+    ]);
+    const many = Array.from({ length: 20 }, (_, i) => ({ kind: "image", url: `https://h/${i}.jpg` }));
+    expect(sanitizeGallery(many)).toHaveLength(MAX_GALLERY_ITEMS);
+    expect(sanitizeGallery("not an array")).toEqual([]);
   });
 });

@@ -20,6 +20,8 @@ import {
   CreatorNameTakenError,
   CreatorNotFoundError,
   CREATOR_SOCIAL_KEYS,
+  MAX_GALLERY_ITEMS,
+  sanitizeGallery,
   type CreatorProfilePatch,
 } from "@/lib/creators";
 
@@ -162,6 +164,23 @@ export async function PATCH(req: NextRequest) {
       links.push(label ? { label, url } : { url });
     }
     patch.otherLinks = links;
+  }
+
+  if (body?.gallery !== undefined) {
+    if (!Array.isArray(body.gallery)) {
+      return NextResponse.json({ error: "gallery must be an array" }, { status: 400 });
+    }
+    if (body.gallery.length > MAX_GALLERY_ITEMS) {
+      return NextResponse.json({ error: `Gallery is capped at ${MAX_GALLERY_ITEMS} items` }, { status: 400 });
+    }
+    const clean = sanitizeGallery(body.gallery);
+    if (clean.length !== body.gallery.length) {
+      return NextResponse.json(
+        { error: "One of those links isn't a YouTube, TikTok or Instagram post (or an uploaded image)" },
+        { status: 400 }
+      );
+    }
+    patch.gallery = clean;
   }
 
   if (!Object.keys(patch).length) {

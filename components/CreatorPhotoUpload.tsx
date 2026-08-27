@@ -9,11 +9,9 @@
  */
 import { useRef, useState } from "react";
 import { toast } from "sonner";
-import { getNhost, nhostFileUrl } from "@/lib/nhost/client";
 import { authFetch } from "@/lib/nhost/auth-fetch";
 import { storageErrorMessage } from "@/lib/storage-error";
-
-const MAX_BYTES = 8 * 1024 * 1024;
+import { uploadImage } from "@/lib/upload-image";
 
 export function CreatorPhotoUpload({
   currentUrl,
@@ -40,21 +38,10 @@ export function CreatorPhotoUpload({
     const file = e.target.files?.[0];
     e.target.value = ""; // allow re-picking the same file
     if (!file) return;
-    if (!file.type.startsWith("image/")) {
-      setError("Please choose an image file.");
-      return;
-    }
-    if (file.size > MAX_BYTES) {
-      setError("That image is over 8 MB — please pick a smaller one.");
-      return;
-    }
     setBusy(true);
     setError(null);
     try {
-      const up = await getNhost().storage.uploadFiles({ "bucket-id": "dish-media", "file[]": [file] });
-      const fileId = up.body?.processedFiles?.[0]?.id;
-      if (!fileId) throw new Error("The upload didn't return a file id — please try again.");
-      const url = nhostFileUrl(fileId);
+      const url = await uploadImage(file);
       await saveUrl(url);
       onSaved(url);
       toast.success("Photo updated");

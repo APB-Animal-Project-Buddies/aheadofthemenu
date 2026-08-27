@@ -23,6 +23,8 @@ export type CreatorFlags = {
 };
 
 /** A most-watched clip on one platform, with a ready-to-embed (muted-autoplay) URL. */
+import { parseVideoUrl, type VideoPlatform } from "@/lib/video-embeds";
+
 export type CreatorTopVideo = {
   url: string;
   video_id?: string | null;
@@ -30,6 +32,65 @@ export type CreatorTopVideo = {
   approx_views?: string | null;
   embed_url?: string | null;
 };
+
+/** One gallery tile on a creator page (creators.gallery JSONB). */
+export type GalleryItem =
+  | { kind: "image"; url: string; caption?: string }
+  | { kind: "video"; platform: VideoPlatform; id: string; url: string }
+  | { kind: "instagram"; id: string; url: string };
+
+export const MAX_GALLERY_ITEMS = 12;
+const IG_SHORTCODE_RE = /^[A-Za-z0-9_-]{5,20}$/;
+
+/** Instagram post / reel URL → normalized item, or null. */
+export function parseInstagramUrl(input: string): Extract<GalleryItem, { kind: "instagram" }> | null {
+  let u: URL;
+  try {
+    u = new URL((input ?? "").trim());
+  } catch {
+    return null;
+  }
+  const host = u.hostname.replace(/^www\./, "").toLowerCase();
+  if (host !== "instagram.com" && host !== "instagr.am") return null;
+  const m = u.pathname.match(/^\/(?:[^/]+\/)?(p|reel|reels|tv)\/([^/?#]+)/);
+  if (!m || !IG_SHORTCODE_RE.test(m[2])) return null;
+  return { kind: "instagram", id: m[2], url: `https://www.instagram.com/p/${m[2]}/` };
+}
+
+/** A pasted link → gallery item (YouTube/TikTok via parseVideoUrl, Instagram here), or null. */
+export function parseGalleryLink(input: string): GalleryItem | null {
+  const v = parseVideoUrl(input);
+  if (v) return { kind: "video", ...v };
+  return parseInstagramUrl(input);
+}
+
+/**
+ * Server-side sanitizer for creators.gallery: re-parses every link so stored
+ * data is canonical, only accepts https image URLs, de-dupes, caps the count.
+ */
+export function sanitizeGallery(input: unknown): GalleryItem[] {
+  if (!Array.isArray(input)) return [];
+  const out: GalleryItem[] = [];
+  const seen = new Set<string>();
+  for (const raw of input) {
+    if (!raw || typeof raw !== "object") continue;
+    const r = raw as Record<string, unknown>;
+    let item: GalleryItem | null = null;
+    if (r.kind === "image" && typeof r.url === "string" && /^https:\/\/.+/i.test(r.url.trim())) {
+      const caption = typeof r.caption === "string" ? r.caption.trim().slice(0, 200) : "";
+      item = caption ? { kind: "image", url: r.url.trim(), caption } : { kind: "image", url: r.url.trim() };
+    } else if (typeof r.url === "string") {
+      item = parseGalleryLink(r.url);
+    }
+    if (!item) continue;
+    const key = item.kind === "image" ? `image:${item.url}` : `${item.kind}:${item.kind === "video" ? item.platform + ":" : ""}${item.id}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    out.push(item);
+    if (out.length >= MAX_GALLERY_ITEMS) break;
+  }
+  return out;
+}
 
 /** Full public profile row rendered by the creator page. */
 export type CreatorProfile = CreatorRow & CreatorFlags & {
@@ -47,6 +108,7 @@ export type CreatorProfile = CreatorRow & CreatorFlags & {
   substack: string | null;
   other_links: Array<{ label?: string; url: string }>;
   top_videos: Partial<Record<"youtube" | "tiktok" | "instagram", CreatorTopVideo>> | null;
+  gallery: GalleryItem[];
   // Which social the profile leads with ("current profile"); editable, not computed.
   primary_social: string | null;
 };
@@ -308,7 +370,7 @@ const PROFILE_FIELDS = `
   owner_id
   real_name bio website image_url
   youtube instagram tiktok facebook twitter_x pinterest substack
-  primary_social other_links top_videos
+  primary_social other_links top_videos gallery
   hidden plant_based
 `;
 
@@ -319,6 +381,7 @@ function normalizeProfile(row: CreatorProfile): CreatorProfile {
     ...row,
     other_links: Array.isArray(row.other_links) ? row.other_links : [],
     top_videos: row.top_videos && typeof row.top_videos === "object" ? row.top_videos : null,
+    gallery: sanitizeGallery(row.gallery),
   };
 }
 
@@ -357,6 +420,7 @@ export type CreatorProfilePatch = Partial<{
   substack: string | null;
   primarySocial: string | null;
   otherLinks: Array<{ label?: string; url: string }>;
+  gallery: GalleryItem[];
 }>;
 
 const PATCH_COLUMNS: Record<keyof CreatorProfilePatch, { column: string; gqlType: string }> = {
@@ -377,6 +441,7 @@ const PATCH_COLUMNS: Record<keyof CreatorProfilePatch, { column: string; gqlType
   // mapping configured, so it shows up in the GraphQL schema as its base type.
   primarySocial: { column: "primary_social", gqlType: "String" },
   otherLinks: { column: "other_links", gqlType: "jsonb" },
+  gallery: { column: "gallery", gqlType: "jsonb" },
 };
 
 /**
