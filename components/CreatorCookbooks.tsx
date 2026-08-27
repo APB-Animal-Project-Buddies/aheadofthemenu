@@ -7,6 +7,7 @@
  * Saves the whole array through PATCH /api/creators/mine like the gallery.
  */
 import { useRef, useState } from "react";
+import { clip } from "@/components/ui/InlineEditField";
 import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -14,6 +15,14 @@ import { authFetch } from "@/lib/nhost/auth-fetch";
 import { storageErrorMessage } from "@/lib/storage-error";
 import { uploadImage } from "@/lib/upload-image";
 import { MAX_COOKBOOKS, type Cookbook } from "@/lib/creators";
+
+function hostOf(url: string): string {
+  try {
+    return new URL(url).hostname.replace(/^www\./, "");
+  } catch {
+    return url;
+  }
+}
 
 export function CreatorCookbooks({
   items,
@@ -25,6 +34,13 @@ export function CreatorCookbooks({
   onChange?: (next: Cookbook[]) => void;
 }) {
   const coverRef = useRef<HTMLInputElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const scrollBy = (dir: 1 | -1) => {
+    const el = trackRef.current;
+    if (!el) return;
+    const card = el.firstElementChild as HTMLElement | null;
+    el.scrollBy({ top: dir * ((card?.offsetHeight ?? 120) + 12), behavior: "smooth" });
+  };
   const [title, setTitle] = useState("");
   const [url, setUrl] = useState("");
   const [cover, setCover] = useState<string | null>(null);
@@ -96,40 +112,69 @@ export function CreatorCookbooks({
       <h2 className="mb-3 text-xl font-bold text-apb">Cookbooks &amp; Other Goodies</h2>
 
       {items.length ? (
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
-          {items.map((c) => (
-            <div key={c.url} className="relative">
-              <a
-                href={c.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group block overflow-hidden rounded-[16px] border border-neutral-200 bg-white/60 transition hover:border-apb"
-              >
-                {c.cover ? (
-                  // eslint-disable-next-line @next/next/no-img-element -- Nhost storage host not in next/image config
-                  <img src={c.cover} alt={c.title} loading="lazy" className="aspect-[3/4] w-full object-cover" />
-                ) : (
-                  <div className="flex aspect-[3/4] w-full items-center justify-center bg-apb/5 text-4xl">📖</div>
-                )}
-                <div className="p-3">
-                  <p className="text-sm font-semibold leading-snug text-neutral-800 group-hover:text-apb">{c.title}</p>
-                  {c.blurb ? <p className="mt-1 line-clamp-2 text-xs text-neutral-500">{c.blurb}</p> : null}
-                  <p className="mt-1 text-xs font-medium text-apb">Get it ↗</p>
-                </div>
-              </a>
-              {editable ? (
-                <button
-                  type="button"
-                  onClick={() => remove(c)}
-                  aria-label={`Remove ${c.title}`}
-                  title="Remove"
-                  className="absolute right-2 top-2 flex h-8 w-8 items-center justify-center rounded-full bg-black/60 text-white transition hover:bg-red-600"
+        // Vertical snap carousel: a fixed-height viewport the cards scroll through
+        // (wheel / touch / chevrons), each card snapping into place.
+        <div className="relative">
+          <div
+            ref={trackRef}
+            className="max-h-[22rem] snap-y snap-mandatory space-y-3 overflow-y-auto overscroll-contain scroll-smooth pr-1 [scrollbar-width:thin]"
+          >
+            {items.map((c) => (
+              <div key={c.url} className="relative snap-start">
+                <a
+                  href={c.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group flex gap-4 overflow-hidden rounded-[16px] border border-neutral-200 bg-white/60 p-3 transition hover:border-apb"
                 >
-                  ✕
-                </button>
-              ) : null}
+                  {c.cover ? (
+                    // eslint-disable-next-line @next/next/no-img-element -- Nhost storage host not in next/image config
+                    <img src={c.cover} alt={c.title} loading="lazy" className="h-28 w-20 shrink-0 rounded-lg object-cover" />
+                  ) : (
+                    <div className="flex h-28 w-20 shrink-0 items-center justify-center rounded-lg bg-apb/5 text-3xl">📖</div>
+                  )}
+                  <div className="min-w-0 flex-1 self-center">
+                    <p className="text-base font-semibold leading-snug text-neutral-800 group-hover:text-apb">{c.title}</p>
+                    {c.blurb ? <p className="mt-1 line-clamp-2 text-sm text-neutral-500">{c.blurb}</p> : null}
+                    <p className="mt-2 text-xs font-medium text-apb">
+                      Get it ↗ <span className="font-normal text-neutral-400">{clip(hostOf(c.url))}</span>
+                    </p>
+                  </div>
+                </a>
+                {editable ? (
+                  <button
+                    type="button"
+                    onClick={() => remove(c)}
+                    aria-label={`Remove ${c.title}`}
+                    title="Remove"
+                    className="absolute right-2 top-2 flex h-8 w-8 items-center justify-center rounded-full bg-black/60 text-white transition hover:bg-red-600"
+                  >
+                    ✕
+                  </button>
+                ) : null}
+              </div>
+            ))}
+          </div>
+          {items.length > 2 ? (
+            <div className="pointer-events-none absolute inset-y-0 right-[-2.25rem] hidden flex-col justify-center gap-2 sm:flex">
+              <button
+                type="button"
+                onClick={() => scrollBy(-1)}
+                aria-label="Scroll up"
+                className="pointer-events-auto flex h-8 w-8 items-center justify-center rounded-full border border-neutral-200 bg-white text-apb shadow-sm hover:bg-apb hover:text-white"
+              >
+                ▲
+              </button>
+              <button
+                type="button"
+                onClick={() => scrollBy(1)}
+                aria-label="Scroll down"
+                className="pointer-events-auto flex h-8 w-8 items-center justify-center rounded-full border border-neutral-200 bg-white text-apb shadow-sm hover:bg-apb hover:text-white"
+              >
+                ▼
+              </button>
             </div>
-          ))}
+          ) : null}
         </div>
       ) : editable ? (
         <p className="text-sm text-neutral-400">Feature your cookbooks, merch, courses or anything else you sell — a title, a link, and optionally a cover image.</p>
