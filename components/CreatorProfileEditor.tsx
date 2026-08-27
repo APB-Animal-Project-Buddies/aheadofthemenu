@@ -24,7 +24,8 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "@/components/AuthProvider";
 import { authFetch } from "@/lib/nhost/auth-fetch";
-import { InlineEditField } from "@/components/ui/InlineEditField";
+import { InlineEditField, clip } from "@/components/ui/InlineEditField";
+import { CreatorPhotoUpload } from "@/components/CreatorPhotoUpload";
 import { CreatorOwnerBar } from "@/components/CreatorOwnerBar";
 import { CREATOR_SOCIALS, orderedSocials, type CreatorProfile } from "@/lib/creators";
 
@@ -218,15 +219,10 @@ export function CreatorProfileEditor({ creator, claimed }: { creator: CreatorPro
           <CreatorOwnerBar isOwner={isOwner} />
 
           <div className="mt-2 max-w-sm">
-            <p className="text-xs font-semibold uppercase tracking-wide text-neutral-400">Photo URL</p>
-            <InlineEditField
-              label="Photo URL"
-              value={profile.image_url ?? ""}
-              onSave={save("image_url")}
-              type="url"
-              placeholder="https://…"
-              emptyText="Add a photo URL"
-              validate={urlValidate}
+            <p className="text-xs font-semibold uppercase tracking-wide text-neutral-400">Photo</p>
+            <CreatorPhotoUpload
+              currentUrl={profile.image_url}
+              onSaved={(url) => setProfile((p) => ({ ...p, image_url: url }))}
             />
           </div>
 
@@ -264,7 +260,7 @@ export function CreatorProfileEditor({ creator, claimed }: { creator: CreatorPro
               validate={urlValidate}
               renderValue={(v) => (
                 <a href={v} target="_blank" rel="noopener noreferrer" className="text-sm font-medium text-apb hover:underline">
-                  {hostnameOf(v)} ↗
+                  {clip(hostnameOf(v))} ↗
                 </a>
               )}
             />

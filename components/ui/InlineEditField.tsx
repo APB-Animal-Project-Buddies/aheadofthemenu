@@ -1,8 +1,8 @@
 "use client";
 
 /**
- * Click-to-edit field: read-only text with a hover-revealed "Edit" link that
- * swaps in an input/textarea + explicit Save/Cancel. Same shape as the handle
+ * Click-to-edit field: read-only text with an always-visible edit (pencil)
+ * button that swaps in an input/textarea + explicit Save/Cancel. Same shape as the handle
  * editor on app/profile/page.tsx (click → controlled input → async save),
  * generalized so creator-profile and account fields share one implementation
  * instead of three copies of the same state machine.
@@ -12,6 +12,12 @@ import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+
+/** Long values (URLs especially) are clipped in read mode; the full value is in the title. */
+export const DISPLAY_MAX = 30;
+export function clip(value: string, max = DISPLAY_MAX): string {
+  return value.length > max ? value.slice(0, max - 1) + "…" : value;
+}
 
 type Props = {
   label: string;
@@ -50,7 +56,15 @@ export function InlineEditField({
       <div className="group flex items-start gap-2">
         <div className="min-w-0 flex-1 text-sm">
           {value ? (
-            renderValue ? renderValue(value) : <span className="whitespace-pre-wrap text-neutral-800">{value}</span>
+            renderValue ? (
+              renderValue(value)
+            ) : multiline ? (
+              <span className="whitespace-pre-wrap text-neutral-800">{value}</span>
+            ) : (
+              <span className="text-neutral-800" title={value.length > DISPLAY_MAX ? value : undefined}>
+                {clip(value)}
+              </span>
+            )
           ) : (
             <span className="italic text-neutral-400">{emptyText ?? `Add ${label.toLowerCase()}`}</span>
           )}
@@ -62,9 +76,14 @@ export function InlineEditField({
             setError(null);
             setEditing(true);
           }}
-          className="shrink-0 text-xs font-medium text-apb opacity-0 transition group-hover:opacity-100 focus:opacity-100 hover:underline"
+          aria-label={`Edit ${label.toLowerCase()}`}
+          title={`Edit ${label.toLowerCase()}`}
+          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-apb/10 text-apb transition hover:bg-apb hover:text-white focus:outline-none focus:ring-2 focus:ring-apb/40"
         >
-          Edit
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <path d="M12 20h9" />
+            <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z" />
+          </svg>
         </button>
       </div>
     );
