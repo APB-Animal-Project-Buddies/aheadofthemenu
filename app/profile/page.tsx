@@ -6,7 +6,6 @@ import Link from "next/link";
 import { useAuth } from "@/components/AuthProvider";
 import { Avatar } from "@/components/Avatar";
 import { QrShareCard } from "@/components/QrShareCard";
-import { EditCreatorProfileButton } from "@/components/EditCreatorProfileButton";
 import { ClaimQrSection } from "@/components/ClaimQrSection";
 import { ClaimCreatorSection } from "@/components/ClaimCreatorSection";
 import { ActiveDishesList } from "@/components/ActiveDishesList";
@@ -129,9 +128,6 @@ export default function ProfilePage() {
         Home
       </Link>
 
-
-      {/* Big CTA for creators — right under Home / the active-dishes QR card. */}
-      <EditCreatorProfileButton className="mb-6" />
 
       {/* Claim/create your creator page — authenticated-only (this page always
           is; redirects to /login otherwise). Sits above the account details: it's the main reason a creator lands here. */}
