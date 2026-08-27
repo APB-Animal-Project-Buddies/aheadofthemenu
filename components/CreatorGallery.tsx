@@ -118,6 +118,8 @@ export function CreatorGallery({
     }
   }
 
+  const hasSquare = items.some((g) => g.kind !== "video");
+
   return (
     <section className="mt-12">
       <h2 className="mb-3 text-xl font-bold text-apb">Gallery</h2>
@@ -157,17 +159,27 @@ export function CreatorGallery({
       ) : null}
 
       {items.length ? (
-        // Dense-packed grid of square units (2 across on phones, 4 from sm):
+        // Dense-packed grid of square units, fully responsive: 2 columns on
+        // phones, 3 from sm, 4 from lg. Row height isn't fixed — the 1×1 tiles
+        // are aspect-square, so every row's height tracks the column width and
+        // the whole grid scales with the viewport. Spanning tiles carry no
+        // aspect of their own; they simply fill their cells:
         //   photo / Instagram → 1×1     landscape YouTube → 2 wide × 1 tall
         //   portrait clip (TikTok, YouTube Short) → 1 wide × 2 tall
         // grid-flow-dense back-fills gaps so mixed shapes still tile tightly.
         // Iframes can't object-fit, so each is oversized on one axis + centred
-        // to cover its cell (16:9 in 2:1 → 112.5% tall; 9:16 in 1:2 → 112.5% wide).
-        <div className="grid auto-rows-fr grid-cols-2 gap-3 [grid-auto-flow:dense] sm:grid-cols-4">
+        // to cover its cell (16:9 in ~2:1 → 112.5% tall; 9:16 in ~1:2 → 112.5% wide).
+        <div className="grid auto-rows-[minmax(0,1fr)] grid-cols-2 gap-3 [grid-auto-flow:dense] sm:grid-cols-3 lg:grid-cols-4">
           {items.map((g) => {
             const portrait = g.kind === "video" && (g.platform === "tiktok" || g.vertical === true);
             const landscape = g.kind === "video" && !portrait;
-            const span = landscape ? "col-span-2 aspect-[2/1]" : portrait ? "row-span-2 aspect-[1/2]" : "aspect-square";
+            // If nothing square is present there's no pacer for the row height,
+            // so spanning tiles fall back to declaring their own aspect.
+            const span = landscape
+              ? `col-span-2 ${hasSquare ? "" : "aspect-[2/1]"}`
+              : portrait
+                ? `row-span-2 ${hasSquare ? "" : "aspect-[1/2]"}`
+                : "aspect-square";
             return (
               <figure
                 key={itemKey(g)}
