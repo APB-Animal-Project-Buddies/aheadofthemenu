@@ -129,7 +129,7 @@ export function CreatorProfileEditor({ creator, claimed }: { creator: CreatorPro
     return (
       <>
         <CreatorOwnerBar isOwner={isOwner} previewPublic={previewPublic} onTogglePreview={setPreviewPublic} />
-        <header className="mt-4 flex flex-col gap-5 sm:flex-row sm:items-start">
+        <header className="mt-10 flex flex-col gap-5 sm:flex-row sm:items-start">
           {view.image_url ? (
             // eslint-disable-next-line @next/next/no-img-element -- external/re-hosted URLs, no next/image domains configured
             <img
@@ -195,7 +195,7 @@ export function CreatorProfileEditor({ creator, claimed }: { creator: CreatorPro
   return (
     <>
       <CreatorOwnerBar isOwner={isOwner} previewPublic={previewPublic} onTogglePreview={setPreviewPublic} />
-      <header className="mt-4 flex flex-col gap-5 sm:flex-row sm:items-start">
+      <header className="mt-10 flex flex-col gap-5 sm:flex-row sm:items-start">
         {profile.image_url ? (
           // eslint-disable-next-line @next/next/no-img-element -- external/re-hosted URLs, no next/image domains configured
           <img

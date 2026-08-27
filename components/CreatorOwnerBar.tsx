@@ -23,7 +23,7 @@ export function CreatorOwnerBar({
   const hasSwitch = typeof previewPublic === "boolean" && !!onTogglePreview;
 
   return (
-    <div className="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-apb/20 bg-apb/5 px-4 py-2.5 text-sm font-medium text-apb">
+    <div className="mt-8 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-apb/20 bg-apb/5 px-5 py-3.5 text-sm font-medium text-apb">
       <span className="flex items-center gap-2">
         This is your profile
         <Link href="/profile" className="text-xs underline hover:no-underline">

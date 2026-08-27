@@ -87,7 +87,7 @@ export default async function CreatorPage({ params }: { params: { slug: string }
     .filter(([, v]) => v && v.url);
 
   return (
-    <main className="mx-auto max-w-3xl px-4 py-8">
+    <main className="mx-auto max-w-3xl px-4 pb-8 pt-12">
       <Link href="/dishes" className="text-sm text-neutral-400 hover:text-apb">← All dishes</Link>
 
       {/* owner_id is the owner's auth user UUID — never sent to the browser.
