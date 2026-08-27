@@ -2,9 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 
 // Static SPA apps live physically in public/<slug>/ — serve them at the root
 // slug via a rewrite so their absolute asset paths keep resolving.
-// NOTE: "recipes" is intentionally omitted — /recipes is temporarily deprecated
-// and redirected to /dishes in next.config.js pending a terms-of-use review of
-// the external sources it curates. Re-add it here to restore the static SPA.
+// NOTE: "recipes" is intentionally omitted — the old static recipes SPA is
+// deprecated pending a terms-of-use review of the external sources it curates.
+// /recipes is now a Next route (app/recipes) that renders the dish library
+// under the business nav. Only public/recipes/site-nav.js is still used.
 const STATIC_APPS = [
   "menus",
   "top-alternatives",

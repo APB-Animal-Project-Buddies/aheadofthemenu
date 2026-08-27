@@ -20,12 +20,10 @@
     { id: 'dairy',    href: '/top-alternatives', label: 'Top Alternatives' },
     { id: 'eatthis',  href: '/eat-this',         label: 'Eat This!' },
   ];
-  // "Recipes" tab is temporarily removed — /recipes is deprecated pending a
-  // terms-of-use review. Re-add { id: 'recipes', href: '/recipes', label: 'Recipes' }
-  // to restore it.
   const BUSINESS_TABS = [
     { id: 'getting-started', href: '/getting-started', label: 'Getting Started' },
     { id: 'menus',    href: '/menus',            label: 'Menus' },
+    { id: 'recipes',  href: '/recipes',          label: 'Recipes' },
     { id: 'dairy',    href: '/top-alternatives', label: 'Top Alternatives' },
     { id: 'tips',     href: '/tips-and-tricks',  label: 'Tips & Tricks' },
     { id: 'eatthis',  href: '/eat-this',         label: 'Eat This!' },
