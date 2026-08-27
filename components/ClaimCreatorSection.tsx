@@ -41,10 +41,10 @@ import Link from "next/link";
 import { useAuth } from "@/components/AuthProvider";
 import { authFetch } from "@/lib/nhost/auth-fetch";
 import { Input } from "@/components/ui/input";
-import { closestMatch, fuzzyMatches } from "@/lib/fuzzy";
+import { closestMatch, fuzzyMatches, normalize } from "@/lib/fuzzy";
+import { creatorSearchTerms, type UnclaimedCreator } from "@/lib/creators";
 import { ClaimCreatorModal } from "@/components/ClaimCreatorModal";
 
-type UnclaimedCreator = { id: string; display_name: string; creator_name: string | null; slug: string | null };
 type ClaimRow = { id: string; creator_id: string; status: "pending" | "approved" | "rejected"; note: string | null; created_at: string; reviewed_at: string | null; creator: { id: string; display_name: string; slug: string | null } };
 type OwnedCreator = { id: string; display_name: string; slug: string | null; image_url?: string | null };
 
@@ -166,11 +166,24 @@ function SearchAndCreate({
   }, []);
 
   const query = q.trim();
-  // Same typo-tolerant ranking as CreatorCombobox, keyed by id so distinct
-  // creators sharing a display_name don't collide.
-  const byName = new Map((creators ?? []).map((c) => [c.display_name, c] as const));
-  const names = fuzzyMatches(query, Array.from(byName.keys()), 8);
-  const matches = names.map((n) => byName.get(n)!).filter(Boolean);
+  // Same typo-tolerant ranking as CreatorCombobox, but over EVERY term a
+  // creator can be found by — display name, brand name, slug, and the handles
+  // from their social URLs — so "@plantsinaslurry" finds "PlantsInASlurry".
+  // Terms map back to creators (first term wins on collision, and each
+  // creator appears once) so two creators sharing a name don't collide.
+  const byTerm = new Map<string, UnclaimedCreator>();
+  for (const c of creators ?? []) for (const t of creatorSearchTerms(c)) if (!byTerm.has(t)) byTerm.set(t, c);
+  const matches: Array<{ creator: UnclaimedCreator; via: string | null }> = [];
+  const seen = new Set<string>();
+  for (const term of fuzzyMatches(query, Array.from(byTerm.keys()), 24)) {
+    const c = byTerm.get(term)!;
+    if (seen.has(c.id)) continue;
+    seen.add(c.id);
+    // Surface the handle that matched when it's not simply the name.
+    const via = normalize(term) === normalize(c.display_name) ? null : c.handles.includes(term) ? `@${term}` : term;
+    matches.push({ creator: c, via });
+    if (matches.length === 8) break;
+  }
 
   return (
     <div className="mt-3">
@@ -182,7 +195,7 @@ function SearchAndCreate({
       <div className="relative mt-3">
         <Input
           value={q}
-          placeholder="Search creators (e.g. Nora Cooks, Vegan Richa)"
+          placeholder="Search by name or handle (e.g. Nora Cooks, @plantsinaslurry)"
           onChange={(e) => setQ(e.target.value)}
           disabled={creators === null}
         />
@@ -196,12 +209,14 @@ function SearchAndCreate({
         <p className="mt-2 text-sm text-neutral-400">No matches — you can create your own page below.</p>
       ) : query ? (
         <ul className="mt-2 divide-y divide-neutral-100 overflow-hidden rounded-xl border border-neutral-200 bg-white">
-          {matches.map((c) => (
+          {matches.map(({ creator: c, via }) => (
             <li key={c.id} className="flex items-center justify-between gap-3 px-4 py-2.5">
               <div className="min-w-0">
                 <p className="truncate text-sm font-medium text-neutral-800">{c.display_name}</p>
-                {c.creator_name && c.creator_name !== c.display_name && (
-                  <p className="truncate text-xs text-neutral-500">{c.creator_name}</p>
+                {(via || (c.creator_name && c.creator_name !== c.display_name)) && (
+                  <p className="truncate text-xs text-neutral-500">
+                    {via ?? c.creator_name}
+                  </p>
                 )}
               </div>
               <button

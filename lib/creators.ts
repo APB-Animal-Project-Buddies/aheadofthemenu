@@ -178,22 +178,77 @@ export async function resolveOrCreateCreator(name: string): Promise<{ id: string
 
 /** Read-only lookup — every claimable creator (unclaimed, not hidden), for the
  * claim-search entry point. Small table; the caller filters client-side. */
-export async function getUnclaimedCreators(): Promise<
-  Array<{ id: string; display_name: string; creator_name: string | null; slug: string | null }>
-> {
+export type UnclaimedCreator = {
+  id: string;
+  display_name: string;
+  creator_name: string | null;
+  slug: string | null;
+  /** Social handles (no "@"), derived from the profile's social URLs — e.g. ["plantsinaslurry"]. */
+  handles: string[];
+};
+
+const SOCIAL_URL_COLUMNS = ["youtube", "instagram", "tiktok", "facebook", "twitter_x", "pinterest", "substack"] as const;
+
+/**
+ * The handle a social URL points at, or null when there isn't one:
+ *   https://www.instagram.com/plantsinaslurry/      → "plantsinaslurry"
+ *   https://youtube.com/@NoraCooks?sub=1            → "NoraCooks"
+ *   https://www.tiktok.com/@vegan.richa             → "vegan.richa"
+ *   https://noracooks.substack.com                  → "noracooks"
+ *   https://www.youtube.com/channel/UCabc123        → "UCabc123" (still searchable)
+ *   https://facebook.com/                           → null
+ */
+export function socialHandle(url: string | null | undefined): string | null {
+  if (!url) return null;
+  let u: URL;
+  try {
+    u = new URL(url.trim());
+  } catch {
+    return null;
+  }
+  const host = u.hostname.toLowerCase();
+  if (host.endsWith(".substack.com")) {
+    const sub = host.slice(0, -".substack.com".length);
+    return sub && sub !== "www" ? sub : null;
+  }
+  const segs = u.pathname.split("/").filter(Boolean);
+  if (!segs.length) return null;
+  const last = segs[segs.length - 1].replace(/^@/, "").replace(/\.html?$/i, "");
+  return last || null;
+}
+
+/** Every string a searcher might type to find this creator: names, slug, handles. */
+export function creatorSearchTerms(c: Pick<UnclaimedCreator, "display_name" | "creator_name" | "slug" | "handles">): string[] {
+  const out = new Set<string>();
+  for (const t of [c.display_name, c.creator_name, c.slug, ...c.handles]) {
+    const v = t?.trim();
+    if (v) out.add(v);
+  }
+  return Array.from(out);
+}
+
+export async function getUnclaimedCreators(): Promise<UnclaimedCreator[]> {
   const { graphql } = await import("@/lib/nhost");
-  const res = await graphql<{
-    creators: Array<{ id: string; display_name: string; creator_name: string | null; slug: string | null }>;
-  }>(
+  type Row = { id: string; display_name: string; creator_name: string | null; slug: string | null } & Record<
+    (typeof SOCIAL_URL_COLUMNS)[number],
+    string | null
+  >;
+  const res = await graphql<{ creators: Row[] }>(
     `query {
        creators(where: { owner_id: { _is_null: true }, hidden: { _eq: false } }, order_by: { display_name: asc }) {
-         id display_name creator_name slug
+         id display_name creator_name slug ${SOCIAL_URL_COLUMNS.join(" ")}
        }
      }`,
     { useAdminSecret: true }
   );
   if (res.errors?.length) throw new Error(res.errors[0].message);
-  return res.data?.creators ?? [];
+  return (res.data?.creators ?? []).map((r) => ({
+    id: r.id,
+    display_name: r.display_name,
+    creator_name: r.creator_name,
+    slug: r.slug,
+    handles: Array.from(new Set(SOCIAL_URL_COLUMNS.map((k) => socialHandle(r[k])).filter((h): h is string => !!h))),
+  }));
 }
 
 /** Thrown by createOwnedCreator when the display name is already taken —
