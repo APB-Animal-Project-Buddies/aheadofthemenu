@@ -103,6 +103,9 @@ export function CreatorProfileEditor({ creator, claimed }: { creator: CreatorPro
   // Local copy so saved edits render immediately; only ever mutated by the
   // owner branch below, so non-owners always see the untouched prop values.
   const [profile, setProfile] = useState<CreatorProfile>(creator);
+  // Owner-only: show the page exactly as a visitor sees it (from the latest
+  // saved values), toggled from the owner bar.
+  const [previewPublic, setPreviewPublic] = useState(false);
 
   const save = (field: TextField) => async (value: string) => {
     const res = await authFetch("/api/creators/mine", {
@@ -115,25 +118,28 @@ export function CreatorProfileEditor({ creator, claimed }: { creator: CreatorPro
     setProfile((p) => ({ ...p, [field]: value || null }) as CreatorProfile);
   };
 
-  if (!isOwner) {
+  if (!isOwner || previewPublic) {
+    // Visitors see the server-rendered prop; an owner previewing sees their saved edits.
+    const view = isOwner ? profile : creator;
     return (
       <>
+        <CreatorOwnerBar isOwner={isOwner} previewPublic={previewPublic} onTogglePreview={setPreviewPublic} />
         <header className="mt-4 flex flex-col gap-5 sm:flex-row sm:items-start">
-          {creator.image_url ? (
+          {view.image_url ? (
             // eslint-disable-next-line @next/next/no-img-element -- external/re-hosted URLs, no next/image domains configured
             <img
-              src={creator.image_url}
-              alt={creator.display_name}
+              src={view.image_url}
+              alt={view.display_name}
               className="h-28 w-28 shrink-0 rounded-full border border-neutral-200 object-cover"
             />
           ) : (
             <div className="flex h-28 w-28 shrink-0 items-center justify-center rounded-full border border-neutral-200 bg-apb/10 text-3xl font-bold text-apb">
-              {creator.display_name.slice(0, 1).toUpperCase()}
+              {view.display_name.slice(0, 1).toUpperCase()}
             </div>
           )}
           <div className="min-w-0">
             <div className="flex flex-wrap items-center gap-2">
-              <h1 className="text-3xl font-bold text-apb">{creator.display_name}</h1>
+              <h1 className="text-3xl font-bold text-apb">{view.display_name}</h1>
               {claimed ? (
                 <span className="inline-flex items-center gap-1 rounded-full bg-apb/10 px-3 py-1 text-sm font-semibold text-apb">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -142,47 +148,47 @@ export function CreatorProfileEditor({ creator, claimed }: { creator: CreatorPro
                   Managed by the creator
                 </span>
               ) : null}
-              {creator.plant_based ? (
+              {view.plant_based ? (
                 <span className="inline-flex items-center gap-1.5 rounded-full bg-green-50 px-3 py-1 text-sm font-semibold text-green-700">
                   <span aria-hidden="true">💚</span> Fully Plant-Based Creator!
                 </span>
               ) : null}
             </div>
-            <CreatorOwnerBar isOwner={isOwner} />
-            {creator.creator_name && creator.creator_name !== creator.display_name ? (
-              <p className="text-neutral-500">{creator.creator_name}</p>
+            {view.creator_name && view.creator_name !== view.display_name ? (
+              <p className="text-neutral-500">{view.creator_name}</p>
             ) : null}
-            {creator.real_name && creator.real_name !== creator.display_name ? (
-              <p className="text-sm text-neutral-400">{creator.real_name}</p>
+            {view.real_name && view.real_name !== view.display_name ? (
+              <p className="text-sm text-neutral-400">{view.real_name}</p>
             ) : null}
-            {creator.website ? (
+            {view.website ? (
               <a
-                href={creator.website}
+                href={view.website}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="mt-1 inline-block text-sm font-medium text-apb hover:underline"
               >
-                {new URL(creator.website).hostname.replace(/^www\./, "")} ↗
+                {new URL(view.website).hostname.replace(/^www\./, "")} ↗
               </a>
             ) : null}
-            <SocialLinks creator={creator} />
+            <SocialLinks creator={view} />
           </div>
         </header>
 
         {/* Bio */}
-        {creator.bio ? (
+        {view.bio ? (
           <p className="mt-6 rounded-[16px] border border-neutral-200 bg-white/60 px-5 py-4 leading-relaxed text-neutral-800">
-            {creator.bio}
+            {view.bio}
           </p>
         ) : null}
 
-        <CreatorGallery items={creator.gallery ?? []} />
+        <CreatorGallery items={view.gallery ?? []} />
       </>
     );
   }
 
   return (
     <>
+      <CreatorOwnerBar isOwner={isOwner} previewPublic={previewPublic} onTogglePreview={setPreviewPublic} />
       <header className="mt-4 flex flex-col gap-5 sm:flex-row sm:items-start">
         {profile.image_url ? (
           // eslint-disable-next-line @next/next/no-img-element -- external/re-hosted URLs, no next/image domains configured
@@ -219,7 +225,6 @@ export function CreatorProfileEditor({ creator, claimed }: { creator: CreatorPro
               </span>
             ) : null}
           </div>
-          <CreatorOwnerBar isOwner={isOwner} />
 
           <div className="mt-2 max-w-sm">
             <p className="text-xs font-semibold uppercase tracking-wide text-neutral-400">Photo</p>
