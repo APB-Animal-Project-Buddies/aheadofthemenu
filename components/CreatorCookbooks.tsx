@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * Featured cookbooks on a creator page (creators.cookbooks). Public: a row of
+ * "Cookbooks & Other Goodies" on a creator page (creators.cookbooks) — books, merch, courses, anything the creator sells. Public: a row of
  * cards (cover, title, blurb) linking out. Owner: same cards with a remove
  * control, plus a small add form (title + link, optional cover upload).
  * Saves the whole array through PATCH /api/creators/mine like the gallery.
@@ -68,7 +68,7 @@ export function CreatorCookbooks({
     setError(null);
     try {
       const item: Cookbook = { title: title.trim(), url: url.trim(), ...(cover ? { cover } : {}) };
-      await persist([...items, item], "Cookbook added");
+      await persist([...items, item], "Added");
       setTitle("");
       setUrl("");
       setCover(null);
@@ -93,7 +93,7 @@ export function CreatorCookbooks({
 
   return (
     <section className="mt-12">
-      <h2 className="mb-3 text-xl font-bold text-apb">Cookbooks</h2>
+      <h2 className="mb-3 text-xl font-bold text-apb">Cookbooks &amp; Other Goodies</h2>
 
       {items.length ? (
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
@@ -114,7 +114,7 @@ export function CreatorCookbooks({
                 <div className="p-3">
                   <p className="text-sm font-semibold leading-snug text-neutral-800 group-hover:text-apb">{c.title}</p>
                   {c.blurb ? <p className="mt-1 line-clamp-2 text-xs text-neutral-500">{c.blurb}</p> : null}
-                  <p className="mt-1 text-xs font-medium text-apb">Get the book ↗</p>
+                  <p className="mt-1 text-xs font-medium text-apb">Get it ↗</p>
                 </div>
               </a>
               {editable ? (
@@ -132,14 +132,14 @@ export function CreatorCookbooks({
           ))}
         </div>
       ) : editable ? (
-        <p className="text-sm text-neutral-400">Feature your cookbooks here — title, a link to buy it, and optionally a cover.</p>
+        <p className="text-sm text-neutral-400">Feature your cookbooks, merch, courses or anything else you sell — a title, a link, and optionally a cover image.</p>
       ) : null}
 
       {editable && items.length < MAX_COOKBOOKS ? (
         <div className="mt-4 rounded-[16px] border border-dashed border-apb/40 bg-apb/5 p-4">
           <div className="grid gap-2 sm:grid-cols-2">
-            <Input value={title} placeholder="Cookbook title" onChange={(e) => setTitle(e.target.value)} disabled={busy} />
-            <Input type="url" value={url} placeholder="https://… (where to buy)" onChange={(e) => setUrl(e.target.value)} disabled={busy} />
+            <Input value={title} placeholder="Title (e.g. cookbook, merch, course)" onChange={(e) => setTitle(e.target.value)} disabled={busy} />
+            <Input type="url" value={url} placeholder="https://… (where to get it)" onChange={(e) => setUrl(e.target.value)} disabled={busy} />
           </div>
           <input ref={coverRef} type="file" accept="image/*" className="hidden" onChange={pickCover} disabled={busy} />
           <div className="mt-2 flex flex-wrap items-center gap-2">
@@ -156,7 +156,7 @@ export function CreatorCookbooks({
               <img src={cover} alt="" className="h-10 w-8 rounded object-cover" />
             ) : null}
             <Button type="button" onClick={add} disabled={busy || !title.trim() || !url.trim()} className="ml-auto rounded-full px-4 py-2 text-sm">
-              {busy ? "Working…" : "Add cookbook"}
+              {busy ? "Working…" : "Add item"}
             </Button>
           </div>
           {error ? <p className="mt-2 text-xs text-red-600">{error}</p> : null}
