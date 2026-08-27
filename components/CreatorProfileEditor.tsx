@@ -25,6 +25,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "@/components/AuthProvider";
 import { authFetch } from "@/lib/nhost/auth-fetch";
 import { InlineEditField, clip } from "@/components/ui/InlineEditField";
+import { Select } from "@/components/ui/select";
 import { CreatorPhotoUpload } from "@/components/CreatorPhotoUpload";
 import { CreatorGallery } from "@/components/CreatorGallery";
 import { CreatorCookbooks } from "@/components/CreatorCookbooks";
@@ -107,6 +108,9 @@ export function CreatorProfileEditor({ creator, claimed }: { creator: CreatorPro
   // Owner-only: show the page exactly as a visitor sees it (from the latest
   // saved values), toggled from the owner bar.
   const [previewPublic, setPreviewPublic] = useState(false);
+  // Which not-yet-populated social the owner picked from "Add more" (its field
+  // is shown, already in edit mode, until saved or cancelled).
+  const [addingSocial, setAddingSocial] = useState<keyof CreatorProfile | null>(null);
 
   const save = (field: TextField) => async (value: string) => {
     const res = await authFetch("/api/creators/mine", {
@@ -279,7 +283,8 @@ export function CreatorProfileEditor({ creator, claimed }: { creator: CreatorPro
           <div className="mt-6 max-w-sm">
             <p className="text-xs font-semibold uppercase tracking-wide text-neutral-400">Social links</p>
             <div className="mt-2 space-y-3">
-              {CREATOR_SOCIALS.map(({ key, label }) => {
+              {/* Only populated platforms are listed; the rest live behind "Add more". */}
+              {CREATOR_SOCIALS.filter(({ key }) => !!profile[key] || key === addingSocial).map(({ key, label }) => {
                 const field = key as TextField;
                 const value = (profile[key] as string | null) ?? "";
                 return (
@@ -289,16 +294,43 @@ export function CreatorProfileEditor({ creator, claimed }: { creator: CreatorPro
                       <InlineEditField
                         label={label}
                         value={value}
-                        onSave={save(field)}
+                        onSave={async (v) => {
+                          await save(field)(v);
+                          setAddingSocial(null);
+                        }}
                         type="url"
                         placeholder="https://…"
                         emptyText={`Add ${label}`}
                         validate={urlValidate}
+                        startEditing={key === addingSocial}
+                        onCancel={() => setAddingSocial(null)}
                       />
                     </div>
                   </div>
                 );
               })}
+              {(() => {
+                const missing = CREATOR_SOCIALS.filter(({ key }) => !profile[key] && key !== addingSocial);
+                if (!missing.length) return null;
+                return (
+                  <div className="flex items-center gap-2">
+                    <span className="w-16 shrink-0 text-xs text-neutral-500">Add more</span>
+                    <Select
+                      value=""
+                      onChange={(e) => setAddingSocial((e.target.value || null) as keyof CreatorProfile | null)}
+                      className="max-w-[12rem] text-sm"
+                      aria-label="Add another social link"
+                    >
+                      <option value="">Choose a platform…</option>
+                      {missing.map(({ key, label }) => (
+                        <option key={String(key)} value={String(key)}>
+                          {label}
+                        </option>
+                      ))}
+                    </Select>
+                  </div>
+                );
+              })()}
             </div>
           </div>
         </div>

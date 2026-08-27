@@ -33,6 +33,10 @@ type Props = {
   validate?: (next: string) => string | null | undefined;
   /** Render the read-only value yourself (e.g. as a link) instead of plain text. */
   renderValue?: (value: string) => React.ReactNode;
+  /** Mount already in edit mode (e.g. a field the user just chose to add). */
+  startEditing?: boolean;
+  /** Called when the user cancels (Esc / Cancel) — lets a parent hide a just-added field. */
+  onCancel?: () => void;
 };
 
 export function InlineEditField({
@@ -45,8 +49,10 @@ export function InlineEditField({
   emptyText,
   validate,
   renderValue,
+  startEditing = false,
+  onCancel,
 }: Props) {
-  const [editing, setEditing] = useState(false);
+  const [editing, setEditing] = useState(startEditing);
   const [draft, setDraft] = useState(value);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -125,6 +131,7 @@ export function InlineEditField({
           if (e.key === "Escape") {
             setEditing(false);
             setError(null);
+            onCancel?.();
           }
         }}
       />
@@ -138,6 +145,7 @@ export function InlineEditField({
           onClick={() => {
             setEditing(false);
             setError(null);
+            onCancel?.();
           }}
           disabled={saving}
           className="text-xs text-neutral-500 hover:underline disabled:opacity-60"
