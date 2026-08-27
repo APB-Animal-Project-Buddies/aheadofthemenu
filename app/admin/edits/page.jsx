@@ -260,6 +260,15 @@ function ClaimEditCard({ e, act, busy }) {
                 <p className="mt-2 text-sm italic text-neutral-600">“{evidenceUrl}”</p>
               )}
               {extraNote ? <p className="mt-1 text-sm italic text-neutral-600">“{extraNote}”</p> : null}
+              {evidenceIsUrl ? (
+                e.evidence_match ? (
+                  <p className="mt-1 text-xs font-medium text-emerald-700">
+                    ✓ Evidence handle @{e.evidence_match.handle} matches this creator&rsquo;s {e.evidence_match.platform.replace("_", "/")} on file
+                  </p>
+                ) : (
+                  <p className="mt-1 text-xs text-neutral-400">Evidence doesn&rsquo;t match any social handle on this creator&rsquo;s page — check it by hand.</p>
+                )
+              ) : null}
             </>
           ) : (
             <p className="mt-2 text-sm text-neutral-400">No note provided.</p>

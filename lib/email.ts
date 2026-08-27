@@ -68,3 +68,45 @@ export async function sendCreatorClaimNotification(claim: {
     console.error("[email] failed to send creator-claim notification", err);
   }
 }
+
+/**
+ * Tell a claimant how their creator-page claim was decided. Best-effort, like
+ * the admin notification: the decision is already committed by the caller.
+ */
+export async function sendCreatorClaimDecision(args: {
+  to: string;
+  creatorDisplayName: string;
+  creatorSlug: string | null;
+  status: "approved" | "rejected";
+}): Promise<void> {
+  const resend = getClient();
+  if (!resend) return;
+
+  const profileUrl = args.creatorSlug ? `https://www.aheadofthemenu.com/creators/${args.creatorSlug}` : null;
+  const approved = args.status === "approved";
+  const subject = approved
+    ? `Your creator page "${args.creatorDisplayName}" is yours`
+    : `About your claim on "${args.creatorDisplayName}"`;
+  const text = (approved
+    ? [
+        `Good news — your claim on the creator page "${args.creatorDisplayName}" was approved.`,
+        "",
+        profileUrl ? `Your page: ${profileUrl}` : null,
+        "Open it while signed in, hover any field and click Edit to update your photo, bio and links.",
+        "You can also get there from https://www.aheadofthemenu.com/profile → \"Edit my Creator Profile\".",
+      ]
+    : [
+        `We reviewed your claim on the creator page "${args.creatorDisplayName}" and couldn't verify it from the evidence provided.`,
+        "",
+        "If this is your page, reply to this email with a link that shows the connection (for example, a post on the profile itself, or a link to Ahead of the Menu from your site or bio) and we'll take another look.",
+      ]
+  )
+    .filter((line) => line !== null)
+    .join("\n");
+
+  try {
+    await resend.emails.send({ from: FROM, to: args.to, replyTo: NOTIFY_TO, subject, text });
+  } catch (err) {
+    console.error("[email] failed to send creator-claim decision", err);
+  }
+}

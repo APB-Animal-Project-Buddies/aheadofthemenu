@@ -198,3 +198,34 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Temporarily unavailable" }, { status: 502 });
   }
 }
+
+// DELETE /api/creators/claims  { claimId }  (Bearer token) → withdraws the
+// caller's OWN pending claim. Approved/rejected claims are history and stay.
+// Without this, a mis-click (claiming the wrong creator) leaves the user
+// stuck on the pending banner AND blocks everyone else — the DB allows only
+// one pending claim per creator.
+export async function DELETE(req: NextRequest) {
+  const caller = verifyNhostJwt(bearerToken(req.headers.get("authorization")));
+  if (!caller) return NextResponse.json({ error: "Not signed in" }, { status: 401 });
+
+  const body = await req.json().catch(() => ({}));
+  const claimId = String(body?.claimId ?? "").trim();
+  if (!UUID_RE.test(claimId)) return NextResponse.json({ error: "Missing or invalid claimId" }, { status: 400 });
+
+  try {
+    const res = await graphql<{ delete_creator_claims: { affected_rows: number } }>(
+      `mutation ($id: uuid!, $uid: uuid!) {
+         delete_creator_claims(where: { id: { _eq: $id }, user_id: { _eq: $uid }, status: { _eq: "pending" } }) {
+           affected_rows
+         }
+       }`,
+      { useAdminSecret: true, variables: { id: claimId, uid: caller.userId } }
+    );
+    if (res.errors?.length) throw new Error(res.errors[0].message);
+    // 0 rows = not yours, not pending, or already gone — all fine to report as
+    // "nothing pending", since the client's next GET reflects the truth.
+    return NextResponse.json({ ok: true, withdrawn: (res.data?.delete_creator_claims.affected_rows ?? 0) > 0 });
+  } catch {
+    return NextResponse.json({ error: "Temporarily unavailable" }, { status: 502 });
+  }
+}

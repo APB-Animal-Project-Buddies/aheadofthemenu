@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { graphql } from "@/lib/nhost";
 import { adminGuard } from "@/lib/admin";
+import { sendCreatorClaimDecision } from "@/lib/email";
 
 export const dynamic = "force-dynamic";
 // Nhost can be slow after idle (cold start); the default function timeout killed
@@ -26,10 +27,24 @@ export async function PATCH(req: NextRequest, { params }: { params: { claimId: s
   }
 
   // Load the claim.
-  let claim: { creator_id: string; user_id: string; status: string } | undefined;
+  let claim:
+    | {
+        creator_id: string;
+        user_id: string;
+        status: string;
+        creator: { display_name: string; slug: string | null };
+        user: { email: string | null };
+      }
+    | undefined;
   try {
     const res = await graphql<{ creator_claims: Array<typeof claim> }>(
-      `query ($id: uuid!) { creator_claims(where: { id: { _eq: $id } }) { creator_id user_id status } }`,
+      `query ($id: uuid!) {
+         creator_claims(where: { id: { _eq: $id } }) {
+           creator_id user_id status
+           creator { display_name slug }
+           user { email }
+         }
+       }`,
       { useAdminSecret: true, variables: { id: claimId } }
     );
     claim = res.data?.creator_claims?.[0];
@@ -49,6 +64,18 @@ export async function PATCH(req: NextRequest, { params }: { params: { claimId: s
 
   const reviewedAt = new Date().toISOString();
 
+  // Best-effort claimant notification — "we'll let you know" on the pending
+  // banner is only true because of this. Never affects the response.
+  const notify = (status: "approved" | "rejected") => {
+    if (!claim?.user.email) return;
+    void sendCreatorClaimDecision({
+      to: claim.user.email,
+      creatorDisplayName: claim.creator.display_name,
+      creatorSlug: claim.creator.slug,
+      status,
+    }).catch(() => {});
+  };
+
   try {
     if (action === "reject") {
       const res = await graphql(
@@ -58,6 +85,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { claimId: s
         { useAdminSecret: true, variables: { id: claimId, at: reviewedAt } }
       );
       if (res.errors?.length) return NextResponse.json({ error: "Could not reject" }, { status: 500 });
+      notify("rejected");
       return NextResponse.json({ ok: true, status: "rejected" });
     }
 
@@ -97,6 +125,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { claimId: s
       console.error("approve creator_claim (finalize) failed:", res.errors);
       return NextResponse.json({ error: "Could not apply claim" }, { status: 500 });
     }
+    notify("approved");
     return NextResponse.json({ ok: true, status: "approved" });
   } catch {
     return NextResponse.json({ error: "Temporarily unavailable" }, { status: 502 });

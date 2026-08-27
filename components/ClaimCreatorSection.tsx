@@ -419,6 +419,8 @@ function formatDate(iso: string) {
  */
 function PendingBanner({ claim, onRefresh }: { claim: ClaimRow; onRefresh: () => Promise<void> }) {
   const [checking, setChecking] = useState(false);
+  const [withdrawing, setWithdrawing] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const submittedOn = formatDate(claim.created_at);
   const { evidenceUrl, extraNote } = splitEvidence(claim.note);
@@ -432,12 +434,46 @@ function PendingBanner({ claim, onRefresh }: { claim: ClaimRow; onRefresh: () =>
     }
   }
 
+  // Re-check on our own while the tab is visible, so an approval shows up
+  // without the user having to remember the button.
+  useEffect(() => {
+    const tick = () => {
+      if (document.visibilityState === "visible") void onRefresh();
+    };
+    const id = setInterval(tick, 30_000);
+    document.addEventListener("visibilitychange", tick);
+    return () => {
+      clearInterval(id);
+      document.removeEventListener("visibilitychange", tick);
+    };
+  }, [onRefresh]);
+
+  async function withdraw() {
+    setWithdrawing(true);
+    setError(null);
+    try {
+      const res = await authFetch("/api/creators/claims", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ claimId: claim.id }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data?.error || "Couldn't withdraw the claim");
+      await onRefresh();
+    } catch (e) {
+      setError((e as Error).message);
+    } finally {
+      setWithdrawing(false);
+    }
+  }
+
   return (
     <div className="mt-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
       <p className="font-medium">Claim pending review</p>
       <p className="mt-1">
-        You asked to claim <strong>{claim.creator.display_name}</strong> on {submittedOn}. We&rsquo;ll
-        let you know once an admin reviews it.
+        You asked to claim <strong>{claim.creator.display_name}</strong> on {submittedOn}. An admin
+        will check the evidence and we&rsquo;ll email you the decision — this page also updates on its
+        own. Wrong page? You can withdraw and pick another.
       </p>
       {evidenceUrl && (
         <p className="mt-2 truncate text-xs text-amber-700">
@@ -448,14 +484,25 @@ function PendingBanner({ claim, onRefresh }: { claim: ClaimRow; onRefresh: () =>
         </p>
       )}
       {extraNote && <p className="mt-1 whitespace-pre-wrap text-xs text-amber-700">{extraNote}</p>}
-      <button
-        type="button"
-        onClick={checkStatus}
-        disabled={checking}
-        className="mt-3 rounded-full border border-amber-300 bg-white px-3 py-1.5 text-xs font-medium text-amber-800 transition hover:bg-amber-100 disabled:opacity-50"
-      >
-        {checking ? "Checking…" : "Check status"}
-      </button>
+      <div className="mt-3 flex flex-wrap items-center gap-2">
+        <button
+          type="button"
+          onClick={checkStatus}
+          disabled={checking}
+          className="rounded-full border border-amber-300 bg-white px-3 py-1.5 text-xs font-medium text-amber-800 transition hover:bg-amber-100 disabled:opacity-50"
+        >
+          {checking ? "Checking…" : "Check status"}
+        </button>
+        <button
+          type="button"
+          onClick={withdraw}
+          disabled={withdrawing}
+          className="rounded-full px-3 py-1.5 text-xs font-medium text-amber-800 underline-offset-2 hover:underline disabled:opacity-50"
+        >
+          {withdrawing ? "Withdrawing…" : "Withdraw claim"}
+        </button>
+      </div>
+      {error && <p className="mt-2 text-xs text-red-700">{error}</p>}
     </div>
   );
 }

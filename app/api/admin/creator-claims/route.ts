@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { graphql } from "@/lib/nhost";
+import { socialHandle } from "@/lib/creators";
 import { adminGuard } from "@/lib/admin";
 
 export const dynamic = "force-dynamic";
@@ -20,7 +21,7 @@ export async function GET(req: NextRequest) {
       `query ($status: String!) {
          creator_claims(where: { status: { _eq: $status } }, order_by: { created_at: asc }) {
            id status note created_at reviewed_at
-           creator { id display_name slug }
+           creator { id display_name slug website youtube instagram tiktok facebook twitter_x pinterest substack }
            user { displayName metadata }
          }
        }`,
@@ -30,7 +31,19 @@ export async function GET(req: NextRequest) {
       console.error("list creator_claims failed:", res.errors);
       return NextResponse.json({ error: "Failed to load claims" }, { status: 500 });
     }
-    return NextResponse.json({ claims: res.data?.creator_claims ?? [] });
+    // Hint for the reviewer, NOT verification: does the evidence link's handle
+    // match one of the creator's known social handles? A typed URL proves
+    // nothing by itself, so this only speeds up the eyeball check.
+    const claims = (res.data?.creator_claims ?? []).map((c) => {
+      const evidenceUrl = typeof c.note === "string" ? c.note.split("\n\n")[0]?.trim() : "";
+      const ev = socialHandle(evidenceUrl)?.toLowerCase() ?? null;
+      const platforms = ["youtube", "instagram", "tiktok", "facebook", "twitter_x", "pinterest", "substack", "website"] as const;
+      const match = ev
+        ? platforms.find((k) => socialHandle(c.creator?.[k])?.toLowerCase() === ev) ?? null
+        : null;
+      return { ...c, evidence_match: match ? { platform: match, handle: ev } : null };
+    });
+    return NextResponse.json({ claims });
   } catch {
     return NextResponse.json({ error: "Temporarily unavailable" }, { status: 502 });
   }
