@@ -12,9 +12,9 @@
  *     remove control per tile. Every change PATCHes the whole array through
  *     /api/creators/mine and reports back via onChange.
  */
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
-import { youTubeAutoplayEmbed, tikTokAutoplayEmbed, instagramEmbed } from "@/lib/video-embeds";
+import { youTubeAutoplayEmbed, tikTokAutoplayEmbed, instagramEmbed, youTubeThumb } from "@/lib/video-embeds";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { authFetch } from "@/lib/nhost/auth-fetch";
@@ -24,6 +24,52 @@ import { parseGalleryLink, galleryTileShape, MAX_GALLERY_ITEMS, type GalleryItem
 
 const itemKey = (g: GalleryItem) =>
   g.kind === "image" ? `image:${g.url}` : g.kind === "video" ? `video:${g.platform}:${g.id}` : `instagram:${g.id}`;
+
+/**
+ * Mounts an embed only while its tile sits in the top 75% of the viewport, and
+ * unmounts it (which stops the stream) once it scrolls out — so a page with a
+ * dozen autoplaying players only ever streams the few actually in view.
+ * rootMargin trims the bottom quarter of the viewport out of the "visible" zone.
+ */
+function ViewportGated({
+  poster,
+  label,
+  children,
+}: {
+  poster: string | null;
+  label: string;
+  children: React.ReactNode;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [active, setActive] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || typeof IntersectionObserver === "undefined") {
+      setActive(true); // no observer support: just play
+      return;
+    }
+    const io = new IntersectionObserver(([entry]) => setActive(entry.isIntersecting), {
+      rootMargin: "0px 0px -25% 0px",
+      threshold: 0.2,
+    });
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+  return (
+    <div ref={ref} className="absolute inset-0">
+      {active ? (
+        children
+      ) : poster ? (
+        // eslint-disable-next-line @next/next/no-img-element -- third-party thumbnail host
+        <img src={poster} alt="" loading="lazy" className="h-full w-full object-cover opacity-90" />
+      ) : (
+        <span className="flex h-full w-full items-center justify-center text-xs font-semibold uppercase tracking-wide text-neutral-400">
+          {label}
+        </span>
+      )}
+    </div>
+  );
+}
 
 function RemoveButton({ onClick, label }: { onClick: () => void; label: string }) {
   return (
@@ -196,35 +242,39 @@ export function CreatorGallery({
                   // eslint-disable-next-line @next/next/no-img-element -- Nhost storage host not in next/image config
                   <img src={g.url} alt={g.caption ?? ""} loading="lazy" className="h-full w-full object-cover" />
                 ) : g.kind === "video" ? (
-                  <iframe
-                    src={g.platform === "youtube" ? youTubeAutoplayEmbed(g.id) : tikTokAutoplayEmbed(g.id)}
-                    title={g.platform === "youtube" ? "YouTube video" : "TikTok video"}
-                    loading="lazy"
-                    allow="autoplay; encrypted-media; picture-in-picture"
-                    allowFullScreen
-                    className={
-                      landscape
-                        ? "absolute left-0 top-1/2 h-[112.5%] w-full -translate-y-1/2"
-                        : g.platform === "youtube"
-                          ? // YouTube paints its desktop chrome (title strip on top, logo/controls
-                            // at the bottom) even on a Short. Make the iframe an exact 9:16 that's
-                            // 20% taller than the 1:2 cell (2.4w × 1.35w) and centre it, so the top
-                            // and bottom 10% — where that chrome lives — are cropped away.
-                            "absolute left-1/2 top-1/2 h-[120%] w-[135%] -translate-x-1/2 -translate-y-1/2"
-                          : "absolute left-1/2 top-0 h-full w-[112.5%] -translate-x-1/2"
-                    }
-                  />
+                  <ViewportGated poster={g.platform === "youtube" ? youTubeThumb(g.id) : null} label="TikTok">
+                    <iframe
+                      src={g.platform === "youtube" ? youTubeAutoplayEmbed(g.id) : tikTokAutoplayEmbed(g.id)}
+                      title={g.platform === "youtube" ? "YouTube video" : "TikTok video"}
+                      allow="autoplay; encrypted-media; picture-in-picture"
+                      allowFullScreen
+                      className={
+                        landscape
+                          ? "absolute left-0 top-1/2 h-[112.5%] w-full -translate-y-1/2"
+                          : g.platform === "youtube"
+                            ? // YouTube paints its desktop chrome (title strip on top, logo/controls
+                              // at the bottom) even on a Short. Make the iframe an exact 9:16 that's
+                              // 20% taller than the 1:2 cell (2.4w × 1.35w) and centre it, so the top
+                              // and bottom 10% — where that chrome lives — are cropped away.
+                              "absolute left-1/2 top-1/2 h-[120%] w-[135%] -translate-x-1/2 -translate-y-1/2"
+                            : "absolute left-1/2 top-0 h-full w-[112.5%] -translate-x-1/2"
+                      }
+                    />
+                  </ViewportGated>
                 ) : (
-                  // Instagram: no autoplay/chrome params. Shift up past the ~54px
-                  // account header so the media's top square fills the tile.
-                  <iframe
-                    src={instagramEmbed(g.id)}
-                    title="Instagram post"
-                    loading="lazy"
-                    allow="encrypted-media; clipboard-write"
-                    scrolling="no"
-                    className="absolute left-0 top-[-54px] h-[calc(100%+160px)] w-full"
-                  />
+                  // Instagram: no autoplay or chrome params, and no public thumbnail
+                  // without an API token — so it's a tap-to-play post. Still gated so
+                  // its embed script isn't fetched until it's actually in view; the
+                  // iframe is shifted up past the ~54px account header.
+                  <ViewportGated poster={null} label="Instagram">
+                    <iframe
+                      src={instagramEmbed(g.id)}
+                      title="Instagram post"
+                      allow="encrypted-media; clipboard-write"
+                      scrolling="no"
+                      className="absolute left-0 top-[-54px] h-[calc(100%+160px)] w-full"
+                    />
+                  </ViewportGated>
                 )}
                 {editable ? (
                   <RemoveButton
