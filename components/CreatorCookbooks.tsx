@@ -200,8 +200,8 @@ export function CreatorCookbooks({
               // eslint-disable-next-line @next/next/no-img-element
               <img src={cover} alt="" className="h-10 w-8 rounded object-cover" />
             ) : null}
-            <Button type="button" onClick={add} disabled={busy || !title.trim() || !url.trim()} className="ml-auto rounded-full px-4 py-2 text-sm">
-              {busy ? "Working…" : "Add item"}
+            <Button type="button" onClick={add} disabled={busy || !title.trim() || !url.trim()} className="ml-auto rounded-full px-5 py-2 text-sm font-bold">
+              {busy ? "Working…" : "Add"}
             </Button>
           </div>
           {error ? <p className="mt-2 text-xs text-red-600">{error}</p> : null}

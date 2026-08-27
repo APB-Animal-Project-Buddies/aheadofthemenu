@@ -191,8 +191,8 @@ export function CreatorGallery({
                 }}
                 disabled={busy}
               />
-              <Button type="button" onClick={addLink} disabled={busy || !link.trim()} className="rounded-full px-4 py-2 text-sm">
-                Add link
+              <Button type="button" onClick={addLink} disabled={busy || !link.trim()} className="rounded-full px-5 py-2 text-sm font-bold">
+                Add
               </Button>
             </div>
           </div>
