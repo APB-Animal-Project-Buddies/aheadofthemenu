@@ -60,6 +60,12 @@ describe("gallery", () => {
     expect(parseInstagramUrl("https://www.tiktok.com/@x/video/123")).toBeNull();
     expect(parseInstagramUrl("nope")).toBeNull();
   });
+  test("YouTube Shorts are flagged vertical, and the flag survives re-sanitizing", () => {
+    expect(parseGalleryLink("https://www.youtube.com/shorts/dQw4w9WgXcQ")).toEqual({ kind: "video", platform: "youtube", id: "dQw4w9WgXcQ", url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", vertical: true });
+    expect(parseGalleryLink("https://youtu.be/dQw4w9WgXcQ")).not.toHaveProperty("vertical");
+    expect(sanitizeGallery([{ kind: "video", url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", vertical: true }])[0]).toHaveProperty("vertical", true);
+    expect(sanitizeGallery([{ kind: "video", url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" }])[0]).not.toHaveProperty("vertical");
+  });
   test("parseGalleryLink routes to video or instagram", () => {
     expect(parseGalleryLink("https://youtu.be/dQw4w9WgXcQ")).toEqual({ kind: "video", platform: "youtube", id: "dQw4w9WgXcQ", url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" });
     expect(parseGalleryLink("https://www.tiktok.com/@x/video/7000000000000000000")?.kind).toBe("video");

@@ -36,7 +36,8 @@ export type CreatorTopVideo = {
 /** One gallery tile on a creator page (creators.gallery JSONB). */
 export type GalleryItem =
   | { kind: "image"; url: string; caption?: string }
-  | { kind: "video"; platform: VideoPlatform; id: string; url: string }
+  /** vertical: a YouTube Short (TikTok is always vertical). The canonical url loses /shorts/, so it's recorded here. */
+  | { kind: "video"; platform: VideoPlatform; id: string; url: string; vertical?: boolean }
   | { kind: "instagram"; id: string; url: string };
 
 export const MAX_GALLERY_ITEMS = 12;
@@ -60,7 +61,10 @@ export function parseInstagramUrl(input: string): Extract<GalleryItem, { kind: "
 /** A pasted link → gallery item (YouTube/TikTok via parseVideoUrl, Instagram here), or null. */
 export function parseGalleryLink(input: string): GalleryItem | null {
   const v = parseVideoUrl(input);
-  if (v) return { kind: "video", ...v };
+  if (v) {
+    const isShort = v.platform === "youtube" && /\/shorts\//i.test(input);
+    return isShort ? { kind: "video", ...v, vertical: true } : { kind: "video", ...v };
+  }
   return parseInstagramUrl(input);
 }
 
@@ -81,6 +85,8 @@ export function sanitizeGallery(input: unknown): GalleryItem[] {
       item = caption ? { kind: "image", url: r.url.trim(), caption } : { kind: "image", url: r.url.trim() };
     } else if (typeof r.url === "string") {
       item = parseGalleryLink(r.url);
+      // Stored rows carry the canonical watch URL, so keep an explicit flag.
+      if (item?.kind === "video" && item.platform === "youtube" && r.vertical === true) item = { ...item, vertical: true };
     }
     if (!item) continue;
     const key = item.kind === "image" ? `image:${item.url}` : `${item.kind}:${item.kind === "video" ? item.platform + ":" : ""}${item.id}`;
