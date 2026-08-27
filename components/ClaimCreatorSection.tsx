@@ -547,25 +547,13 @@ function RejectedBanner({ claim, onDismiss }: { claim: ClaimRow; onDismiss: () =
 }
 
 /**
- * Piece 5 — owned-creator summary: a card with one big, unmissable call to
- * action. Editing is inline on the public page (hover a field → "Edit"), which
- * nobody discovers on their own, so the button is the front door to it.
+ * Piece 5 — owned-creator summary card. The big "Edit my Creator Profile"
+ * CTA lives at the top of /profile (EditCreatorProfileButton); this card just
+ * confirms which page is theirs and links to it.
  */
 function OwnedSummary({ creator }: { creator: OwnedCreator }) {
   return (
     <div className="mt-3 rounded-xl border border-neutral-200 bg-white p-4">
-      {creator.slug ? (
-        <Link
-          href={`/creators/${creator.slug}`}
-          className="mb-4 flex w-full items-center justify-center gap-2 rounded-2xl bg-apb px-6 py-4 text-lg font-semibold text-white shadow-sm transition hover:opacity-90"
-        >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-            <path d="M12 20h9" />
-            <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z" />
-          </svg>
-          Edit my Creator Profile
-        </Link>
-      ) : null}
       <div className="flex items-center gap-3">
       {creator.image_url ? (
         // eslint-disable-next-line @next/next/no-img-element -- external/re-hosted URLs, no next/image domains configured
@@ -582,9 +570,9 @@ function OwnedSummary({ creator }: { creator: OwnedCreator }) {
       <div className="min-w-0 flex-1">
         <p className="truncate text-sm font-medium text-neutral-800">{creator.display_name}</p>
         {creator.slug ? (
-          <p className="text-xs text-neutral-500">
-            Open your page, then hover any field and click <span className="font-medium text-apb">Edit</span>.
-          </p>
+          <Link href={`/creators/${creator.slug}`} className="text-xs font-medium text-apb hover:underline">
+            Open your page →
+          </Link>
         ) : null}
       </div>
       </div>

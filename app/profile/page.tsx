@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useAuth } from "@/components/AuthProvider";
 import { Avatar } from "@/components/Avatar";
 import { QrShareCard } from "@/components/QrShareCard";
+import { EditCreatorProfileButton } from "@/components/EditCreatorProfileButton";
 import { ClaimQrSection } from "@/components/ClaimQrSection";
 import { ClaimCreatorSection } from "@/components/ClaimCreatorSection";
 import { ActiveDishesList } from "@/components/ActiveDishesList";
@@ -137,6 +138,9 @@ export default function ProfilePage() {
           caption="Share this QR — it opens the dishes you currently have open for review."
         />
       )}
+
+      {/* Big CTA for creators — right under Home / the active-dishes QR card. */}
+      <EditCreatorProfileButton className="mb-6" />
 
       <div className="overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-sm">
         {/* Header */}
