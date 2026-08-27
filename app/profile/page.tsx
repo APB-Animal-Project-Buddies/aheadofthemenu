@@ -254,6 +254,11 @@ export default function ProfilePage() {
         </div>
       </div>
 
+      {/* Claim/create your creator page — authenticated-only (this page always
+          is; redirects to /login otherwise). Sits first: it's the main reason a
+          creator lands on this page. */}
+      <ClaimCreatorSection />
+
       {/* Claim a URL — signed-in only; this page always is (redirects to
           /login otherwise). Moved here from the public active-dishes page. */}
       <ClaimQrSection />
@@ -276,10 +281,6 @@ export default function ProfilePage() {
       {/* Agent API keys — not gated on `handle`, since an agent acts as the
           user account rather than through their public profile URL. */}
       <AgentKeysSection />
-
-      {/* Claim/create your creator page — authenticated-only (this page always
-          is; redirects to /login otherwise). */}
-      <ClaimCreatorSection />
     </main>
   );
 }
