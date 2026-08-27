@@ -157,18 +157,26 @@ export function CreatorGallery({
       ) : null}
 
       {items.length ? (
-        // One grid, insertion order, every tile square. Video iframes can't be
-        // object-fit'd, so each is oversized along one axis and centred to
-        // "cover" the square: 16:9 → 177.78% wide; 9:16 → 177.78% tall.
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+        // Waterfall / masonry: CSS multi-column, tiles keep their natural shape
+        // (photos as uploaded, YouTube 16:9, TikTok 9:16, Instagram 4:5) and
+        // flow top-to-bottom into 2–3 columns. break-inside-avoid keeps a tile whole.
+        <div className="columns-2 gap-3 sm:columns-3 [&>*]:mb-3 [&>*]:break-inside-avoid">
           {items.map((g) => (
             <figure
               key={itemKey(g)}
-              className={`relative aspect-square overflow-hidden rounded-[16px] border border-neutral-200 ${g.kind === "image" ? "bg-neutral-100" : g.kind === "instagram" ? "bg-white" : "bg-black"}`}
+              className={`relative overflow-hidden rounded-[16px] border border-neutral-200 ${
+                g.kind === "image"
+                  ? "bg-neutral-100"
+                  : g.kind === "instagram"
+                    ? "aspect-[4/5] bg-white"
+                    : g.platform === "youtube"
+                      ? "aspect-video bg-black"
+                      : "aspect-[9/16] bg-black"
+              }`}
             >
               {g.kind === "image" ? (
                 // eslint-disable-next-line @next/next/no-img-element -- Nhost storage host not in next/image config
-                <img src={g.url} alt={g.caption ?? ""} loading="lazy" className="h-full w-full object-cover" />
+                <img src={g.url} alt={g.caption ?? ""} loading="lazy" className="block h-auto w-full" />
               ) : g.kind === "video" ? (
                 <iframe
                   src={g.platform === "youtube" ? youTubeAutoplayEmbed(g.id) : tikTokAutoplayEmbed(g.id)}
@@ -176,15 +184,11 @@ export function CreatorGallery({
                   loading="lazy"
                   allow="autoplay; encrypted-media; picture-in-picture"
                   allowFullScreen
-                  className={
-                    g.platform === "youtube"
-                      ? "absolute left-1/2 top-0 h-full w-[177.78%] -translate-x-1/2"
-                      : "absolute left-0 top-1/2 h-[177.78%] w-full -translate-y-1/2"
-                  }
+                  className="absolute inset-0 h-full w-full"
                 />
               ) : (
                 // Instagram: no autoplay/chrome params. Shift up past the ~54px
-                // account header so the media's top square fills the tile.
+                // account header; the 4:5 tile shows the media, not the footer.
                 <iframe
                   src={instagramEmbed(g.id)}
                   title="Instagram post"
