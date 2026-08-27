@@ -16,6 +16,10 @@ import { getNhost } from "@/lib/nhost/client";
 import { authFetch } from "@/lib/nhost/auth-fetch";
 import { InlineEditField } from "@/components/ui/InlineEditField";
 
+// Hidden for now (2026-08-26): the "Claim a URL" QR flow and the agent API
+// keys aren't ready for general users. Flip to true to bring both back.
+const SHOW_QR_AND_AGENT_SECTIONS = false;
+
 function roleLabel(role: string | null): string {
   if (!role) return "—";
   return ROLE_OPTIONS.find((o) => o.role === role)?.label ?? role;
@@ -261,7 +265,7 @@ export default function ProfilePage() {
 
       {/* Claim a URL — signed-in only; this page always is (redirects to
           /login otherwise). Moved here from the public active-dishes page. */}
-      <ClaimQrSection />
+      {SHOW_QR_AND_AGENT_SECTIONS && <ClaimQrSection />}
 
       {/* Your dishes — private to your own profile (this page is always the
           signed-in user; it redirects to /login otherwise). */}
@@ -280,7 +284,7 @@ export default function ProfilePage() {
 
       {/* Agent API keys — not gated on `handle`, since an agent acts as the
           user account rather than through their public profile URL. */}
-      <AgentKeysSection />
+      {SHOW_QR_AND_AGENT_SECTIONS && <AgentKeysSection />}
     </main>
   );
 }
