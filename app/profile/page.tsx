@@ -129,20 +129,16 @@ export default function ProfilePage() {
         Home
       </Link>
 
-      {activeDishesUrl && (
-        <QrShareCard
-          className="mb-6"
-          url={activeDishesUrl}
-          title="Your active dishes"
-          link={{ href: `/${handle}/active-dishes`, text: activeDishesUrl }}
-          caption="Share this QR — it opens the dishes you currently have open for review."
-        />
-      )}
 
       {/* Big CTA for creators — right under Home / the active-dishes QR card. */}
       <EditCreatorProfileButton className="mb-6" />
 
-      <div className="overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-sm">
+      {/* Claim/create your creator page — authenticated-only (this page always
+          is; redirects to /login otherwise). Sits above the account details: it's the main reason a creator lands here. */}
+      <ClaimCreatorSection />
+
+      {/* Account details */}
+      <div className="mt-8 overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-sm">
         {/* Header */}
         <div className="flex items-center gap-4 border-b border-neutral-100 bg-apb-cream px-6 py-6">
           <Avatar email={email} displayName={displayName} avatarUrl={avatarUrl} size={64} />
@@ -262,10 +258,6 @@ export default function ProfilePage() {
         </div>
       </div>
 
-      {/* Claim/create your creator page — authenticated-only (this page always
-          is; redirects to /login otherwise). Sits first: it's the main reason a
-          creator lands on this page. */}
-      <ClaimCreatorSection />
 
       {/* Claim a URL — signed-in only; this page always is (redirects to
           /login otherwise). Moved here from the public active-dishes page. */}
@@ -273,6 +265,17 @@ export default function ProfilePage() {
 
       {/* Your dishes — private to your own profile (this page is always the
           signed-in user; it redirects to /login otherwise). */}
+      {/* Your active dishes — QR + lists, under the account details. */}
+      {activeDishesUrl && (
+        <QrShareCard
+          className="mt-8"
+          url={activeDishesUrl}
+          title="Your active dishes"
+          link={{ href: `/${handle}/active-dishes`, text: activeDishesUrl }}
+          caption="Share this QR — it opens the dishes you currently have open for review."
+        />
+      )}
+
       {handle && (
         <>
           <section className="mt-8">
