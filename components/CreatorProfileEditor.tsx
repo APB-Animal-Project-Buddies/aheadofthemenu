@@ -226,7 +226,7 @@ export function CreatorProfileEditor({ creator, claimed }: { creator: CreatorPro
             ) : null}
           </div>
 
-          <div className="mt-2 max-w-sm">
+          <div className="mt-6 max-w-sm">
             <p className="text-xs font-semibold uppercase tracking-wide text-neutral-400">Photo</p>
             <CreatorPhotoUpload
               currentUrl={profile.image_url}
@@ -234,7 +234,7 @@ export function CreatorProfileEditor({ creator, claimed }: { creator: CreatorPro
             />
           </div>
 
-          <div className="mt-2 max-w-sm">
+          <div className="mt-6 max-w-sm">
             <p className="text-xs font-semibold uppercase tracking-wide text-neutral-400">Creator / brand name</p>
             <InlineEditField
               label="Creator/brand name"
@@ -245,7 +245,7 @@ export function CreatorProfileEditor({ creator, claimed }: { creator: CreatorPro
             />
           </div>
 
-          <div className="mt-2 max-w-sm">
+          <div className="mt-6 max-w-sm">
             <p className="text-xs font-semibold uppercase tracking-wide text-neutral-400">Real name</p>
             <InlineEditField
               label="Real name"
@@ -256,7 +256,7 @@ export function CreatorProfileEditor({ creator, claimed }: { creator: CreatorPro
             />
           </div>
 
-          <div className="mt-2 max-w-sm">
+          <div className="mt-6 max-w-sm">
             <p className="text-xs font-semibold uppercase tracking-wide text-neutral-400">Website</p>
             <InlineEditField
               label="Website"
@@ -274,9 +274,9 @@ export function CreatorProfileEditor({ creator, claimed }: { creator: CreatorPro
             />
           </div>
 
-          <div className="mt-3 max-w-sm">
+          <div className="mt-6 max-w-sm">
             <p className="text-xs font-semibold uppercase tracking-wide text-neutral-400">Social links</p>
-            <div className="mt-1 space-y-2">
+            <div className="mt-2 space-y-3">
               {CREATOR_SOCIALS.map(({ key, label }) => {
                 const field = key as TextField;
                 const value = (profile[key] as string | null) ?? "";
