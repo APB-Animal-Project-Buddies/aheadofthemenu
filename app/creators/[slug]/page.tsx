@@ -77,7 +77,10 @@ export default async function CreatorPage({ params }: { params: { slug: string }
     <main className="mx-auto max-w-3xl px-4 py-8">
       <Link href="/dishes" className="text-sm text-neutral-400 hover:text-apb">← All dishes</Link>
 
-      <CreatorProfileEditor creator={creator} />
+      {/* owner_id is the owner's auth user UUID — never sent to the browser.
+          The editor learns ownership from the authenticated
+          GET /api/creators/claims instead; `claimed` drives the public badge. */}
+      <CreatorProfileEditor creator={{ ...creator, owner_id: null }} claimed={creator.owner_id !== null} />
 
       {/* Most-watched clips */}
       {videoEntries.length ? (

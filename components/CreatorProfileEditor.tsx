@@ -5,8 +5,10 @@
  * the header (avatar, name, badges, website, socials) and bio paragraph that
  * used to be static JSX in app/creators/[slug]/page.tsx.
  *
- * Ownership check is client-side (useAuth().userId === creator.owner_id), so
- * the component renders TWO branches:
+ * Ownership check is client-side: once signed in, GET /api/creators/claims
+ * (authenticated) says which creator the viewer owns, and we compare ids.
+ * The public page deliberately never includes owner_id (a user UUID), so
+ * that's the only way to know. The component renders TWO branches:
  *   - not the owner (including anonymous visitors, mid-hydration, or a
  *     different signed-in user): reproduces the exact original markup,
  *     verbatim, from `creator` — pixel-identical to before this component
@@ -19,7 +21,7 @@
  * without waiting on a full page reload — the server-rendered `creator` prop
  * itself goes stale after a save, by design (see task notes).
  */
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "@/components/AuthProvider";
 import { authFetch } from "@/lib/nhost/auth-fetch";
 import { InlineEditField } from "@/components/ui/InlineEditField";
@@ -73,9 +75,28 @@ function hostnameOf(url: string): string {
   }
 }
 
-export function CreatorProfileEditor({ creator }: { creator: CreatorProfile }) {
+export function CreatorProfileEditor({ creator, claimed }: { creator: CreatorProfile; claimed: boolean }) {
   const { userId } = useAuth();
-  const isOwner = !!userId && !!creator.owner_id && userId === creator.owner_id;
+  const [ownedId, setOwnedId] = useState<string | null>(null);
+  useEffect(() => {
+    if (!userId) {
+      setOwnedId(null);
+      return;
+    }
+    let cancelled = false;
+    authFetch("/api/creators/claims")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => {
+        if (!cancelled) setOwnedId(d?.owned?.id ?? null);
+      })
+      .catch(() => {
+        if (!cancelled) setOwnedId(null);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [userId]);
+  const isOwner = !!userId && ownedId !== null && ownedId === creator.id;
 
   // Local copy so saved edits render immediately; only ever mutated by the
   // owner branch below, so non-owners always see the untouched prop values.
@@ -111,7 +132,7 @@ export function CreatorProfileEditor({ creator }: { creator: CreatorProfile }) {
           <div className="min-w-0">
             <div className="flex flex-wrap items-center gap-2">
               <h1 className="text-3xl font-bold text-apb">{creator.display_name}</h1>
-              {creator.owner_id ? (
+              {claimed ? (
                 <span className="inline-flex items-center gap-1 rounded-full bg-apb/10 px-3 py-1 text-sm font-semibold text-apb">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                     <path d="M20 6 9 17l-5-5" />
@@ -125,7 +146,7 @@ export function CreatorProfileEditor({ creator }: { creator: CreatorProfile }) {
                 </span>
               ) : null}
             </div>
-            <CreatorOwnerBar ownerId={creator.owner_id} />
+            <CreatorOwnerBar isOwner={isOwner} />
             {creator.creator_name && creator.creator_name !== creator.display_name ? (
               <p className="text-neutral-500">{creator.creator_name}</p>
             ) : null}
@@ -180,7 +201,7 @@ export function CreatorProfileEditor({ creator }: { creator: CreatorProfile }) {
               validate={(v) => (v ? null : "Display name can't be empty")}
               renderValue={(v) => <h1 className="text-3xl font-bold text-apb">{v}</h1>}
             />
-            {creator.owner_id ? (
+            {claimed ? (
               <span className="inline-flex items-center gap-1 rounded-full bg-apb/10 px-3 py-1 text-sm font-semibold text-apb">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                   <path d="M20 6 9 17l-5-5" />
@@ -194,7 +215,7 @@ export function CreatorProfileEditor({ creator }: { creator: CreatorProfile }) {
               </span>
             ) : null}
           </div>
-          <CreatorOwnerBar ownerId={creator.owner_id} />
+          <CreatorOwnerBar isOwner={isOwner} />
 
           <div className="mt-2 max-w-sm">
             <p className="text-xs font-semibold uppercase tracking-wide text-neutral-400">Photo URL</p>
