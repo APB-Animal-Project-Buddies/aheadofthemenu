@@ -4,15 +4,17 @@
  * Creator-page gallery: uploaded photos + YouTube/TikTok/Instagram embeds,
  * stored as creators.gallery (see lib/creators.ts GalleryItem). Renders in two
  * modes from the same markup:
- *   - read-only (visitors): photo grid, click-to-load videos (reuses
- *     VideoEmbeds from the dish page), Instagram post embeds.
+ *   - read-only (visitors): photo grid, then video tiles that autoplay
+ *     muted with platform chrome stripped (YouTube/TikTok params; Instagram
+ *     has neither, so its header/footer are cropped out of the frame and the
+ *     clip still needs a tap to play).
  *   - editable (owner): the same, plus "Add photos", "Add a link", and a
  *     remove control per tile. Every change PATCHes the whole array through
  *     /api/creators/mine and reports back via onChange.
  */
 import { useRef, useState } from "react";
 import { toast } from "sonner";
-import { VideoEmbeds } from "@/components/VideoEmbeds";
+import { youTubeAutoplayEmbed, tikTokAutoplayEmbed, instagramEmbed } from "@/lib/video-embeds";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { authFetch } from "@/lib/nhost/auth-fetch";
@@ -121,7 +123,7 @@ export function CreatorGallery({
   }
 
   return (
-    <section className="mt-8">
+    <section className="mt-12">
       <h2 className="mb-3 text-xl font-bold text-apb">Gallery</h2>
 
       {editable && (
@@ -170,34 +172,36 @@ export function CreatorGallery({
         </div>
       ) : null}
 
-      {videos.length ? (
-        <div className={images.length ? "mt-4" : ""}>
-          <VideoEmbeds embeds={videos.map(({ platform, id, url }) => ({ platform, id, url }))} />
-          {editable ? (
-            <ul className="mt-2 flex flex-wrap gap-2">
-              {videos.map((g) => (
-                <li key={itemKey(g)} className="flex items-center gap-1 rounded-full border border-neutral-200 bg-white px-3 py-1 text-xs text-neutral-700">
-                  {g.platform === "youtube" ? "YouTube" : "TikTok"} · {g.id.slice(0, 12)}
-                  <button type="button" onClick={() => remove(g)} aria-label="Remove video" className="ml-1 text-neutral-400 hover:text-red-600">
-                    ✕
-                  </button>
-                </li>
-              ))}
-            </ul>
-          ) : null}
-        </div>
-      ) : null}
-
-      {posts.length ? (
-        <div className={`grid grid-cols-1 gap-4 sm:grid-cols-2 ${images.length || videos.length ? "mt-4" : ""}`}>
-          {posts.map((g) => (
-            <figure key={itemKey(g)} className="relative overflow-hidden rounded-[16px] border border-neutral-200 bg-white">
+      {videos.length || posts.length ? (
+        <div className={`grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 ${images.length ? "mt-4" : ""}`}>
+          {videos.map((g) => (
+            <figure
+              key={itemKey(g)}
+              className={`relative overflow-hidden rounded-[16px] border border-neutral-200 bg-black ${g.platform === "youtube" ? "aspect-video sm:col-span-2" : "aspect-[9/16] max-h-[70vh]"}`}
+            >
               <iframe
-                src={`https://www.instagram.com/p/${g.id}/embed/`}
+                src={g.platform === "youtube" ? youTubeAutoplayEmbed(g.id) : tikTokAutoplayEmbed(g.id)}
+                title={g.platform === "youtube" ? "YouTube video" : "TikTok video"}
+                loading="lazy"
+                allow="autoplay; encrypted-media; picture-in-picture"
+                allowFullScreen
+                className="absolute inset-0 h-full w-full"
+              />
+              {editable ? <RemoveButton onClick={() => remove(g)} label="Remove video" /> : null}
+            </figure>
+          ))}
+          {posts.map((g) => (
+            // Instagram's embed always paints a ~54px account header and a
+            // ~44px "View on Instagram" footer. Shift the iframe up and make it
+            // taller than the tile so only the media sits inside the visible box.
+            <figure key={itemKey(g)} className="relative aspect-[4/5] overflow-hidden rounded-[16px] border border-neutral-200 bg-white">
+              <iframe
+                src={instagramEmbed(g.id)}
                 title="Instagram post"
                 loading="lazy"
-                className="h-[560px] w-full"
                 allow="encrypted-media; clipboard-write"
+                scrolling="no"
+                className="absolute left-0 top-[-54px] h-[calc(100%+98px)] w-full"
               />
               {editable ? <RemoveButton onClick={() => remove(g)} label="Remove Instagram post" /> : null}
             </figure>

@@ -83,3 +83,13 @@ export const youTubeThumb = (id: string) => `https://img.youtube.com/vi/${id}/hq
 export const youTubeEmbed = (id: string) => `https://www.youtube-nocookie.com/embed/${id}?autoplay=1`;
 export const tikTokEmbed = (id: string) => `https://www.tiktok.com/player/v1/${id}?autoplay=1`;
 export const tikTokOEmbed = (url: string) => `https://www.tiktok.com/oembed?url=${encodeURIComponent(url)}`;
+
+// Gallery-tile variants: silent autoplay with as little platform chrome as each
+// player allows. (Muted autoplay is what browsers permit without a gesture.)
+export const youTubeAutoplayEmbed = (id: string) =>
+  `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&playsinline=1&loop=1&playlist=${id}`;
+export const tikTokAutoplayEmbed = (id: string) =>
+  `https://www.tiktok.com/player/v1/${id}?autoplay=1&muted=1&loop=1&controls=0&progress_bar=0&play_button=0&volume_control=0&fullscreen_button=0&timestamp=0&music_info=0&description=0&rel=0&closed_caption=0`;
+// Instagram's embed has no autoplay or chrome params; the header/footer are
+// cropped away by the tile (see CreatorGallery). Uncaptioned variant.
+export const instagramEmbed = (id: string) => `https://www.instagram.com/p/${id}/embed/`;

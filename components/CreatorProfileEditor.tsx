@@ -176,7 +176,7 @@ export function CreatorProfileEditor({ creator, claimed }: { creator: CreatorPro
 
         {/* Bio */}
         {view.bio ? (
-          <p className="mt-6 rounded-[16px] border border-neutral-200 bg-white/60 px-5 py-4 leading-relaxed text-neutral-800">
+          <p className="mt-10 rounded-[16px] border border-neutral-200 bg-white/60 px-5 py-4 leading-relaxed text-neutral-800">
             {view.bio}
           </p>
         ) : null}
@@ -303,7 +303,7 @@ export function CreatorProfileEditor({ creator, claimed }: { creator: CreatorPro
       </header>
 
       {/* Bio */}
-      <div className="mt-6">
+      <div className="mt-10">
         <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-neutral-400">Bio</p>
         <InlineEditField
           label="Bio"

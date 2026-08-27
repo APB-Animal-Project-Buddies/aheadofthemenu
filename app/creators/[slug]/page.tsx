@@ -84,7 +84,7 @@ export default async function CreatorPage({ params }: { params: { slug: string }
 
       {/* Most-watched clips */}
       {videoEntries.length ? (
-        <section className="mt-8">
+        <section className="mt-12">
           <h2 className="mb-3 text-xl font-bold text-apb">Most watched</h2>
           <div className="flex flex-wrap gap-6">
             {videoEntries.map(([p, v]) => (
@@ -95,7 +95,7 @@ export default async function CreatorPage({ params }: { params: { slug: string }
       ) : null}
 
       {/* Dishes */}
-      <section className="mt-8">
+      <section className="mt-12">
         <h2 className="mb-3 text-xl font-bold text-apb">
           Recipes{dishes.length ? ` (${dishes.length})` : ""}
         </h2>
