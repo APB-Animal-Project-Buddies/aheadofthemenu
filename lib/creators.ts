@@ -35,12 +35,24 @@ export type CreatorTopVideo = {
 
 /** One gallery tile on a creator page (creators.gallery JSONB). */
 export type GalleryItem =
-  | { kind: "image"; url: string; caption?: string }
+  /** w/h: pixel size measured at upload, so the gallery can shape the tile to the photo. */
+  | { kind: "image"; url: string; caption?: string; w?: number; h?: number }
   /** vertical: a YouTube Short (TikTok is always vertical). The canonical url loses /shorts/, so it's recorded here. */
   | { kind: "video"; platform: VideoPlatform; id: string; url: string; vertical?: boolean }
   | { kind: "instagram"; id: string; url: string };
 
 export const MAX_GALLERY_ITEMS = 12;
+
+/** Tile shape for a gallery item from its real dimensions: wide → 2 columns, tall → 2 rows, else square. */
+export function galleryTileShape(g: GalleryItem): "wide" | "tall" | "square" {
+  if (g.kind === "video") return g.platform === "tiktok" || g.vertical ? "tall" : "wide";
+  if (g.kind === "image" && g.w && g.h) {
+    const r = g.w / g.h;
+    if (r >= 1.4) return "wide";
+    if (r <= 0.72) return "tall";
+  }
+  return "square";
+}
 const IG_SHORTCODE_RE = /^[A-Za-z0-9_-]{5,20}$/;
 
 /** Instagram post / reel URL → normalized item, or null. */
@@ -83,6 +95,8 @@ export function sanitizeGallery(input: unknown): GalleryItem[] {
     if (r.kind === "image" && typeof r.url === "string" && /^https:\/\/.+/i.test(r.url.trim())) {
       const caption = typeof r.caption === "string" ? r.caption.trim().slice(0, 200) : "";
       item = caption ? { kind: "image", url: r.url.trim(), caption } : { kind: "image", url: r.url.trim() };
+      const w = Number(r.w), h = Number(r.h);
+      if (Number.isInteger(w) && Number.isInteger(h) && w > 0 && h > 0 && w < 100_000 && h < 100_000) item = { ...item, w, h };
     } else if (typeof r.url === "string") {
       item = parseGalleryLink(r.url);
       // Stored rows carry the canonical watch URL, so keep an explicit flag.

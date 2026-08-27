@@ -15,3 +15,15 @@ export async function uploadImage(file: File): Promise<string> {
   if (!fileId) throw new Error("The upload didn't return a file id — please try again.");
   return nhostFileUrl(fileId);
 }
+
+/** Pixel dimensions of an image file, measured in the browser; null if it can't be decoded. */
+export async function measureImage(file: File): Promise<{ w: number; h: number } | null> {
+  try {
+    const bmp = await createImageBitmap(file);
+    const dims = { w: bmp.width, h: bmp.height };
+    bmp.close();
+    return dims;
+  } catch {
+    return null;
+  }
+}

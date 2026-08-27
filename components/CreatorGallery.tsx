@@ -19,8 +19,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { authFetch } from "@/lib/nhost/auth-fetch";
 import { storageErrorMessage } from "@/lib/storage-error";
-import { uploadImage } from "@/lib/upload-image";
-import { parseGalleryLink, MAX_GALLERY_ITEMS, type GalleryItem } from "@/lib/creators";
+import { uploadImage, measureImage } from "@/lib/upload-image";
+import { parseGalleryLink, galleryTileShape, MAX_GALLERY_ITEMS, type GalleryItem } from "@/lib/creators";
 
 const itemKey = (g: GalleryItem) =>
   g.kind === "image" ? `image:${g.url}` : g.kind === "video" ? `video:${g.platform}:${g.id}` : `instagram:${g.id}`;
@@ -78,9 +78,12 @@ export function CreatorGallery({
     setBusy(true);
     setError(null);
     try {
-      const urls: string[] = [];
-      for (const f of files.slice(0, room)) urls.push(await uploadImage(f));
-      await persist([...items, ...urls.map((url) => ({ kind: "image" as const, url }))], `${urls.length} photo${urls.length === 1 ? "" : "s"} added`);
+      const added: GalleryItem[] = [];
+      for (const f of files.slice(0, room)) {
+        const [url, dims] = await Promise.all([uploadImage(f), measureImage(f)]);
+        added.push(dims ? { kind: "image", url, ...dims } : { kind: "image", url });
+      }
+      await persist([...items, ...added], `${added.length} photo${added.length === 1 ? "" : "s"} added`);
       if (files.length > room) setError(`Only ${room} of ${files.length} photos were added — the gallery holds ${MAX_GALLERY_ITEMS}.`);
     } catch (err) {
       setError(storageErrorMessage(err));
@@ -118,7 +121,7 @@ export function CreatorGallery({
     }
   }
 
-  const hasSquare = items.some((g) => g.kind !== "video");
+  const hasSquare = items.some((g) => galleryTileShape(g) === "square");
 
   return (
     <section className="mt-12">
@@ -164,15 +167,17 @@ export function CreatorGallery({
         // are aspect-square, so every row's height tracks the column width and
         // the whole grid scales with the viewport. Spanning tiles carry no
         // aspect of their own; they simply fill their cells:
-        //   photo / Instagram → 1×1     landscape YouTube → 2 wide × 1 tall
-        //   portrait clip (TikTok, YouTube Short) → 1 wide × 2 tall
+        //   shape comes from the media itself (galleryTileShape): wide photos
+        //   and landscape YouTube → 2 wide × 1 tall; tall photos, Shorts and
+        //   TikTok → 1 wide × 2 tall; everything else (incl. Instagram) → 1×1
         // grid-flow-dense back-fills gaps so mixed shapes still tile tightly.
         // Iframes can't object-fit, so each is oversized on one axis + centred
         // to cover its cell (16:9 in ~2:1 → 112.5% tall; 9:16 in ~1:2 → 112.5% wide).
         <div className="grid auto-rows-[minmax(0,1fr)] grid-cols-2 gap-3 [grid-auto-flow:dense] sm:grid-cols-3 lg:grid-cols-4">
           {items.map((g) => {
-            const portrait = g.kind === "video" && (g.platform === "tiktok" || g.vertical === true);
-            const landscape = g.kind === "video" && !portrait;
+            const shape = galleryTileShape(g);
+            const portrait = shape === "tall";
+            const landscape = shape === "wide";
             // If nothing square is present there's no pacer for the row height,
             // so spanning tiles fall back to declaring their own aspect.
             const span = landscape

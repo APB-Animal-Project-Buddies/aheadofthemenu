@@ -1,5 +1,5 @@
 import { test, expect, describe } from "bun:test";
-import { slugify, pickCreatorMatch, socialHandle, creatorSearchTerms, parseInstagramUrl, parseGalleryLink, sanitizeGallery, MAX_GALLERY_ITEMS } from "./creators";
+import { slugify, pickCreatorMatch, socialHandle, creatorSearchTerms, parseInstagramUrl, parseGalleryLink, sanitizeGallery, MAX_GALLERY_ITEMS, galleryTileShape } from "./creators";
 
 test("slugify kebab-cases and strips punctuation", () => {
   expect(slugify("Rainbow Plant Life")).toBe("rainbow-plant-life");
@@ -90,5 +90,24 @@ describe("gallery", () => {
     const many = Array.from({ length: 20 }, (_, i) => ({ kind: "image", url: `https://h/${i}.jpg` }));
     expect(sanitizeGallery(many)).toHaveLength(MAX_GALLERY_ITEMS);
     expect(sanitizeGallery("not an array")).toEqual([]);
+  });
+});
+
+describe("galleryTileShape", () => {
+  test("uses real photo dimensions; falls back to square", () => {
+    expect(galleryTileShape({ kind: "image", url: "https://h/a.jpg", w: 1600, h: 900 })).toBe("wide");
+    expect(galleryTileShape({ kind: "image", url: "https://h/a.jpg", w: 1080, h: 1920 })).toBe("tall");
+    expect(galleryTileShape({ kind: "image", url: "https://h/a.jpg", w: 1000, h: 1000 })).toBe("square");
+    expect(galleryTileShape({ kind: "image", url: "https://h/a.jpg" })).toBe("square");
+    expect(galleryTileShape({ kind: "instagram", id: "ABCDEFG", url: "https://www.instagram.com/p/ABCDEFG/" })).toBe("square");
+  });
+  test("videos: landscape YouTube wide, Shorts/TikTok tall", () => {
+    expect(galleryTileShape({ kind: "video", platform: "youtube", id: "x", url: "u" })).toBe("wide");
+    expect(galleryTileShape({ kind: "video", platform: "youtube", id: "x", url: "u", vertical: true })).toBe("tall");
+    expect(galleryTileShape({ kind: "video", platform: "tiktok", id: "x", url: "u" })).toBe("tall");
+  });
+  test("sanitizeGallery keeps valid dimensions and drops bogus ones", () => {
+    expect(sanitizeGallery([{ kind: "image", url: "https://h/a.jpg", w: 800, h: 600 }])[0]).toMatchObject({ w: 800, h: 600 });
+    expect(sanitizeGallery([{ kind: "image", url: "https://h/a.jpg", w: -1, h: "x" }])[0]).not.toHaveProperty("w");
   });
 });
