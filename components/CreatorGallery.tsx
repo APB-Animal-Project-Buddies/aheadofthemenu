@@ -55,10 +55,6 @@ export function CreatorGallery({
   const [link, setLink] = useState("");
   const [error, setError] = useState<string | null>(null);
 
-  const images = items.filter((g): g is Extract<GalleryItem, { kind: "image" }> => g.kind === "image");
-  const videos = items.filter((g): g is Extract<GalleryItem, { kind: "video" }> => g.kind === "video");
-  const posts = items.filter((g): g is Extract<GalleryItem, { kind: "instagram" }> => g.kind === "instagram");
-
   if (!editable && items.length === 0) return null;
 
   async function persist(next: GalleryItem[], successMsg: string) {
@@ -160,50 +156,50 @@ export function CreatorGallery({
         <p className="text-sm text-neutral-400">Nothing here yet — add a few photos or links so visitors can see your work.</p>
       ) : null}
 
-      {images.length ? (
+      {items.length ? (
+        // One grid, insertion order, every tile square. Video iframes can't be
+        // object-fit'd, so each is oversized along one axis and centred to
+        // "cover" the square: 16:9 → 177.78% wide; 9:16 → 177.78% tall.
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-          {images.map((g) => (
-            <figure key={itemKey(g)} className="relative aspect-square overflow-hidden rounded-[16px] border border-neutral-200 bg-neutral-100">
-              {/* eslint-disable-next-line @next/next/no-img-element -- Nhost storage host not in next/image config */}
-              <img src={g.url} alt={g.caption ?? ""} loading="lazy" className="h-full w-full object-cover" />
-              {editable ? <RemoveButton onClick={() => remove(g)} label="Remove photo" /> : null}
-            </figure>
-          ))}
-        </div>
-      ) : null}
-
-      {videos.length || posts.length ? (
-        <div className={`grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 ${images.length ? "mt-4" : ""}`}>
-          {videos.map((g) => (
+          {items.map((g) => (
             <figure
               key={itemKey(g)}
-              className={`relative overflow-hidden rounded-[16px] border border-neutral-200 bg-black ${g.platform === "youtube" ? "aspect-video sm:col-span-2" : "aspect-[9/16] max-h-[70vh]"}`}
+              className={`relative aspect-square overflow-hidden rounded-[16px] border border-neutral-200 ${g.kind === "image" ? "bg-neutral-100" : g.kind === "instagram" ? "bg-white" : "bg-black"}`}
             >
-              <iframe
-                src={g.platform === "youtube" ? youTubeAutoplayEmbed(g.id) : tikTokAutoplayEmbed(g.id)}
-                title={g.platform === "youtube" ? "YouTube video" : "TikTok video"}
-                loading="lazy"
-                allow="autoplay; encrypted-media; picture-in-picture"
-                allowFullScreen
-                className="absolute inset-0 h-full w-full"
-              />
-              {editable ? <RemoveButton onClick={() => remove(g)} label="Remove video" /> : null}
-            </figure>
-          ))}
-          {posts.map((g) => (
-            // Instagram's embed always paints a ~54px account header and a
-            // ~44px "View on Instagram" footer. Shift the iframe up and make it
-            // taller than the tile so only the media sits inside the visible box.
-            <figure key={itemKey(g)} className="relative aspect-[4/5] overflow-hidden rounded-[16px] border border-neutral-200 bg-white">
-              <iframe
-                src={instagramEmbed(g.id)}
-                title="Instagram post"
-                loading="lazy"
-                allow="encrypted-media; clipboard-write"
-                scrolling="no"
-                className="absolute left-0 top-[-54px] h-[calc(100%+98px)] w-full"
-              />
-              {editable ? <RemoveButton onClick={() => remove(g)} label="Remove Instagram post" /> : null}
+              {g.kind === "image" ? (
+                // eslint-disable-next-line @next/next/no-img-element -- Nhost storage host not in next/image config
+                <img src={g.url} alt={g.caption ?? ""} loading="lazy" className="h-full w-full object-cover" />
+              ) : g.kind === "video" ? (
+                <iframe
+                  src={g.platform === "youtube" ? youTubeAutoplayEmbed(g.id) : tikTokAutoplayEmbed(g.id)}
+                  title={g.platform === "youtube" ? "YouTube video" : "TikTok video"}
+                  loading="lazy"
+                  allow="autoplay; encrypted-media; picture-in-picture"
+                  allowFullScreen
+                  className={
+                    g.platform === "youtube"
+                      ? "absolute left-1/2 top-0 h-full w-[177.78%] -translate-x-1/2"
+                      : "absolute left-0 top-1/2 h-[177.78%] w-full -translate-y-1/2"
+                  }
+                />
+              ) : (
+                // Instagram: no autoplay/chrome params. Shift up past the ~54px
+                // account header so the media's top square fills the tile.
+                <iframe
+                  src={instagramEmbed(g.id)}
+                  title="Instagram post"
+                  loading="lazy"
+                  allow="encrypted-media; clipboard-write"
+                  scrolling="no"
+                  className="absolute left-0 top-[-54px] h-[calc(100%+160px)] w-full"
+                />
+              )}
+              {editable ? (
+                <RemoveButton
+                  onClick={() => remove(g)}
+                  label={g.kind === "image" ? "Remove photo" : g.kind === "video" ? "Remove video" : "Remove Instagram post"}
+                />
+              ) : null}
             </figure>
           ))}
         </div>
