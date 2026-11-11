@@ -27,7 +27,7 @@
     { id: 'recipes',  href: '/recipes',          label: 'Recipes' },
     { id: 'creators', href: '/creators',         label: 'Creators' },
     { id: 'dairy',    href: '/top-alternatives', label: 'Top Alternatives' },
-    { id: 'tips',     href: '/tips-and-tricks',  label: 'Tips & Tricks' },
+    // Tips & Tricks tab removed — content now lives on /getting-started.
     // { id: 'eatthis',  href: '/eat-this',         label: 'Eat This!' },  // hidden
   ];
 

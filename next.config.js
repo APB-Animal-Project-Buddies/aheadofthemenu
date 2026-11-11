@@ -11,6 +11,8 @@ const nextConfig = {
       { source: "/", destination: "/getting-started", permanent: false },
       // The Menus page was removed — send old links to Upload Menu.
       { source: "/menus", destination: "/getting-started", permanent: false },
+      // Tips & Tricks was folded into the Upload Menu page.
+      { source: "/tips-and-tricks", destination: "/getting-started", permanent: false },
       // Eat This! is hidden for now (focus mode). Code + APIs are untouched; delete
       // these two redirects to bring the pages back (and restore the nav tab).
       { source: "/eat-this", destination: "/creators", permanent: false },

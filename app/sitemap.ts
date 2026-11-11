@@ -38,7 +38,6 @@ const STATIC_PAGES: StaticEntry[] = [
   { path: "/creators", changeFrequency: "daily", priority: 0.9 },
   // { path: "/eat-this", changeFrequency: "daily", priority: 0.8 },  // hidden (focus mode)
   { path: "/top-alternatives", changeFrequency: "weekly", priority: 0.7 },
-  { path: "/tips-and-tricks", changeFrequency: "monthly", priority: 0.5 },
   // Live and complete, just unlinked from the nav while the Creators launch
   // takes focus. Drop this line if it should stay out of search too.
   { path: "/protein-guide", changeFrequency: "monthly", priority: 0.6 },

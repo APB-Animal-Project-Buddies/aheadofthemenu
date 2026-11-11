@@ -29,8 +29,8 @@ const BUSINESS_TABS: Tab[] = [
   { href: "/getting-started", label: "Upload Menu" },
   { href: "/recipes", label: "Recipes" },
   { href: "/creators", label: "Creators" },
-  { href: "/top-alternatives", label: "Top Alternatives" },
-  { href: "/tips-and-tricks", label: "Tips & Tricks" }
+  { href: "/top-alternatives", label: "Top Alternatives" }
+  // Tips & Tricks tab removed — its content now lives on /getting-started (/tips-and-tricks redirects there).
   // { href: "/eat-this", label: "Eat This!" }  // hidden — /eat-this redirects to /creators
 ];
 
