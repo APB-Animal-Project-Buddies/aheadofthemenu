@@ -7,7 +7,6 @@ import { NextRequest, NextResponse } from "next/server";
 // /recipes is now a Next route (app/recipes) that renders the dish library
 // under the business nav. Only public/recipes/site-nav.js is still used.
 const STATIC_APPS = [
-  "menus",
   "top-alternatives",
   "tips-and-tricks",
 ];

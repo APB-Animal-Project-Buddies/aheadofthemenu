@@ -15,24 +15,30 @@ type Tab = { href: string; label: string };
 // emerald bar is identical across Next pages and the static apps.
 // Protein Guide is temporarily hidden from the nav (page still exists at
 // /protein-guide, just unlinked) while the Creators launch goes first.
-const CONSUMER_TABS: Tab[] = [
-  { href: "/dishes", label: "Dishes" },
+//
+// FOCUS MODE: the consumer tab set (Dishes, Eat This!) is commented out for now —
+// the site is restaurant-mode only, with Creators folded into the one tab set.
+// Restore CONSUMER_TABS and the mode resolution below to bring consumers back.
+// const CONSUMER_TABS: Tab[] = [
+//   { href: "/dishes", label: "Dishes" },
+//   { href: "/creators", label: "Creators" },
+//   { href: "/top-alternatives", label: "Top Alternatives" },
+//   { href: "/eat-this", label: "Eat This!" }
+// ];
+const BUSINESS_TABS: Tab[] = [
+  { href: "/getting-started", label: "Upload Menu" },
+  { href: "/recipes", label: "Recipes" },
   { href: "/creators", label: "Creators" },
   { href: "/top-alternatives", label: "Top Alternatives" },
-  { href: "/eat-this", label: "Eat This!" }
-];
-const BUSINESS_TABS: Tab[] = [
-  { href: "/getting-started", label: "Getting Started" },
-  { href: "/menus", label: "Menus" },
-  { href: "/recipes", label: "Recipes" },
-  { href: "/top-alternatives", label: "Top Alternatives" },
-  { href: "/tips-and-tricks", label: "Tips & Tricks" },
-  { href: "/eat-this", label: "Eat This!" }
+  { href: "/tips-and-tricks", label: "Tips & Tricks" }
+  // { href: "/eat-this", label: "Eat This!" }  // hidden — /eat-this redirects to /creators
 ];
 
 // Some sections belong to one mode regardless of login: a signed-out visitor on a
 // business-only page (/recipes, /menus, /tips-and-tricks) still gets the restaurant nav,
 // and /dishes always reads as consumer. Shared sections fall back to the account type.
+// Unused in focus mode (mode is always business) — kept for restoring consumers.
+void 0;
 const BUSINESS_SECTIONS = new Set(["recipes", "menus", "tips-and-tricks", "getting-started"]);
 
 /**
@@ -50,7 +56,7 @@ type NavMode = "business" | "consumer";
 // `dishes` is deliberately NOT pinned here: it's meaningful to both audiences, so
 // it honours the #business / #consumer hash like the other ambivalent sections
 // (falling back to consumer when no hash is present, which is the old behaviour).
-const CONSUMER_SECTIONS = new Set(["creators"]);
+// const CONSUMER_SECTIONS = new Set(["creators"]);  // focus mode: unused
 
 // The nav has its own header on the landing + auth screens, and is intentionally
 // hidden on the user's profile and public handle pages.
@@ -127,15 +133,17 @@ export function SiteNav() {
   }, []);
 
   const seg = pathname.split("/").filter(Boolean)[0] ?? "";
-  const mode: NavMode = isAuthenticated
-    ? (userType === "business" ? "business" : "consumer")
-    : BUSINESS_SECTIONS.has(seg) ? "business"
-      : CONSUMER_SECTIONS.has(seg) ? "consumer"
-        : hash === "business" ? "business"
-          : hash === "consumer" ? "consumer"
-            // Nothing in the URL says which side we're on — use what the last
-            // page established, so a fragment-dropping redirect doesn't reset it.
-            : storedMode ?? "consumer";
+  // FOCUS MODE: always restaurant mode. Original resolution (account type, section,
+  // hash, stored mode) is kept below, commented, for when consumers return.
+  const mode: NavMode = "business";
+  // const mode: NavMode = isAuthenticated
+  //   ? (userType === "business" ? "business" : "consumer")
+  //   : BUSINESS_SECTIONS.has(seg) ? "business"
+  //     : CONSUMER_SECTIONS.has(seg) ? "consumer"
+  //       : hash === "business" ? "business"
+  //         : hash === "consumer" ? "consumer"
+  //           : storedMode ?? "consumer";
+  void seg; void hash; void storedMode; void userType;
   // Persist the resolved mode so a later page that loses the fragment can recover
   // it. Deliberately after resolution, not just on an explicit hash: landing on a
   // pinned section like /menus should also establish the mode.
@@ -147,7 +155,7 @@ export function SiteNav() {
     }
   }, [mode]);
 
-  const tabs = mode === "business" ? BUSINESS_TABS : CONSUMER_TABS;
+  const tabs = BUSINESS_TABS;
   // Always carry the mode forward on every tab link (no param → consumer).
   const withMode = (href: string) => `${href}#${mode}`;
 

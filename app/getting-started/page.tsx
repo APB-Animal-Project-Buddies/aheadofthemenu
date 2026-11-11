@@ -220,6 +220,9 @@ const SOURCES = [
   },
 ];
 
+// Focus mode: show only hero + upload. See the gated block at the bottom of the page.
+const SHOW_FULL_PAGE = false;
+
 export default function RevampPage() {
   return (
     <main className="bg-apb-cream text-[#0e1f14]">
@@ -233,57 +236,15 @@ export default function RevampPage() {
               "radial-gradient(120% 90% at 85% 5%, rgba(45,122,62,0.38) 0%, transparent 55%), radial-gradient(90% 80% at 5% 100%, rgba(255,107,53,0.16) 0%, transparent 50%)",
           }}
         />
-        <div className="relative mx-auto max-w-5xl px-5 py-20 md:px-8 md:py-28">
+        <div className="relative mx-auto max-w-5xl px-5 py-14 md:px-8 md:py-20">
           <span className="inline-flex items-center gap-2 rounded-full border border-apb-accent/40 bg-apb-accent/10 px-3 py-1 text-[12px] font-semibold uppercase tracking-[0.14em] text-apb-accent">
             For restaurants &amp; chefs
           </span>
           {/* The four-beat promise runs at roughly half the display size — at the
               hero's clamp() it would swamp the fold and wrap to four lines. */}
           <h1 className="mt-6 font-semibold tracking-tight">
-            <span className="block text-[clamp(2.6rem,7vw,4.6rem)] leading-[1.02]">Upload your menu, make more money on plant foods.</span>
-            <span className="mt-4 block max-w-3xl text-[clamp(1.3rem,3.1vw,2.1rem)] leading-[1.3] text-apb-accent">
-              Make money. Sell more. Save lives. Help the planet.
-            </span>
+            <span className="block text-[clamp(2.2rem,6vw,3.6rem)] leading-[1.05]">Upload your menu, make more money on plant foods.</span>
           </h1>
-          <div className="mt-6 flex max-w-3xl flex-col gap-3 sm:flex-row sm:items-center sm:gap-6">
-            <p className="text-lg leading-relaxed text-apb-cream/85 md:text-xl">
-              Win-Win-Win for everyone.
-            </p>
-            <span aria-hidden className="hidden h-8 w-px bg-apb-cream/25 sm:block" />
-            <p className="text-lg leading-relaxed text-apb-cream/85 md:text-xl">
-              <b className="font-semibold text-apb-accent">27%</b> of Gen&nbsp;Z and millennials want
-              to eat plant-based foods, and counting. Let&rsquo;s catch you up!
-            </p>
-          </div>
-          <div className="mt-9 flex flex-wrap items-center gap-3">
-            <a
-              href="#upload"
-              className="inline-flex items-center gap-2 rounded-full bg-apb-accent px-6 py-3 text-base font-semibold text-[#112619] transition hover:bg-apb-accent-light"
-            >
-              Score my menu
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-                <path d="M5 12h14M13 6l6 6-6 6" />
-              </svg>
-            </a>
-            <a
-              href="#moves"
-              className="inline-flex items-center rounded-full border border-apb-cream/25 px-6 py-3 text-base font-medium text-apb-cream/90 transition hover:border-apb-cream/50 hover:text-apb-cream"
-            >
-              See the eight moves
-            </a>
-          </div>
-          <ul className="mt-12 grid gap-3 sm:grid-cols-3">
-            {[
-              ["+25–108%", "orders, from appetising dish names alone"],
-              ["+41–79%", "plant sales when you double the options"],
-              ["up to 8×", "uptake when plants become the default"],
-            ].map(([stat, label]) => (
-              <li key={stat} className="rounded-2xl border border-apb-cream/15 bg-white/[0.04] px-5 py-4">
-                <div className="font-serif text-2xl font-semibold text-apb-accent">{stat}</div>
-                <div className="mt-1 text-sm text-apb-cream/70">{label}</div>
-              </li>
-            ))}
-          </ul>
         </div>
       </section>
 
@@ -300,6 +261,10 @@ export default function RevampPage() {
         </div>
       </section>
 
+      {/* FOCUS MODE: the long marketing sections below are hidden — the page is just
+          hero + upload. Flip SHOW_FULL_PAGE to bring them back. */}
+      {SHOW_FULL_PAGE && (
+        <>
       {/* ---- How it works ---- */}
       <section className="mx-auto max-w-5xl px-5 py-16 md:px-8 md:py-20">
         <div className="text-center">
@@ -319,12 +284,8 @@ export default function RevampPage() {
           Gaps worth filling get filled from our own library —{" "}
           <Link href="/recipes" className="font-medium text-apb-light underline underline-offset-4 hover:text-apb">
             line-tested recipes
-          </Link>
-          ,{" "}
-          <Link href="/menus" className="font-medium text-apb-light underline underline-offset-4 hover:text-apb">
-            full menus
-          </Link>
-          , and{" "}
+          </Link>{" "}
+          and{" "}
           <Link href="/top-alternatives" className="font-medium text-apb-light underline underline-offset-4 hover:text-apb">
             blind-taste-tested swaps
           </Link>{" "}
@@ -497,6 +458,8 @@ export default function RevampPage() {
           </p>
         </div>
       </section>
+        </>
+      )}
     </main>
   );
 }

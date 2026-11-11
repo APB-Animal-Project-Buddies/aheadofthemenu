@@ -60,6 +60,7 @@ export default function AheadOfTheMenu() {
               </span>
             </a>
 
+            {/* Hidden for now (focus mode: restaurants + creators). Restore to bring consumers back.
             <a className="aotm-card" href="/dishes">
               <span className="aotm-card-num">02</span>
               <span className="aotm-card-body">
@@ -71,6 +72,7 @@ export default function AheadOfTheMenu() {
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
               </span>
             </a>
+            */}
 
             <a className="aotm-card" href="/top-alternatives">
               <span className="aotm-card-num" aria-hidden="true">

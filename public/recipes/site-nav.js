@@ -14,19 +14,21 @@
 // Nhost session the Next app persists in localStorage ("nhostSession").
 
 (function () {
-  const CONSUMER_TABS = [
-    { id: 'dishes',   href: '/dishes',           label: 'Dishes' },
+  // FOCUS MODE: consumer tab set (Dishes, Eat This!) commented out — restaurant
+  // mode only, with Creators in the one tab set. Mirrors components/SiteNav.tsx.
+  // const CONSUMER_TABS = [
+  //   { id: 'dishes',   href: '/dishes',           label: 'Dishes' },
+  //   { id: 'creators', href: '/creators',         label: 'Creators' },
+  //   { id: 'dairy',    href: '/top-alternatives', label: 'Top Alternatives' },
+  //   { id: 'eatthis',  href: '/eat-this',         label: 'Eat This!' },
+  // ];
+  const BUSINESS_TABS = [
+    { id: 'getting-started', href: '/getting-started', label: 'Upload Menu' },
+    { id: 'recipes',  href: '/recipes',          label: 'Recipes' },
     { id: 'creators', href: '/creators',         label: 'Creators' },
     { id: 'dairy',    href: '/top-alternatives', label: 'Top Alternatives' },
-    { id: 'eatthis',  href: '/eat-this',         label: 'Eat This!' },
-  ];
-  const BUSINESS_TABS = [
-    { id: 'getting-started', href: '/getting-started', label: 'Getting Started' },
-    { id: 'menus',    href: '/menus',            label: 'Menus' },
-    { id: 'recipes',  href: '/recipes',          label: 'Recipes' },
-    { id: 'dairy',    href: '/top-alternatives', label: 'Top Alternatives' },
     { id: 'tips',     href: '/tips-and-tricks',  label: 'Tips & Tricks' },
-    { id: 'eatthis',  href: '/eat-this',         label: 'Eat This!' },
+    // { id: 'eatthis',  href: '/eat-this',         label: 'Eat This!' },  // hidden
   ];
 
   // The session object the Nhost SDK persists; null when signed out or unreadable.
@@ -65,15 +67,18 @@
       const v = window.sessionStorage.getItem(MODE_KEY);
       if (v === 'business' || v === 'consumer') storedMode = v;
     } catch (e) { /* storage disabled — the fragment still works */ }
-    const mode = session
-      ? (userType === 'business' ? 'business' : 'consumer')
-      : BUSINESS_SECTIONS.indexOf(active) !== -1 ? 'business'
-      : CONSUMER_SECTIONS.indexOf(active) !== -1 ? 'consumer'
-      : hash === 'business' ? 'business'
-      : hash === 'consumer' ? 'consumer'
-      : storedMode || 'consumer';
+    // FOCUS MODE: always restaurant mode. Original resolution kept for restoring:
+    // const mode = session
+    //   ? (userType === 'business' ? 'business' : 'consumer')
+    //   : BUSINESS_SECTIONS.indexOf(active) !== -1 ? 'business'
+    //   : CONSUMER_SECTIONS.indexOf(active) !== -1 ? 'consumer'
+    //   : hash === 'business' ? 'business'
+    //   : hash === 'consumer' ? 'consumer'
+    //   : storedMode || 'consumer';
+    const mode = 'business';
+    void BUSINESS_SECTIONS; void CONSUMER_SECTIONS; void storedMode; void userType; void hash;
     try { window.sessionStorage.setItem(MODE_KEY, mode); } catch (e) { /* no-op */ }
-    const TABS = mode === 'business' ? BUSINESS_TABS : CONSUMER_TABS;
+    const TABS = BUSINESS_TABS;
     const links = TABS
       .map(t => `<li><a href="${t.href}#${mode}"${t.id === active ? ' class="active"' : ''}>${t.label}</a></li>`)
       .join('');

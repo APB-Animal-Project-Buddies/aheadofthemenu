@@ -55,10 +55,6 @@ function SubTabs({ active, recipeCount }) {
   return (
     <div className="sub-tabs">
       <a
-        href="/menus"
-        className={"sub-tab" + (active === 'menus' ? ' on' : '')}
-      >Menus <span className="ct">generator</span></a>
-      <a
         href="/recipes"
         className={"sub-tab" + (active === 'recipes' ? ' on' : '')}
       >Recipes <span className="ct">{recipeCount ?? 135}</span></a>

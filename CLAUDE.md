@@ -35,7 +35,7 @@ drops tabs on half the site:
 | File | Serves |
 |---|---|
 | `components/SiteNav.tsx` | every Next route (`/dishes`, `/creators`, `/eat-this`, …) |
-| `public/recipes/site-nav.js` | the static SPAs in `public/` — `/top-alternatives`, `/menus`, `/tips-and-tricks` (see `STATIC_APPS` in `middleware.ts`) |
+| `public/recipes/site-nav.js` | the static SPAs in `public/` — `/top-alternatives`, `/tips-and-tricks` (see `STATIC_APPS` in `middleware.ts`) |
 
 The static apps are plain HTML served by a middleware rewrite, so **`SiteNav.tsx`
 never renders on them** — they build their nav from `site-nav.js` instead.

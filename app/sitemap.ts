@@ -34,12 +34,11 @@ type StaticEntry = {
 
 const STATIC_PAGES: StaticEntry[] = [
   { path: "/", changeFrequency: "weekly", priority: 1.0 },
-  { path: "/dishes", changeFrequency: "daily", priority: 0.9 },
+  // { path: "/dishes", changeFrequency: "daily", priority: 0.9 },  // hidden (focus mode)
   { path: "/creators", changeFrequency: "daily", priority: 0.9 },
-  { path: "/eat-this", changeFrequency: "daily", priority: 0.8 },
+  // { path: "/eat-this", changeFrequency: "daily", priority: 0.8 },  // hidden (focus mode)
   { path: "/top-alternatives", changeFrequency: "weekly", priority: 0.7 },
   { path: "/tips-and-tricks", changeFrequency: "monthly", priority: 0.5 },
-  { path: "/menus", changeFrequency: "monthly", priority: 0.5 },
   // Live and complete, just unlinked from the nav while the Creators launch
   // takes focus. Drop this line if it should stay out of search too.
   { path: "/protein-guide", changeFrequency: "monthly", priority: 0.6 },
@@ -92,7 +91,9 @@ async function getDynamicEntries(): Promise<MetadataRoute.Sitemap> {
       priority: 0.6,
     }));
 
-  return [...creators, ...dishes, ...eatThis];
+  // Focus mode: dishes + Eat This! URLs are left out of the sitemap.
+  void dishes; void eatThis;
+  return [...creators];
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {

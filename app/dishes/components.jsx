@@ -38,10 +38,6 @@ function SubTabs({ active, dishCount }) {
   return (
     <div className="sub-tabs">
       <a
-        href="/menus"
-        className={"sub-tab" + (active === 'menus' ? ' on' : '')}
-      >Menus <span className="ct">generator</span></a>
-      <a
         href="/dishes"
         className={"sub-tab" + (active === 'dishes' ? ' on' : '')}
       >Dishs <span className="ct">{dishCount ?? 135}</span></a>

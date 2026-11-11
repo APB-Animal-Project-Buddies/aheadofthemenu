@@ -56,5 +56,7 @@ export const USER_TYPE_LABELS: Record<UserType, string> = {
  * the "business" → "/recipes" branch when that page comes back.
  */
 export function landingPathForUserType(userType: UserType | null | undefined): string {
-  return userType === "business" ? "/dishes" : "/dishes";
+  // Focus mode: everyone lands on Upload Menu (/getting-started) while the site narrows to restaurants + creators.
+  void userType;
+  return "/getting-started";
 }
